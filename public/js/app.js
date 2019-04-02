@@ -23272,6 +23272,8 @@ __webpack_require__.r(__webpack_exports__);
 
 $(function () {
   var dropdown = $('.menu-dropdown');
+  var headbot = $('.header-bottom');
+  var header = $('header');
   dropdown.find('.menu-dropdown-target').on('click', function (e) {
     var par = $(this).parent();
     dropdown.not(par).removeClass('menu-dropdown-active');
@@ -23280,6 +23282,21 @@ $(function () {
   });
   $(document).on('click', function (e) {
     dropdown.removeClass('menu-dropdown-active');
+  });
+  $(window).on('scroll', function (e) {
+    if (headbot.is(':hidden')) {
+      return;
+    }
+
+    var scrolled = $(document).scrollTop();
+
+    if (scrolled > 40) {
+      headbot.addClass('header-fixed');
+      header.css('padding-top', '60px');
+    } else {
+      header.css('padding-top', '0');
+      headbot.removeClass('header-fixed');
+    }
   });
 });
 
@@ -23303,8 +23320,8 @@ $(function () {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\OpenServer\OSPanel\domains\microstone\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\OpenServer\OSPanel\domains\microstone\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\xampp\htdocs\microstone\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\xampp\htdocs\microstone\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

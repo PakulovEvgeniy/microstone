@@ -23,11 +23,62 @@
 						
 					</li>
 					<uvedoml-component></uvedoml-component>
-					<li><a>Войти</a></li>
-					<li><a>Регистрация</a></li>
+					@guest
+						<li><a href="{{ route('login') }}">Войти</a></li>
+						<li><a href="{{ route('register') }}">Регистрация</a></li>
+					@else
+						<li class="menu-dropdown">
+							<i class="fa fa-user"></i>
+							<a class="menu-dropdown-target">{{ Auth::user()->email }}</a>
+							<i class="fa fa-chevron-down"></i>
+							<ul class="menu-dropdown-items">
+								<li><a>Профиль</a></li>
+								<li><a>Контрагенты</a></li>
+								<li><a>Бонусы</a></li>
+								<li><a>Заказы</a></li>
+								<li><a>Списки</a></li>
+								<li><a>Уведомления</a></li>
+								<li><a>Обратная связь</a></li>
+								<li><a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();">Выход</a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </li>
+							</ul>
+						</li>
+					@endguest
 				</ul>
 				
 			</div>
 		</div>
 	</div>
+	<nav class="header-bottom">
+		<div class="container">
+			<div class="header-bottom-container">
+				<div class="logo-container">
+					<a href={{ URL::to('/') }}>MICROSTONE</a>
+				</div>
+				<form class="main-search-form" method="get">
+					<div class="main-search-form-container">
+						<input type="text" class="main-search-form-input" name="search" placeholder="Поиск по каталогу">
+						<span class="main-search-form-button-container">
+							<button tabindex="2" type="submit" class="main-search-form-button"><i class="fa fa-search"></i></button>
+						</span>
+					</div>
+				</form>
+				<div class="header-buttons">
+					<a>
+						<span>Все списки</span>
+					</a>
+					<a>
+						<span>Избранное</span>
+					</a>
+					<a>
+						<span>Корзина</span>
+					</a>
+				</div>
+			</div>
+		</div>
+	</nav>
 </header>

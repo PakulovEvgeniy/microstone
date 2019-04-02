@@ -1,3 +1,11 @@
+@font-face {
+    font-family: 'DigitalMono-7';
+    src: url('../fonts/Digital-7Mono.woff2') format('woff2'),
+        url('../fonts/Digital-7Mono.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 *, :after, :before {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -14,6 +22,7 @@ a {
 	text-decoration: none;
 	cursor: pointer;
 	display: inline-block;
+	color: #3b3b3b;
 }
 
 a:hover {
@@ -40,7 +49,6 @@ body {
     min-width: 320px;
 }
 header {
-    transition: padding-top 100ms ease 0s;
     background: #f6f6f6;
     margin-bottom: 16px;
     font-size: 13px;
@@ -145,6 +153,98 @@ header {
 	padding-left: 15px;
 }
 
+.header-bottom {
+    background: rgba(29, 113, 184,0.9) !important;
+    z-index: 1030;
+    height: 60px;
+    box-sizing: content-box;
+    top: -64px;
+}
+
+.header-fixed {
+	position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.25);
+}
+
+.logo-container a {
+	font-family: 'DigitalMono-7';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 40px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.header-bottom-container {
+		display: flex;
+    	padding: 0;
+    	margin: 0;
+    	list-style: none;
+    	justify-content: flex-start;
+    	align-items: center;
+}
+
+.main-search-form {
+	flex-grow: 1;
+	padding: 10px 20px;
+}
+
+.main-search-form-container {
+	display: table;
+	width: 100%;
+}
+
+.main-search-form-button-container {
+	display: table-cell;
+    z-index: 2;
+    height: 40px;
+    width: 1%;
+    vertical-align: middle;
+}
+
+.main-search-form-input {
+	border-radius: 4px 0 0 4px;
+    box-shadow: none;
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 15px;
+}
+
+.main-search-form-button {
+	border-radius: 0 4px 4px 0;
+    box-shadow: none;
+    position: relative;
+    height: 40px;
+    width: 60px;
+    border: 1px solid #fff;
+    background: #fff;
+    outline: none;
+    border-left: none;
+    cursor: pointer;
+
+}
+
+.main-search-form-button i {
+	color: #9898a1;
+    font-size: 16px;
+}
+
+.main-search-form-button::before {
+	position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -10px;
+    height: 20px;
+    width: 0;
+    content: " ";
+    color: transparent;
+    font-size: 0;
+    border-left: solid 1px #e6e6e6;
+}
+
 @media (min-width: 1200px) {
 	.container {
     	max-width: 1200px;
@@ -169,6 +269,9 @@ header {
 	.header-top-menu-list {
 		display: none;
 	}
+	.header-bottom {
+		display: none;
+	}
 }
 
 @media (min-width: 992px) {
@@ -183,5 +286,13 @@ header {
     	list-style: none;
     	justify-content: flex-end;
     	align-items: center;
+	}
+	.main-search-form-input {
+		height: 40px;
+	    padding: 6px 12px;
+	    background: #fff;
+	    color: #555;
+	    border: none;
+	    outline: 0;
 	}
 }
