@@ -245,6 +245,41 @@ header {
     border-left: solid 1px #e6e6e6;
 }
 
+.header-buttons a{
+	text-decoration: none;
+}
+
+.header-buttons .btn-cart {
+	box-shadow: 0 2px 0 0 #e3e3e3;
+    background: #fff;
+    border-color: #e3e3e3;
+    min-width: 120px;
+    margin-left: 20px;
+    height: 39px;
+    padding: 8px 12px 4px 12px;
+    border-radius: 4px;
+    text-align: center;
+    line-height: 24px;
+    vertical-align: top;
+}
+.header-buttons .btn-cart:hover {
+	background: #ededed;
+    border-color: #e3e3e3;
+}
+
+.header-buttons .btn-cart i {
+	color: #989696;
+	font-size: .9em;
+    margin-right: 10px;
+    margin-top: 6px;
+}
+.header-buttons .btn-cart .price {
+	color: #333;
+	font-weight: 700;
+	font-size: 15px;
+	line-height: 24px;
+}
+
 @media (min-width: 1200px) {
 	.container {
     	max-width: 1200px;

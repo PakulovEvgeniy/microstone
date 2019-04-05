@@ -74,8 +74,11 @@
 					<a>
 						<span>Избранное</span>
 					</a>
-					<a>
-						<span>Корзина</span>
+					<a class="btn-cart">
+						<i class="fa fa-shopping-cart"></i>
+						<span class="price">
+							<span>Корзина</span>
+						</span>
 					</a>
 				</div>
 			</div>
