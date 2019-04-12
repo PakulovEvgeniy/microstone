@@ -68,11 +68,13 @@
 					</div>
 				</form>
 				<div class="header-buttons">
-					<a>
-						<span>Все списки</span>
+					<a class="btn-info">
+						<i class="far fa-clock"></i>
+						<span>Лист ожидания</span>
 					</a>
-					<a>
-						<span>Избранное</span>
+					<a class="btn-info">
+						<i class="far fa-heart"></i>
+						<span>Мои списки</span>
 					</a>
 					<a class="btn-cart">
 						<i class="fa fa-shopping-cart"></i>

@@ -176,6 +176,7 @@ header {
     font-size: 40px;
     color: #fff;
     text-decoration: none;
+    line-height: 60px;
 }
 
 .header-bottom-container {
@@ -248,6 +249,9 @@ header {
 .header-buttons a{
 	text-decoration: none;
 }
+.header-buttons {
+	display: block;
+}
 
 .header-buttons .btn-cart {
 	box-shadow: 0 2px 0 0 #e3e3e3;
@@ -260,7 +264,6 @@ header {
     border-radius: 4px;
     text-align: center;
     line-height: 24px;
-    vertical-align: top;
 }
 .header-buttons .btn-cart:hover {
 	background: #ededed;
@@ -278,6 +281,21 @@ header {
 	font-weight: 700;
 	font-size: 15px;
 	line-height: 24px;
+}
+.header-buttons .btn-info {
+	color: #fff;
+    font-size: 15px;
+    line-height: 20px;
+    font-weight: 400;
+    padding: 20px 10px;
+}
+.header-buttons .btn-info:hover {
+	background: rgba(255,255,255,0.2);
+}
+.header-buttons .btn-info i {
+	color: #fff;
+	font-size: .9em;
+    margin-right: 5px;
 }
 
 @media (min-width: 1200px) {
