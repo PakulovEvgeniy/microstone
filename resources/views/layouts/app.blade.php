@@ -27,6 +27,6 @@
 
             @include('layouts.footer')
         </div>
-        <script src="{{ URL::to('js/app.js') }}"></script>
+        <script src="{{ URL::to('js/entry-client.js') }}"></script>
     </body>
 </html>

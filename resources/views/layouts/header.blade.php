@@ -24,8 +24,8 @@
 					</li>
 					<uvedoml-component></uvedoml-component>
 					@guest
-						<li><a href="{{ route('login') }}">Войти</a></li>
-						<li><a href="{{ route('register') }}">Регистрация</a></li>
+						<li><a href="#">Войти</a></li>
+						<li><a href="#">Регистрация</a></li>
 					@else
 						<li class="menu-dropdown">
 							<i class="fa fa-user"></i>
