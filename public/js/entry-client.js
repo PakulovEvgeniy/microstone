@@ -1790,6 +1790,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   components: {
     'header-component': _layout_Header_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
+  mounted: function mounted() {
+    this.$store.commit('setScreenWidth', window.innerWidth);
+    window.addEventListener('resize', this.onResize);
+  },
+  beforeDestroy: function beforeDestroy() {
+    window.removeEventListener('resize', this.onResize);
+  },
+  methods: {
+    onResize: function onResize() {
+      this.$store.commit('setScreenWidth', window.innerWidth);
+    }
+  },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(['settings']), {
     statename: function statename() {
       return this.$store.state.name;
@@ -1823,7 +1835,7 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     name: function name() {
       var name = this.$router.name || this.$router.currentRoute.name;
-      return "Hello frm the ".concat(name, " page");
+      return "Hello frm the ".concat(name, " page") + 'dsfsdfsdf sdffsdf dsf dsfsd fsdf sfsdfsffsdfsd dfsdfwdwure9qwe 	ba 	quiyui exporty iuyxiu euwyeiuqwy eixquweyquiwyte xqwyeiu tyquet uqwyei uxq eqi euqt wecqute qwetqiut ecxt euqtue cqety wuiet xqwteq uwextyuq texyqt eyt wetqute xqyt eytqe tqwt xuetq uetqt exuqt euyqt eyq tuyetq teuyq teuytq exytquye tq tuyt exyqt yetqwy txeuyqt exuyqt ex yqte ytyqe tyuqt eyt uyqt euyt eqyt uyet qwyxet qwt exuyqt uyqt euyt uyt qey tuyqte uyqt eyqt euyqt euqt eyt quyq tqeytyuteytq xywet xyuqteqyt eytq eqy etuyqt euyqweuyq teyut qeytq exuyq teyt yqte qy teyqt euyqt eyuqt eyqteyqt euyqt euyq teuyqtey tqyet yq teyuqteyqteyt qeuyqte qyeyq etuyqteqtuyq eyqet qetuq teu teuyq euyqt eyt quet uqt euyq teyqe yuqt etqye tquet uqetu qeyuq teyq etut wetuqte uuq etuetqetueuetyqtwex qeqet uqetuqteuqetuqteuqteuqteuqqx eghjewh ehwg exhqwegxegjgwjqwge dsfsdfsdf sdffsdf dsf dsfsd fsdf sfsdfsffsdfsd dfsdfwdwure9qwe 	ba 	quiyui exporty iuyxiu euwyeiuqwy eixquweyquiwyte xqwyeiu tyquet uqwyei uxq eqi euqt wecqute qwetqiut ecxt euqtue cqety wuiet xqwteq uwextyuq texyqt eyt wetqute xqyt eytqe tqwt xuetq uetqt exuqt euyqt eyq tuyetq teuyq teuytq exytquye tq tuyt exyqt yetqwy txeuyqt exuyqt ex yqte ytyqe tyuqt eyt uyqt euyt eqyt uyet qwyxet qwt exuyqt uyqt euyt uyt qey tuyqte uyqt eyqt euyqt euqt eyt quyq tqeytyuteytq xywet xyuqteqyt eytq eqy etuyqt euyqweuyq teyut qeytq exuyq teyt yqte qy teyqt euyqt eyuqt eyqteyqt euyqt euyq teuyqtey tqyet yq teyuqteyqteyt qeuyqte qyeyq etuyqteqtuyq eyqet qetuq teu teuyq euyqt eyt quet uqt euyq teyqe yuqt etqye tquet uqetu qeyuq teyq etut wetuqte uuq etuetqetueuetyqtwex qeqet uqetuqteuqetuqteuqteuqteuqqx eghjewh ehwg exhqwegxegjgwjqwge dsfsdfsdf sdffsdf dsf dsfsd fsdf sfsdfsffsdfsd dfsdfwdwure9qwe 	ba 	quiyui exporty iuyxiu euwyeiuqwy eixquweyquiwyte xqwyeiu tyquet uqwyei uxq eqi euqt wecqute qwetqiut ecxt euqtue cqety wuiet xqwteq uwextyuq texyqt eyt wetqute xqyt eytqe tqwt xuetq uetqt exuqt euyqt eyq tuyetq teuyq teuytq exytquye tq tuyt exyqt yetqwy txeuyqt exuyqt ex yqte ytyqe tyuqt eyt uyqt euyt eqyt uyet qwyxet qwt exuyqt uyqt euyt uyt qey tuyqte uyqt eyqt euyqt euqt eyt quyq tqeytyuteytq xywet xyuqteqyt eytq eqy etuyqt euyqweuyq teyut qeytq exuyq teyt yqte qy teyqt euyqt eyuqt eyqteyqt euyqt euyq teuyqtey tqyet yq teyuqteyqteyt qeuyqte qyeyq etuyqteqtuyq eyqet qetuq teu teuyq euyqt eyt quet uqt euyq teyqe yuqt etqye tquet uqetu qeyuq teyq etut wetuqte uuq etuetqetueuetyqtwex qeqet uqetuqteuqetuqteuqteuqteuqqx eghjewh ehwg exhqwegxegjgwjqwge dsfsdfsdf sdffsdf dsf dsfsd fsdf sfsdfsffsdfsd dfsdfwdwure9qwe 	ba 	quiyui exporty iuyxiu euwyeiuqwy eixquweyquiwyte xqwyeiu tyquet uqwyei uxq eqi euqt wecqute qwetqiut ecxt euqtue cqety wuiet xqwteq uwextyuq texyqt eyt wetqute xqyt eytqe tqwt xuetq uetqt exuqt euyqt eyq tuyetq teuyq teuytq exytquye tq tuyt exyqt yetqwy txeuyqt exuyqt ex yqte ytyqe tyuqt eyt uyqt euyt eqyt uyet qwyxet qwt exuyqt uyqt euyt uyt qey tuyqte uyqt eyqt euyqt euqt eyt quyq tqeytyuteytq xywet xyuqteqyt eytq eqy etuyqt euyqweuyq teyut qeytq exuyq teyt yqte qy teyqt euyqt eyuqt eyqteyqt euyqt euyq teuyqtey tqyet yq teyuqteyqteyt qeuyqte qyeyq etuyqteqtuyq eyqet qetuq teu teuyq euyqt eyt quet uqt euyq teyqe yuqt etqye tquet uqetu qeyuq teyq etut wetuqte uuq etuetqetueuetyqtwex qeqet uqetuqteuqetuqteuqteuqteuqqx eghjewh ehwg exhqwegxegjgwjqwgedsfsdfsdf sdffsdf dsf dsfsd fsdf sfsdfsffsdfsd dfsdfwdwure9qwe 	ba 	quiyui exporty iuyxiu euwyeiuqwy eixquweyquiwyte xqwyeiu tyquet uqwyei uxq eqi euqt wecqute qwetqiut ecxt euqtue cqety wuiet xqwteq uwextyuq texyqt eyt wetqute xqyt eytqe tqwt xuetq uetqt exuqt euyqt eyq tuyetq teuyq teuytq exytquye tq tuyt exyqt yetqwy txeuyqt exuyqt ex yqte ytyqe tyuqt eyt uyqt euyt eqyt uyet qwyxet qwt exuyqt uyqt euyt uyt qey tuyqte uyqt eyqt euyqt euqt eyt quyq tqeytyuteytq xywet xyuqteqyt eytq eqy etuyqt euyqweuyq teyut qeytq exuyq teyt yqte qy teyqt euyqt eyuqt eyqteyqt euyqt euyq teuyqtey tqyet yq teyuqteyqteyt qeuyqte qyeyq etuyqteqtuyq eyqet qetuq teu teuyq euyqt eyt quet uqt euyq teyqe yuqt etqye tquet uqetu qeyuq teyq etut wetuqte uuq etuetqetueuetyqtwex qeqet uqetuqteuqetuqteuqteuqteuqqx eghjewh ehwg exhqwegxegjgwjqwge dsfsdfsdf sdffsdf dsf dsfsd fsdf sfsdfsffsdfsd dfsdfwdwure9qwe 	ba 	quiyui exporty iuyxiu euwyeiuqwy eixquweyquiwyte xqwyeiu tyquet uqwyei uxq eqi euqt wecqute qwetqiut ecxt euqtue cqety wuiet xqwteq uwextyuq texyqt eyt wetqute xqyt eytqe tqwt xuetq uetqt exuqt euyqt eyq tuyetq teuyq teuytq exytquye tq tuyt exyqt yetqwy txeuyqt exuyqt ex yqte ytyqe tyuqt eyt uyqt euyt eqyt uyet qwyxet qwt exuyqt uyqt euyt uyt qey tuyqte uyqt eyqt euyqt euqt eyt quyq tqeytyuteytq xywet xyuqteqyt eytq eqy etuyqt euyqweuyq teyut qeytq exuyq teyt yqte qy teyqt euyqt eyuqt eyqteyqt euyqt euyq teuyqtey tqyet yq teyuqteyqteyt qeuyqte qyeyq etuyqteqtuyq eyqet qetuq teu teuyq euyqt eyt quet uqt euyq teyqe yuqt etqye tquet uqetu qeyuq teyq etut wetuqte uuq etuetqetueuetyqtwex qeqet uqetuqteuqetuqteuqteuqteuqqx eghjewh ehwg exhqwegxegjgwjqwge dsfsdfsdf sdffsdf dsf dsfsd fsdf sfsdfsffsdfsd dfsdfwdwure9qwe 	ba 	quiyui exporty iuyxiu euwyeiuqwy eixquweyquiwyte xqwyeiu tyquet uqwyei uxq eqi euqt wecqute qwetqiut ecxt euqtue cqety wuiet xqwteq uwextyuq texyqt eyt wetqute xqyt eytqe tqwt xuetq uetqt exuqt euyqt eyq tuyetq teuyq teuytq exytquye tq tuyt exyqt yetqwy txeuyqt exuyqt ex yqte ytyqe tyuqt eyt uyqt euyt eqyt uyet qwyxet qwt exuyqt uyqt euyt uyt qey tuyqte uyqt eyqt euyqt euqt eyt quyq tqeytyuteytq xywet xyuqteqyt eytq eqy etuyqt euyqweuyq teyut qeytq exuyq teyt yqte qy teyqt euyqt eyuqt eyqteyqt euyqt euyq teuyqtey tqyet yq teyuqteyqteyt qeuyqte qyeyq etuyqteqtuyq eyqet qetuq teu teuyq euyqt eyt quet uqt euyq teyqe yuqt etqye tquet uqetu qeyuq teyq etut wetuqte uuq etuetqetueuetyqtwex qeqet uqetuqteuqetuqteuqteuqteuqqx eghjewh ehwg exhqwegxegjgwjqwge dsfsdfsdf sdffsdf dsf dsfsd fsdf sfsdfsffsdfsd dfsdfwdwure9qwe 	ba 	quiyui exporty iuyxiu euwyeiuqwy eixquweyquiwyte xqwyeiu tyquet uqwyei uxq eqi euqt wecqute qwetqiut ecxt euqtue cqety wuiet xqwteq uwextyuq texyqt eyt wetqute xqyt eytqe tqwt xuetq uetqt exuqt euyqt eyq tuyetq teuyq teuytq exytquye tq tuyt exyqt yetqwy txeuyqt exuyqt ex yqte ytyqe tyuqt eyt uyqt euyt eqyt uyet qwyxet qwt exuyqt uyqt euyt uyt qey tuyqte uyqt eyqt euyqt euqt eyt quyq tqeytyuteytq xywet xyuqteqyt eytq eqy etuyqt euyqweuyq teyut qeytq exuyq teyt yqte qy teyqt euyqt eyuqt eyqteyqt euyqt euyq teuyqtey tqyet yq teyuqteyqteyt qeuyqte qyeyq etuyqteqtuyq eyqet qetuq teu teuyq euyqt eyt quet uqt euyq teyqe yuqt etqye tquet uqetu qeyuq teyq etut wetuqte uuq etuetqetueuetyqtwex qeqet uqetuqteuqetuqteuqteuqteuqqx eghjewh ehwg exhqwegxegjgwjqwgedsfsdfsdf sdffsdf dsf dsfsd fsdf sfsdfsffsdfsd dfsdfwdwure9qwe 	ba 	quiyui exporty iuyxiu euwyeiuqwy eixquweyquiwyte xqwyeiu tyquet uqwyei uxq eqi euqt wecqute qwetqiut ecxt euqtue cqety wuiet xqwteq uwextyuq texyqt eyt wetqute xqyt eytqe tqwt xuetq uetqt exuqt euyqt eyq tuyetq teuyq teuytq exytquye tq tuyt exyqt yetqwy txeuyqt exuyqt ex yqte ytyqe tyuqt eyt uyqt euyt eqyt uyet qwyxet qwt exuyqt uyqt euyt uyt qey tuyqte uyqt eyqt euyqt euqt eyt quyq tqeytyuteytq xywet xyuqteqyt eytq eqy etuyqt euyqweuyq teyut qeytq exuyq teyt yqte qy teyqt euyqt eyuqt eyqteyqt euyqt euyq teuyqtey tqyet yq teyuqteyqteyt qeuyqte qyeyq etuyqteqtuyq eyqet qetuq teu teuyq euyqt eyt quet uqt euyq teyqe yuqt etqye tquet uqetu qeyuq teyq etut wetuqte uuq etuetqetueuetyqtwex qeqet uqetuqteuqetuqteuqteuqteuqqx eghjewh ehwg exhqwegxegjgwjqwge dsfsdfsdf sdffsdf dsf dsfsd fsdf sfsdfsffsdfsd dfsdfwdwure9qwe 	ba 	quiyui exporty iuyxiu euwyeiuqwy eixquweyquiwyte xqwyeiu tyquet uqwyei uxq eqi euqt wecqute qwetqiut ecxt euqtue cqety wuiet xqwteq uwextyuq texyqt eyt wetqute xqyt eytqe tqwt xuetq uetqt exuqt euyqt eyq tuyetq teuyq teuytq exytquye tq tuyt exyqt yetqwy txeuyqt exuyqt ex yqte ytyqe tyuqt eyt uyqt euyt eqyt uyet qwyxet qwt exuyqt uyqt euyt uyt qey tuyqte uyqt eyqt euyqt euqt eyt quyq tqeytyuteytq xywet xyuqteqyt eytq eqy etuyqt euyqweuyq teyut qeytq exuyq teyt yqte qy teyqt euyqt eyuqt eyqteyqt euyqt euyq teuyqtey tqyet yq teyuqteyqteyt qeuyqte qyeyq etuyqteqtuyq eyqet qetuq teu teuyq euyqt eyt quet uqt euyq teyqe yuqt etqye tquet uqetu qeyuq teyq etut wetuqte uuq etuetqetueuetyqtwex qeqet uqetuqteuqetuqteuqteuqteuqqx eghjewh ehwg exhqwegxegjgwjqwge dsfsdfsdf sdffsdf dsf dsfsd fsdf sfsdfsffsdfsd dfsdfwdwure9qwe 	ba 	quiyui exporty iuyxiu euwyeiuqwy eixquweyquiwyte xqwyeiu tyquet uqwyei uxq eqi euqt wecqute qwetqiut ecxt euqtue cqety wuiet xqwteq uwextyuq texyqt eyt wetqute xqyt eytqe tqwt xuetq uetqt exuqt euyqt eyq tuyetq teuyq teuytq exytquye tq tuyt exyqt yetqwy txeuyqt exuyqt ex yqte ytyqe tyuqt eyt uyqt euyt eqyt uyet qwyxet qwt exuyqt uyqt euyt uyt qey tuyqte uyqt eyqt euyqt euqt eyt quyq tqeytyuteytq xywet xyuqteqyt eytq eqy etuyqt euyqweuyq teyut qeytq exuyq teyt yqte qy teyqt euyqt eyuqt eyqteyqt euyqt euyq teuyqtey tqyet yq teyuqteyqteyt qeuyqte qyeyq etuyqteqtuyq eyqet qetuq teu teuyq euyqt eyt quet uqt euyq teyqe yuqt etqye tquet uqetu qeyuq teyq etut wetuqte uuq etuetqetueuetyqtwex qeqet uqetuqteuqetuqteuqteuqteuqqx eghjewh ehwg exhqwegxegjgwjqwge dsfsdfsdf sdffsdf dsf dsfsd fsdf sfsdfsffsdfsd dfsdfwdwure9qwe 	ba 	quiyui exporty iuyxiu euwyeiuqwy eixquweyquiwyte xqwyeiu tyquet uqwyei uxq eqi euqt wecqute qwetqiut ecxt euqtue cqety wuiet xqwteq uwextyuq texyqt eyt wetqute xqyt eytqe tqwt xuetq uetqt exuqt euyqt eyq tuyetq teuyq teuytq exytquye tq tuyt exyqt yetqwy txeuyqt exuyqt ex yqte ytyqe tyuqt eyt uyqt euyt eqyt uyet qwyxet qwt exuyqt uyqt euyt uyt qey tuyqte uyqt eyqt euyqt euqt eyt quyq tqeytyuteytq xywet xyuqteqyt eytq eqy etuyqt euyqweuyq teyut qeytq exuyq teyt yqte qy teyqt euyqt eyuqt eyqteyqt euyqt euyq teuyqtey tqyet yq teyuqteyqteyt qeuyqte qyeyq etuyqteqtuyq eyqet qetuq teu teuyq euyqt eyt quet uqt euyq teyqe yuqt etqye tquet uqetu qeyuq teyq etut wetuqte uuq etuetqetueuetyqtwex qeqet uqetuqteuqetuqteuqteuqteuqqx eghjewh ehwg exhqwegxegjgwjqwgedsfsdfsdf sdffsdf dsf dsfsd fsdf sfsdfsffsdfsd dfsdfwdwure9qwe 	ba 	quiyui exporty iuyxiu euwyeiuqwy eixquweyquiwyte xqwyeiu tyquet uqwyei uxq eqi euqt wecqute qwetqiut ecxt euqtue cqety wuiet xqwteq uwextyuq texyqt eyt wetqute xqyt eytqe tqwt xuetq uetqt exuqt euyqt eyq tuyetq teuyq teuytq exytquye tq tuyt exyqt yetqwy txeuyqt exuyqt ex yqte ytyqe tyuqt eyt uyqt euyt eqyt uyet qwyxet qwt exuyqt uyqt euyt uyt qey tuyqte uyqt eyqt euyqt euqt eyt quyq tqeytyuteytq xywet xyuqteqyt eytq eqy etuyqt euyqweuyq teyut qeytq exuyq teyt yqte qy teyqt euyqt eyuqt eyqteyqt euyqt euyq teuyqtey tqyet yq teyuqteyqteyt qeuyqte qyeyq etuyqteqtuyq eyqet qetuq teu teuyq euyqt eyt quet uqt euyq teyqe yuqt etqye tquet uqetu qeyuq teyq etut wetuqte uuq etuetqetueuetyqtwex qeqet uqetuqteuqetuqteuqteuqteuqqx eghjewh ehwg exhqwegxegjgwjqwge dsfsdfsdf sdffsdf dsf dsfsd fsdf sfsdfsffsdfsd dfsdfwdwure9qwe 	ba 	quiyui exporty iuyxiu euwyeiuqwy eixquweyquiwyte xqwyeiu tyquet uqwyei uxq eqi euqt wecqute qwetqiut ecxt euqtue cqety wuiet xqwteq uwextyuq texyqt eyt wetqute xqyt eytqe tqwt xuetq uetqt exuqt euyqt eyq tuyetq teuyq teuytq exytquye tq tuyt exyqt yetqwy txeuyqt exuyqt ex yqte ytyqe tyuqt eyt uyqt euyt eqyt uyet qwyxet qwt exuyqt uyqt euyt uyt qey tuyqte uyqt eyqt euyqt euqt eyt quyq tqeytyuteytq xywet xyuqteqyt eytq eqy etuyqt euyqweuyq teyut qeytq exuyq teyt yqte qy teyqt euyqt eyuqt eyqteyqt euyqt euyq teuyqtey tqyet yq teyuqteyqteyt qeuyqte qyeyq etuyqteqtuyq eyqet qetuq teu teuyq euyqt eyt quet uqt euyq teyqe yuqt etqye tquet uqetu qeyuq teyq etut wetuqte uuq etuetqetueuetyqtwex qeqet uqetuqteuqetuqteuqteuqteuqqx eghjewh ehwg exhqwegxegjgwjqwge dsfsdfsdf sdffsdf dsf dsfsd fsdf sfsdfsffsdfsd dfsdfwdwure9qwe 	ba 	quiyui exporty iuyxiu euwyeiuqwy eixquweyquiwyte xqwyeiu tyquet uqwyei uxq eqi euqt wecqute qwetqiut ecxt euqtue cqety wuiet xqwteq uwextyuq texyqt eyt wetqute xqyt eytqe tqwt xuetq uetqt exuqt euyqt eyq tuyetq teuyq teuytq exytquye tq tuyt exyqt yetqwy txeuyqt exuyqt ex yqte ytyqe tyuqt eyt uyqt euyt eqyt uyet qwyxet qwt exuyqt uyqt euyt uyt qey tuyqte uyqt eyqt euyqt euqt eyt quyq tqeytyuteytq xywet xyuqteqyt eytq eqy etuyqt euyqweuyq teyut qeytq exuyq teyt yqte qy teyqt euyqt eyuqt eyqteyqt euyqt euyq teuyqtey tqyet yq teyuqteyqteyt qeuyqte qyeyq etuyqteqtuyq eyqet qetuq teu teuyq euyqt eyt quet uqt euyq teyqe yuqt etqye tquet uqetu qeyuq teyq etut wetuqte uuq etuetqetueuetyqtwex qeqet uqetuqteuqetuqteuqteuqteuqqx eghjewh ehwg exhqwegxegjgwjqwge dsfsdfsdf sdffsdf dsf dsfsd fsdf sfsdfsffsdfsd dfsdfwdwure9qwe 	ba 	quiyui exporty iuyxiu euwyeiuqwy eixquweyquiwyte xqwyeiu tyquet uqwyei uxq eqi euqt wecqute qwetqiut ecxt euqtue cqety wuiet xqwteq uwextyuq texyqt eyt wetqute xqyt eytqe tqwt xuetq uetqt exuqt euyqt eyq tuyetq teuyq teuytq exytquye tq tuyt exyqt yetqwy txeuyqt exuyqt ex yqte ytyqe tyuqt eyt uyqt euyt eqyt uyet qwyxet qwt exuyqt uyqt euyt uyt qey tuyqte uyqt eyqt euyqt euqt eyt quyq tqeytyuteytq xywet xyuqteqyt eytq eqy etuyqt euyqweuyq teyut qeytq exuyq teyt yqte qy teyqt euyqt eyuqt eyqteyqt euyqt euyq teuyqtey tqyet yq teyuqteyqteyt qeuyqte qyeyq etuyqteqtuyq eyqet qetuq teu teuyq euyqt eyt quet uqt euyq teyqe yuqt etqye tquet uqetu qeyuq teyq etut wetuqte uuq etuetqetueuetyqtwex qeqet uqetuqteuqetuqteuqteuqteuqqx eghjewh ehwg exhqwegxegjgwjqwge';
     }
   }
 });
@@ -1883,9 +1895,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      scrolled: 0
+    };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['settings']))
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['isBottomMenuFixed', 'getScreenState'])),
+  methods: {
+    onScroll: function onScroll(e) {
+      this.$store.commit('setScrolled', window.pageYOffset);
+    }
+  },
+  mounted: function mounted() {
+    window.addEventListener('scroll', this.onScroll);
+    this.$store.commit('setScrolled', window.pageYOffset);
+  },
+  beforeDestroy: function beforeDestroy() {
+    window.removeEventListener('scroll', this.onScroll);
+    this.$store.commit('setScrolled', 0);
+  }
 });
 
 /***/ }),
@@ -1901,6 +1928,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Topmenu__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Topmenu */ "./resources/js/components/layout/Topmenu.vue");
 /* harmony import */ var _Bottommenu__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Bottommenu */ "./resources/js/components/layout/Bottommenu.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -1908,12 +1940,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {};
   },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])(['isBottomMenuFixed', 'getScreenState']), {
+    styleHeader: function styleHeader() {
+      return this.isBottomMenuFixed && this.getScreenState > 1 ? {
+        paddingTop: '60px'
+      } : {
+        paddingTop: 0
+      };
+    }
+  }),
   components: {
     'top-menu': _Topmenu__WEBPACK_IMPORTED_MODULE_0__["default"],
     'bottom-menu': _Bottommenu__WEBPACK_IMPORTED_MODULE_1__["default"]
@@ -2026,11 +2068,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {
-    console.log('Component mounted.');
-  }
-});
+/* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
 
@@ -2704,22 +2742,35 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("nav", { staticClass: "header-bottom" }, [
-    _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "header-bottom-container" }, [
-        _c(
-          "div",
-          { staticClass: "logo-container" },
-          [_c("router-link", { attrs: { to: "/" } }, [_vm._v("MICROSTONE")])],
-          1
-        ),
-        _vm._v(" "),
-        _vm._m(0),
-        _vm._v(" "),
-        _vm._m(1)
-      ])
-    ])
-  ])
+  return _vm.getScreenState > 1
+    ? _c(
+        "nav",
+        {
+          staticClass: "header-bottom",
+          class: { "header-fixed": _vm.isBottomMenuFixed }
+        },
+        [
+          _c("div", { staticClass: "container" }, [
+            _c("div", { staticClass: "header-bottom-container" }, [
+              _c(
+                "div",
+                { staticClass: "logo-container" },
+                [
+                  _c("router-link", { attrs: { to: "/" } }, [
+                    _vm._v("MICROSTONE")
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _vm._m(0),
+              _vm._v(" "),
+              _vm._m(1)
+            ])
+          ])
+        ]
+      )
+    : _vm._e()
 }
 var staticRenderFns = [
   function() {
@@ -2800,7 +2851,12 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("header", [_c("top-menu"), _vm._v(" "), _c("bottom-menu")], 1)
+  return _c(
+    "header",
+    { style: _vm.styleHeader },
+    [_c("top-menu"), _vm._v(" "), _c("bottom-menu")],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -19527,7 +19583,9 @@ function createStore() {
       auth: false,
       csrf: '',
       userEmail: 'info@microstone.ru',
-      settings: {}
+      settings: {},
+      scrolled: 0,
+      screenWidth: 0
     },
     actions: {
       setName: function setName(_ref, page) {
@@ -19544,6 +19602,12 @@ function createStore() {
       },
       setSettings: function setSettings(state, payload) {
         state.settings = payload;
+      },
+      setScrolled: function setScrolled(state, payload) {
+        state.scrolled = payload;
+      },
+      setScreenWidth: function setScreenWidth(state, payload) {
+        state.screenWidth = payload;
       }
     },
     getters: {
@@ -19555,6 +19619,18 @@ function createStore() {
       },
       userEmail: function userEmail(state) {
         return state.userEmail;
+      },
+      isBottomMenuFixed: function isBottomMenuFixed(state) {
+        return state.scrolled > 40;
+      },
+      getScreenState: function getScreenState(state) {
+        if (state.screenWidth == 0 || state.screenWidth > 1199) {
+          return 3;
+        } else if (state.screenWidth < 992) {
+          return 1;
+        } else {
+          return 2;
+        }
       }
     }
   });

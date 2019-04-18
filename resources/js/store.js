@@ -12,7 +12,9 @@ export function createStore () {
       auth: false,
       csrf: '',
       userEmail: 'info@microstone.ru',
-      settings: {}
+      settings: {},
+      scrolled: 0,
+      screenWidth: 0
     },
     actions: {
       setName ({ commit }, page) {
@@ -25,6 +27,12 @@ export function createStore () {
       },
       setSettings (state, payload) {
         state.settings = payload;
+      },
+      setScrolled (state, payload) {
+        state.scrolled = payload;
+      },
+      setScreenWidth (state, payload) {
+        state.screenWidth = payload;
       }
     },
     getters: {
@@ -36,6 +44,18 @@ export function createStore () {
       },
       userEmail (state) {
         return state.userEmail;
+      },
+      isBottomMenuFixed (state) {
+        return state.scrolled>40;
+      },
+      getScreenState(state) {
+        if (state.screenWidth==0 || state.screenWidth>1199) {
+          return 3
+        } else if (state.screenWidth<992) {
+          return 1
+        } else {
+          return 2
+        }
       }
     }
   })

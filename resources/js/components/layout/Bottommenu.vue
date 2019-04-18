@@ -1,5 +1,5 @@
 <template>
-    <nav class="header-bottom">
+    <nav v-if="getScreenState>1" class="header-bottom" :class="{'header-fixed': isBottomMenuFixed}">
     <div class="container">
       <div class="header-bottom-container">
         <div class="logo-container">
@@ -39,13 +39,27 @@
     export default {
         data() {
             return {
-                
+              scrolled: 0  
             }
         }, 
         computed: {
           ...mapGetters([
-            'settings'
+            'isBottomMenuFixed',
+            'getScreenState'
           ])
+        },
+        methods: {
+          onScroll(e) {
+            this.$store.commit('setScrolled', window.pageYOffset);  
+          }
+        },
+        mounted() {
+          window.addEventListener('scroll', this.onScroll);
+          this.$store.commit('setScrolled', window.pageYOffset);
+        },
+        beforeDestroy() {
+          window.removeEventListener('scroll', this.onScroll);
+          this.$store.commit('setScrolled', 0);
         }
     }
 </script>

@@ -21,6 +21,18 @@
         components: {
           'header-component': HeaderComponent
         },
+        mounted() {
+          this.$store.commit('setScreenWidth',window.innerWidth);
+          window.addEventListener('resize', this.onResize);
+        },
+        beforeDestroy () {
+          window.removeEventListener('resize', this.onResize);
+        },
+        methods: {
+          onResize() {
+            this.$store.commit('setScreenWidth',window.innerWidth);
+          }
+        },
         computed: {
           ...mapGetters([
             'settings'
