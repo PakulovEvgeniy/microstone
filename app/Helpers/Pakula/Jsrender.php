@@ -14,9 +14,9 @@ class Jsrender {
             $data[$sett->setting_id] = $sett->name;
         }
         $state['settings'] = $data;
-        $state['auth'] = true; //Auth::check();
+        $state['auth'] = Auth::check();
         if ($state['auth']) {
-        	$state['userEmail'] = 'info@microstone.ru';//Auth::user()->email;
+        	$state['userEmail'] = Auth::user()->email;
         } else {
         	$state['userEmail'] = '';
         }

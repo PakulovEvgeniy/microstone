@@ -14,7 +14,8 @@ export function createStore () {
       userEmail: 'info@microstone.ru',
       settings: {},
       scrolled: 0,
-      screenWidth: 0
+      screenWidth: 0,
+      nonVisibleMain: false
     },
     actions: {
       setName ({ commit }, page) {
@@ -33,6 +34,9 @@ export function createStore () {
       },
       setScreenWidth (state, payload) {
         state.screenWidth = payload;
+      },
+      setNonVisibleMain (state, payload) {
+        state.nonVisibleMain = payload;
       }
     },
     getters: {
@@ -44,6 +48,9 @@ export function createStore () {
       },
       userEmail (state) {
         return state.userEmail;
+      },
+      nonVisibleMain (state) {
+        return state.nonVisibleMain;
       },
       isBottomMenuFixed (state) {
         return state.scrolled>40;

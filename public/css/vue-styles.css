@@ -81,3 +81,44 @@
   color: #7e7e7e;
   font-size: .8em;
 }
+
+.micro-logo {
+	margin: 15px auto;
+	text-align: center;
+}
+.micro-logo .m-logo {
+	font-family: 'DigitalMono-7';
+  font-weight: bold;
+  font-style: normal;
+  font-size: 70px;
+  color: #ccc;
+  margin-top: 20%;
+}
+.micro-logo a:hover {
+	text-decoration: none;
+}
+
+.rl-dialog {
+  border: 2px solid #ccc;
+  border-radius: 15px;
+  width: 530px;
+  margin: 15px auto;
+  background-color: #fff;
+  padding-bottom: 15px;
+  position: relative;
+  min-height: 100px;
+}
+
+.r-topic {
+  font-size: 26px;
+  color: #404040;
+  margin: 8px 0 15px 40px;
+}
+.r-footer {
+  text-align: center;
+}
+.r-footer a{
+  color: #0493d9;
+  text-decoration: none;
+  font-weight: 700;
+}

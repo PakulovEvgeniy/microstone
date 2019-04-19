@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import PageComp from './components/Page.vue';
+import loginComp from './components/pages/login.vue';
+import registerComp from './components/pages/register.vue';
 
 Vue.use(Router);
 
@@ -16,6 +18,8 @@ export default new Router({
   routes: [
     { path: '/', component: PageComponent('Home'), name: 'home' },
     { path: '/about', component: PageComp, name: 'about' },
-    { path: '/contact', component: PageComponent('Contact'), name: 'contact' }
+    { path: '/contact', component: PageComponent('Contact'), name: 'contact' },
+    { path: '/login', component: loginComp, name: 'login' },
+    { path: '/register', component: registerComp, name: 'register' }
   ]
 });

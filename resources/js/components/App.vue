@@ -1,10 +1,14 @@
 <template>
     <div id="app">
+      <div v-if = "!nonVisibleMain">
         <header-component></header-component>
         <h1>{{ title }} {{ statename }} {{ str}}</h1>
-        <router-view></router-view>
+      </div>
+      <router-view></router-view>
+      <div v-if = "!nonVisibleMain">
         <router-link :to="{ name: 'about' }">About</router-link>
         <router-link :to="{ name: 'contact' }">Contact</router-link>
+      </div>
     </div>
 </template>
 
@@ -35,7 +39,8 @@
         },
         computed: {
           ...mapGetters([
-            'settings'
+            'settings',
+            'nonVisibleMain'
           ]),
            statename() {
             return this.$store.state.name
