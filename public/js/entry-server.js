@@ -3551,7 +3551,7 @@ function normalizeComponent (
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /*!
-  * vue-router v3.0.5
+  * vue-router v3.0.6
   * (c) 2019 Evan You
   * @license MIT
   */
@@ -5322,7 +5322,7 @@ function resolveAsyncComponents (matched) {
           match.components[key] = resolvedDef;
           pending--;
           if (pending <= 0) {
-            next(to);
+            next();
           }
         });
 
@@ -6214,7 +6214,7 @@ function createHref (base, fullPath, mode) {
 }
 
 VueRouter.install = install;
-VueRouter.version = '3.0.5';
+VueRouter.version = '3.0.6';
 
 if (inBrowser && window.Vue) {
   window.Vue.use(VueRouter);
@@ -20332,7 +20332,7 @@ function createStore() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\xampp\htdocs\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
+module.exports = __webpack_require__(/*! d:\xampp\htdocs\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
 
 
 /***/ })
