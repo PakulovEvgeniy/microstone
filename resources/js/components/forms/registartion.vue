@@ -1,12 +1,12 @@
 <template>
-    <form>
+    <form novalidate>
         <div class="registration">
             <div v-if="error" class="error"></div>
-            <label for="login">Адрес электронной почты (e-mail)</label>
-            <input id="login" class="first" name="login" value="" type="email">
+            <label for="email">Адрес электронной почты (e-mail)</label>
+            <input onfocus="this.removeAttribute('readonly')" readonly @blur="onBlur('login')" :class="{'valid': validClass('login'), 'invalid' : invalidClass('login')}" id="email" name="email" :value="login.value" @input="onInput($event,'login')" type="email">
             <label for="password">Пароль</label>
             <div class="password-area">
-                <input :type="typePassword" id="password" class="second" name="password" placeholder="Не менее 8 символов">
+                <input onfocus="this.removeAttribute('readonly')" readonly @blur="onBlur('password')" :type="typePassword" :class="{'valid': validClass('password'), 'invalid' : invalidClass('password')}" id="password" @input="onInput($event, 'password')" :value="password.value" name="password" placeholder="Не менее 8 символов">
                 <div class="show-password" title="Показать пароль">
                     <span @click="showPassword = !showPassword">Показать</span>
                     <input type="checkbox" id="cb-show-password" v-model="showPassword">
@@ -16,11 +16,11 @@
             </div>
             <div class="controls">
                 <div class="captcha">
-                    <vue-recaptcha @verify="onVerify" type="checkbox" sitekey="6LcArp8UAAAAAD1CM3AaGQRCQZyN2gFbm0GGkzKk"></vue-recaptcha>
+                    <vue-recaptcha @verify="onVerify" @expired="onExpired" type="checkbox" sitekey="6LcArp8UAAAAAD1CM3AaGQRCQZyN2gFbm0GGkzKk"></vue-recaptcha>
                 </div>
                 <div class="policy-area">
                     <div class="policy">
-                        <input type="checkbox" id="cb-policy" name="agreeWithPolicy" value="true" checked>
+                        <input type="checkbox" id="cb-policy" name="agreeWithPolicy" v-model="isPolicy">
                         <label for="cb-policy" class="policy"></label>
                     </div>
                     <div class="policy-text">
@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="buttons">
-                    <input type="submit" class="btn medium-btn active-btn" value="Зарегистрироваться">
+                    <input type="submit" class="btn medium-btn" :class="{'active-btn': isValid}" :disabled="!isValid" value="Зарегистрироваться">
                 </div>
             </div>
             <div class="hr"></div>
@@ -44,17 +44,51 @@ import VueRecaptcha from 'vue-recaptcha';
         data() {
             return {
                 error: false,
-                showPassword: false
+                showPassword: false,
+                login: {
+                    value: '',
+                    valid: false,
+                    validate: /^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$/,
+                    edit: false
+                },
+                password: {
+                    value: '',
+                    valid: false,
+                    validate: /.{8}/,
+                    edit: false
+                },
+                captchaToken: '',
+                isPolicy:true
             }
         },
         computed: {
             typePassword() {
                 return this.showPassword ? 'text' : 'password';
+            },
+            isValid() {
+                return this.isPolicy && this.captchaToken && this.login.valid && this.password.valid;
             }
         },
         methods: {
             onVerify(response) {
-                console.log(response);
+                this.captchaToken = response;
+            },
+            onExpired() {
+                this.captchaToken = '';
+            },
+            onInput(e, param) {
+                this[param].value = e.target.value;
+                this[param].valid = this[param].validate.test(this[param].value);
+            },
+            onBlur(param) {
+                this[param].edit = true;
+                console.log(param);
+            },
+            validClass(param) {
+                return this[param].edit && this[param].valid
+            },
+            invalidClass(param) {
+                return this[param].edit && !this[param].valid
             }
         },
         components: 

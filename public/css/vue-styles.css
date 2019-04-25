@@ -176,6 +176,17 @@
    margin-top: 5px;
    padding-top: 5px;
 }
+.rl-dialog .valid {
+   box-shadow: 0 0 5px #8dfa85!important;
+   border-color: #7bdf73!important;
+}
+.rl-dialog .invalid {
+   box-shadow: 0 0 5px #ff9e9e!important;
+   border-color: #ffa2a2!important;
+}
+.rl-dialog input:focus {
+   outline: none;
+}
 
 .registration {
     position: relative;

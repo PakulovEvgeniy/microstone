@@ -1901,17 +1901,51 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       error: false,
-      showPassword: false
+      showPassword: false,
+      login: {
+        value: '',
+        valid: false,
+        validate: /^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$/,
+        edit: false
+      },
+      password: {
+        value: '',
+        valid: false,
+        validate: /.{8}/,
+        edit: false
+      },
+      captchaToken: '',
+      isPolicy: true
     };
   },
   computed: {
     typePassword: function typePassword() {
       return this.showPassword ? 'text' : 'password';
+    },
+    isValid: function isValid() {
+      return this.isPolicy && this.captchaToken && this.login.valid && this.password.valid;
     }
   },
   methods: {
     onVerify: function onVerify(response) {
-      console.log(response);
+      this.captchaToken = response;
+    },
+    onExpired: function onExpired() {
+      this.captchaToken = '';
+    },
+    onInput: function onInput(e, param) {
+      this[param].value = e.target.value;
+      this[param].valid = this[param].validate.test(this[param].value);
+    },
+    onBlur: function onBlur(param) {
+      this[param].edit = true;
+      console.log(param);
+    },
+    validClass: function validClass(param) {
+      return this[param].edit && this[param].valid;
+    },
+    invalidClass: function invalidClass(param) {
+      return this[param].edit && !this[param].valid;
     }
   },
   components: {
@@ -3011,29 +3045,61 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("form", [
+  return _c("form", { attrs: { novalidate: "" } }, [
     _c("div", { staticClass: "registration" }, [
       _vm.error ? _c("div", { staticClass: "error" }) : _vm._e(),
       _vm._v(" "),
-      _c("label", { attrs: { for: "login" } }, [
+      _c("label", { attrs: { for: "email" } }, [
         _vm._v("Адрес электронной почты (e-mail)")
       ]),
       _vm._v(" "),
       _c("input", {
-        staticClass: "first",
-        attrs: { id: "login", name: "login", value: "", type: "email" }
+        class: {
+          valid: _vm.validClass("login"),
+          invalid: _vm.invalidClass("login")
+        },
+        attrs: {
+          onfocus: "this.removeAttribute('readonly')",
+          readonly: "",
+          id: "email",
+          name: "email",
+          type: "email"
+        },
+        domProps: { value: _vm.login.value },
+        on: {
+          blur: function($event) {
+            return _vm.onBlur("login")
+          },
+          input: function($event) {
+            return _vm.onInput($event, "login")
+          }
+        }
       }),
       _vm._v(" "),
       _c("label", { attrs: { for: "password" } }, [_vm._v("Пароль")]),
       _vm._v(" "),
       _c("div", { staticClass: "password-area" }, [
         _c("input", {
-          staticClass: "second",
+          class: {
+            valid: _vm.validClass("password"),
+            invalid: _vm.invalidClass("password")
+          },
           attrs: {
+            onfocus: "this.removeAttribute('readonly')",
+            readonly: "",
             type: _vm.typePassword,
             id: "password",
             name: "password",
             placeholder: "Не менее 8 символов"
+          },
+          domProps: { value: _vm.password.value },
+          on: {
+            blur: function($event) {
+              return _vm.onBlur("password")
+            },
+            input: function($event) {
+              return _vm.onInput($event, "password")
+            }
           }
         }),
         _vm._v(" "),
@@ -3106,14 +3172,58 @@ var render = function() {
                 type: "checkbox",
                 sitekey: "6LcArp8UAAAAAD1CM3AaGQRCQZyN2gFbm0GGkzKk"
               },
-              on: { verify: _vm.onVerify }
+              on: { verify: _vm.onVerify, expired: _vm.onExpired }
             })
           ],
           1
         ),
         _vm._v(" "),
         _c("div", { staticClass: "policy-area" }, [
-          _vm._m(0),
+          _c("div", { staticClass: "policy" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.isPolicy,
+                  expression: "isPolicy"
+                }
+              ],
+              attrs: {
+                type: "checkbox",
+                id: "cb-policy",
+                name: "agreeWithPolicy"
+              },
+              domProps: {
+                checked: Array.isArray(_vm.isPolicy)
+                  ? _vm._i(_vm.isPolicy, null) > -1
+                  : _vm.isPolicy
+              },
+              on: {
+                change: function($event) {
+                  var $$a = _vm.isPolicy,
+                    $$el = $event.target,
+                    $$c = $$el.checked ? true : false
+                  if (Array.isArray($$a)) {
+                    var $$v = null,
+                      $$i = _vm._i($$a, $$v)
+                    if ($$el.checked) {
+                      $$i < 0 && (_vm.isPolicy = $$a.concat([$$v]))
+                    } else {
+                      $$i > -1 &&
+                        (_vm.isPolicy = $$a
+                          .slice(0, $$i)
+                          .concat($$a.slice($$i + 1)))
+                    }
+                  } else {
+                    _vm.isPolicy = $$c
+                  }
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("label", { staticClass: "policy", attrs: { for: "cb-policy" } })
+          ]),
           _vm._v(" "),
           _c(
             "div",
@@ -3130,44 +3240,24 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _vm._m(1)
+        _c("div", { staticClass: "buttons" }, [
+          _c("input", {
+            staticClass: "btn medium-btn",
+            class: { "active-btn": _vm.isValid },
+            attrs: {
+              type: "submit",
+              disabled: !_vm.isValid,
+              value: "Зарегистрироваться"
+            }
+          })
+        ])
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "hr" })
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "policy" }, [
-      _c("input", {
-        attrs: {
-          type: "checkbox",
-          id: "cb-policy",
-          name: "agreeWithPolicy",
-          value: "true",
-          checked: ""
-        }
-      }),
-      _vm._v(" "),
-      _c("label", { staticClass: "policy", attrs: { for: "cb-policy" } })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "buttons" }, [
-      _c("input", {
-        staticClass: "btn medium-btn active-btn",
-        attrs: { type: "submit", value: "Зарегистрироваться" }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
