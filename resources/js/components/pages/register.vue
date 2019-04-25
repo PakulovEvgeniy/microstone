@@ -46,9 +46,4 @@
   .r-footer {
     text-align: center;
   }
-  .r-footer a{
-    color: #0493d9;
-    text-decoration: none;
-    font-weight: 700;
-  }
 </style>

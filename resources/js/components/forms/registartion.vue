@@ -18,7 +18,21 @@
                 <div class="captcha">
                     <vue-recaptcha @verify="onVerify" type="checkbox" sitekey="6LcArp8UAAAAAD1CM3AaGQRCQZyN2gFbm0GGkzKk"></vue-recaptcha>
                 </div>
+                <div class="policy-area">
+                    <div class="policy">
+                        <input type="checkbox" id="cb-policy" name="agreeWithPolicy" value="true" checked>
+                        <label for="cb-policy" class="policy"></label>
+                    </div>
+                    <div class="policy-text">
+                        Настоящим подтверждаю, что я ознакомлен и согласен с 
+                        <router-link to="/police">условиями политики конфиденциальности</router-link>
+                    </div>
+                </div>
+                <div class="buttons">
+                    <input type="submit" class="btn medium-btn active-btn" value="Зарегистрироваться">
+                </div>
             </div>
+            <div class="hr"></div>
         </div>
 
     </form>
@@ -114,5 +128,83 @@ import VueRecaptcha from 'vue-recaptcha';
     }
     .controls {
         margin-top: 10px;
+    }
+    .captcha {
+        margin: 10px 0 5px 0;
+    }
+    .policy-area {
+        margin: 7px 0 7px 0;
+        font-size: 15px;
+        position: relative;
+        height: 40px;
+    }
+    .policy {
+        width: 30px;
+        position: absolute;
+        float: left;
+        height: auto;
+    }
+    .policy input[type=checkbox] {
+        margin: 0;
+    }
+    .policy input[type=checkbox]:checked+label {
+        background: -webkit-linear-gradient(top,#59de23 40%,#32ad00 100%);
+        background: -moz-linear-gradient(top,#59de23 40%,#32ad00 100%);
+        background: -o-linear-gradient(top,#59de23 40%,#32ad00 100%);
+        background: -ms-linear-gradient(top,#59de23 40%,#32ad00 100%);
+        background: linear-gradient(top,#59de23 40%,#32ad00 100%);
+    }
+    .policy label {
+        cursor: pointer;
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        top: 0;
+        border-radius: 4px;
+        left: 0;
+        background: -webkit-linear-gradient(top,#dfe5d7 40%,#b3bead 100%);
+        background: -moz-linear-gradient(top,#dfe5d7 40%,#b3bead 100%);
+        background: -o-linear-gradient(top,#dfe5d7 40%,#b3bead 100%);
+        background: -ms-linear-gradient(top,#dfe5d7 40%,#b3bead 100%);
+        background: linear-gradient(top,#dfe5d7 40%,#b3bead 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfe5d7',endColorstr='#b3bead',GradientType=0);
+    }
+    .policy input[type=checkbox]:checked+label:after {
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+        filter: alpha(opacity=100);
+        opacity: 1;
+    }
+    .policy label:hover::after {
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+        filter: alpha(opacity=30);
+        opacity: .5;
+    }
+    .policy label:after {
+        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+        filter: alpha(opacity=0);
+        opacity: 0;
+        content: '';
+        position: absolute;
+        width: 8px;
+        height: 5px;
+        background: transparent;
+        top: 3px;
+        left: 4px;
+        border: 3px solid #fff;
+        border-top: none;
+        border-right: none;
+        -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+        box-sizing: content-box;
+    }
+    .policy-text {
+        margin-left: 30px;
+        position: absolute;
+    }
+    .buttons {
+        text-align: center;
     }
 </style>

@@ -1882,6 +1882,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3096,12 +3110,64 @@ var render = function() {
             })
           ],
           1
-        )
-      ])
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "policy-area" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "policy-text" },
+            [
+              _vm._v(
+                "\n                    Настоящим подтверждаю, что я ознакомлен и согласен с \n                    "
+              ),
+              _c("router-link", { attrs: { to: "/police" } }, [
+                _vm._v("условиями политики конфиденциальности")
+              ])
+            ],
+            1
+          )
+        ]),
+        _vm._v(" "),
+        _vm._m(1)
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "hr" })
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "policy" }, [
+      _c("input", {
+        attrs: {
+          type: "checkbox",
+          id: "cb-policy",
+          name: "agreeWithPolicy",
+          value: "true",
+          checked: ""
+        }
+      }),
+      _vm._v(" "),
+      _c("label", { staticClass: "policy", attrs: { for: "cb-policy" } })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "buttons" }, [
+      _c("input", {
+        staticClass: "btn medium-btn active-btn",
+        attrs: { type: "submit", value: "Зарегистрироваться" }
+      })
+    ])
+  }
+]
 render._withStripped = true
 
 
