@@ -11,7 +11,7 @@ export function createStore () {
       name: '',
       auth: false,
       csrf: '',
-      userEmail: 'info@microstone.ru',
+      userEmail: '',
       settings: {},
       scrolled: 0,
       screenWidth: 0,
@@ -25,6 +25,12 @@ export function createStore () {
     mutations: {
       setName (state, payload) {
         state.name = payload;
+      },
+      setAuth (state, payload) {
+        state.auth = payload;
+      },
+      setEmail (state, payload) {
+        state.userEmail = payload;
       },
       setSettings (state, payload) {
         state.settings = payload;
@@ -40,6 +46,9 @@ export function createStore () {
       }
     },
     getters: {
+      csrf(state) {
+        return state.csrf;
+      },
       settings (state) {
         return state.settings;
       },

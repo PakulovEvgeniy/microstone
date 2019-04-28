@@ -15,6 +15,7 @@
   import MicrostoneLogo from '../../components/layout/microstone_logo';
   import ReglogDialog from '../layout/reglog_dialog';
   import Registration from '../forms/registartion';
+  import { mapGetters } from 'vuex';
     export default {
         data() {
             return {
@@ -25,8 +26,16 @@
           'reglog-dialog': ReglogDialog,
           'registration-form': Registration
         },
+        computed: {
+          ...mapGetters([
+                'auth'
+          ])
+        },
         beforeRouteEnter (to, from, next) {
           next(vm => {
+            //if(vm.$store.state.auth) {
+            //  return vm.$router.push('/home');
+            //}
             vm.$store.commit('setNonVisibleMain', true)
           })
         },

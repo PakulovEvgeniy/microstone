@@ -19,6 +19,7 @@ export default new Router({
     { path: '/', component: PageComponent('Home'), name: 'home' },
     { path: '/about', component: PageComp, name: 'about' },
     { path: '/contact', component: PageComponent('Contact'), name: 'contact' },
+    { path: '/account', component: PageComponent('Account'), name: 'account' },
     { path: '/login', component: loginComp, name: 'login' },
     { path: '/register', component: registerComp, name: 'register' }
   ]

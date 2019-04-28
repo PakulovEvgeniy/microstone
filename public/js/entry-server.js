@@ -1856,6 +1856,12 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_recaptcha__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-recaptcha */ "./node_modules/vue-recaptcha/dist/vue-recaptcha.es.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
 //
 //
 //
@@ -1897,35 +1903,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      error: false,
+      error: '',
       showPassword: false,
       login: {
         value: '',
         valid: false,
         validate: /^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$/,
-        edit: false
+        edit: false,
+        errTxt: 'Некорректный e-mail'
       },
       password: {
         value: '',
         valid: false,
         validate: /.{8}/,
-        edit: false
+        edit: false,
+        errTxt: 'Слишком короткий пароль'
       },
       captchaToken: '',
       isPolicy: true
     };
   },
-  computed: {
+  computed: _objectSpread({
     typePassword: function typePassword() {
       return this.showPassword ? 'text' : 'password';
     },
     isValid: function isValid() {
+      return true;
       return this.isPolicy && this.captchaToken && this.login.valid && this.password.valid;
     }
-  },
+  }, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(['csrf'])),
   methods: {
     onVerify: function onVerify(response) {
       this.captchaToken = response;
@@ -1939,13 +1949,44 @@ __webpack_require__.r(__webpack_exports__);
     },
     onBlur: function onBlur(param) {
       this[param].edit = true;
-      console.log(param);
+
+      if (!this[param].valid) {
+        this.error = this[param].errTxt;
+      } else if (this.login.valid && this.password.valid) {
+        this.error = '';
+      }
     },
     validClass: function validClass(param) {
       return this[param].edit && this[param].valid;
     },
     invalidClass: function invalidClass(param) {
       return this[param].edit && !this[param].valid;
+    },
+    onSubmit: function onSubmit() {
+      var _this = this;
+
+      axios.post('/register', {
+        _token: this.csrf,
+        email: this.login.value,
+        password: this.password.value
+      }).then(function (response) {
+        var dat = response.data;
+        console.log(dat);
+
+        if (dat.status && dat.status == 'success') {
+          if (dat.email) {
+            _this.$store.commit('setAuth', true);
+
+            _this.$store.commit('setEmail', dat.email);
+          }
+        }
+
+        if (dat.redirectTo) {
+          _this.$router.push(dat.redirectTo);
+        }
+      }).catch(function (e) {
+        console.log(e);
+      });
     }
   },
   components: {
@@ -2277,6 +2318,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_layout_microstone_logo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/layout/microstone_logo */ "./resources/js/components/layout/microstone_logo.vue");
 /* harmony import */ var _layout_reglog_dialog__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../layout/reglog_dialog */ "./resources/js/components/layout/reglog_dialog.vue");
 /* harmony import */ var _forms_registartion__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../forms/registartion */ "./resources/js/components/forms/registartion.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2290,6 +2336,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
@@ -2302,8 +2349,12 @@ __webpack_require__.r(__webpack_exports__);
     'reglog-dialog': _layout_reglog_dialog__WEBPACK_IMPORTED_MODULE_1__["default"],
     'registration-form': _forms_registartion__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_3__["mapGetters"])(['auth'])),
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
     next(function (vm) {
+      //if(vm.$store.state.auth) {
+      //  return vm.$router.push('/home');
+      //}
       vm.$store.commit('setNonVisibleMain', true);
     });
   },
@@ -3045,217 +3096,242 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("form", { attrs: { novalidate: "" } }, [
-    _c("div", { staticClass: "registration" }, [
-      _vm.error ? _c("div", { staticClass: "error" }) : _vm._e(),
-      _vm._v(" "),
-      _c("label", { attrs: { for: "email" } }, [
-        _vm._v("Адрес электронной почты (e-mail)")
-      ]),
-      _vm._v(" "),
-      _c("input", {
-        class: {
-          valid: _vm.validClass("login"),
-          invalid: _vm.invalidClass("login")
-        },
-        attrs: {
-          onfocus: "this.removeAttribute('readonly')",
-          readonly: "",
-          id: "email",
-          name: "email",
-          type: "email"
-        },
-        domProps: { value: _vm.login.value },
-        on: {
-          blur: function($event) {
-            return _vm.onBlur("login")
-          },
-          input: function($event) {
-            return _vm.onInput($event, "login")
-          }
+  return _c(
+    "form",
+    {
+      attrs: { novalidate: "", method: "post" },
+      on: {
+        submit: function($event) {
+          $event.preventDefault()
+          return _vm.onSubmit($event)
         }
+      }
+    },
+    [
+      _c("input", {
+        attrs: { type: "hidden", name: "_token", id: "csrf-token" },
+        domProps: { value: this.csrf }
       }),
       _vm._v(" "),
-      _c("label", { attrs: { for: "password" } }, [_vm._v("Пароль")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "password-area" }, [
+      _c("div", { staticClass: "registration" }, [
+        _vm.error
+          ? _c("div", { staticClass: "error" }, [_vm._v(_vm._s(this.error))])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("label", { attrs: { for: "email" } }, [
+          _vm._v("Адрес электронной почты (e-mail)")
+        ]),
+        _vm._v(" "),
         _c("input", {
           class: {
-            valid: _vm.validClass("password"),
-            invalid: _vm.invalidClass("password")
+            valid: _vm.validClass("login"),
+            invalid: _vm.invalidClass("login")
           },
           attrs: {
             onfocus: "this.removeAttribute('readonly')",
             readonly: "",
-            type: _vm.typePassword,
-            id: "password",
-            name: "password",
-            placeholder: "Не менее 8 символов"
+            id: "email",
+            name: "email",
+            type: "email"
           },
-          domProps: { value: _vm.password.value },
+          domProps: { value: _vm.login.value },
           on: {
             blur: function($event) {
-              return _vm.onBlur("password")
+              return _vm.onBlur("login")
             },
             input: function($event) {
-              return _vm.onInput($event, "password")
+              return _vm.onInput($event, "login")
             }
           }
         }),
         _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "show-password", attrs: { title: "Показать пароль" } },
-          [
-            _c(
-              "span",
-              {
-                on: {
-                  click: function($event) {
-                    _vm.showPassword = !_vm.showPassword
-                  }
-                }
-              },
-              [_vm._v("Показать")]
-            ),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.showPassword,
-                  expression: "showPassword"
-                }
-              ],
-              attrs: { type: "checkbox", id: "cb-show-password" },
-              domProps: {
-                checked: Array.isArray(_vm.showPassword)
-                  ? _vm._i(_vm.showPassword, null) > -1
-                  : _vm.showPassword
-              },
-              on: {
-                change: function($event) {
-                  var $$a = _vm.showPassword,
-                    $$el = $event.target,
-                    $$c = $$el.checked ? true : false
-                  if (Array.isArray($$a)) {
-                    var $$v = null,
-                      $$i = _vm._i($$a, $$v)
-                    if ($$el.checked) {
-                      $$i < 0 && (_vm.showPassword = $$a.concat([$$v]))
-                    } else {
-                      $$i > -1 &&
-                        (_vm.showPassword = $$a
-                          .slice(0, $$i)
-                          .concat($$a.slice($$i + 1)))
-                    }
-                  } else {
-                    _vm.showPassword = $$c
-                  }
-                }
-              }
-            }),
-            _vm._v(" "),
-            _c("label", { attrs: { for: "cb-show-password" } })
-          ]
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "controls" }, [
-        _c(
-          "div",
-          { staticClass: "captcha" },
-          [
-            _c("vue-recaptcha", {
-              attrs: {
-                type: "checkbox",
-                sitekey: "6LcArp8UAAAAAD1CM3AaGQRCQZyN2gFbm0GGkzKk"
-              },
-              on: { verify: _vm.onVerify, expired: _vm.onExpired }
-            })
-          ],
-          1
-        ),
+        _c("label", { attrs: { for: "password" } }, [_vm._v("Пароль")]),
         _vm._v(" "),
-        _c("div", { staticClass: "policy-area" }, [
-          _c("div", { staticClass: "policy" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.isPolicy,
-                  expression: "isPolicy"
-                }
-              ],
-              attrs: {
-                type: "checkbox",
-                id: "cb-policy",
-                name: "agreeWithPolicy"
+        _c("div", { staticClass: "password-area" }, [
+          _c("input", {
+            class: {
+              valid: _vm.validClass("password"),
+              invalid: _vm.invalidClass("password")
+            },
+            attrs: {
+              onfocus: "this.removeAttribute('readonly')",
+              readonly: "",
+              type: _vm.typePassword,
+              id: "password",
+              name: "password",
+              placeholder: "Не менее 8 символов"
+            },
+            domProps: { value: _vm.password.value },
+            on: {
+              blur: function($event) {
+                return _vm.onBlur("password")
               },
-              domProps: {
-                checked: Array.isArray(_vm.isPolicy)
-                  ? _vm._i(_vm.isPolicy, null) > -1
-                  : _vm.isPolicy
-              },
-              on: {
-                change: function($event) {
-                  var $$a = _vm.isPolicy,
-                    $$el = $event.target,
-                    $$c = $$el.checked ? true : false
-                  if (Array.isArray($$a)) {
-                    var $$v = null,
-                      $$i = _vm._i($$a, $$v)
-                    if ($$el.checked) {
-                      $$i < 0 && (_vm.isPolicy = $$a.concat([$$v]))
-                    } else {
-                      $$i > -1 &&
-                        (_vm.isPolicy = $$a
-                          .slice(0, $$i)
-                          .concat($$a.slice($$i + 1)))
-                    }
-                  } else {
-                    _vm.isPolicy = $$c
-                  }
-                }
+              input: function($event) {
+                return _vm.onInput($event, "password")
               }
-            }),
-            _vm._v(" "),
-            _c("label", { staticClass: "policy", attrs: { for: "cb-policy" } })
-          ]),
+            }
+          }),
           _vm._v(" "),
           _c(
             "div",
-            { staticClass: "policy-text" },
+            {
+              staticClass: "show-password",
+              attrs: { title: "Показать пароль" }
+            },
             [
-              _vm._v(
-                "\n                    Настоящим подтверждаю, что я ознакомлен и согласен с \n                    "
+              _c(
+                "span",
+                {
+                  on: {
+                    click: function($event) {
+                      _vm.showPassword = !_vm.showPassword
+                    }
+                  }
+                },
+                [_vm._v("Показать")]
               ),
-              _c("router-link", { attrs: { to: "/police" } }, [
-                _vm._v("условиями политики конфиденциальности")
-              ])
-            ],
-            1
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.showPassword,
+                    expression: "showPassword"
+                  }
+                ],
+                attrs: { type: "checkbox", id: "cb-show-password" },
+                domProps: {
+                  checked: Array.isArray(_vm.showPassword)
+                    ? _vm._i(_vm.showPassword, null) > -1
+                    : _vm.showPassword
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.showPassword,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && (_vm.showPassword = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.showPassword = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.showPassword = $$c
+                    }
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("label", { attrs: { for: "cb-show-password" } })
+            ]
           )
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "buttons" }, [
-          _c("input", {
-            staticClass: "btn medium-btn",
-            class: { "active-btn": _vm.isValid },
-            attrs: {
-              type: "submit",
-              disabled: !_vm.isValid,
-              value: "Зарегистрироваться"
-            }
-          })
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "hr" })
-    ])
-  ])
+        _c("div", { staticClass: "controls" }, [
+          _c(
+            "div",
+            { staticClass: "captcha" },
+            [
+              _c("vue-recaptcha", {
+                attrs: {
+                  type: "checkbox",
+                  sitekey: "6LcArp8UAAAAAD1CM3AaGQRCQZyN2gFbm0GGkzKk"
+                },
+                on: { verify: _vm.onVerify, expired: _vm.onExpired }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "policy-area" }, [
+            _c("div", { staticClass: "policy" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.isPolicy,
+                    expression: "isPolicy"
+                  }
+                ],
+                attrs: {
+                  type: "checkbox",
+                  id: "cb-policy",
+                  name: "agreeWithPolicy"
+                },
+                domProps: {
+                  checked: Array.isArray(_vm.isPolicy)
+                    ? _vm._i(_vm.isPolicy, null) > -1
+                    : _vm.isPolicy
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.isPolicy,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 && (_vm.isPolicy = $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          (_vm.isPolicy = $$a
+                            .slice(0, $$i)
+                            .concat($$a.slice($$i + 1)))
+                      }
+                    } else {
+                      _vm.isPolicy = $$c
+                    }
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("label", {
+                staticClass: "policy",
+                attrs: { for: "cb-policy" }
+              })
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "policy-text" },
+              [
+                _vm._v(
+                  "\n                    Настоящим подтверждаю, что я ознакомлен и согласен с \n                    "
+                ),
+                _c("router-link", { attrs: { to: "/police" } }, [
+                  _vm._v("условиями политики конфиденциальности")
+                ])
+              ],
+              1
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "buttons" }, [
+            _c("input", {
+              staticClass: "btn medium-btn",
+              class: { "active-btn": _vm.isValid },
+              attrs: {
+                type: "submit",
+                disabled: !_vm.isValid,
+                value: "Зарегистрироваться"
+              }
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "hr" })
+      ])
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -20850,6 +20926,10 @@ function PageComponent(name) {
     component: PageComponent('Contact'),
     name: 'contact'
   }, {
+    path: '/account',
+    component: PageComponent('Account'),
+    name: 'account'
+  }, {
     path: '/login',
     component: _components_pages_login_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
     name: 'login'
@@ -20887,7 +20967,7 @@ function createStore() {
       name: '',
       auth: false,
       csrf: '',
-      userEmail: 'info@microstone.ru',
+      userEmail: '',
       settings: {},
       scrolled: 0,
       screenWidth: 0,
@@ -20906,6 +20986,12 @@ function createStore() {
       setName: function setName(state, payload) {
         state.name = payload;
       },
+      setAuth: function setAuth(state, payload) {
+        state.auth = payload;
+      },
+      setEmail: function setEmail(state, payload) {
+        state.userEmail = payload;
+      },
       setSettings: function setSettings(state, payload) {
         state.settings = payload;
       },
@@ -20920,6 +21006,9 @@ function createStore() {
       }
     },
     getters: {
+      csrf: function csrf(state) {
+        return state.csrf;
+      },
       settings: function settings(state) {
         return state.settings;
       },

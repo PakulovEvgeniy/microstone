@@ -14,6 +14,7 @@
 Route::get('/', 'AppController@get');
 Route::get('/about', 'AppController@get');
 Route::get('/contact', 'AppController@get');
+Route::get('/account', 'AppController@get');
 
 Auth::routes();
 
