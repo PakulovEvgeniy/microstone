@@ -17,7 +17,7 @@
             </div>
             <div class="controls">
                 <div class="captcha">
-                    <vue-recaptcha @verify="onVerify" @expired="onExpired" type="checkbox" sitekey="6LcArp8UAAAAAD1CM3AaGQRCQZyN2gFbm0GGkzKk"></vue-recaptcha>
+                    <vue-recaptcha ref="recaptcha" @verify="onVerify" @expired="onExpired" type="checkbox" sitekey="6LcArp8UAAAAAD1CM3AaGQRCQZyN2gFbm0GGkzKk"></vue-recaptcha>
                 </div>
                 <div class="policy-area">
                     <div class="policy">
@@ -62,7 +62,8 @@ import { mapGetters } from 'vuex';
                     errTxt: 'Слишком короткий пароль'
                 },
                 captchaToken: '',
-                isPolicy:true
+                isPolicy:true,
+                isQuery: false
             }
         },
         computed: {
@@ -70,8 +71,7 @@ import { mapGetters } from 'vuex';
                 return this.showPassword ? 'text' : 'password';
             },
             isValid() {
-                return true;
-                return this.isPolicy && this.captchaToken && this.login.valid && this.password.valid;
+                return this.isPolicy && this.captchaToken && this.login.valid && this.password.valid && !this.isQuery;
             },
             ...mapGetters([
                 'csrf'
@@ -103,27 +103,53 @@ import { mapGetters } from 'vuex';
                 return this[param].edit && !this[param].valid
             },
             onSubmit() {
+                this.error = '';
+                this.isQuery = true;
                 axios.post('/register', {   
                     _token: this.csrf,
                     email: this.login.value,
-                    password: this.password.value
+                    password: this.password.value,
+                    captcha: this.captchaToken
                 })
                 .then(response => {
+                    this.isQuery = false;
                     let dat = response.data;
-                    console.log(dat)
                     if (dat.status && dat.status == 'success') {
                         if (dat.email) {
                             this.$store.commit('setAuth', true);
                             this.$store.commit('setEmail', dat.email);  
                         }
                     }
+                    if (dat.csrf) {
+                        this.$store.commit('setCsrf', dat.csrf);
+                        axios.defaults.headers.common['X-CSRF-TOKEN'] = dat.csrf;
+                    }
                     if (dat.redirectTo) {
                         this.$router.push(dat.redirectTo);
                     }
                 })
                 .catch(e => {
-                    console.log(e);
+                    this.resetRecaptcha();
+                    this.showError(e);
+                    this.isQuery = false;
+
                 })
+            },
+            showError(e) {
+               if (e.response && e.response.data) {
+                let err = e.response.data.errors;
+                if (err) {
+                    for(let el in err) {
+                        this.error = err[el][0];
+                    }
+                }
+               } else {
+                this.error = e.message;
+               }
+            },
+            resetRecaptcha () {
+                this.captchaToken = '';
+                this.$refs.recaptcha.reset() // Direct call reset method
             }
         },
         components: 

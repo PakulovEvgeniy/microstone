@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
+use App\Rules\Captcha;
 use JSRender;
 
 class RegisterController extends Controller
@@ -53,6 +54,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
+            'captcha' => ['required', new Captcha]
         ]);
     }
 
@@ -76,7 +78,8 @@ class RegisterController extends Controller
             return [
                 'status' => 'success',
                 'email' => $user->email,
-                'redirectTo' => $this->redirectPath()
+                'redirectTo' => $this->redirectPath(),
+                'csrf' => csrf_token()
             ];   
         }
     }

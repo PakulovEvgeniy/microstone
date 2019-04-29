@@ -47,12 +47,4 @@
 </script>
 
 <style>
-  .r-topic {
-    font-size: 26px;
-    color: #404040;
-    margin: 8px 0 15px 40px;
-  }
-  .r-footer {
-    text-align: center;
-  }
 </style>

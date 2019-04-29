@@ -39,10 +39,41 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            $this->username() => ['required', 'string', 'email', 'max:255'],
+            'password' => ['required', 'string', 'min:8']
+        ]);
+    }
+
     public function showLoginForm(Request $request) {
         $ssr = JSRender::render($request->path(), ['nonVisibleMain' => true]);
         //$rend = $this->render($request->path());
         //$ssr = phpinfo(); 
         return view('app', ['ssr' => $ssr]);
+    }
+
+    public function authenticated(Request $request, $user)
+    {
+        if ($request->ajax()) {
+            return [
+                'status' => 'success',
+                'email' => $user->email,
+                'redirectTo' => $this->redirectPath(),
+                'csrf' => csrf_token()
+            ];   
+        }
+    }
+
+    public function loggedOut(Request $request)
+    {
+        if ($request->ajax()) {
+            return [
+                'status' => 'success',
+                'csrf' => csrf_token(),
+                'redirectTo' => '/'
+            ];   
+        }
     }
 }

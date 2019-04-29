@@ -40,7 +40,11 @@
                   <li><a>Списки</a></li>
                   <li><a>Уведомления</a></li>
                   <li><a>Обратная связь</a></li>
-                  <li><a href="">Выход</a></li>
+                  <li><a @click.prevent="onExit">Выход</a>
+                      <form ref='logoutform' id="logout-form" :action="this.$router.options.base+'logout'" method="POST" style="display: none;">
+                       <input type="hidden" name="_token" id="csrf-token" :value="this.csrf">
+                      </form>
+                  </li>
                 </dropdown-menu>
               </li>
             </template>
@@ -64,12 +68,18 @@
           ...mapGetters([
             'settings',
             'auth',
-            'userEmail'
+            'userEmail',
+            'csrf'
           ])
         }, 
         components: {
           'uvedoml-component': UvedomlComp,
           'dropdown-menu': Dropdown
+        }, 
+        methods: {
+          onExit() {
+            this.$refs['logoutform'].submit();
+          }
         }
     }
 </script>

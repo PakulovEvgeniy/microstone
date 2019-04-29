@@ -29,6 +29,9 @@ export function createStore () {
       setAuth (state, payload) {
         state.auth = payload;
       },
+      setCsrf (state, payload) {
+        state.csrf = payload;
+      },
       setEmail (state, payload) {
         state.userEmail = payload;
       },
