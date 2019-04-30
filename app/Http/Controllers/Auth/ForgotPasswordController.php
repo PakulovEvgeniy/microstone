@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Illuminate\Http\Request;
+use App\Rules\Captcha;
+use Session;
+use JSRender;
 
 class ForgotPasswordController extends Controller
 {
@@ -28,5 +32,26 @@ class ForgotPasswordController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+    }
+
+    public function validateEmail(Request $request)
+    {
+        $request->validate(['email' => ['required', 'email'],
+            'captcha' => ['required', new Captcha]
+        ]);
+    }
+
+    public function showLinkRequestForm(Request $request) {
+        if ($request->ajax()) {
+            $errors = Session::get('errors');
+            if ($errors && $errors->has('email')) {
+                return ['error' => $errors->first('email')];
+            }
+        }  else {
+            $ssr = JSRender::render($request->path(), ['nonVisibleMain' => true]);
+        //$rend = $this->render($request->path());
+        //$ssr = phpinfo(); 
+            return view('app', ['ssr' => $ssr]);
+        }
     }
 }

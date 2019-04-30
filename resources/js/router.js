@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import PageComp from './components/Page.vue';
 import loginComp from './components/pages/login.vue';
 import registerComp from './components/pages/register.vue';
+import passwordLink from './components/pages/passwordlink.vue';
 
 Vue.use(Router);
 
@@ -21,6 +22,7 @@ export default new Router({
     { path: '/contact', component: PageComponent('Contact'), name: 'contact' },
     { path: '/account', component: PageComponent('Account'), name: 'account' },
     { path: '/login', component: loginComp, name: 'login' },
-    { path: '/register', component: registerComp, name: 'register' }
+    { path: '/register', component: registerComp, name: 'register' },
+    { path: '/password/reset', component: passwordLink, name: 'passwordLink' }
   ]
 });

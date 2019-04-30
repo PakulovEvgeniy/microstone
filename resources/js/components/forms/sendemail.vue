@@ -5,20 +5,14 @@
             <div v-if="error" class="error">{{this.error}}</div>
             <label for="email">Адрес электронной почты (e-mail)</label>
             <input @blur="onBlur('login')" :class="{'valid': validClass('login'), 'invalid' : invalidClass('login')}" id="email" name="email" :value="login.value" @input="onInput($event,'login')" type="email">
-            <label for="password">Пароль</label>
-            <div class="password-area">
-                <input onfocus="this.removeAttribute('readonly')" readonly @blur="onBlur('password')" :type="typePassword" :class="{'valid': validClass('password'), 'invalid' : invalidClass('password')}" id="password" @input="onInput($event, 'password')" :value="password.value" name="password" placeholder="Не менее 8 символов">
-                <div class="show-password" title="Показать пароль">
-                    <span @click="showPassword = !showPassword">Показать</span>
-                    <input type="checkbox" id="cb-show-password" v-model="showPassword">
-                    <label for="cb-show-password">
-                    </label>
-                </div>
-            </div>
+            
             <div class="controls">
-                <router-link to="/password/reset">Забыли пароль?</router-link>
+                <div class="captcha">
+                    <vue-recaptcha ref="recaptcha" @verify="onVerify" @expired="onExpired" type="checkbox" sitekey="6LcArp8UAAAAAD1CM3AaGQRCQZyN2gFbm0GGkzKk"></vue-recaptcha>
+                </div>
+                
                 <div class="buttons">
-                    <input type="submit" class="btn medium-btn" :class="{'active-btn': isValid}" :disabled="!isValid" value="Войти">
+                    <input type="submit" class="btn medium-btn" :class="{'active-btn': isValid}" :disabled="!isValid" value="Восстановить пароль">
                 </div>
             </div>
             <div class="hr"></div>
@@ -28,12 +22,12 @@
 </template>
 
 <script>
+import VueRecaptcha from 'vue-recaptcha';
 import { mapGetters } from 'vuex';
     export default {
         data() {
             return {
                 error: '',
-                showPassword: false,
                 login: {
                     value: '',
                     valid: false,
@@ -41,28 +35,25 @@ import { mapGetters } from 'vuex';
                     edit: false,
                     errTxt: 'Некорректный e-mail'
                 },
-                password: {
-                    value: '',
-                    valid: false,
-                    validate: /.{8}/,
-                    edit: false,
-                    errTxt: 'Слишком короткий пароль'
-                },
+                captchaToken: '',
                 isQuery: false
             }
         },
         computed: {
-            typePassword() {
-                return this.showPassword ? 'text' : 'password';
-            },
             isValid() {
-                return this.login.valid && this.password.valid && !this.isQuery;
+                return this.captchaToken && this.login.valid  && !this.isQuery;
             },
             ...mapGetters([
                 'csrf'
             ])
         },
         methods: {
+            onVerify(response) {
+                this.captchaToken = response;
+            },
+            onExpired() {
+                this.captchaToken = '';
+            },
             onInput(e, param) {
                 this[param].value = e.target.value;
                 this[param].valid = this[param].validate.test(this[param].value);
@@ -71,7 +62,7 @@ import { mapGetters } from 'vuex';
                 this[param].edit = true;
                 if (!this[param].valid) {
                    this.error = this[param].errTxt;   
-                } else if (this.login.valid && this.password.valid){
+                } else if (this.login.valid){
                     this.error = '';
                 }
             },
@@ -84,29 +75,22 @@ import { mapGetters } from 'vuex';
             onSubmit() {
                 this.error = '';
                 this.isQuery = true;
-                axios.post('/login', {   
+                axios.post('/password/email', {   
                     _token: this.csrf,
                     email: this.login.value,
-                    password: this.password.value
+                    captcha: this.captchaToken
                 })
                 .then(response => {
                     this.isQuery = false;
                     let dat = response.data;
-                    if (dat.status && dat.status == 'success') {
-                        if (dat.email) {
-                            this.$store.commit('setAuth', true);
-                            this.$store.commit('setEmail', dat.email);  
-                        }
-                        if (dat.csrf) {
-                            this.$store.commit('setCsrf', dat.csrf);
-                            axios.defaults.headers.common['X-CSRF-TOKEN'] = dat.csrf;
-                        }
-                    }
-                    if (dat.redirectTo) {
-                        this.$router.push(dat.redirectTo);
+                    console.log(dat);
+                    if (dat.error) {
+                        this.error = dat.error;
+                        this.resetRecaptcha();
                     }
                 })
                 .catch(e => {
+                    this.resetRecaptcha();
                     this.showError(e);
                     this.isQuery = false;
 
@@ -124,8 +108,14 @@ import { mapGetters } from 'vuex';
                } else {
                 this.error = e.message;
                }
+            },
+            resetRecaptcha () {
+                this.captchaToken = '';
+                this.$refs.recaptcha.reset() // Direct call reset method
             }
-        }
+        },
+        components: 
+        { VueRecaptcha }
     }
 </script>
 

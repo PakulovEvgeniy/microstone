@@ -141,6 +141,7 @@ import { mapGetters } from 'vuex';
                 if (err) {
                     for(let el in err) {
                         this.error = err[el][0];
+                        break;
                     }
                 }
                } else {
@@ -158,75 +159,7 @@ import { mapGetters } from 'vuex';
 </script>
 
 <style>
-    .registration {
-        position: relative;
-        margin-left: 40px;
-        color: #404040;
-        width: 450px;
-    }
-    .password-area {
-        font-size: 15px;
-        position: relative;
-        display: block;
-    }
-    .show-password {
-        width: 88px;
-        position: absolute;
-        height: 20px;
-        top: 13px;
-        right: 5px;
-        text-align: right;
-        float: right;
-        cursor: pointer;
-    }
-    .show-password span {
-        top: 0;
-        position: relative;
-        font-size: 15px;
-    }
-    .show-password label {
-        position: absolute;
-        width: 17px;
-        height: 17px;
-        top: 0;
-        border-radius: 3px;
-        left: 0;
-        border: 1px solid #898888;
-    }
-
-    .show-password label::after {
-        -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-        filter: alpha(opacity=0);
-        opacity: 0;
-        content: '';
-        position: absolute;
-        width: 8px;
-        height: 5px;
-        background: transparent;
-        top: 3px;
-        left: 3px;
-        border: 3px solid #007aff;
-        border-top: none;
-        border-right: none;
-        -webkit-transform: rotate(-45deg);
-        -moz-transform: rotate(-45deg);
-        -o-transform: rotate(-45deg);
-        -ms-transform: rotate(-45deg);
-        transform: rotate(-45deg);
-        box-sizing: content-box;
-    }
-    .show-password label:hover::after {
-        opacity: 0.3;
-    }
-    .show-password input[type="checkbox"]:checked + label::after {
-        opacity: 1;
-    }
-    .controls {
-        margin-top: 10px;
-    }
-    .captcha {
-        margin: 10px 0 5px 0;
-    }
+    
     .policy-area {
         margin: 7px 0 7px 0;
         font-size: 15px;
@@ -298,8 +231,5 @@ import { mapGetters } from 'vuex';
     .policy-text {
         margin-left: 30px;
         position: absolute;
-    }
-    .buttons {
-        text-align: center;
     }
 </style>
