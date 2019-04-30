@@ -36,8 +36,7 @@ class ForgotPasswordController extends Controller
 
     public function validateEmail(Request $request)
     {
-        $request->validate(['email' => ['required', 'email'],
-            'captcha' => ['required', new Captcha]
+        $request->validate(['email' => ['required', 'email']
         ]);
     }
 
@@ -46,6 +45,8 @@ class ForgotPasswordController extends Controller
             $errors = Session::get('errors');
             if ($errors && $errors->has('email')) {
                 return ['error' => $errors->first('email')];
+            } else {
+                return ['success' => true];
             }
         }  else {
             $ssr = JSRender::render($request->path(), ['nonVisibleMain' => true]);

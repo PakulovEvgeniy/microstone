@@ -1,5 +1,5 @@
 <template>
-    <form novalidate method="post" @submit.prevent="onSubmit">
+    <form novalidate method="post" action="/microstone/public/password/email">
         <input type="hidden" name="_token" id="csrf-token" :value="this.csrf">
         <div class="registration">
             <div v-if="error" class="error">{{this.error}}</div>
@@ -41,6 +41,7 @@ import { mapGetters } from 'vuex';
         },
         computed: {
             isValid() {
+                return true;
                 return this.captchaToken && this.login.valid  && !this.isQuery;
             },
             ...mapGetters([

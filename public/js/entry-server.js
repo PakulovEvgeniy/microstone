@@ -2233,6 +2233,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: _objectSpread({
     isValid: function isValid() {
+      return true;
       return this.captchaToken && this.login.valid && !this.isQuery;
     }
   }, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(['csrf'])),
@@ -3946,12 +3947,10 @@ var render = function() {
   return _c(
     "form",
     {
-      attrs: { novalidate: "", method: "post" },
-      on: {
-        submit: function($event) {
-          $event.preventDefault()
-          return _vm.onSubmit($event)
-        }
+      attrs: {
+        novalidate: "",
+        method: "post",
+        action: "/microstone/public/password/email"
       }
     },
     [
