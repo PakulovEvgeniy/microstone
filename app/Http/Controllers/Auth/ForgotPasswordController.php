@@ -36,17 +36,26 @@ class ForgotPasswordController extends Controller
 
     public function validateEmail(Request $request)
     {
-        $request->validate(['email' => ['required', 'email']
+        $request->validate([
+            'email' => ['required', 'email'],
+            'captcha' => ['required', new Captcha]
         ]);
+    }
+
+    protected function sendResetLinkResponse(Request $request, $response)
+    {
+        Session::put('reset_email', $request->email);
+        return back()->with('status', trans($response));
     }
 
     public function showLinkRequestForm(Request $request) {
         if ($request->ajax()) {
             $errors = Session::get('errors');
+            $status = Session::get('status');
             if ($errors && $errors->has('email')) {
                 return ['error' => $errors->first('email')];
             } else {
-                return ['success' => true];
+                return ['success' => true, 'status' => $status];
             }
         }  else {
             $ssr = JSRender::render($request->path(), ['nonVisibleMain' => true]);

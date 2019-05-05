@@ -41,7 +41,7 @@
 
 <script>
 import VueRecaptcha from 'vue-recaptcha';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
     export default {
         data() {
             return {
@@ -102,6 +102,10 @@ import { mapGetters } from 'vuex';
             invalidClass(param) {
                 return this[param].edit && !this[param].valid
             },
+            ...mapActions({
+                setAuth: 'setAuth',
+                showError: 'showError'
+            }),
             onSubmit() {
                 this.error = '';
                 this.isQuery = true;
@@ -113,40 +117,17 @@ import { mapGetters } from 'vuex';
                 })
                 .then(response => {
                     this.isQuery = false;
-                    let dat = response.data;
-                    if (dat.status && dat.status == 'success') {
-                        if (dat.email) {
-                            this.$store.commit('setAuth', true);
-                            this.$store.commit('setEmail', dat.email);  
-                        }
-                    }
-                    if (dat.csrf) {
-                        this.$store.commit('setCsrf', dat.csrf);
-                        axios.defaults.headers.common['X-CSRF-TOKEN'] = dat.csrf;
-                    }
-                    if (dat.redirectTo) {
-                        this.$router.push(dat.redirectTo);
-                    }
+                    this.setAuth({
+                        dat: response.data,
+                        vm: this
+                    });
                 })
                 .catch(e => {
                     this.resetRecaptcha();
-                    this.showError(e);
+                    this.showError({e: e, vm: this});
                     this.isQuery = false;
 
                 })
-            },
-            showError(e) {
-               if (e.response && e.response.data) {
-                let err = e.response.data.errors;
-                if (err) {
-                    for(let el in err) {
-                        this.error = err[el][0];
-                        break;
-                    }
-                }
-               } else {
-                this.error = e.message;
-               }
             },
             resetRecaptcha () {
                 this.captchaToken = '';

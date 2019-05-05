@@ -1,5 +1,6 @@
 <template>
     <div id="app">
+      <vs-notify group="alert" position="top center" transition="ntf-top" :duration="4000"></vs-notify>
       <div v-if = "!nonVisibleMain">
         <header-component></header-component>
         <h1>{{ title }} {{ statename }} {{ str}}</h1>

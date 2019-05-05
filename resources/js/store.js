@@ -3,8 +3,6 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-import axios from 'axios';
-
 export function createStore () {
   return new Vuex.Store({
     state: {
@@ -15,11 +13,47 @@ export function createStore () {
       settings: {},
       scrolled: 0,
       screenWidth: 0,
-      nonVisibleMain: false
+      nonVisibleMain: false,
+      resetEmail: {}
     },
     actions: {
-      setName ({ commit }, page) {
-        return axios.get(`/api/name/${page}`).then(({ data }) => commit('setName', data));
+      setAuth ({ commit }, data) {
+        let dat = data.dat;
+        let vm = data.vm;
+        if (dat.status && dat.status == 'success') {
+            if (dat.email) {
+                commit('setAuth', true);
+                commit('setEmail', dat.email);  
+            }
+        }
+        if (dat.csrf) {
+            commit('setCsrf', dat.csrf);
+            axios.defaults.headers.common['X-CSRF-TOKEN'] = dat.csrf;
+        }
+        if (dat.redirectTo) {
+            vm.$router.push(dat.redirectTo);
+        }
+        if (dat.error) {
+          vm.$notify("alert", dat.error, "error");
+        }
+        if (dat.message) {
+          vm.$notify("alert", dat.message, "success");
+        }
+      },
+      showError({commit}, data) {
+        let e = data.e;
+        let vm = data.vm;
+        if (e.response && e.response.data) {
+          let err = e.response.data.errors;
+          if (err) {
+              for(let el in err) {
+                  vm.$notify("alert", err[el][0], "error");
+                  break;
+              }
+          }
+        } else {
+             vm.$notify("alert", e.message, "error");
+        }
       }
     },
     mutations: {
@@ -60,6 +94,9 @@ export function createStore () {
       },
       userEmail (state) {
         return state.userEmail;
+      },
+      resetEmail (state) {
+        return state.resetEmail;
       },
       nonVisibleMain (state) {
         return state.nonVisibleMain;

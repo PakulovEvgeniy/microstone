@@ -3,8 +3,6 @@
         <input type="hidden" name="_token" id="csrf-token" :value="this.csrf">
         <div class="registration">
             <div v-if="error" class="error">{{this.error}}</div>
-            <label for="email">Адрес электронной почты (e-mail)</label>
-            <input @blur="onBlur('login')" :class="{'valid': validClass('login'), 'invalid' : invalidClass('login')}" id="email" name="email" :value="login.value" @input="onInput($event,'login')" type="email">
             <label for="password">Пароль</label>
             <div class="password-area">
                 <input onfocus="this.removeAttribute('readonly')" readonly @blur="onBlur('password')" :type="typePassword" :class="{'valid': validClass('password'), 'invalid' : invalidClass('password')}" id="password" @input="onInput($event, 'password')" :value="password.value" name="password" placeholder="Не менее 8 символов">
@@ -16,9 +14,8 @@
                 </div>
             </div>
             <div class="controls">
-                <router-link to="/password/reset">Забыли пароль?</router-link>
                 <div class="buttons">
-                    <input type="submit" class="btn medium-btn" :class="{'active-btn': isValid}" :disabled="!isValid" value="Войти">
+                    <input type="submit" class="btn medium-btn" :class="{'active-btn': isValid}" :disabled="!isValid" value="Изменить пароль">
                 </div>
             </div>
             <div class="hr"></div>
@@ -34,13 +31,6 @@ import { mapGetters, mapActions } from 'vuex';
             return {
                 error: '',
                 showPassword: false,
-                login: {
-                    value: '',
-                    valid: false,
-                    validate: /^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$/,
-                    edit: false,
-                    errTxt: 'Некорректный e-mail'
-                },
                 password: {
                     value: '',
                     valid: false,
@@ -56,10 +46,11 @@ import { mapGetters, mapActions } from 'vuex';
                 return this.showPassword ? 'text' : 'password';
             },
             isValid() {
-                return this.login.valid && this.password.valid && !this.isQuery;
+                return this.password.valid && !this.isQuery;
             },
             ...mapGetters([
-                'csrf'
+                'csrf',
+                'resetEmail'
             ])
         },
         methods: {
@@ -71,7 +62,7 @@ import { mapGetters, mapActions } from 'vuex';
                 this[param].edit = true;
                 if (!this[param].valid) {
                    this.error = this[param].errTxt;   
-                } else if (this.login.valid && this.password.valid){
+                } else if (this.password.valid){
                     this.error = '';
                 }
             },
@@ -88,10 +79,12 @@ import { mapGetters, mapActions } from 'vuex';
             onSubmit() {
                 this.error = '';
                 this.isQuery = true;
-                axios.post('/login', {   
+                axios.post('/password/reset', {   
                     _token: this.csrf,
-                    email: this.login.value,
-                    password: this.password.value
+                    password: this.password.value,
+                    password_confirmation: this.password.value,
+                    email: this.resetEmail.email,
+                    token: this.resetEmail.token
                 })
                 .then(response => {
                     this.isQuery = false;
@@ -103,7 +96,6 @@ import { mapGetters, mapActions } from 'vuex';
                 .catch(e => {
                     this.showError({e: e, vm: this});
                     this.isQuery = false;
-
                 })
             }
         }
@@ -111,5 +103,4 @@ import { mapGetters, mapActions } from 'vuex';
 </script>
 
 <style>
-    
 </style>

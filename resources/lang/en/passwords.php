@@ -14,9 +14,9 @@ return [
     */
 
     'password' => 'Passwords must be at least eight characters and match the confirmation.',
-    'reset' => 'Your password has been reset!',
-    'sent' => 'We have e-mailed your password reset link!',
-    'token' => 'This password reset token is invalid.',
+    'reset' => 'Ваш пароль был успешно изменен!',
+    'sent' => 'Письмо с инструкцией по восстановлению пароля успешно отправлено!',
+    'token' => 'Неверный токен для восстановления пароля.',
     'user' => "Пользователь с таким e-mail не зарегистрирован",
 
 ];
