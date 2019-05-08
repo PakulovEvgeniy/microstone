@@ -3,9 +3,15 @@
       <vs-notify group="alert" position="top center" transition="ntf-top" :duration="4000"></vs-notify>
       <div v-if = "!nonVisibleMain">
         <header-component></header-component>
-        <h1>{{ title }} {{ statename }} {{ str}}</h1>
       </div>
-      <router-view></router-view>
+      <div class="container">
+        <aside v-if = "!nonVisibleMain && !nonVisibleAside">
+          <category-menu></category-menu>
+        </aside>
+        <main>
+          <router-view></router-view>
+        </main>
+      </div>
       <div v-if = "!nonVisibleMain">
         <router-link :to="{ name: 'about' }">About</router-link>
         <router-link :to="{ name: 'contact' }">Contact</router-link>
@@ -15,6 +21,7 @@
 
 <script>
   import HeaderComponent from './layout/Header.vue';
+  import CategoryMenu from './product/categorymenu.vue';
   import { mapGetters } from 'vuex';
 
     export default {
@@ -24,7 +31,8 @@
             }
         }, 
         components: {
-          'header-component': HeaderComponent
+          'header-component': HeaderComponent,
+          'category-menu': CategoryMenu
         },
         mounted() {
           this.$store.commit('setScreenWidth',window.innerWidth);
@@ -41,7 +49,8 @@
         computed: {
           ...mapGetters([
             'settings',
-            'nonVisibleMain'
+            'nonVisibleMain',
+            'nonVisibleAside'
           ]),
            statename() {
             return this.$store.state.name
@@ -55,3 +64,9 @@
         }
     }
 </script>
+
+<style>
+  main {
+    position: relative;
+  }
+</style>

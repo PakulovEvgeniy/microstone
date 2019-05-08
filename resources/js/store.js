@@ -14,6 +14,7 @@ export function createStore () {
       scrolled: 0,
       screenWidth: 0,
       nonVisibleMain: false,
+      nonVisibleAside: false,
       resetEmail: {}
     },
     actions: {
@@ -81,6 +82,10 @@ export function createStore () {
       setNonVisibleMain (state, payload) {
         state.nonVisibleMain = payload;
       }
+      ,
+      setNonVisibleAside (state, payload) {
+        state.nonVisibleAside = payload;
+      }
     },
     getters: {
       csrf(state) {
@@ -100,6 +105,9 @@ export function createStore () {
       },
       nonVisibleMain (state) {
         return state.nonVisibleMain;
+      },
+      nonVisibleAside (state) {
+        return state.nonVisibleAside;
       },
       isBottomMenuFixed (state) {
         return state.scrolled>40;

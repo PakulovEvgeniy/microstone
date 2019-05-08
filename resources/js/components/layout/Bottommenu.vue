@@ -2,8 +2,9 @@
     <nav v-if="getScreenState>1" class="header-bottom" :class="{'header-fixed': isBottomMenuFixed}">
     <div class="container">
       <div class="header-bottom-container">
-        <div class="logo-container">
-          <router-link to='/'>MICROSTONE</router-link>
+        <div  class="logo-container">
+          <router-link v-tooltip.bottom="'Вернуться на главную страницу'" to='/'>MICROSTONE</router-link>
+          <span class="logo-chevron"><i class="fa fa-chevron-down"></i></span>
         </div>
         <form class="main-search-form" method="get">
           <div class="main-search-form-container">
@@ -65,5 +66,28 @@
 </script>
 
 <style>
-  
+   .logo-container .logo-chevron {
+      width: 30px;
+      background: none;
+      display: inline-block;
+      height: 60px;
+      vertical-align: top;
+      line-height: 60px;
+      padding-left: 5px;
+   }
+   .logo-chevron i {
+     opacity: 0.5;
+     color: #fff;
+   }
+
+  .logo-container a {
+    font-family: 'DigitalMono-7';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 40px;
+    color: #fff;
+    text-decoration: none;
+    line-height: 40px;
+    margin-top: 10px;
+  }
 </style>
