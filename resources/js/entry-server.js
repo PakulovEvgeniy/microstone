@@ -20,7 +20,8 @@ new Promise((resolve, reject) => {
   .then(app => {
     renderVueComponentToString(app, (err, res) => {
       print(res);
-      print("<script type='text/javascript'>window.__INITIAL_STATE__ = JSON.parse('"+JSON.stringify(app.$store.state)+"')</script>");
+      var state_str =  encodeURIComponent(JSON.stringify(app.$store.state));
+      print("<script type='text/javascript'>window.__INITIAL_STATE__ = JSON.parse(decodeURIComponent('"+state_str+"'))</script>");
     });
   })
   .catch((err) => {

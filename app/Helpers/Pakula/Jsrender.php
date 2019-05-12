@@ -20,7 +20,7 @@ class Jsrender {
         } else {
         	$state['userEmail'] = '';
         }
-        $data_str = json_encode($state);
+        $data_str = urlencode(json_encode($state));
 
         $renderer_source = File::get(base_path('node_modules/vue-server-renderer/basic.js'));
         $app_source = File::get(public_path('js/entry-server.js'));
@@ -34,7 +34,7 @@ class Jsrender {
 var process = { env: { VUE_ENV: "server", NODE_ENV: "production" } }; 
 this.global = { process: process}; 
 var url = "$path";
-var state = JSON.parse('$data_str');
+var state = JSON.parse(decodeURIComponent('$data_str'.replace(/\+/g, ' ')));
 
 EOT;
         $v8->executeString($js);

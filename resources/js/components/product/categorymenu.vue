@@ -1,19 +1,25 @@
 <template>
     <div class="category-menu">
       <ul class="catalog">
-        <li><a class="catalog-icon">Ноутбуки</a></li>
-        <li><a class="catalog-icon">Ноутбуки</a></li>
-        <li><a class="catalog-icon">Ноутбуки</a></li>
-        <li><a class="catalog-icon">Ноутбуки</a></li>
+        <li v-for="(item, index) in catalog" key="index"><a class="catalog-icon"><span>{{item.name}}</span></a></li>
       </ul>
     </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
     export default {
         data() {
             return {
             }
+        },
+        computed: {
+          ...mapGetters([
+                'getCatalog'
+          ]),
+          catalog () {
+            return this.getCatalog.items
+          }
         }
     }
 </script>
@@ -39,11 +45,12 @@
   }
   .catalog li a {
     color: #333;
-    display: block;
+    display: flex;
+    align-items: center;
     text-decoration: none;
   }
   .catalog>li>a {
-    line-height: 40px;
+    min-height: 40px;
   }
   .catalog>li:last-child {
     box-shadow: inset 0 -1px 0 0 #ddd;

@@ -15,7 +15,11 @@ export function createStore () {
       screenWidth: 0,
       nonVisibleMain: false,
       nonVisibleAside: false,
-      resetEmail: {}
+      resetEmail: {},
+      catalog: {
+        date: '',
+        items: []
+      }
     },
     actions: {
       setAuth ({ commit }, data) {
@@ -93,6 +97,9 @@ export function createStore () {
       },
       settings (state) {
         return state.settings;
+      },
+      getCatalog (state) {
+        return state.catalog;
       },
       auth (state) {
         return state.auth;

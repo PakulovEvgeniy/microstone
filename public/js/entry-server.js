@@ -1276,6 +1276,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -1284,13 +1289,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {};
-  }
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['getCatalog']), {
+    catalog: function catalog() {
+      return this.getCatalog.items;
+    }
+  })
 });
 
 /***/ }),
@@ -10443,34 +10451,22 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "category-menu" }, [
-      _c("ul", { staticClass: "catalog" }, [
-        _c("li", [
-          _c("a", { staticClass: "catalog-icon" }, [_vm._v("Ноутбуки")])
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("a", { staticClass: "catalog-icon" }, [_vm._v("Ноутбуки")])
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("a", { staticClass: "catalog-icon" }, [_vm._v("Ноутбуки")])
-        ]),
-        _vm._v(" "),
-        _c("li", [
-          _c("a", { staticClass: "catalog-icon" }, [_vm._v("Ноутбуки")])
+  return _c("div", { staticClass: "category-menu" }, [
+    _c(
+      "ul",
+      { staticClass: "catalog" },
+      _vm._l(_vm.catalog, function(item, index) {
+        return _c("li", { key: "index" }, [
+          _c("a", { staticClass: "catalog-icon" }, [
+            _c("span", [_vm._v(_vm._s(item.name))])
+          ])
         ])
-      ])
-    ])
-  }
-]
+      }),
+      0
+    )
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -28243,7 +28239,8 @@ new Promise(function (resolve, reject) {
 }).then(function (app) {
   renderVueComponentToString(app, function (err, res) {
     print(res);
-    print("<script type='text/javascript'>window.__INITIAL_STATE__ = JSON.parse('" + JSON.stringify(app.$store.state) + "')</script>");
+    var state_str = encodeURIComponent(JSON.stringify(app.$store.state));
+    print("<script type='text/javascript'>window.__INITIAL_STATE__ = JSON.parse(decodeURIComponent('" + state_str + "'))</script>");
   });
 }).catch(function (err) {
   print(err);
@@ -28353,7 +28350,11 @@ function createStore() {
       screenWidth: 0,
       nonVisibleMain: false,
       nonVisibleAside: false,
-      resetEmail: {}
+      resetEmail: {},
+      catalog: {
+        date: '',
+        items: []
+      }
     },
     actions: {
       setAuth: function setAuth(_ref, data) {
@@ -28439,6 +28440,9 @@ function createStore() {
       },
       settings: function settings(state) {
         return state.settings;
+      },
+      getCatalog: function getCatalog(state) {
+        return state.catalog;
       },
       auth: function auth(state) {
         return state.auth;
