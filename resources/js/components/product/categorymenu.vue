@@ -1,13 +1,23 @@
 <template>
     <div class="category-menu">
       <ul class="catalog">
-        <li v-for="(item, index) in catalog" key="index"><a class="catalog-icon"><span>{{item.name}}</span></a></li>
+        <li v-for="item of catalog" :key="item.id">
+          <a class="catalog-icon"><span>{{item.name}}</span></a>
+          <div v-if="item.childrens.length" class="sub-wrap">
+            <ul class="catalog-subcatalog level-1">
+              <li v-for="item2 of item.childrens" :key="item2.id">
+                
+              </li>
+            </ul>
+          </div>
+        </li>
       </ul>
     </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import Subcategory from './subcategory.vue';
     export default {
         data() {
             return {
