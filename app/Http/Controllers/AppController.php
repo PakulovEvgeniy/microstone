@@ -21,7 +21,7 @@ class AppController extends Controller
 			$dat[] = [
 				'id' => $val->id,
 				'parent_id' => $val->parent_id,
-				'image' => $val->image,
+				'image' => JSRender::resizeImage($val->image,22,22),
 				'sort_order' => $val->sort_order,
 				'name' => $val->category_description->name,
 				'description' => $val->category_description->description,
@@ -36,6 +36,8 @@ class AppController extends Controller
 	}
 
      public function get(Request $request) {
+     	//phpinfo();
+     	//return;
      	$data = ['date' => '', 'items' => $this->getCatalog('')];
 
         $ssr = JSRender::render($request->path(), ['catalog' => $data]);

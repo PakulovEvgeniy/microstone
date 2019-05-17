@@ -24,7 +24,7 @@ window.axios = require('axios');
 
 //'Content-Type': 'multipart/form-data'
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-window.axios.defaults.baseURL = '/microstone/public';
+window.axios.defaults.baseURL = '/public';
 //window.axios.defaults.headers.common['Content-Type'] = 'multipart/form-data';
 
 /**

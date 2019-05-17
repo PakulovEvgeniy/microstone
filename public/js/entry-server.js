@@ -1277,7 +1277,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _subcategory_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./subcategory.vue */ "./resources/js/components/product/subcategory.vue");
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -1299,17 +1298,64 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      focusItems: {},
+      idTime: null,
+      idTime2: null,
+      visBacdrop: false,
+      menuHeight: 0
+    };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['getCatalog']), {
     catalog: function catalog() {
       return this.getCatalog.items;
     }
-  })
+  }),
+  methods: {
+    onMouseEnter: function onMouseEnter(id) {
+      var _this = this;
+
+      this.idTime = setTimeout(function () {
+        _this.$set(_this.focusItems, id, true);
+      }, 300);
+    },
+    onMouseEnter2: function onMouseEnter2(e) {
+      var _this2 = this;
+
+      this.menuHeight = e.target.offsetHeight;
+      this.idTime2 = setTimeout(function () {
+        _this2.visBacdrop = true;
+      }, 300);
+    },
+    onMouseLeave: function onMouseLeave(id) {
+      var _this3 = this;
+
+      if (!this.focusItems[id]) {
+        clearTimeout(this.idTime);
+        return;
+      }
+
+      setTimeout(function () {
+        _this3.focusItems[id] = false;
+      }, 300);
+    },
+    onMouseLeave2: function onMouseLeave2() {
+      var _this4 = this;
+
+      if (!this.visBacdrop) {
+        clearTimeout(this.idTime2);
+        return;
+      }
+
+      setTimeout(function () {
+        _this4.visBacdrop = false;
+      }, 300);
+    }
+  }
 });
 
 /***/ }),
@@ -1331,12 +1377,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      focusItems: {},
+      idTime: null
+    };
   },
   props: ['items', 'level'],
-  computed: {}
+  computed: {},
+  methods: {
+    onMouseEnter: function onMouseEnter(id) {
+      var _this = this;
+
+      this.idTime = setTimeout(function () {
+        _this.$set(_this.focusItems, id, true);
+      }, 300);
+    },
+    onMouseLeave: function onMouseLeave(id) {
+      var _this2 = this;
+
+      if (!this.focusItems[id]) {
+        clearTimeout(this.idTime);
+        return;
+      }
+
+      setTimeout(function () {
+        _this2.focusItems[id] = false;
+      }, 300);
+    }
+  }
 });
 
 /***/ }),
@@ -10492,32 +10569,84 @@ var render = function() {
   return _c("div", { staticClass: "category-menu" }, [
     _c(
       "ul",
-      { staticClass: "catalog" },
+      {
+        staticClass: "catalog",
+        on: {
+          mouseenter: function($event) {
+            return _vm.onMouseEnter2($event)
+          },
+          mouseleave: _vm.onMouseLeave2
+        }
+      },
       _vm._l(_vm.catalog, function(item) {
-        return _c("li", { key: item.id }, [
-          _c("a", { staticClass: "catalog-icon" }, [
-            _c("span", [_vm._v(_vm._s(item.name))])
-          ]),
-          _vm._v(" "),
-          item.childrens.length
-            ? _c("div", { staticClass: "sub-wrap" }, [
-                _c(
-                  "ul",
-                  { staticClass: "catalog-subcatalog level-1" },
-                  _vm._l(item.childrens, function(item2) {
-                    return _c("li", { key: item2.id })
-                  }),
-                  0
+        return _c(
+          "li",
+          {
+            key: item.id,
+            on: {
+              mouseenter: function($event) {
+                return _vm.onMouseEnter(item.id)
+              },
+              mouseleave: function($event) {
+                return _vm.onMouseLeave(item.id)
+              }
+            }
+          },
+          [
+            _c("a", { staticClass: "catalog-icon" }, [
+              _c("span", [
+                _c("img", {
+                  attrs: { width: "22px", height: "22px", src: item.image }
+                })
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "title" }, [_vm._v(_vm._s(item.name))]),
+              _vm._v(" "),
+              _vm._m(0, true)
+            ]),
+            _vm._v(" "),
+            item.childrens.length
+              ? _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.focusItems[item.id],
+                        expression: "focusItems[item.id]"
+                      }
+                    ],
+                    staticClass: "sub-wrap",
+                    style: { "min-height": _vm.menuHeight + "px" }
+                  },
+                  [
+                    _c("subcategory", {
+                      attrs: { items: item.childrens, level: 1 }
+                    })
+                  ],
+                  1
                 )
-              ])
-            : _vm._e()
-        ])
+              : _vm._e()
+          ]
+        )
       }),
       0
-    )
+    ),
+    _vm._v(" "),
+    _vm.visBacdrop ? _c("div", { staticClass: "modal-backdrop" }) : _vm._e()
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "icon" }, [
+      _c("i", { staticClass: "fa fa-chevron-right" })
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -10543,7 +10672,60 @@ var render = function() {
     "ul",
     { staticClass: "catalog-subcatalog", class: "level-" + _vm.level },
     _vm._l(_vm.items, function(item) {
-      return _c("li")
+      return _c(
+        "li",
+        {
+          key: item.id,
+          on: {
+            mouseenter: function($event) {
+              return _vm.onMouseEnter(item.id)
+            },
+            mouseleave: function($event) {
+              return _vm.onMouseLeave(item.id)
+            }
+          }
+        },
+        [
+          _c("a", { staticClass: "catalog-icon" }, [
+            _c("span", [
+              _c("img", {
+                attrs: { src: item.image, width: "22", height: "22" }
+              })
+            ]),
+            _vm._v(" "),
+            _c("span", { staticClass: "title" }, [_vm._v(_vm._s(item.name))]),
+            _vm._v(" "),
+            item.childrens.length
+              ? _c("span", { staticClass: "icon" }, [
+                  _c("i", { staticClass: "fa fa-chevron-right" })
+                ])
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          item.childrens.length
+            ? _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.focusItems[item.id],
+                      expression: "focusItems[item.id]"
+                    }
+                  ],
+                  staticClass: "sub-wrap"
+                },
+                [
+                  _c("subcategory", {
+                    attrs: { items: item.childrens, level: _vm.level + 1 }
+                  })
+                ],
+                1
+              )
+            : _vm._e()
+        ]
+      )
     }),
     0
   )
@@ -26729,6 +26911,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./router */ "./resources/js/router.js");
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./store */ "./resources/js/store.js");
 /* harmony import */ var v_tooltip__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! v-tooltip */ "./node_modules/v-tooltip/dist/v-tooltip.esm.js");
+/* harmony import */ var _components_product_subcategory_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/product/subcategory.vue */ "./resources/js/components/product/subcategory.vue");
+
 
 
 
@@ -26753,6 +26937,7 @@ var VsNotify = {
 };
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(VsNotify);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(v_tooltip__WEBPACK_IMPORTED_MODULE_4__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('subcategory', _components_product_subcategory_vue__WEBPACK_IMPORTED_MODULE_5__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('vs-notify', {
   template: '<div :class="[\'vs-notify\', group]" :style="styles"><transition-group :name="trans" mode="out-in">' + '<div :class="it.type" v-for="it in list" :key="it.id">' + '<slot name="body" :class="it.type" :item="it" :close="function(){ end(it) }">' + '<div @click.stop="end(it)" v-html="it.text"></div>' + '</slot>' + '</div>' + '</transition-group></div>',
   props: {
@@ -28435,7 +28620,7 @@ function PageComponent(name) {
 
 /* harmony default export */ __webpack_exports__["default"] = (new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   mode: 'history',
-  base: '/microstone/public/',
+  base: '/public/',
   routes: [{
     path: '/',
     component: PageComponent('Home'),
@@ -28635,7 +28820,7 @@ function createStore() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\xampp\htdocs\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
+module.exports = __webpack_require__(/*! D:\openserver\OSPanel\domains\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
 
 
 /***/ })

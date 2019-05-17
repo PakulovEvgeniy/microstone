@@ -16,7 +16,7 @@ function PageComponent(name) {
 
 export default new Router({
   mode: 'history',
-  base: '/microstone/public/',
+  base: '/public/',
   routes: [
     { path: '/', component: PageComponent('Home'), name: 'home' },
     { path: '/about', component: PageComp, name: 'about' },

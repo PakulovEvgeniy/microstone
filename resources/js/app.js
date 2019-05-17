@@ -3,6 +3,7 @@ import Vue from 'vue';
 import router from './router';
 import {createStore} from './store';
 import VTooltip from 'v-tooltip';
+import Subcategory from './components/product/subcategory.vue';
 
 var store = createStore();
 
@@ -20,7 +21,7 @@ var VsNotify =
 
 Vue.use(VsNotify);
 Vue.use(VTooltip);
-
+Vue.component('subcategory', Subcategory);
 Vue.component('vs-notify',
 {
 	template:
