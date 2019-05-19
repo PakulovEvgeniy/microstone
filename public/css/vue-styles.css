@@ -1,4 +1,8 @@
 
+main {
+  position: relative;
+}
+
 .notification-container {
     display: inline-block;
 }
@@ -232,10 +236,6 @@ li:hover>a>.icon {
 }
 .catalog-subcatalog.level-1 .sub-wrap {
   margin-top: -1px;
-}
-
-main {
-  position: relative;
 }
 
 .micro-logo {

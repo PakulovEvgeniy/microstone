@@ -28820,7 +28820,7 @@ function createStore() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\openserver\OSPanel\domains\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
+module.exports = __webpack_require__(/*! D:\OpenServer\OSPanel\domains\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
 
 
 /***/ })

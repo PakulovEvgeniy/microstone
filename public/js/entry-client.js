@@ -30575,7 +30575,7 @@ s.innerHTML = '.vs-notify{ position:fixed; width:400px; z-index:9999; }' + '.vs-
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\openserver\OSPanel\domains\microstone\resources\js\entry-client.js */"./resources/js/entry-client.js");
+module.exports = __webpack_require__(/*! D:\OpenServer\OSPanel\domains\microstone\resources\js\entry-client.js */"./resources/js/entry-client.js");
 
 
 /***/ })
