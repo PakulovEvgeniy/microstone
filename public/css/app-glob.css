@@ -266,7 +266,7 @@ header {
         float: left;
     }
     aside+main {
-        margin-left: 240px;
+        margin-left: 260px;
     }
     aside>* {
       margin-bottom: 1em;

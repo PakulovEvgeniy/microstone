@@ -275,6 +275,6 @@ EOT;
             }
         }
 
-        return $DIR_IMAGE . $new_image;
+        return '/' . $DIR_IMAGE . $new_image;
     }
 }

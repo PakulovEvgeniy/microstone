@@ -1,14 +1,14 @@
 <template>
     <div class="category-menu">
       <ul class="catalog" @mouseenter="onMouseEnter2($event)" @mouseleave="onMouseLeave2">
-        <li v-for="item of catalog" :key="item.id" @mouseenter="onMouseEnter(item.id)" @mouseleave="onMouseLeave(item.id)">
-          <a class="catalog-icon">
+        <li v-for="item of catalog" :key="item.id" @mouseenter="onMouseEnter(item.id)" @mouseleave="onMouseLeave(item.id)" @click="onClick">
+          <router-link :to="'/category/'+item.chpu" class="catalog-icon">
             <span><img width="22px" height="22px" :src="item.image"></span>
             <span class="title">{{item.name}}</span>
             <span class="icon"><i class="fa fa-chevron-right"></i></span>
-          </a>
-          <div v-if="item.childrens.length" class="sub-wrap" v-show="focusItems[item.id]" :style="{'min-height': menuHeight+'px'}">
-            <subcategory :items="item.childrens" :level="1"></subcategory>
+          </router-link>
+          <div v-if="item.childrens.length" class="sub-wrap" v-show="focusItemId == item.id" :style="{'min-height': menuHeight+'px'}">
+            <subcategory :items="item.childrens" :level="1" :minHeight="menuHeight" :visibl="focusItemId == item.id"></subcategory>
           </div>
         </li>
       </ul>
@@ -21,8 +21,9 @@ import { mapGetters } from 'vuex';
     export default {
         data() {
             return {
-              focusItems: {},
+              focusItemId: 0,
               idTime: null,
+              idTime3: null,
               idTime2: null,
               visBacdrop: false,
               menuHeight: 0
@@ -37,9 +38,19 @@ import { mapGetters } from 'vuex';
           }
         },
         methods: {
+          onClick() {
+            clearTimeout(this.idTime);
+            clearTimeout(this.idTime2);
+            this.visBacdrop = false;
+            this.focusItemId = 0;
+          },
           onMouseEnter(id) {
+            if (this.focusItemId == id) {
+              clearTimeout(this.idTime3);
+              return;
+            }
             this.idTime = setTimeout(() => {
-              this.$set(this.focusItems,id,true);
+              this.focusItemId = id;
             }, 300);
           },
           onMouseEnter2(e) {
@@ -49,12 +60,12 @@ import { mapGetters } from 'vuex';
             }, 300);
           },
           onMouseLeave(id) {
-            if (!this.focusItems[id]) {
+            if (this.focusItemId != id) {
               clearTimeout(this.idTime);
               return;
             }
-            setTimeout(() => {
-              this.focusItems[id] = false
+            this.idTime3 = setTimeout(() => {
+              this.focusItemId = 0
             }, 300);
           },
           onMouseLeave2() {
@@ -119,8 +130,9 @@ import { mapGetters } from 'vuex';
     display:none
   }
   .catalog li:hover {
-    border-right: none;
+    border-right: none !important;
   }
+ 
   .catalog li:hover>a {
     color: rgb(29, 113, 184);
   }
@@ -146,6 +158,7 @@ import { mapGetters } from 'vuex';
     width: 240px;
     z-index: 1000;
     border: 1px solid #ddd;
+    border-right: none;
     border-left: none;
     top: 0;
   }
@@ -166,6 +179,7 @@ import { mapGetters } from 'vuex';
     border-radius: 0;
     border: none;
     border-bottom: 1px solid #ddd; 
+    border-right: 1px solid #ddd; 
   }
   
   .catalog li>.sub-wrap .catalog-subcatalog>li>.item-wrap a {

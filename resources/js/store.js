@@ -46,18 +46,36 @@ export function createStore () {
         }
       },
       showError({commit}, data) {
-        let e = data.e;
-        let vm = data.vm;
-        if (e.response && e.response.data) {
+        let e = data;
+        if (e.response && e.response.data && e.response.data.errors) {
           let err = e.response.data.errors;
           if (err) {
               for(let el in err) {
-                  vm.$notify("alert", err[el][0], "error");
+                  $notify("alert", err[el][0], "error");
                   break;
               }
           }
         } else {
-             vm.$notify("alert", e.message, "error");
+             $notify("alert", e.message, "error");
+        }
+      },
+      async getCatalog({commit, state}, data) {
+        if (state.catalog.items.length) {
+          if (!state.catalog.date) {
+            state.catalog.date = new Date();
+            return;
+          }
+          let nDat = new Date();
+          let dif = (nDat.getTime() - state.catalog.date.getTime())/1000;
+          if (dif<=3600) {
+            return;
+          }
+        }
+        let res = await axios.get('/api/products/category');
+        let dat = res.data;
+
+        if (dat && dat.status == 'OK') {
+          commit('setCatalog', dat.data);
         }
       }
     },
@@ -85,10 +103,13 @@ export function createStore () {
       },
       setNonVisibleMain (state, payload) {
         state.nonVisibleMain = payload;
-      }
-      ,
+      },
       setNonVisibleAside (state, payload) {
         state.nonVisibleAside = payload;
+      },
+      setCatalog(state, payload) {
+        state.catalog.date = new Date();
+        state.catalog.items = payload;
       }
     },
     getters: {

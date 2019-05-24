@@ -31,18 +31,6 @@
           ...mapGetters([
                 'auth'
           ])
-        },
-        beforeRouteEnter (to, from, next) {
-          next(vm => {
-            //if(vm.$store.state.auth) {
-            //  return vm.$router.push('/home');
-            //}
-            vm.$store.commit('setNonVisibleMain', true)
-          })
-        },
-        beforeRouteLeave (to, from, next) {
-          this.$store.commit('setNonVisibleMain', false);
-          next();
         }
     }
 </script>

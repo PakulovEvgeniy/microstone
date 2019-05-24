@@ -103,6 +103,38 @@ Vue.component('vs-notify',
 	}
 });
 
+
+function inLoginInterface(path) {
+	let exPath = ['/login','/register','/password'];
+	return exPath.findIndex((el) => {
+		return path.indexOf(el) !== -1; 
+	}) !== -1;
+}
+
+router.beforeEach((to, from, next) => {
+	if (inLoginInterface(from.path)) {
+		store.commit('setNonVisibleMain', false);
+	}
+
+	if (inLoginInterface(to.path)) {
+		store.commit('setNonVisibleMain', true)
+		next()
+	} else {
+		if (global && global.process && global.process.env.VUE_ENV == 'server') {
+			return next();
+		}
+		if (!from.name) {
+			return next();
+		}
+		store.dispatch('getCatalog').then((res) => {
+			next();
+		}).
+		catch(e => {
+            store.dispatch('showError', e);
+        });
+	}
+})
+
 export default new Vue({
     router,
     store,

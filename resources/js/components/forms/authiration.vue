@@ -101,7 +101,7 @@ import { mapGetters, mapActions } from 'vuex';
                     });
                 })
                 .catch(e => {
-                    this.showError({e: e, vm: this});
+                    this.showError(e);
                     this.isQuery = false;
 
                 })
