@@ -8,6 +8,7 @@
         <aside v-if = "!nonVisibleMain && !nonVisibleAside">
           <category-menu></category-menu>
         </aside>
+        <category-menu v-if="!nonVisibleMain && nonVisibleAside"></category-menu>
         <main>
           <router-view></router-view>
         </main>
@@ -27,7 +28,7 @@
     export default {
         data() {
             return {
-                title: 'Welcme To My Site'
+                
             }
         }, 
         components: {

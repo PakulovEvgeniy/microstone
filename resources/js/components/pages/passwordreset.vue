@@ -1,5 +1,5 @@
 <template>
-    <div class="page">
+    <div class="page" v-title="'Восстановление пароля'">
       <microstone-logo></microstone-logo>
       <reglog-dialog>
         <div class="r-topic">Восстановление пароля</div>

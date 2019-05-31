@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Category_description;
 use JSRender;
 
 class Category extends Model
@@ -13,6 +14,28 @@ class Category extends Model
     public function category_description()
     {
         return $this->hasOne('App\Category_description');
+    }
+
+    public static function getCategoryByChpu($chpu)
+    {
+    	$cat = Category_description::where('chpu', $chpu)->first();
+    	if ($cat) {
+    		return [
+    			'id' => $cat->category_id,
+    			'name' => $cat->name,
+    			'id_1s' => $cat->category->id_1s,
+    			'meta_title' => $cat->meta_title,
+				'meta_description' => $cat->meta_description,
+				'meta_keyword' => $cat->meta_keyword
+    		];
+    	}
+    	return false;
+    }
+
+    public static function getCountChild($id_1s)
+    {
+    	$count = Category::where('parent_id', $id_1s)->count();
+    	return $count;
     }
 
     public static function getCatalog($parent)

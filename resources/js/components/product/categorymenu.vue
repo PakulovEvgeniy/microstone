@@ -1,6 +1,6 @@
 <template>
     <div class="category-menu">
-      <ul class="catalog" @mouseenter="onMouseEnter2($event)" @mouseleave="onMouseLeave2">
+      <ul class="catalog" :class="{'collapsed': nonVisibleAside, 'show': nonVisibleAside && visBacdrop}" @mouseenter="onMouseEnter2($event)" @mouseleave="onMouseLeave2" :style="ulStyle">
         <li v-for="item of catalog" :key="item.id" @mouseenter="onMouseEnter(item.id)" @mouseleave="onMouseLeave(item.id)" @click="onClick">
           <router-link :to="'/category/'+item.chpu" class="catalog-icon">
             <span><img width="22px" height="22px" :src="item.image"></span>
@@ -24,24 +24,43 @@ import { mapGetters } from 'vuex';
               focusItemId: 0,
               idTime: null,
               idTime3: null,
-              idTime2: null,
-              visBacdrop: false,
-              menuHeight: 0
+              menuHeight: 0,
+              topUl: 101
             }
         },
         computed: {
           ...mapGetters([
-                'getCatalog'
+                'getCatalog',
+                'nonVisibleAside',
+                'visBacdrop',
+                'idTimeStartBack',
+                'idTimeStopBack',
+                'scrolled',
+                'isBottomMenuFixed',
+                'getScreenState'
           ]),
           catalog () {
             return this.getCatalog.items
+          },
+          ulStyle() {
+            return this.nonVisibleAside ? {top: this.topUl+'px'} : {}
+          }
+        },
+        watch: {
+          scrolled() {
+            if (this.visBacdrop) {
+              if (61+this.scrolled > this.topUl) {
+                return;
+              }
+            }
+            this.topUl = this.isBottomMenuFixed && this.getScreenState>1 ? 61+this.scrolled : 101;
           }
         },
         methods: {
           onClick() {
             clearTimeout(this.idTime);
             clearTimeout(this.idTime2);
-            this.visBacdrop = false;
+            this.$store.commit('setVisBacdrop', false);
             this.focusItemId = 0;
           },
           onMouseEnter(id) {
@@ -55,9 +74,13 @@ import { mapGetters } from 'vuex';
           },
           onMouseEnter2(e) {
             this.menuHeight = e.target.offsetHeight;
-            this.idTime2 = setTimeout(() => {
-              this.visBacdrop = true;
-            }, 300);
+            if (this.visBacdrop) {
+              clearTimeout(this.idTimeStopBack);
+              return;
+            }
+            this.$store.commit('setIdTimeStartBack',setTimeout(() => {
+              this.$store.commit('setVisBacdrop', true);
+            }, 300));
           },
           onMouseLeave(id) {
             if (this.focusItemId != id) {
@@ -70,12 +93,12 @@ import { mapGetters } from 'vuex';
           },
           onMouseLeave2() {
             if (!this.visBacdrop) {
-              clearTimeout(this.idTime2);
+              clearTimeout(this.idTimeStartBack);
               return;
             }
-            setTimeout(() => {
-              this.visBacdrop = false
-            }, 300);
+            this.$store.commit('setIdTimeStopBack',setTimeout(() => {
+              this.$store.commit('setVisBacdrop', false);
+            }, 300));
           }
         }
     }
@@ -211,11 +234,22 @@ import { mapGetters } from 'vuex';
     position: fixed;
     right: 0;
     top: 0;
-    z-index: 897;
+    z-index: 1;
     opacity: 0.5;
     background-color: #000;
   }
   .catalog-subcatalog.level-1 .sub-wrap {
     margin-top: -1px;
+  }
+  .catalog.collapsed {
+    position: absolute;
+    margin-top: 0px;
+    display: none;
+    z-index: -1;
+  }
+
+  .catalog.collapsed.show {
+    display: block;
+    z-index: 100;
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="page">
+    <div class="page" v-title="'Войти в личный кабинет'">
       <microstone-logo></microstone-logo>
       <reglog-dialog>
         <div class="r-topic">Войти в личный кабинет</div>

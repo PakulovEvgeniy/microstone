@@ -58,6 +58,10 @@ header {
     position: relative;
     z-index: 1001;
 }
+.hidden {
+    display: none !important;
+    visibility: hidden !important;
+}
 .container {
 	margin: 0 auto;
 }
@@ -240,6 +244,9 @@ header {
 }
 
 @media (min-width: 992px) {
+  .page-products .page-content-container {
+    margin-left: 240px;
+  }
 	.header-top {
 		min-height: 40px;
 		max-height: 40px;

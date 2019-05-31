@@ -15,11 +15,79 @@ export function createStore () {
       screenWidth: 0,
       nonVisibleMain: false,
       nonVisibleAside: false,
+      visBacdrop:false,
+      idTimeStartBack: null,
+      idTimeStopBack: null,
       resetEmail: {},
       catalog: {
         date: '',
         items: []
-      }
+      },
+      categoryFilters: {},
+      topFilters: [
+        {
+          name: 'order',
+          caption: 'Сортировать:',
+          items: [
+            {
+              id: 1,
+              name: 'По продажам'
+            },
+            {
+              id: 2,
+              name: 'По возрастанию цены'
+            },
+            {
+              id: 3,
+              name: 'По убыванию цены'
+            },
+            {
+              id: 4,
+              name: 'По наименованию'
+            },
+            {
+              id: 5,
+              name: 'По рейтингу'
+            }
+          ]
+        },
+        {
+          name: 'group',
+          caption: 'Группировать:',
+          items: [
+            {
+              id: 1,
+              name: 'Без группировки'
+            },
+            {
+              id: 2,
+              name: 'По производителю'
+            },
+            {
+              id: 3,
+              name: 'По наличию'
+            }
+          ]
+        },
+        {
+          name: 'stock',
+          caption: 'Наличие:',
+          items: [
+            {
+              id: 1,
+              name: 'В наличии и под заказ'
+            },
+            {
+              id: 2,
+              name: 'В наличии'
+            },
+            {
+              id: 3,
+              name: 'Под заказ'
+            }
+          ]
+        }
+      ]
     },
     actions: {
       setAuth ({ commit }, data) {
@@ -101,6 +169,15 @@ export function createStore () {
       setScreenWidth (state, payload) {
         state.screenWidth = payload;
       },
+      setVisBacdrop (state, payload) {
+        state.visBacdrop = payload;
+      },
+      setIdTimeStartBack (state, payload) {
+        state.idTimeStartBack = payload;
+      },
+      setIdTimeStopBack (state, payload) {
+        state.idTimeStopBack = payload;
+      },
       setNonVisibleMain (state, payload) {
         state.nonVisibleMain = payload;
       },
@@ -110,6 +187,9 @@ export function createStore () {
       setCatalog(state, payload) {
         state.catalog.date = new Date();
         state.catalog.items = payload;
+      },
+      setCategoryFilters(state, payload) {
+        state.categoryFilters[payload.name] = payload.value
       }
     },
     getters: {
@@ -118,6 +198,18 @@ export function createStore () {
       },
       settings (state) {
         return state.settings;
+      },
+      visBacdrop (state) {
+        return state.visBacdrop;
+      },
+      scrolled (state) {
+        return state.scrolled;
+      },
+      idTimeStartBack (state) {
+        return state.idTimeStartBack;
+      },
+      idTimeStopBack (state) {
+        return state.idTimeStopBack;
       },
       getCatalog (state) {
         return state.catalog;
@@ -148,6 +240,15 @@ export function createStore () {
         } else {
           return 2
         }
+      },
+      topFilters(state) {
+        return state.topFilters
+      },
+      screenWidth(state) {
+        return state.screenWidth;
+      },
+      categoryFilters(state) {
+        return state.categoryFilters;
       }
     }
   })

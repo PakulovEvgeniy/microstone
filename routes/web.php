@@ -12,7 +12,7 @@
 */
 
 Route::get('/', 'AppController@get');
-Route::get('/category/{id?}', 'AppController@get');
+Route::get('/category/{id?}', 'Category_prod@get');
 Route::get('/about', 'AppController@get');
 Route::get('/contact', 'AppController@get');
 Route::get('/account', 'AppController@get');

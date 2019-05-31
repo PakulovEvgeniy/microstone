@@ -88,6 +88,6 @@ class RegisterController extends Controller
         $ssr = JSRender::render($request->path(), ['nonVisibleMain' => true]);
         //$rend = $this->render($request->path());
         //$ssr = phpinfo(); 
-        return view('app', ['ssr' => $ssr]);
+        return view('app', ['ssr' => $ssr, 'title' => 'Зарегистрироваться']);
     }
 }

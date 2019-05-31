@@ -6,6 +6,7 @@ import registerComp from './components/pages/register.vue';
 import passwordLink from './components/pages/passwordlink.vue';
 import passwordReset from './components/pages/passwordreset.vue';
 import Category from './components/pages/category.vue';
+import Home from './components/pages/home.vue';
 
 Vue.use(Router);
 
@@ -18,7 +19,7 @@ function PageComponent(name) {
 export default new Router({
   mode: 'history',
   routes: [
-    { path: '/', component: PageComponent('Home'), name: 'home' },
+    { path: '/', component: Home, name: 'home' },
     { path: '/category', component: Category, name: 'allCategory' },
     { path: '/category/:id', component: Category, name: 'category' },
     { path: '/about', component: PageComp, name: 'about' },

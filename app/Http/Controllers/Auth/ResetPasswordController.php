@@ -74,7 +74,7 @@ class ResetPasswordController extends Controller
                 'nonVisibleMain' => true, 
                 'resetEmail' => $data
             ]);
-            return view('app', ['ssr' => $ssr]);
+            return view('app', ['ssr' => $ssr, 'title' => 'Восстановление пароля']);
         }
     }
 }

@@ -17,7 +17,7 @@ class AppController extends Controller
         $ssr = JSRender::render($request->path(), ['catalog' => $data]);
         //$rend = $this->render($request->path()); 
         //$ssr = phpinfo();
-        return view('app', ['ssr' => $ssr]);
+        return view('app', ['ssr' => $ssr, 'title' => 'Интернет-магазин "Микростоун"']);
     }
 }
 

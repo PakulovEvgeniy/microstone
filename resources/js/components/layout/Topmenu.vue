@@ -49,6 +49,19 @@
               </li>
             </template>
           </ul>
+          <div class="basic-controls">
+            <div  class="logo-container">
+              <router-link to='/'>MICROSTONE</router-link>
+            </div>
+            <form class="main-search-form" method="get">
+              <div class="main-search-form-container">
+                <input type="text" class="main-search-form-input" name="search" placeholder="Поиск по каталогу" autocomplete="off">
+                <span class="main-search-form-button-container">
+                  <i class="fa fa-search"></i>
+                </span>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -99,5 +112,67 @@
   .navbar-menu [class*="fa-"] {
     color: #7e7e7e;
     font-size: .8em;
+  }
+  .basic-controls .logo-container a {
+    font-family: 'DigitalMono-7';
+    font-weight: bold;
+    font-style: normal;
+    font-size: 40px;
+    color: #0d61af;
+    text-decoration: none;
+    line-height: 40px;
+    margin-top: 10px;
+  }
+  .basic-controls .logo-container {
+    margin-left: 20px;
+  }
+  @media (min-width: 992px){
+    .basic-controls { 
+      display: none;
+    }
+  }
+  @media (max-width: 991px) {
+    .basic-controls {
+      display: flex;
+      height: 60px;
+      background-color: #fff;
+      border-bottom: solid 1px #d8d8d8;
+    }
+    .main-search-form-container {
+      position: relative;
+      background: #eaeaea;
+      border-radius: 8px;
+      height: 40px;
+      font-size: 14px;
+    }
+    .main-search-form-input {
+      background: #eaeaea;
+      color: #333;
+      padding-left: 12px;
+      height: 95%;
+      width: calc(100% - 45px);
+      border-radius: 8px;
+      border: none;
+      outline: none;
+    }
+  }
+  .basic-controls .main-search-form-button-container {
+    color: #8c8c8c;
+    position: absolute;
+    right: 8px;
+    top: 0;
+    height: 30px;
+    width: 40px;
+    text-align: center;
+    cursor: pointer;
+    height: 39px;
+  }
+  .basic-controls .main-search-form-button-container i {
+    position: absolute;
+    top: 13px;
+    font-size: 16px;
+  }
+  .basic-controls .main-search-form-button-container:hover i {
+    color: #333;
   }
 </style>

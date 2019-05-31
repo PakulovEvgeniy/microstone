@@ -1,8 +1,8 @@
 <template>
-    <div class="category-item">
+    <div class="category-item"  v-title="itemHeader">
       <bread-crump :links="breadItems"></bread-crump>
       <h1 v-html="itemHeader"></h1>
-      <p v-html="itemDescr"></p>
+      <div class="item-descr" v-html="itemDescr"></div>
       <div class="cat-items" v-if="itemChilds.length">
           <router-link :to="'/category/'+it.chpu" v-for="it in itemChilds" :key="it.id">
               <div class="image">
@@ -11,12 +11,14 @@
               <div class="caption" v-html="it.name"></div>
           </router-link>
       </div>
+      <page-products v-else></page-products>
     </div>
 </template>
 
 <script>
     import { mapGetters } from 'vuex';
     import Breadcrump from '../system/breadcrump.vue';
+    import PageProducts from '../product/pageproducts.vue';
     export default {
         data() {
             return {
@@ -93,10 +95,36 @@
                         if (itm) {return itm}
                     }
                 }
+            },
+            setVisibleSide(id) {
+              let nonVis = false;
+              if (id) {
+                let it = this.findItem(this.getCatalog.items, id);
+                if (it) {
+                    nonVis = it.childrens.length == 0
+                }
+
+              }
+              this.$store.commit('setNonVisibleAside', nonVis);
             }
         }, 
         components: {
-            'bread-crump': Breadcrump
+            'bread-crump': Breadcrump,
+            'page-products': PageProducts
+        },
+        beforeRouteLeave (to, from, next) {
+            this.$store.commit('setNonVisibleAside', false);
+            next();
+        },
+        beforeRouteEnter (to, from, next) {
+          next(vm => {
+            vm.setVisibleSide(vm.$route.params['id']);
+          })
+        },
+        watch: {
+            '$route' (to, from) {
+              this.setVisibleSide(this.$route.params['id']);
+            }
         }
     }
 </script>
@@ -146,5 +174,13 @@
     .cat-items img {
         height: 80px;
         width: 80px;
+    }
+    .category-item .item-descr {
+        margin-bottom: 15px;
+        font-size: 14px;
+    }
+    .item-descr p {
+        margin-bottom: 5px;
+        margin-top: 5px;
     }
 </style>

@@ -1,0 +1,46 @@
+<template>
+    <div class="item-block">
+      <a @click="onClick">{{name}}</a>
+    </div>
+</template>
+
+<script>
+ 
+    export default {
+        data() {
+            return {
+            }
+        },
+        props: [
+          'name'
+        ],
+        methods: {
+          onClick() {
+            this.$emit('clickOffer');
+          }
+        }
+    }
+</script>
+
+<style>
+  .item-block {
+    border-radius: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #d8d8d8;
+    display: inline-block;
+    font-size: 14px;
+    line-height: 30px;
+    margin: 5px 10px 5px 0;
+    padding: 0 12px;
+    text-align: center;
+  }
+  .item-block a {
+    color: #333;
+    transition: .3s;
+    text-decoration: none;
+  }
+  .item-block a:hover {
+    text-decoration: none;
+    color: #fc5808;
+  }
+</style>

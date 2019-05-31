@@ -55,7 +55,8 @@
 
 
   .menu-dropdown-active > .menu-dropdown-items {
-      display: block;
+      display: block !important;
+      opacity: 1 !important;
   }
 
   .menu-dropdown-items {
