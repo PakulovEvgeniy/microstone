@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Category;
+use App\Orders;
+use App\Groups;
 
 class Products extends Controller
 {
@@ -15,6 +17,20 @@ class Products extends Controller
     	if ($param == 'category') {
     		$stat = 'OK';
     		$data = Category::getCatalog('');
+		}
+		if ($param == 'orders') {
+			$qu = $request->all();
+			if (isset($qu['chpu'])) {
+				$stat = 'OK';
+				$data = Orders::getOrdersByChpu($qu['chpu']);
+			}
+		}
+		if ($param == 'groups') {
+			$qu = $request->all();
+			if (isset($qu['chpu'])) {
+				$stat = 'OK';
+				$data = Groups::getGroupsByChpu($qu['chpu']);
+			}
     	}
     	return ['status' => $stat, 'data' => $data];
     }

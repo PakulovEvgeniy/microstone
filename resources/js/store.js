@@ -24,70 +24,26 @@ export function createStore () {
         items: []
       },
       categoryFilters: {},
-      topFilters: [
-        {
-          name: 'order',
-          caption: 'Сортировать:',
-          items: [
+      topFilters: {
+        stock:  {
+          'name' : 'stock',
+          'caption' : 'Наличие:',
+          'items' : [
             {
-              id: 1,
-              name: 'По продажам'
+              'id' : 1,
+              'name' : 'В наличии и под заказ'
             },
             {
-              id: 2,
-              name: 'По возрастанию цены'
+              'id' : 2,
+              'name' : 'В наличии'
             },
             {
-              id: 3,
-              name: 'По убыванию цены'
-            },
-            {
-              id: 4,
-              name: 'По наименованию'
-            },
-            {
-              id: 5,
-              name: 'По рейтингу'
-            }
-          ]
-        },
-        {
-          name: 'group',
-          caption: 'Группировать:',
-          items: [
-            {
-              id: 1,
-              name: 'Без группировки'
-            },
-            {
-              id: 2,
-              name: 'По производителю'
-            },
-            {
-              id: 3,
-              name: 'По наличию'
-            }
-          ]
-        },
-        {
-          name: 'stock',
-          caption: 'Наличие:',
-          items: [
-            {
-              id: 1,
-              name: 'В наличии и под заказ'
-            },
-            {
-              id: 2,
-              name: 'В наличии'
-            },
-            {
-              id: 3,
-              name: 'Под заказ'
+              'id' : 3,
+              'name' : 'Под заказ'
             }
           ]
         }
-      ]
+      }
     },
     actions: {
       setAuth ({ commit }, data) {
@@ -145,6 +101,20 @@ export function createStore () {
         if (dat && dat.status == 'OK') {
           commit('setCatalog', dat.data);
         }
+      },
+      async getOrders({commit, state}, data) {
+        let res = await axios.get('/api/products/orders?chpu='+data);
+        let dat = res.data;
+        if (dat && dat.status == 'OK') {
+          commit('setOrders', dat.data);
+        }
+      },
+      async getGroups({commit, state}, data) {
+        let res = await axios.get('/api/products/groups?chpu='+data);
+        let dat = res.data;
+        if (dat && dat.status == 'OK') {
+          commit('setGroups', dat.data);
+        }
       }
     },
     mutations: {
@@ -190,6 +160,12 @@ export function createStore () {
       },
       setCategoryFilters(state, payload) {
         state.categoryFilters[payload.name] = payload.value
+      },
+      setOrders(state, payload) {
+        state.topFilters['order'] =  payload;
+      },
+      setGroups(state, payload) {
+        state.topFilters['group'] =  payload;
       }
     },
     getters: {

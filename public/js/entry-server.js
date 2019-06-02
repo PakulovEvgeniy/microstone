@@ -1808,6 +1808,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 
@@ -1824,8 +1826,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['topFilters', 'categoryFilters'])),
   methods: {
     onInput: function onInput(e, name) {
-      console.log('fdsfd');
-
       if (name == 'mode') {
         this.curMode = e;
       }
@@ -2082,7 +2082,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      curId: this.curValue || 1
+      curId: this.curValue || this.item.items[0].id
     };
   },
   props: ['item', 'curValue'],
@@ -12620,17 +12620,43 @@ var render = function() {
     _c(
       "div",
       { staticClass: "top-filters__wrap" },
-      _vm._l(_vm.topFilters, function(it) {
-        return _c("top-filter", {
-          key: it.name,
-          attrs: { item: it, curValue: _vm.categoryFilters[it.name] },
+      [
+        _c("top-filter", {
+          attrs: {
+            item: _vm.topFilters["order"],
+            curValue: _vm.categoryFilters[_vm.topFilters["order"].name]
+          },
           on: {
             input: function($event) {
-              return _vm.onInput($event, it.name)
+              return _vm.onInput($event, _vm.topFilters["order"].name)
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("top-filter", {
+          attrs: {
+            item: _vm.topFilters["group"],
+            curValue: _vm.categoryFilters[_vm.topFilters["group"].name]
+          },
+          on: {
+            input: function($event) {
+              return _vm.onInput($event, _vm.topFilters["group"].name)
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("top-filter", {
+          attrs: {
+            item: _vm.topFilters["stock"],
+            curValue: _vm.categoryFilters[_vm.topFilters["stock"].name]
+          },
+          on: {
+            input: function($event) {
+              return _vm.onInput($event, _vm.topFilters["stock"].name)
             }
           }
         })
-      }),
+      ],
       1
     ),
     _vm._v(" "),
@@ -29261,24 +29287,56 @@ function inLoginInterface(path) {
   }) !== -1;
 }
 
-_router__WEBPACK_IMPORTED_MODULE_2__["default"].beforeEach(function (to, from, next) {
-  if (inLoginInterface(from.path)) {
-    store.commit('setNonVisibleMain', false);
-  }
+function findItem(items, id) {
+  for (var i = 0; i < items.length; i++) {
+    var it = items[i];
 
+    if (it.chpu == id) {
+      return it;
+    }
+
+    if (it.childrens.length) {
+      var itm = findItem(it.childrens, id);
+
+      if (itm) {
+        return itm;
+      }
+    }
+  }
+}
+
+_router__WEBPACK_IMPORTED_MODULE_2__["default"].beforeEach(function (to, from, next) {
   if (inLoginInterface(to.path)) {
     store.commit('setNonVisibleMain', true);
     next();
   } else {
     if (global && global.process && global.process.env.VUE_ENV == 'server') {
+      store.commit('setNonVisibleMain', false);
       return next();
     }
 
     if (!from.name) {
+      store.commit('setNonVisibleMain', false);
       return next();
     }
 
     store.dispatch('getCatalog').then(function (res) {
+      var arrProm = [];
+
+      if (to.path.indexOf('/category') != -1) {
+        if (to.params['id']) {
+          var item = findItem(store.state.catalog.items, to.params['id']);
+
+          if (item && item.childrens.length == 0) {
+            arrProm.push(store.dispatch('getOrders', to.params['id']));
+            arrProm.push(store.dispatch('getGroups', to.params['id']));
+          }
+        }
+      }
+
+      return Promise.all(arrProm);
+    }).then(function (res) {
+      store.commit('setNonVisibleMain', false);
       next();
     }).catch(function (e) {
       store.dispatch('showError', e);
@@ -31918,52 +31976,22 @@ function createStore() {
         items: []
       },
       categoryFilters: {},
-      topFilters: [{
-        name: 'order',
-        caption: 'Сортировать:',
-        items: [{
-          id: 1,
-          name: 'По продажам'
-        }, {
-          id: 2,
-          name: 'По возрастанию цены'
-        }, {
-          id: 3,
-          name: 'По убыванию цены'
-        }, {
-          id: 4,
-          name: 'По наименованию'
-        }, {
-          id: 5,
-          name: 'По рейтингу'
-        }]
-      }, {
-        name: 'group',
-        caption: 'Группировать:',
-        items: [{
-          id: 1,
-          name: 'Без группировки'
-        }, {
-          id: 2,
-          name: 'По производителю'
-        }, {
-          id: 3,
-          name: 'По наличию'
-        }]
-      }, {
-        name: 'stock',
-        caption: 'Наличие:',
-        items: [{
-          id: 1,
-          name: 'В наличии и под заказ'
-        }, {
-          id: 2,
-          name: 'В наличии'
-        }, {
-          id: 3,
-          name: 'Под заказ'
-        }]
-      }]
+      topFilters: {
+        stock: {
+          'name': 'stock',
+          'caption': 'Наличие:',
+          'items': [{
+            'id': 1,
+            'name': 'В наличии и под заказ'
+          }, {
+            'id': 2,
+            'name': 'В наличии'
+          }, {
+            'id': 3,
+            'name': 'Под заказ'
+          }]
+        }
+      }
     },
     actions: {
       setAuth: function setAuth(_ref, data) {
@@ -32072,6 +32100,76 @@ function createStore() {
         }
 
         return getCatalog;
+      }(),
+      getOrders: function () {
+        var _getOrders = _asyncToGenerator(
+        /*#__PURE__*/
+        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(_ref4, data) {
+          var commit, state, res, dat;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+            while (1) {
+              switch (_context2.prev = _context2.next) {
+                case 0:
+                  commit = _ref4.commit, state = _ref4.state;
+                  _context2.next = 3;
+                  return axios.get('/api/products/orders?chpu=' + data);
+
+                case 3:
+                  res = _context2.sent;
+                  dat = res.data;
+
+                  if (dat && dat.status == 'OK') {
+                    commit('setOrders', dat.data);
+                  }
+
+                case 6:
+                case "end":
+                  return _context2.stop();
+              }
+            }
+          }, _callee2);
+        }));
+
+        function getOrders(_x3, _x4) {
+          return _getOrders.apply(this, arguments);
+        }
+
+        return getOrders;
+      }(),
+      getGroups: function () {
+        var _getGroups = _asyncToGenerator(
+        /*#__PURE__*/
+        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(_ref5, data) {
+          var commit, state, res, dat;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+            while (1) {
+              switch (_context3.prev = _context3.next) {
+                case 0:
+                  commit = _ref5.commit, state = _ref5.state;
+                  _context3.next = 3;
+                  return axios.get('/api/products/groups?chpu=' + data);
+
+                case 3:
+                  res = _context3.sent;
+                  dat = res.data;
+
+                  if (dat && dat.status == 'OK') {
+                    commit('setGroups', dat.data);
+                  }
+
+                case 6:
+                case "end":
+                  return _context3.stop();
+              }
+            }
+          }, _callee3);
+        }));
+
+        function getGroups(_x5, _x6) {
+          return _getGroups.apply(this, arguments);
+        }
+
+        return getGroups;
       }()
     },
     mutations: {
@@ -32117,6 +32215,12 @@ function createStore() {
       },
       setCategoryFilters: function setCategoryFilters(state, payload) {
         state.categoryFilters[payload.name] = payload.value;
+      },
+      setOrders: function setOrders(state, payload) {
+        state.topFilters['order'] = payload;
+      },
+      setGroups: function setGroups(state, payload) {
+        state.topFilters['group'] = payload;
       }
     },
     getters: {
@@ -32190,7 +32294,7 @@ function createStore() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\openserver\OSPanel\domains\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
+module.exports = __webpack_require__(/*! D:\OpenServer\OSPanel\domains\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
 
 
 /***/ })

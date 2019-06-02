@@ -116,25 +116,53 @@ function inLoginInterface(path) {
 	}) !== -1;
 }
 
-router.beforeEach((to, from, next) => {
-	if (inLoginInterface(from.path)) {
-		store.commit('setNonVisibleMain', false);
+function findItem(items, id) {
+	for (let i = 0; i<items.length ; i++) {
+		let it = items[i];
+		if (it.chpu == id) {
+			return it;
+		}
+		if (it.childrens.length) {
+			let itm = findItem(it.childrens, id);
+			if (itm) {return itm}
+		}
 	}
+}
 
+router.beforeEach((to, from, next) => {
+	
 	if (inLoginInterface(to.path)) {
 		store.commit('setNonVisibleMain', true)
 		next()
 	} else {
 		if (global && global.process && global.process.env.VUE_ENV == 'server') {
+			store.commit('setNonVisibleMain', false);
 			return next();
 		}
 		if (!from.name) {
+			store.commit('setNonVisibleMain', false);
 			return next();
 		}
-		store.dispatch('getCatalog').then((res) => {
+		
+		store.dispatch('getCatalog')
+		.then((res) => {
+				let arrProm = [];
+				if (to.path.indexOf('/category') != -1) {
+					if (to.params['id']) {
+						let item = findItem(store.state.catalog.items, to.params['id']);
+						if (item && item.childrens.length == 0) {
+							arrProm.push(store.dispatch('getOrders', to.params['id']));	
+							arrProm.push(store.dispatch('getGroups', to.params['id']));	
+						}
+					}
+				}
+				return Promise.all(arrProm);
+		})
+		.then((res) => {
+			store.commit('setNonVisibleMain', false);
 			next();
-		}).
-		catch(e => {
+		})
+		.catch(e => {
             store.dispatch('showError', e);
         });
 	}

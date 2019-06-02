@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Category;
+use App\Orders;
+use App\OrdersGroups;
+use App\Groups;
+use App\GroupsGroups;
 use App\Category_description;
 
 class Obmen extends Controller
@@ -27,7 +31,62 @@ class Obmen extends Controller
     	if (!isset($par['param'])) {
     		return 'OK';
     	}
-    	$pr = $par['param'];
+		$pr = $par['param'];
+		
+		if ($pr == 'order') {
+			$id = $par['ord_id'];
+			$name = $par['ord_name'];
+			$kod_sort = $par['ord_kod_sort'];
+			$status = $par['ord_status'];
+			$ord = Orders::firstOrNew(['id_1s' => $id]);
+			$ord->id_1s = $id;
+			$ord->name = $name;
+			$ord->sort_order = $kod_sort;
+			$ord->status = $status;
+			$ord->save();
+
+			OrdersGroups::where('orders_id', $ord->id)->delete();
+
+			if (isset($par['ord_group'])) {
+
+				foreach ($par['ord_group'] as $value) {
+					$grp = new OrdersGroups;
+					$grp->orders_id = $ord->id;
+					$grp->category_id = $value;
+					$grp->save();
+				}
+			}
+
+			return 'OK';
+		}
+
+		if ($pr == 'groups') {
+			$id = $par['grp_id'];
+			$name = $par['grp_name'];
+			$kod_sort = $par['grp_kod_sort'];
+			$status = $par['grp_status'];
+			$grp = Groups::firstOrNew(['id_1s' => $id]);
+			$grp->id_1s = $id;
+			$grp->name = $name;
+			$grp->sort_order = $kod_sort;
+			$grp->status = $status;
+			$grp->save();
+
+			GroupsGroups::where('groups_id', $grp->id)->delete();
+
+			if (isset($par['grp_group'])) {
+
+				foreach ($par['grp_group'] as $value) {
+					$grp_grp = new GroupsGroups;
+					$grp_grp->groups_id = $grp->id;
+					$grp_grp->category_id = $value;
+					$grp_grp->save();
+				}
+			}
+
+			return 'OK';
+		}
+
     	if ($pr == 'group') {
     		$id_1s = $par['gr_id'];
     		$rodit = $par['gr_rodit'];

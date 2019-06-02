@@ -17,7 +17,7 @@
     export default {
         data() {
             return {
-              curId: this.curValue || 1
+              curId: this.curValue || this.item.items[0].id
             }
         },
         props: [

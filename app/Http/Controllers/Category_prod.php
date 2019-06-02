@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Category;
+use App\Orders;
+use App\Groups;
 use JSRender;
 
 class Category_prod extends Controller
@@ -15,7 +17,8 @@ class Category_prod extends Controller
      	$data = ['date' => '', 'items' => $items];
      	$id = $request->route('id');
         $categoryFilters = [];
-     	$nonVis = false;
+		$nonVis = false;
+		$topf = [];
      	if ($id) {
      		$cat = Category::getCategoryByChpu($id);
      		if ($cat) {
@@ -23,7 +26,60 @@ class Category_prod extends Controller
      			$count = Category::getCountChild($cat['id_1s']);
      			if ($count == 0) {
      				$nonVis = true;
-                    $categoryFilters = $request->all();
+					$categoryFilters = [];
+					$filters = $request->all();
+					$ordItems = Orders::getOrders($cat['id_1s']);
+					$grpItems = Groups::getGroups($cat['id_1s']);
+
+					if (isset($filters['order'])) {
+						$key = array_search($filters['order'], array_column($ordItems, 'id'));
+						$categoryFilters['order'] = ($key === false) ? $ordItems[0]['id'] : $filters['order'];
+					} 
+					if (isset($filters['group'])) {
+						$key = array_search($filters['group'], array_column($grpItems, 'id'));
+						$categoryFilters['group'] = ($key === false) ? $grpItems[0]['id'] : $filters['group'];
+					} 
+					if (isset($filters['stock'])) {
+						$key = array_search($filters['stock'], [1,2,3]);
+						$categoryFilters['stock'] = ($key === false) ? 1 : $filters['stock'];
+					}
+					if (isset($filters['mode'])) {
+						$categoryFilters['mode'] = ($filters['mode'] == 'tile') ? 'tile' : 'simple';
+					}
+					
+
+					$topf = [
+						'order' => [
+							'name' => 'order',
+							'date' => '',
+							'caption' => 'Сортировать:',
+							'items' => $ordItems
+						],
+						'group' => [
+							'name' => 'group',
+							'date' => '',
+							'caption' => 'Группировать:',
+							'items' => $grpItems
+						],
+						'stock' => [
+							'name' => 'stock',
+							'caption' => 'Наличие:',
+							'items' => [
+								[
+									'id' => 1,
+									'name' => 'В наличии и под заказ'
+								],
+								[
+									'id' => 2,
+									'name' => 'В наличии'
+								],
+								[
+									'id' => 3,
+									'name' => 'Под заказ'
+								]
+							]
+						]
+					];
      			} 
      		} else {
      			$title = "Каталог товаров";	
@@ -32,8 +88,11 @@ class Category_prod extends Controller
      		$title = "Каталог товаров";
      	}
 
-        $ssr = JSRender::render($request->path(), ['catalog' => $data,
-        	'nonVisibleAside' => $nonVis, 'categoryFilters' => $categoryFilters
+        $ssr = JSRender::render($request->path(), [
+			'catalog' => $data,
+			'nonVisibleAside' => $nonVis, 
+			'categoryFilters' => $categoryFilters,
+			'topFilters' => $topf
     	]);
         //$rend = $this->render($request->path()); 
         //$ssr = phpinfo();

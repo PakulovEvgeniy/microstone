@@ -1,7 +1,9 @@
 <template>
     <div class="top-filters">
       <div class="top-filters__wrap">
-        <top-filter v-for="it in topFilters" :key="it.name" :item="it" @input="onInput($event, it.name)" :curValue="categoryFilters[it.name]"></top-filter>
+        <top-filter  :item="topFilters['order']" @input="onInput($event, topFilters['order'].name)" :curValue="categoryFilters[topFilters['order'].name]"></top-filter>
+        <top-filter  :item="topFilters['group']" @input="onInput($event, topFilters['group'].name)" :curValue="categoryFilters[topFilters['group'].name]"></top-filter>
+        <top-filter  :item="topFilters['stock']" @input="onInput($event, topFilters['stock'].name)" :curValue="categoryFilters[topFilters['stock'].name]"></top-filter>
       </div>
       <div class="top-filters__view-mode">
         <catalog-mode :value="curMode" @input="onInput($event,'mode')"></catalog-mode>
@@ -31,7 +33,6 @@ import catalogMode from '../system/catalog-mode.vue';
         },
         methods: {
           onInput(e, name) {
-            console.log('fdsfd');
             if (name=='mode') {
               this.curMode = e;
             }
