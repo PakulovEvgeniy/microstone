@@ -151,7 +151,7 @@
         border-radius: 4px;
         box-shadow: inset 0 -1px 0 0 rgba(0,0,0,0.1);
         border: 1px solid #ddd;
-        width: 220px;
+        width: 217px;
         padding: 15px;
         margin-right: 10px;
         margin-bottom: 10px;

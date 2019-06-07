@@ -130,7 +130,6 @@ function findItem(items, id) {
 }
 
 router.beforeEach((to, from, next) => {
-	
 	if (inLoginInterface(to.path)) {
 		store.commit('setNonVisibleMain', true)
 		next()
@@ -151,8 +150,11 @@ router.beforeEach((to, from, next) => {
 					if (to.params['id']) {
 						let item = findItem(store.state.catalog.items, to.params['id']);
 						if (item && item.childrens.length == 0) {
-							arrProm.push(store.dispatch('getOrders', to.params['id']));	
-							arrProm.push(store.dispatch('getGroups', to.params['id']));	
+							if (to.params['id'] != from.params['id']) {
+								arrProm.push(store.dispatch('getOrders', to.params['id']));
+								arrProm.push(store.dispatch('getGroups', to.params['id']));
+								arrProm.push(store.dispatch('getProductsCategory', to.params['id']));
+							}
 						}
 					}
 				}

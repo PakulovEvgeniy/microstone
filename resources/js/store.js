@@ -43,7 +43,9 @@ export function createStore () {
             }
           ]
         }
-      }
+      },
+      productsOfCategory: [
+      ]
     },
     actions: {
       setAuth ({ commit }, data) {
@@ -115,6 +117,13 @@ export function createStore () {
         if (dat && dat.status == 'OK') {
           commit('setGroups', dat.data);
         }
+      },
+      async getProductsCategory({commit, state}, data) {
+        let res = await axios.get('/api/products/products_cat?chpu='+data);
+        let dat = res.data;
+        if (dat && dat.status == 'OK') {
+          commit('setProductsCategory', dat.data);
+        }
       }
     },
     mutations: {
@@ -163,9 +172,28 @@ export function createStore () {
       },
       setOrders(state, payload) {
         state.topFilters['order'] =  payload;
+        if (state.categoryFilters['order']) {
+          let it = state.topFilters['order'].items.find((el) => {
+            return el.id == state.categoryFilters['order'];
+          });
+          if (!it) {
+            state.categoryFilters['order'] = state.topFilters['order'].items[0].id;
+          }
+        }
       },
       setGroups(state, payload) {
         state.topFilters['group'] =  payload;
+        if (state.categoryFilters['group']) {
+          let it = state.topFilters['group'].items.find((el) => {
+            return el.id == state.categoryFilters['group'];
+          });
+          if (!it) {
+            state.categoryFilters['group'] = state.topFilters['group'].items[0].id;
+          }
+        }
+      },
+      setProductsCategory(state, payload) {
+        state.productsOfCategory = payload;
       }
     },
     getters: {
@@ -225,6 +253,9 @@ export function createStore () {
       },
       categoryFilters(state) {
         return state.categoryFilters;
+      },
+      productsOfCategoryFilters(state) {
+        return state.productsOfCategory.slice(0,18);
       }
     }
   })

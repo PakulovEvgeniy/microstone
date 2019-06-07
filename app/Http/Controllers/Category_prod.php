@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Category;
 use App\Orders;
 use App\Groups;
+use App\Products;
 use JSRender;
 
 class Category_prod extends Controller
@@ -19,6 +20,7 @@ class Category_prod extends Controller
         $categoryFilters = [];
 		$nonVis = false;
 		$topf = [];
+		$prods = [];
      	if ($id) {
      		$cat = Category::getCategoryByChpu($id);
      		if ($cat) {
@@ -80,6 +82,8 @@ class Category_prod extends Controller
 							]
 						]
 					];
+
+					$prods = Products::getProductsCategory($cat['id_1s']);
      			} 
      		} else {
      			$title = "Каталог товаров";	
@@ -87,13 +91,20 @@ class Category_prod extends Controller
      	} else {
      		$title = "Каталог товаров";
      	}
-
-        $ssr = JSRender::render($request->path(), [
+     	$dat = [
 			'catalog' => $data,
-			'nonVisibleAside' => $nonVis, 
-			'categoryFilters' => $categoryFilters,
-			'topFilters' => $topf
-    	]);
+			'nonVisibleAside' => $nonVis
+    	];
+    	if (count($categoryFilters)) {
+    		$dat['categoryFilters'] = $categoryFilters;
+    	}
+    	if (count($topf)) {
+    		$dat['topFilters'] = $topf;
+    	}
+    	if (count($prods)) {
+    		$dat['productsOfCategory'] = $prods;
+    	}
+        $ssr = JSRender::render($request->path(), $dat);
         //$rend = $this->render($request->path()); 
         //$ssr = phpinfo();
         return view('app', ['ssr' => $ssr, 'title' => $title]);

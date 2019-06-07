@@ -10,6 +10,8 @@ use App\OrdersGroups;
 use App\Groups;
 use App\GroupsGroups;
 use App\Category_description;
+use App\Products;
+use App\ProductsDescriptions;
 
 class Obmen extends Controller
 {
@@ -87,6 +89,79 @@ class Obmen extends Controller
 			return 'OK';
 		}
 
+        if ($pr == 'product') {
+            $id_1s = $par['pr_id'];
+            $rodit = $par['pr_rodit'];
+            if (!$rodit) {
+                $rodit = '';
+            }
+            $name = $par['pr_fullname'];
+            $sku = $par['pr_kod'];
+            $active = $par['pr_active'];
+            if (!$active) {
+                $active = 0;
+            }
+            $kod_sort = 0;
+            $pict = '';
+            if (isset($par['pr_pict'])) {
+                $pict = $par['pr_pict'][0];
+            }
+            if (!$pict) {
+                $pict = 'no_image.png';
+            }
+            $opis = $par['pr_opis'];
+            if (!$opis) {
+                $opis = $name;
+            }
+            $chpu = $par['pr_chpu'];
+            if (!$chpu) {
+                $chpu = $this->translit($name);
+            }
+            $meta_title = $par['pr_meta_title'];
+            if (!$meta_title) {
+                $meta_title = $name;
+            }
+            $meta_description = $par['pr_meta_description'];
+            if (!$meta_description) {
+                $meta_description = $name;
+            }
+            $meta_keyword = $par['pr_meta_keyword'];
+            if (!$meta_keyword) {
+                $meta_keyword = $name;
+            }
+            $meta_weight = $par['pr_meta_weight'];
+            if (!$meta_weight) {
+                $meta_weight = 0;
+            }
+
+
+
+            $grp = Products::firstOrNew(['id_1s' => $id_1s]);
+            $grp->parent_id = $rodit;
+            $grp->id_1s = $id_1s;
+            $grp->image = 'catalog/' . $pict;
+            $grp->status = $active;
+            $grp->sort_order = $kod_sort;
+            $grp->parent_id = $rodit;
+            $grp->sku = $sku;
+            $grp->save();
+
+            $grp_desc = ProductsDescriptions::firstOrNew(['products_id' => $grp->id]);
+
+            $grp_desc->name = $name;
+            $grp_desc->products_id = $grp->id;
+            $grp_desc->description = $opis;
+            $grp_desc->chpu = $chpu;
+            $grp_desc->meta_title = $meta_title;
+            $grp_desc->meta_description = $meta_description;
+            $grp_desc->meta_keyword = $meta_keyword;
+            $grp_desc->meta_weight = $meta_weight;
+            
+            $grp_desc->save();
+
+            return 'OK';
+        }
+
     	if ($pr == 'group') {
     		$id_1s = $par['gr_id'];
     		$rodit = $par['gr_rodit'];
@@ -132,7 +207,6 @@ class Obmen extends Controller
     		$grp->image = 'catalog/' . $pict;
     		$grp->status = $active;
     		$grp->sort_order = $kodsort;
-    		$grp->parent_id = $rodit;
     		$grp->save();
 
     		$grp_desc = Category_description::firstOrNew(['category_id' => $grp->id]);

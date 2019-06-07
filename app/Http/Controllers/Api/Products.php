@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Category;
 use App\Orders;
 use App\Groups;
+use App\Products as mod_Products;
 
 class Products extends Controller
 {
@@ -23,6 +24,13 @@ class Products extends Controller
 			if (isset($qu['chpu'])) {
 				$stat = 'OK';
 				$data = Orders::getOrdersByChpu($qu['chpu']);
+			}
+		}
+		if ($param == 'products_cat') {
+			$qu = $request->all();
+			if (isset($qu['chpu'])) {
+				$stat = 'OK';
+				$data = mod_Products::getProductsByChpu($qu['chpu']);
 			}
 		}
 		if ($param == 'groups') {

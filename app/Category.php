@@ -23,10 +23,7 @@ class Category extends Model
     		return [
     			'id' => $cat->category_id,
     			'name' => $cat->name,
-    			'id_1s' => $cat->category->id_1s,
-    			'meta_title' => $cat->meta_title,
-				'meta_description' => $cat->meta_description,
-				'meta_keyword' => $cat->meta_keyword
+    			'id_1s' => $cat->category->id_1s
     		];
     	}
     	return false;
@@ -57,9 +54,6 @@ class Category extends Model
 				'name' => $val->category_description->name,
 				'description' => $val->category_description->description,
 				'chpu' => $val->category_description->chpu,
-				'meta_title' => $val->category_description->meta_title,
-				'meta_description' => $val->category_description->meta_description,
-				'meta_keyword' => $val->category_description->meta_keyword,
 				'childrens' => $child
 			];
 		}

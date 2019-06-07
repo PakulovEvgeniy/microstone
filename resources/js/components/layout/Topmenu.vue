@@ -113,6 +113,10 @@
     color: #7e7e7e;
     font-size: .8em;
   }
+  .header-top .container {
+    padding-right: 0;
+    padding-left: 0;
+  }
   .basic-controls .logo-container a {
     font-family: 'DigitalMono-7';
     font-weight: bold;

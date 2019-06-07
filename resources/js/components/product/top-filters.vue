@@ -18,9 +18,12 @@ import catalogMode from '../system/catalog-mode.vue';
     export default {
         data() {
             return {
-              curMode: this.$store.state.categoryFilters.mode == 'tile' ? 'tile' : 'simple',
+              
             }
-        }, 
+        },
+        props: [
+          'curMode'
+        ], 
         components: {
           'top-filter': topFilter,
           'catalog-mode': catalogMode
@@ -34,7 +37,7 @@ import catalogMode from '../system/catalog-mode.vue';
         methods: {
           onInput(e, name) {
             if (name=='mode') {
-              this.curMode = e;
+              this.$emit('input',e);
             }
             if (this.$router.currentRoute) {
               this.$store.commit('setCategoryFilters',{
