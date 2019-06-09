@@ -211,6 +211,11 @@ import catalogItem from './catalog-item.vue';
   }
   .catalog-items-list .catalog-item .n-catalog-product .n-catalog-product__info .product-info__title-link a{
     display: block;
+    max-height: 46px;
+    overflow: hidden;
+  }
+  .catalog-items-list.view-simple .catalog-item .n-catalog-product .n-catalog-product__info .product-info__title-link a{
+    max-height: 50px;
   }
   .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__info .product-info__title-link {
     height: 50px;
@@ -302,6 +307,18 @@ import catalogItem from './catalog-item.vue';
     justify-content: space-between;
     margin-top: auto;
   }
+  .catalog-items-list.view-tile .n-catalog-product__buttons button {
+    margin-right: 10px;
+  }
+  .catalog-items-list.view-tile .n-catalog-product__buttons .primary-btn {
+    flex-grow: 1;
+  }
+  .catalog-items-list.view-tile .n-catalog-product__buttons .primary-btn button {
+    width: 100%;
+  }
+  .catalog-items-list.view-simple .n-catalog-product__buttons .primary-btn button {
+    min-width: 138px;
+  }
   @media (min-width: 1200px) {
     .products-page__left-block {
       width: 278px;
@@ -324,6 +341,9 @@ import catalogItem from './catalog-item.vue';
       margin-right: 12px;
       margin-bottom: 12px;
     }
+    .catalog-items-list.view-simple .n-catalog-product .product-info__title {
+      width: 400px;
+    }
   }
   @media (max-width: 991px) {
     .products-page__left-block {
@@ -332,6 +352,9 @@ import catalogItem from './catalog-item.vue';
     }
     .products-page__list {
       max-width: 100%;
+    }
+    .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__info .product-info__title-description {
+      height: auto;
     }
   }
   @media (min-width: 768px) {
@@ -343,9 +366,12 @@ import catalogItem from './catalog-item.vue';
     }
   }
   @media (max-width: 991px) and (min-width: 768px) {
-  .catalog-items-list.view-tile .catalog-item {
+    .catalog-items-list.view-tile .catalog-item {
       width: calc((100% - 40px) / 3);
       margin-right: 20px;
+    }
+    .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__info .product-info__title {
+      width: 400px;
     }
   }
   @media (max-width: 767px) {
@@ -356,6 +382,54 @@ import catalogItem from './catalog-item.vue';
     }
     .catalog-items-list.view-tile .catalog-item:nth-of-type(2n) {
       margin-right: 0;
+    }
+    .catalog-items-list.view-tile .n-catalog-product .n-catalog-product__info .product-info__code {
+      display: none;
+    }
+    .catalog-items-list.view-tile .n-catalog-product .n-catalog-product__info .product-info__image {
+      width: 120px;
+      height: 120px;
+      margin-top: 25px;
+      margin-bottom: 10px;
+    }
+    .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__info .product-info {
+      flex-direction: column;
+    }
+    .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__info {
+      height: auto;
+    }
+    .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__price {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__info .product-info__social {
+      margin-top: 0;
+      position: relative;
+    }
+    .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__info .product-info__code {
+      display: none;
+    }
+    .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__info .product-info__voblers {
+      min-height: auto;
+      margin: 10px 0 0;
+    }
+    .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__info .product-info__title {
+      width: auto;
+      height: auto;
+    }
+    .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__buttons {
+      flex-wrap: wrap;
+      margin-left: 0;
+    }
+    .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__buttons .primary-btn {
+      flex-grow: 1;
+    }
+    .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__buttons .primary-btn button {
+      width: 100%;
+    }
+    .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__avails {
+      display: block;
     }
   }
 </style>

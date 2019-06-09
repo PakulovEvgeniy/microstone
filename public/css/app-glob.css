@@ -233,7 +233,6 @@ header {
 .button-ui {
   border-radius: 8px;
     height: 40px;
-    min-width: 138px;
     padding: 0;
     font-size: 16px;
     border: none;
@@ -313,9 +312,6 @@ header {
 	.container {
     	width: 960px;
 	}
-  .button-ui_brand {
-    min-width: 100px;
-  }
 }
 
 @media (max-width: 991px) {
@@ -323,9 +319,6 @@ header {
     	width: 100%;
       padding: 0 10px;
 	}
-  .button-ui_brand {
-    min-width: 100px;
-  }
 	.header-top {
 		min-height: 60px;
 		max-height: 60px;
