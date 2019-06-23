@@ -12,6 +12,7 @@ use App\GroupsGroups;
 use App\Category_description;
 use App\Products;
 use App\ProductsDescriptions;
+use App\PriceParty;
 
 class Obmen extends Controller
 {
@@ -35,6 +36,33 @@ class Obmen extends Controller
     	}
 		$pr = $par['param'];
 		
+		if ($pr == 'price_party') {
+			$id_prod = $par['pp_id'];
+			$id_party = $par['pp_party'];
+			$p_type = $par['pp_type'];
+			$p_act = $par['pp_act'];
+			$p_minqty = $par['pp_minqty'];
+			$p_price = $par['pp_price'];
+			if ($p_act == 'ПрайсУдалить') {
+				PriceParty::where(['product_id1s' => $id_prod, 'party_id1s' => $id_party, 'min_qty' => $p_minqty])->delete();
+			} else {
+				$arr = PriceParty::where(['product_id1s' => $id_prod, 'party_id1s' => $id_party, 'min_qty' => $p_minqty])->first();
+				if ($arr) {
+					PriceParty::where(['product_id1s' => $id_prod, 'party_id1s' => $id_party, 'min_qty' => $p_minqty])
+					->update(['price' => $p_price]);
+				} else {
+					$pp = new PriceParty;
+					$pp->product_id1s = $id_prod;
+					$pp->party_id1s = $id_party;
+					$pp->min_qty = $p_minqty;
+					$pp->party_type = $p_type;
+					$pp->price = $p_price;
+					$pp->save();
+				}
+			}
+			return 'OK';
+		}
+
 		if ($pr == 'order') {
 			$id = $par['ord_id'];
 			$name = $par['ord_name'];
