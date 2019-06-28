@@ -48,7 +48,7 @@
           <div class="n-catalog-product__price">
             <div class="product-price">
               <div class="product-price__current">
-                450.50 - 600.00
+                {{price}}
                 <i class="product-price__rub_icon fas fa-ruble-sign"></i>
               </div>
             </div>
@@ -70,7 +70,7 @@
             <div class="order-avail-wrap">
               <span class="avail-text">
                 <span class="available">Доступно:</span>
-                <a class="avail-text__link ui-link ui-link_blue ui-link_pseudolink">В наличии</a>
+                <a v-show="item.stock>0" class="avail-text__link ui-link ui-link_blue ui-link_pseudolink">В наличии</a>
                 <a class="avail-text__link ui-link ui-link_blue ui-link_pseudolink">Под заказ</a>
               </span>
             </div>
@@ -90,7 +90,21 @@
         },
         props: [
           'item'
-        ]
+        ],
+        computed: {
+          price() {
+            if (this.item.min_price && this.item.max_price) {
+              let pr1 = parseFloat(this.item.min_price);
+              let pr2 = parseFloat(this.item.max_price);
+              if (pr1 != pr2) {
+                return pr1.toFixed(2) + ' - ' + pr2.toFixed(2);
+              }
+              return pr1.toFixed(2);
+            } else {
+              return '0';
+            }
+          }
+        }
     }
 </script>
 

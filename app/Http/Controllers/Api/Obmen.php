@@ -13,6 +13,7 @@ use App\Category_description;
 use App\Products;
 use App\ProductsDescriptions;
 use App\PriceParty;
+use App\StockParty;
 
 class Obmen extends Controller
 {
@@ -36,6 +37,25 @@ class Obmen extends Controller
     	}
 		$pr = $par['param'];
 		
+        if ($pr == 'stock_party') {
+            $id_prod = $par['sp_id'];
+            $id_party = $par['sp_party'];
+            $stock = $par['sp_stock'];
+            
+            $arr = StockParty::where(['product_id1s' => $id_prod, 'party_id1s' => $id_party])->first();
+            if ($arr) {
+                StockParty::where(['product_id1s' => $id_prod, 'party_id1s' => $id_party])
+                    ->update(['stock' => $stock]);
+            } else {
+                $pp = new StockParty;
+                $pp->product_id1s = $id_prod;
+                $pp->party_id1s = $id_party;
+                $pp->stock = $stock;
+                $pp->save();
+            }
+            return 'OK';
+        }
+
 		if ($pr == 'price_party') {
 			$id_prod = $par['pp_id'];
 			$id_party = $par['pp_party'];

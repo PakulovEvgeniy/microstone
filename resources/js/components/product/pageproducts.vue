@@ -2,7 +2,7 @@
     <div class="page-products">
       <div class="products-page__top-block">
         <product-offers></product-offers>
-        <top-filters :curMode="curMode" @input="curMode = $event"></top-filters>
+        <top-filters :curMode="curMode"></top-filters>
       </div>
       <div class="products-page__content">
         <div class="products-page__left-block"></div>
@@ -11,9 +11,10 @@
             <div class="products-list__content">
               <div class="items-group">
                 <div class="catalog-items-list" :class="classMode">
-                  <catalog-item v-for="it in productsOfCategoryFilters" :key="it.id" :item="it"></catalog-item>
+                  <catalog-item v-for="it in productsOfCategoryPage" :key="it.id" :item="it"></catalog-item>
                 </div>
               </div>
+              <paginator :itemQty="itemQty" :numPage="numPage" @changePage="onChangePage($event)"></paginator>
             </div>
           </div>
         </div>
@@ -26,24 +27,52 @@ import productOffers from './product-offers.vue';
 import { mapGetters } from 'vuex'; 
 import topFilters from './top-filters.vue';
 import catalogItem from './catalog-item.vue';
+import paginator from '../system/paginator.vue';
     export default {
         data() {
             return {
-              curMode: this.$store.state.categoryFilters.mode == 'tile' ? 'tile' : 'simple',
             }
         },
         components: {
           'product-offers': productOffers,
           'top-filters': topFilters,
-          'catalog-item': catalogItem
+          'catalog-item': catalogItem,
+          'paginator' : paginator
         },
         computed: {
           ...mapGetters([
             'categoryFilters',
-            'productsOfCategoryFilters'
+            'productsOfCategoryFilters',
+            'productsOfCategoryPage',
+            'getScreenState'
           ]),
+          curMode() {
+            return this.categoryFilters.mode == 'tile' ? 'tile' : 'simple';
+          },
           classMode() {
             return 'view-'+this.curMode;
+          },
+          itemQty() {
+            return this.productsOfCategoryFilters.length;
+          },
+          numPage() {
+            return this.categoryFilters['page'] || 1;
+          }
+        },
+        methods: {
+          onChangePage(num) {
+            if (this.$router.currentRoute) {
+              this.$store.commit('setCategoryFilters',{
+                name: 'page',
+                value: num
+              });
+              this.$router.push({
+                path: this.$router.currentRoute.path,
+                query: this.categoryFilters
+              });
+              let scrTop = this.getScreenState == 1 ? 40 : 80;
+              window.scrollTo({ top: scrTop, behavior: 'smooth' });
+            }
           }
         }
 

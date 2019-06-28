@@ -32,6 +32,7 @@ class Category_prod extends Controller
 					$filters = $request->all();
 					$ordItems = Orders::getOrders($cat['id_1s']);
 					$grpItems = Groups::getGroups($cat['id_1s']);
+					$prods = Products::getProductsCategory($cat['id_1s']);
 
 					if (isset($filters['order'])) {
 						$key = array_search($filters['order'], array_column($ordItems, 'id'));
@@ -48,7 +49,9 @@ class Category_prod extends Controller
 					if (isset($filters['mode'])) {
 						$categoryFilters['mode'] = ($filters['mode'] == 'tile') ? 'tile' : 'simple';
 					}
-					
+					if (isset($filters['page'])) {
+						$categoryFilters['page'] = $filters['page'];
+					}
 
 					$topf = [
 						'order' => [
@@ -83,7 +86,7 @@ class Category_prod extends Controller
 						]
 					];
 
-					$prods = Products::getProductsCategory($cat['id_1s']);
+					
      			} 
      		} else {
      			$title = "Каталог товаров";	

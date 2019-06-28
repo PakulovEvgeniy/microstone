@@ -17,7 +17,6 @@
     export default {
         data() {
             return {
-              curId: this.curValue || this.item.items[0].id
             }
         },
         props: [
@@ -29,6 +28,9 @@
          'radio-button': radioButton
         },
         computed: {
+          curId() {
+            return this.curValue || this.item.items[0].id;
+          },
           curItem() {
             return this.item.items.find((el) => {
               return el.id == this.curId;
@@ -37,7 +39,6 @@
         },
         methods: {
           onInput(e) {
-            this.curId = e;
             this.$emit('input', e)
           }
         }

@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Category_description;
 use JSRender;
+use DB;
 
 class Products extends Model
 {
@@ -27,10 +28,11 @@ class Products extends Model
 
     public static function getProductsCategory($id_1s)
     {
-    	$prods = Products::where(['status' => 1, 'parent_id' => $id_1s])->get();
+    	$prd = Products::where(['products.status' => 1, 'parent_id' => $id_1s])->leftJoin('price_party','products.id_1s','=','price_party.product_id1s')->leftJoin('stock_party', 'products.id_1s','=','stock_party.product_id1s')->select('id_1s', 'id', 'parent_id', 'sku', 'image', DB::raw('MAX(price) as max_price, MIN(price) as min_price, SUM(stock) as stock'))->groupBy('id_1s', 'id', 'parent_id', 'sku', 'image')->with('products_descriptions')->get(); 
+
     	$dat = [];
 
-    	foreach ($prods as $val) {
+    	foreach ($prd as $val) {
     		$dat[] = [
 				'id' => $val->id,
 				'parent_id' => $val->parent_id,
@@ -40,7 +42,10 @@ class Products extends Model
 				'name' => $val->products_descriptions->name,
 				'description' => $val->products_descriptions->description,
 				'small_desc' => mb_strimwidth(strip_tags($val->products_descriptions->description),0,150,'...'),
-				'chpu' => $val->products_descriptions->chpu
+				'chpu' => $val->products_descriptions->chpu,
+				'max_price' => $val->max_price,
+				'min_price' => $val->min_price,
+				'stock' => $val->stock
 			];
     	}
     	return $dat;

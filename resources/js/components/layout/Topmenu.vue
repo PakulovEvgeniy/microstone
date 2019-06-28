@@ -137,6 +137,8 @@
   }
   @media (max-width: 991px) {
     .basic-controls {
+      position: fixed;
+      width: 100%;
       display: flex;
       height: 60px;
       background-color: #fff;

@@ -21,7 +21,7 @@ export default new Router({
   routes: [
     { path: '/', component: Home, name: 'home' },
     { path: '/category', component: Category, name: 'allCategory' },
-    { path: '/category/:id', component: Category, name: 'category' },
+    { path: '/category/:id', component: Category, name: 'category', meta: { scrollToTop: true } },
     { path: '/about', component: PageComp, name: 'about' },
     { path: '/contact', component: PageComponent('Contact'), name: 'contact' },
     { path: '/account', component: PageComponent('Account'), name: 'account' },
@@ -29,5 +29,15 @@ export default new Router({
     { path: '/register', component: registerComp, name: 'register' },
     { path: '/password/reset', component: passwordLink, name: 'passwordLink' },
     { path: '/password/reset/:token', component: passwordReset, name: 'passwordReset' }
-  ]
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return false;
+      if (to.matched.some(m => m.meta.scrollToTop)) {
+        return { x: 0, y: 80 } 
+      }
+    }
+  }
 });

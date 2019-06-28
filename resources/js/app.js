@@ -156,12 +156,18 @@ router.beforeEach((to, from, next) => {
 								arrProm.push(store.dispatch('getProductsCategory', to.params['id']));
 							}
 						}
+						//store.commit('setCategoryFiltersAll',to.query);
 					}
 				}
 				return Promise.all(arrProm);
 		})
 		.then((res) => {
 			store.commit('setNonVisibleMain', false);
+			if (to.path.indexOf('/category') != -1) {
+					if (to.params['id']) {
+						store.commit('setCategoryFiltersAll',to.query);
+					}
+				}
 			next();
 		})
 		.catch(e => {

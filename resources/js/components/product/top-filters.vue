@@ -36,9 +36,6 @@ import catalogMode from '../system/catalog-mode.vue';
         },
         methods: {
           onInput(e, name) {
-            if (name=='mode') {
-              this.$emit('input',e);
-            }
             if (this.$router.currentRoute) {
               this.$store.commit('setCategoryFilters',{
                 name: name,

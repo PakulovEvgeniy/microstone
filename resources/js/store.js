@@ -168,7 +168,18 @@ export function createStore () {
         state.catalog.items = payload;
       },
       setCategoryFilters(state, payload) {
-        state.categoryFilters[payload.name] = payload.value
+        if (state.categoryFilters[payload.name] === undefined) {
+          Vue.set(state.categoryFilters, payload.name, payload.value);
+        } else {
+          state.categoryFilters[payload.name] = payload.value
+        }
+      },
+      setCategoryFiltersAll(state, payload) {
+        let ob = {};
+        for (let key in payload) {
+          ob[key] = payload[key];
+        }
+        state.categoryFilters = ob;
       },
       setOrders(state, payload) {
         state.topFilters['order'] =  payload;
@@ -194,6 +205,9 @@ export function createStore () {
       },
       setProductsCategory(state, payload) {
         state.productsOfCategory = payload;
+        if (state.categoryFilters['page']) {
+          state.categoryFilters['page'] = 1;
+        } 
       }
     },
     getters: {
@@ -255,7 +269,19 @@ export function createStore () {
         return state.categoryFilters;
       },
       productsOfCategoryFilters(state) {
-        return state.productsOfCategory.slice(0,18);
+        return state.productsOfCategory;
+      },
+      productsOfCategoryPage(state, getters) {
+        let itFilter = getters.productsOfCategoryFilters;
+        let catFilter = getters.categoryFilters;
+        let page = 0;
+        if (catFilter['page']) {
+          page = parseInt(catFilter['page']);
+        }
+        if (!page) {
+          page = 1;
+        }
+        return itFilter.slice((page-1)*18,page*18);
       }
     }
   })
