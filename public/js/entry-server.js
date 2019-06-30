@@ -1542,6 +1542,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -12632,7 +12633,14 @@ var render = function() {
                 _c("i", {
                   staticClass: "product-price__rub_icon fas fa-ruble-sign"
                 })
-              ])
+              ]),
+              _vm._v(" "),
+              _vm.item.sold
+                ? _c("div", { staticClass: "product-price__sold" }, [
+                    _vm._v("Продажи: "),
+                    _c("span", [_vm._v(_vm._s(_vm.item.sold) + " шт.")])
+                  ])
+                : _vm._e()
             ])
           ]),
           _vm._v(" "),
@@ -33133,6 +33141,10 @@ function createStore() {
         } else {
           state.categoryFilters[payload.name] = payload.value;
         }
+
+        if (payload.name == 'stock' && state.categoryFilters['page'] !== undefined) {
+          state.categoryFilters['page'] = 1;
+        }
       },
       setCategoryFiltersAll: function setCategoryFiltersAll(state, payload) {
         var ob = {};
@@ -33236,11 +33248,50 @@ function createStore() {
         return state.categoryFilters;
       },
       productsOfCategoryFilters: function productsOfCategoryFilters(state) {
-        return state.productsOfCategory;
+        var catFilter = state.categoryFilters;
+        var res = state.productsOfCategory;
+
+        if (catFilter['stock']) {
+          if (catFilter['stock'] == 2) {
+            res = res.filter(function (el) {
+              return el.stock && el.stock > 0;
+            });
+          } else if (catFilter['stock'] == 3) {
+            res = res.filter(function (el) {
+              return !el.stock;
+            });
+          }
+        }
+
+        var sortItem;
+
+        if (catFilter['order']) {
+          sortItem = state.topFilters['order'].items.find(function (el) {
+            return el.id == catFilter['order'];
+          });
+        } else {
+          sortItem = state.topFilters['order'].items[0];
+        }
+
+        if (sortItem['sort_field']) {
+          res.sort(function (a, b) {
+            if (sortItem['sort_type'] == 'Число') {
+              if (sortItem['sort_ord'] == 'DESC') {
+                return +b[sortItem['sort_field']] - +a[sortItem['sort_field']];
+              } else {
+                return +a[sortItem['sort_field']] - +b[sortItem['sort_field']];
+              }
+            } else {
+              return a[sortItem['sort_field']].localeCompare(b[sortItem['sort_field']]);
+            }
+          });
+        }
+
+        return res;
       },
       productsOfCategoryPage: function productsOfCategoryPage(state, getters) {
         var itFilter = getters.productsOfCategoryFilters;
-        var catFilter = getters.categoryFilters;
+        var catFilter = state.categoryFilters;
         var page = 0;
 
         if (catFilter['page']) {
@@ -33266,7 +33317,7 @@ function createStore() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\openserver\OSPanel\domains\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
+module.exports = __webpack_require__(/*! D:\OpenServer\OSPanel\domains\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
 
 
 /***/ })

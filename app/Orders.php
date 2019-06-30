@@ -31,7 +31,10 @@ class Orders extends Model
         foreach ($rows as $val) {
             $res[] = [
                 'id' => $val->id,
-                'name' => $val->name
+                'name' => $val->name,
+                'sort_field' => $val->sort_field,
+                'sort_ord' => $val->sort_ord,
+                'sort_type' => $val->sort_type
             ];
         }
     	return $res;

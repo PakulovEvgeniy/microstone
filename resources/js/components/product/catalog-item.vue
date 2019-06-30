@@ -51,6 +51,7 @@
                 {{price}}
                 <i class="product-price__rub_icon fas fa-ruble-sign"></i>
               </div>
+              <div v-if="item.sold" class="product-price__sold">Продажи: <span>{{item.sold}} шт.</span></div>
             </div>
           </div>
           <div class="n-catalog-product__buttons">
@@ -141,5 +142,10 @@
   .product-info__rating i {
     color: #feb909;
     font-size: 12px;
+  }
+
+  .product-price__sold span {
+    font-weight: bold;
+    color: rgb(29, 113, 184);
   }
 </style>

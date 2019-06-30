@@ -14,6 +14,7 @@ use App\Products;
 use App\ProductsDescriptions;
 use App\PriceParty;
 use App\StockParty;
+use App\SoldProduct;
 
 class Obmen extends Controller
 {
@@ -37,6 +38,23 @@ class Obmen extends Controller
     	}
 		$pr = $par['param'];
 		
+		if ($pr == 'soldout') {
+            $id_prod = $par['so_id'];
+            $sold = $par['so_qty'];
+            
+            $arr = SoldProduct::where(['product_id1s' => $id_prod])->first();
+            if ($arr) {
+                SoldProduct::where(['product_id1s' => $id_prod])
+                    ->update(['sold' => $sold]);
+            } else {
+                $pp = new SoldProduct;
+                $pp->product_id1s = $id_prod;
+                $pp->sold = $sold;
+                $pp->save();
+            }
+            return 'OK';
+        }
+
         if ($pr == 'stock_party') {
             $id_prod = $par['sp_id'];
             $id_party = $par['sp_party'];
@@ -88,11 +106,17 @@ class Obmen extends Controller
 			$name = $par['ord_name'];
 			$kod_sort = $par['ord_kod_sort'];
 			$status = $par['ord_status'];
+			$field = $par['ord_field'];
+			$napr = $par['ord_napr'];
+			$ord_type = $par['ord_type'];
 			$ord = Orders::firstOrNew(['id_1s' => $id]);
 			$ord->id_1s = $id;
 			$ord->name = $name;
 			$ord->sort_order = $kod_sort;
 			$ord->status = $status;
+			$ord->sort_field = $field;
+			$ord->sort_ord = $napr;
+			$ord->sort_type = $ord_type;		
 			$ord->save();
 
 			OrdersGroups::where('orders_id', $ord->id)->delete();

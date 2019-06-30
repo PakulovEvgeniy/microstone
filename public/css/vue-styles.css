@@ -843,6 +843,10 @@ input[type="radio"]:checked+.ui-radio__content:before {
   color: #feb909;
   font-size: 12px;
 }
+.product-price__sold span {
+  font-weight: bold;
+  color: rgb(29, 113, 184);
+}
 
 .pagination-widget__pages {
   display: flex;

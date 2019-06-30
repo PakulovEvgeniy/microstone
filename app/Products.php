@@ -28,7 +28,13 @@ class Products extends Model
 
     public static function getProductsCategory($id_1s)
     {
-    	$prd = Products::where(['products.status' => 1, 'parent_id' => $id_1s])->leftJoin('price_party','products.id_1s','=','price_party.product_id1s')->leftJoin('stock_party', 'products.id_1s','=','stock_party.product_id1s')->select('id_1s', 'id', 'parent_id', 'sku', 'image', DB::raw('MAX(price) as max_price, MIN(price) as min_price, SUM(stock) as stock'))->groupBy('id_1s', 'id', 'parent_id', 'sku', 'image')->with('products_descriptions')->get(); 
+		$prd = Products::where(['products.status' => 1, 'parent_id' => $id_1s])
+			->leftJoin('price_party','products.id_1s','=','price_party.product_id1s')
+			->leftJoin('stock_party', 'products.id_1s','=','stock_party.product_id1s')
+			->leftJoin('sold_product','products.id_1s','=','sold_product.product_id1s')
+			->select('id_1s', 'id', 'parent_id', 'sku', 'image', DB::raw('MAX(price) as max_price, MIN(price) as min_price, 
+					SUM(stock) as stock, SUM(sold) as sold'))
+			->groupBy('id_1s', 'id', 'parent_id', 'sku', 'image')->with('products_descriptions')->get(); 
 
     	$dat = [];
 
@@ -41,11 +47,12 @@ class Products extends Model
 				'image' => JSRender::resizeImage($val->image,200,200),
 				'name' => $val->products_descriptions->name,
 				'description' => $val->products_descriptions->description,
-				'small_desc' => mb_strimwidth(strip_tags($val->products_descriptions->description),0,150,'...'),
+				'small_desc' => mb_strimwidth(strip_tags($val->products_descriptions->description),0,100,'...'),
 				'chpu' => $val->products_descriptions->chpu,
 				'max_price' => $val->max_price,
 				'min_price' => $val->min_price,
-				'stock' => $val->stock
+				'stock' => $val->stock,
+				'sold' => $val->sold
 			];
     	}
     	return $dat;

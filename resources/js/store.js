@@ -173,6 +173,9 @@ export function createStore () {
         } else {
           state.categoryFilters[payload.name] = payload.value
         }
+        if (payload.name == 'stock' && state.categoryFilters['page'] !== undefined) {
+          state.categoryFilters['page'] = 1;
+        }
       },
       setCategoryFiltersAll(state, payload) {
         let ob = {};
@@ -269,11 +272,45 @@ export function createStore () {
         return state.categoryFilters;
       },
       productsOfCategoryFilters(state) {
-        return state.productsOfCategory;
+        let catFilter = state.categoryFilters;
+        let res = state.productsOfCategory;
+        if (catFilter['stock']) {
+          if (catFilter['stock'] == 2) {
+            res = res.filter((el) => {
+              return el.stock && el.stock>0;
+            });
+          } else if (catFilter['stock'] == 3){
+            res = res.filter((el) => {
+              return !el.stock;
+            });
+          }
+        }
+        let sortItem;
+        if (catFilter['order']) {
+          sortItem = state.topFilters['order'].items.find((el) => {
+            return el.id == catFilter['order'];
+          });
+        } else {
+          sortItem = state.topFilters['order'].items[0];
+        }
+        if (sortItem['sort_field']) {
+          res.sort((a, b)=>{
+            if (sortItem['sort_type'] == 'Число') {
+              if (sortItem['sort_ord'] == 'DESC') {
+                return (+b[sortItem['sort_field']]) - (+a[sortItem['sort_field']]);
+              } else {
+                return (+a[sortItem['sort_field']]) - (+b[sortItem['sort_field']]);
+              }
+            } else {
+              return a[sortItem['sort_field']].localeCompare(b[sortItem['sort_field']]);
+            }
+          });
+        }
+        return res;
       },
       productsOfCategoryPage(state, getters) {
         let itFilter = getters.productsOfCategoryFilters;
-        let catFilter = getters.categoryFilters;
+        let catFilter = state.categoryFilters;
         let page = 0;
         if (catFilter['page']) {
           page = parseInt(catFilter['page']);
