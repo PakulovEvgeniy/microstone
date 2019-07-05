@@ -24,6 +24,7 @@ export function createStore () {
         items: []
       },
       categoryFilters: {},
+      groupValues: [],
       topFilters: {
         stock:  {
           'name' : 'stock',
@@ -45,7 +46,8 @@ export function createStore () {
         }
       },
       productsOfCategory: [
-      ]
+      ],
+      filterItems: []
     },
     actions: {
       setAuth ({ commit }, data) {
@@ -265,15 +267,23 @@ export function createStore () {
       topFilters(state) {
         return state.topFilters
       },
+      filterItems(state) {
+        return state.filterItems;
+      },
       screenWidth(state) {
         return state.screenWidth;
       },
       categoryFilters(state) {
         return state.categoryFilters;
       },
+      productsOfCategory(state) {
+        return state.productsOfCategory;
+      },
       productsOfCategoryFilters(state) {
         let catFilter = state.categoryFilters;
         let res = state.productsOfCategory;
+
+
         if (catFilter['stock']) {
           if (catFilter['stock'] == 2) {
             res = res.filter((el) => {
@@ -285,6 +295,71 @@ export function createStore () {
             });
           }
         }
+        if (catFilter['q']) {
+          res = res.filter((el) => {
+            let name = el.name.toUpperCase();
+            let sr = catFilter['q'].toUpperCase();
+            return name.indexOf(sr) != -1;
+          })
+        }
+        if (catFilter['group']) {
+          if (catFilter['group'] == 3) {
+            res = res.map((el) => {
+              let newEl = {};
+              Object.assign(newEl, el);              
+              if (newEl.stock && newEl.stock>0) {
+                newEl.group = {id: 1, name: "В наличии"};
+              } else {
+                newEl.group = {id: 2, name: "Под заказ"};
+              }
+              return newEl;
+            });   
+          } else if (catFilter['group'] != 1) {
+            let grItem = state.topFilters['group'].items.find((el) => {
+              return el.id == catFilter['group'];
+            });
+            if (grItem) {
+              let arr = [];
+              let undIt = {name: 'Неопределено'};
+              let arrGr = [];
+              res.forEach((el) => {
+                let fPar = el.params.filter((it) => {
+                  return it.param_type_id == grItem.param_type_id;
+                })
+                if (fPar.length) {
+                  fPar.forEach((it2) => {
+                    let newEl = {};
+                    Object.assign(newEl, el);
+                    let fElGr = arrGr.find((gr) => {
+                      return gr.name == it2.value;
+                    });
+                    if (!fElGr) {
+                      fElGr = {name: it2.value};
+                      arrGr.push(fElGr);
+                    }
+                    newEl.group = fElGr;
+                    arr.push(newEl);  
+                  })
+                } else {
+                  let newEl = {};
+                  Object.assign(newEl, el);
+                  newEl.group = undIt;
+                  arr.push(newEl);
+                }
+              });
+              arrGr = arrGr.sort((a, b) => {
+                if (a.name == b.name) {return 0;}
+                return a.name<b.name ? -1 : 1;
+              });
+              arrGr.forEach((el, ind) => {
+                el.id = ind+1;
+              });
+              undIt.id = arrGr.length+1;
+              res = arr;
+            }
+          }
+        }
+
         let sortItem;
         if (catFilter['order']) {
           sortItem = state.topFilters['order'].items.find((el) => {
@@ -295,6 +370,11 @@ export function createStore () {
         }
         if (sortItem['sort_field']) {
           res.sort((a, b)=>{
+            if (a['group'] !== undefined) {
+              if (a['group'] != b['group']) {
+                return a['group'].id - b['group'].id;
+              }
+            }
             if (sortItem['sort_type'] == 'Число') {
               if (sortItem['sort_ord'] == 'DESC') {
                 return (+b[sortItem['sort_field']]) - (+a[sortItem['sort_field']]);
@@ -302,7 +382,12 @@ export function createStore () {
                 return (+a[sortItem['sort_field']]) - (+b[sortItem['sort_field']]);
               }
             } else {
-              return a[sortItem['sort_field']].localeCompare(b[sortItem['sort_field']]);
+              if (a[sortItem['sort_field']] == b[sortItem['sort_field']]) {return 0;}
+              if (sortItem['sort_ord'] == 'DESC') {
+                return a[sortItem['sort_field']] < b[sortItem['sort_field']] ? 1 : -1;
+              } else {
+                return a[sortItem['sort_field']] < b[sortItem['sort_field']] ? -1 : 1;
+              }
             }
           });
         }

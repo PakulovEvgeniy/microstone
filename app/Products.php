@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Category_description;
 use JSRender;
 use DB;
+use App\Orders;
+use App\PartyParams;
 
 class Products extends Model
 {
@@ -28,18 +30,43 @@ class Products extends Model
 
     public static function getProductsCategory($id_1s)
     {
-		$prd = Products::where(['products.status' => 1, 'parent_id' => $id_1s])
+		$param_ord = Orders::getParamsOrders($id_1s);
+        $fld = [];
+
+
+        $prd = Products::where(['products.status' => 1, 'parent_id' => $id_1s])
 			->leftJoin('price_party','products.id_1s','=','price_party.product_id1s')
 			->leftJoin('stock_party', 'products.id_1s','=','stock_party.product_id1s')
-			->leftJoin('sold_product','products.id_1s','=','sold_product.product_id1s')
-			->select('id_1s', 'id', 'parent_id', 'sku', 'image', DB::raw('MAX(price) as max_price, MIN(price) as min_price, 
-					SUM(stock) as stock, SUM(sold) as sold'))
-			->groupBy('id_1s', 'id', 'parent_id', 'sku', 'image')->with('products_descriptions')->get(); 
+			->leftJoin('sold_product','products.id_1s','=','sold_product.product_id1s');
+        if (count($param_ord)) {
+            foreach ($param_ord as $val) {
+                if (in_array($val['sort_field'], $fld)) {
+                    continue;
+                }
+                $fld[] = $val['sort_field'];
+                $alias = 'party_params' . $val['sort_field'];
+                $prd = $prd->leftJoin('party_params as ' . $alias, function ($join) use ($val, $alias)
+                {
+                    $join->on('products.id_1s','=',$alias . '.product_id1s')
+                    ->where($alias . '.param_type_id','=',$val['param_type_id']);
+                });
+            }
+        }
+        $prd = $prd->select('id_1s', 'id', 'parent_id', 'sku', 'image', DB::raw('MAX(price) as max_price, MIN(price) as min_price, 
+					SUM(stock) as stock, SUM(sold) as sold'));
+        if (count($fld)) {
+            foreach ($fld as $val) {
+                $alias = 'party_params' . $val;
+                $prd = $prd->addSelect(DB::raw('MAX(' . $alias . '.value) as ' . $val));
+            }
+        }
+
+        $prd = $prd->groupBy('id_1s', 'id', 'parent_id', 'sku', 'image')->with('products_descriptions')->get(); 
 
     	$dat = [];
 
     	foreach ($prd as $val) {
-    		$dat[] = [
+    		$d = [
 				'id' => $val->id,
 				'parent_id' => $val->parent_id,
 				'id_1s' => $val->id_1s,
@@ -52,9 +79,16 @@ class Products extends Model
 				'max_price' => $val->max_price,
 				'min_price' => $val->min_price,
 				'stock' => $val->stock,
-				'sold' => $val->sold
+				'sold' => $val->sold,
+                'params' => PartyParams::getProductParams($val->id_1s)
 			];
+            if (count($fld)) {
+               foreach ($fld as $v) {
+                $d[$v] = $val[$v];
+               } 
+            }
+            $dat[] = $d;
     	}
-    	return $dat;
+        return $dat;
     }
 }

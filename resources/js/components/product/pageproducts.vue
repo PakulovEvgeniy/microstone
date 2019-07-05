@@ -5,16 +5,26 @@
         <top-filters :curMode="curMode"></top-filters>
       </div>
       <div class="products-page__content">
-        <div class="products-page__left-block"></div>
+        <div class="products-page__left-block">
+          <div>
+            <div class="ui-input-search ui-input-search_catalog-filter left-top-filters-search-input">
+              <input ref="inpFind" class="ui-input-search__input ui-input-search__input_catalog-filter" placeholder="Поиск по категории" :value="valFindCat">
+              <span class="ui-input-search__icon ui-input-search__icon_clear ui-input-search__icon_catalog-filter" :class="{'ui-input-search__icon_clear-visible' : visFindCat}" @click="onQuickSeach(false)"><i class="fas fa-times"></i></span>
+              <span class="ui-input-search__icon ui-input-search__icon_search ui-input-search__icon_catalog-filter"><i class="fa fa-search" @click="onQuickSeach(true)"></i></span>
+            </div>
+          </div>
+          <left-filters></left-filters>
+        </div>
         <div class="products-page__list">
           <div class="products-list">
             <div class="products-list__content">
-              <div class="items-group">
+              <div class="items-group" v-for="(el, k, ind) in pageByGroup" :key = "k">
+                <span v-if="k!=='undefined'" class="items-group__title" :class="{'items-group__title_first' : ind==0}">{{k}}</span>
                 <div class="catalog-items-list" :class="classMode">
-                  <catalog-item v-for="it in productsOfCategoryPage" :key="it.id" :item="it"></catalog-item>
+                  <catalog-item v-for="it in el" :key="it.id" :item="it"></catalog-item>
                 </div>
               </div>
-              <paginator :itemQty="itemQty" :numPage="numPage" @changePage="onChangePage($event)"></paginator>
+              <paginator v-if="itemQty>0" :itemQty="itemQty" :numPage="numPage" @changePage="onChangePage($event)"></paginator>
             </div>
           </div>
         </div>
@@ -28,16 +38,20 @@ import { mapGetters } from 'vuex';
 import topFilters from './top-filters.vue';
 import catalogItem from './catalog-item.vue';
 import paginator from '../system/paginator.vue';
+import leftfilters from '../system/leftfilters.vue';
     export default {
         data() {
             return {
+              curGroup: '',
+              quickValue: ''
             }
         },
         components: {
           'product-offers': productOffers,
           'top-filters': topFilters,
           'catalog-item': catalogItem,
-          'paginator' : paginator
+          'paginator' : paginator,
+          'left-filters': leftfilters
         },
         computed: {
           ...mapGetters([
@@ -57,21 +71,66 @@ import paginator from '../system/paginator.vue';
           },
           numPage() {
             return this.categoryFilters['page'] || 1;
+          },
+          pageByGroup() {
+            if (!this.productsOfCategoryPage.length || this.productsOfCategoryPage[0].group === undefined) {
+              return {
+                'undefined': this.productsOfCategoryPage
+              }
+            }
+            let arrGrp = {};
+            let curGrp = undefined;
+            for (let i = 0; i < this.productsOfCategoryPage.length; i++) {
+              let el = this.productsOfCategoryPage[i];
+              if (el.group.id != curGrp) {
+                arrGrp[el.group.name] = [];
+                curGrp = el.group.id;
+              }
+              arrGrp[el.group.name].push(el);
+            }
+            return arrGrp;
+          },
+          visFindCat() {
+            return  this.categoryFilters['q'] ? true : false;
+          },
+          valFindCat() {
+            return  this.categoryFilters['q'] || '';
           }
         },
         methods: {
           onChangePage(num) {
             if (this.$router.currentRoute) {
-              this.$store.commit('setCategoryFilters',{
-                name: 'page',
-                value: num
-              });
+              let obj = {};
+              Object.assign(obj, this.categoryFilters);
+              obj['page'] = num;
+              //this.$store.commit('setCategoryFilters',{
+              //  name: 'page',
+              //  value: num
+              //});
               this.$router.push({
                 path: this.$router.currentRoute.path,
-                query: this.categoryFilters
+                query: obj
               });
               let scrTop = this.getScreenState == 1 ? 40 : 80;
               window.scrollTo({ top: scrTop, behavior: 'smooth' });
+            }
+          },
+          onQuickSeach(isSearch) {
+            if (this.$router.currentRoute) {
+              let obj = {};
+              Object.assign(obj, this.categoryFilters);
+              if (isSearch) {
+                if (!this.$refs['inpFind'].value) {
+                  return;
+                }
+                obj['q'] = this.$refs['inpFind'].value;
+              } else {
+                delete obj['q'];
+              }
+              this.$router.push({
+                path: this.$router.currentRoute.path,
+                query: obj
+              });
             }
           }
         }
@@ -94,10 +153,6 @@ import paginator from '../system/paginator.vue';
   .products-page__left-block {
     height: 100%;
     margin-right: 20px;
-  }
-  .products-page__left-block {
-    height: 30px;
-    background-color: #fff;
   }
   .products-page__list {
     max-width: 902px;
@@ -347,6 +402,86 @@ import paginator from '../system/paginator.vue';
   }
   .catalog-items-list.view-simple .n-catalog-product__buttons .primary-btn button {
     min-width: 138px;
+  }
+  .products-list .items-group__title {
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
+  .products-list .items-group__title_first {
+     margin-top: 0px;
+  }
+  .ui-input-search {
+    position: relative;
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    height: 40px;
+    line-height: 38px;
+    font-size: 14px;
+  }
+  .ui-input-search.ui-input-search_catalog-filter {
+    border-radius: 8px;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.16);
+    border: solid 1px transparent;
+    background: #fff;
+    margin-bottom: 12px;
+  }
+  .ui-input-search__input {
+    color: #333;
+    padding: 0 45px 0 12px;
+    height: 100%;
+    width: 100%;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+  }
+  .ui-input-search__input.ui-input-search__input_catalog-filter {
+    background-color: #fff;
+  }
+  .ui-input-search__icon {
+    background: linear-gradient(270deg, #fff 45%, rgba(234,234,234,0));
+    color: #8c8c8c;
+    position: absolute;
+    right: 5px;
+    top: 0;
+    font-size: 16px;
+    height: 100%;
+    width: 40px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .ui-input-search__icon_clear {
+    display: none;
+  }
+  .ui-input-search__icon.ui-input-search__icon_catalog-filter {
+    background: linear-gradient(270deg, #fff 45%, rgba(234,234,234,0));
+  }
+  .ui-input-search__icon_search i:before, .ui-input-search__icon_clear i:before {
+    speak: none;
+    display: inline-block;
+    line-height: 1;
+  }
+  .ui-input-search__icon:hover {
+    color: #333;
+  }
+  .ui-input-search__icon_clear-visible+.ui-input-search__icon_search {
+    display: none;
+  }
+  .ui-input-search__icon_clear-visible {
+    display: block;
+  }
+  @media (min-width: 992px) {
+    .left-top-filters-search-input {
+      display: block;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      height: 40px;
+      background: #f2f2f2;
+    }
   }
   @media (min-width: 1200px) {
     .products-page__left-block {

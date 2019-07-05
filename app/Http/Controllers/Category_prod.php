@@ -7,6 +7,7 @@ use App\Category;
 use App\Orders;
 use App\Groups;
 use App\Products;
+use App\Filters;
 use JSRender;
 
 class Category_prod extends Controller
@@ -21,6 +22,7 @@ class Category_prod extends Controller
 		$nonVis = false;
 		$topf = [];
 		$prods = [];
+		$filt = [];
      	if ($id) {
      		$cat = Category::getCategoryByChpu($id);
      		if ($cat) {
@@ -33,6 +35,7 @@ class Category_prod extends Controller
 					$ordItems = Orders::getOrders($cat['id_1s']);
 					$grpItems = Groups::getGroups($cat['id_1s']);
 					$prods = Products::getProductsCategory($cat['id_1s']);
+					$fltItems = Filters::getFilters($cat['id_1s']);
 
 					if (isset($filters['order'])) {
 						$key = array_search($filters['order'], array_column($ordItems, 'id'));
@@ -52,6 +55,10 @@ class Category_prod extends Controller
 					if (isset($filters['page'])) {
 						$categoryFilters['page'] = $filters['page'];
 					}
+					if (isset($filters['q'])) {
+						$categoryFilters['q'] = $filters['q'];
+					}
+					
 
 					$topf = [
 						'order' => [
@@ -86,7 +93,7 @@ class Category_prod extends Controller
 						]
 					];
 
-					
+					$filt = $fltItems;
      			} 
      		} else {
      			$title = "Каталог товаров";	
@@ -106,6 +113,9 @@ class Category_prod extends Controller
     	}
     	if (count($prods)) {
     		$dat['productsOfCategory'] = $prods;
+    	}
+    	if (count($filt)) {
+    		$dat['filterItems'] = $filt;
     	}
         $ssr = JSRender::render($request->path(), $dat);
         //$rend = $this->render($request->path()); 

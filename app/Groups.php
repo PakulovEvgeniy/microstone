@@ -31,7 +31,8 @@ class Groups extends Model
         foreach ($rows as $val) {
             $res[] = [
                 'id' => $val->id,
-                'name' => $val->name
+                'name' => $val->name,
+                'param_type_id' => $val->param_type_id
             ];
         }
     	return $res;

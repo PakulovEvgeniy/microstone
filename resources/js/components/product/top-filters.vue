@@ -37,13 +37,15 @@ import catalogMode from '../system/catalog-mode.vue';
         methods: {
           onInput(e, name) {
             if (this.$router.currentRoute) {
-              this.$store.commit('setCategoryFilters',{
-                name: name,
-                value: e
-              });
+              let obj = {};
+              Object.assign(obj, this.categoryFilters);
+              obj[name] = e;
+              if (name=='stock' && obj['page'] !== undefined) {
+                obj['page'] = 1;
+              }
               this.$router.push({
                 path: this.$router.currentRoute.path,
-                query: this.categoryFilters
+                query: obj
               });
             }
           }

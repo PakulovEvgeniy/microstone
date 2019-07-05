@@ -17,6 +17,9 @@
         <router-link :to="{ name: 'about' }">About</router-link>
         <router-link :to="{ name: 'contact' }">Contact</router-link>
       </div>
+      <div :style="{right: leftTopBtn+'px'}" v-show="scrolled>200" id="scroll-top-button" @click="onClick">
+        <i class="fas fa-arrow-up"></i>
+      </div>
     </div>
 </template>
 
@@ -44,15 +47,25 @@
         },
         methods: {
           onResize() {
-            this.$store.commit('setScreenWidth',window.innerWidth);
+            this.$store.state.screenWidth = window.innerWidth;
+          },
+          onClick() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
           }
         },
         computed: {
           ...mapGetters([
             'settings',
             'nonVisibleMain',
-            'nonVisibleAside'
+            'nonVisibleAside',
+            'scrolled',
+            'screenWidth'
           ]),
+          leftTopBtn() {
+            let res;
+            res = Math.max(this.screenWidth/2 - 670, 30);
+            return res;
+          },
            statename() {
             return this.$store.state.name
            },
@@ -69,5 +82,46 @@
 <style>
   main {
     position: relative;
+  }
+  #scroll-top-button {
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.25);
+    border-radius: 12px;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    position: fixed;
+    z-index: 1000;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    opacity: .88;
+    background: #fff;
+  }
+  #scroll-top-button i {
+    font-size: 18px;
+    color: #8c8c8c;
+    margin-top: 3px;
+  }
+  #scroll-top-button i:hover {
+    color: #333;
+  }
+  @media (min-width: 1200px) {
+    #scroll-top-button {
+      margin-bottom: 24px;
+    }
+  }
+  @media (max-width: 1199px) and (min-width: 992px) {
+    #scroll-top-button {
+      bottom: 24px;
+      right: 5px;
+    }
+  }
+  @media (max-width: 991px) {
+    #scroll-top-button {
+      display: none;
+    }
   }
 </style>

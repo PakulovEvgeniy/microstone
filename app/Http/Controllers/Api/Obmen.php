@@ -15,6 +15,12 @@ use App\ProductsDescriptions;
 use App\PriceParty;
 use App\StockParty;
 use App\SoldProduct;
+use App\ParamTypes;
+use App\PartyParams;
+use App\Brands;
+use App\Cases;
+use App\Filters;
+use App\FiltersGroups;
 
 class Obmen extends Controller
 {
@@ -38,6 +44,94 @@ class Obmen extends Controller
     	}
 		$pr = $par['param'];
 		
+        if ($pr == 'param_type') {
+           $id = $par['pt_id'];
+           $name = $par['pt_name'];
+           $table = $par['pt_table'];
+           if (!$table) {
+               $table = '';
+           }
+
+           $ord = ParamTypes::firstOrNew(['id' => $id]);
+           $ord->id = $id;
+           $ord->name = $name;
+           $ord->table = $table;
+           $ord->save();
+           return 'OK'; 
+        }
+
+        if ($pr == 'cases') {
+           $id = $par['c_id'];
+           $name = $par['c_name'];
+           $pict = $par['c_pict'];
+           if (!$pict) {
+                $pict = 'no_image.png';
+           }
+           
+           $ord = Cases::firstOrNew(['id' => $id]);
+           $ord->id = $id;
+           $ord->name = $name;
+           $ord->image = 'catalog/' . $pict;
+           $ord->save();
+           return 'OK'; 
+        }
+
+        if ($pr == 'brand') {
+           $id = $par['br_id'];
+           $name = $par['br_name'];
+           $fullname = $par['br_fullname'];
+           if (!$fullname) {
+               $fullname = $name;
+           }
+           $cite = $par['br_syte'];
+           if (!$cite) {
+               $cite = '';
+           }
+           $opis = $par['br_opis'];
+           $kod_sort = $par['br_kodsort'];
+           $pict = $par['br_pict'];
+           if (!$pict) {
+                $pict = 'no_image.png';
+           }
+           $stat = 1;
+
+
+           $ord = Brands::firstOrNew(['id' => $id]);
+           $ord->id = $id;
+           $ord->name = $name;
+           $ord->full_name = $fullname;
+           $ord->cite = $cite;
+           $ord->comment = $opis;
+           $ord->kod_sort = $kod_sort;
+           $ord->logo = 'catalog/' . $pict;
+           $ord->status = $stat;
+
+           $ord->save();
+           return 'OK'; 
+        }
+
+        if ($pr == 'party_params') {
+           $prod_id = $par['pp_prodid']; 
+           $p_id = $par['pp_id'];
+           $id_val = $par['pp_params'];
+           
+
+           PartyParams::where(['party_id1s' => $p_id])->delete();
+           if ($id_val) {
+            foreach ($id_val as $val) {
+               $ar_val = explode('###', $val); 
+               $pp = new PartyParams;
+               $pp->product_id1s = $prod_id;
+               $pp->party_id1s = $p_id;
+               $pp->param_type_id = $ar_val[0];
+               $pp->value = $ar_val[1];
+               $pp->value_id = $ar_val[2];
+               $pp->save();
+            }
+           }
+           return 'OK'; 
+        }
+
 		if ($pr == 'soldout') {
             $id_prod = $par['so_id'];
             $sold = $par['so_qty'];
@@ -109,6 +203,10 @@ class Obmen extends Controller
 			$field = $par['ord_field'];
 			$napr = $par['ord_napr'];
 			$ord_type = $par['ord_type'];
+            $ord_param = $par['ord_param'];
+            if (!$ord_param) {
+                $ord_param = '';
+            }
 			$ord = Orders::firstOrNew(['id_1s' => $id]);
 			$ord->id_1s = $id;
 			$ord->name = $name;
@@ -116,7 +214,8 @@ class Obmen extends Controller
 			$ord->status = $status;
 			$ord->sort_field = $field;
 			$ord->sort_ord = $napr;
-			$ord->sort_type = $ord_type;		
+			$ord->sort_type = $ord_type;
+            $ord->param_type_id = $ord_param;		
 			$ord->save();
 
 			OrdersGroups::where('orders_id', $ord->id)->delete();
@@ -134,16 +233,60 @@ class Obmen extends Controller
 			return 'OK';
 		}
 
+    if ($pr == 'filter') {
+      $id = $par['f_id'];
+      $name = $par['f_name'];
+      $kod_sort = $par['f_kod_sort'];
+      $status = $par['f_status'];
+      $field = $par['f_field'];
+      if (!$field) {
+        $field = '';
+      }
+      $ord_type = $par['f_type'];
+      $ord_param = $par['f_param'];
+      if (!$ord_param) {
+        $ord_param = '';
+      }
+      $ord = Filters::firstOrNew(['id_1s' => $id]);
+      $ord->id_1s = $id;
+      $ord->name = $name;
+      $ord->sort_order = $kod_sort;
+      $ord->status = $status;
+      $ord->filter_field = $field;
+      $ord->filter_type = $ord_type;
+      $ord->param_type_id = $ord_param;   
+      $ord->save();
+
+      FiltersGroups::where('filters_id', $ord->id)->delete();
+
+      if (isset($par['f_group'])) {
+
+        foreach ($par['f_group'] as $value) {
+          $grp = new FiltersGroups;
+          $grp->filters_id = $ord->id;
+          $grp->category_id = $value;
+          $grp->save();
+        }
+      }
+
+      return 'OK';
+    }
+
 		if ($pr == 'groups') {
 			$id = $par['grp_id'];
 			$name = $par['grp_name'];
 			$kod_sort = $par['grp_kod_sort'];
 			$status = $par['grp_status'];
+            $param = $par['grp_param'];
+            if (!$param) {
+                $param = '';
+            }
 			$grp = Groups::firstOrNew(['id_1s' => $id]);
 			$grp->id_1s = $id;
 			$grp->name = $name;
 			$grp->sort_order = $kod_sort;
 			$grp->status = $status;
+            $grp->param_type_id = $param;
 			$grp->save();
 
 			GroupsGroups::where('groups_id', $grp->id)->delete();
@@ -205,6 +348,10 @@ class Obmen extends Controller
             if (!$meta_weight) {
                 $meta_weight = 0;
             }
+            $params = '';
+            if (isset($par['pr_params'])) {
+                $params = $par['pr_params'];
+            }
 
 
 
@@ -230,6 +377,20 @@ class Obmen extends Controller
             $grp_desc->meta_weight = $meta_weight;
             
             $grp_desc->save();
+
+            PartyParams::where(['product_id1s' => $id_1s, 'party_id1s' => ''])->delete();
+            if ($params) {
+             foreach ($params as $val) {
+               $ar_val = explode('###', $val); 
+               $pp = new PartyParams;
+               $pp->product_id1s = $id_1s;
+               $pp->party_id1s = '';
+               $pp->param_type_id = $ar_val[0];
+               $pp->value = $ar_val[1];
+               $pp->value_id = $ar_val[2];
+               $pp->save();
+             }
+            }
 
             return 'OK';
         }

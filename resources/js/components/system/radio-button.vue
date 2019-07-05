@@ -1,7 +1,7 @@
 <template>
-    <label class="ui-radio__item">
-      <input type="radio" class="ui-radio__input" :name="name" :value="value" @input="$emit('input', $event.target.value)" :checked="checked">
-      <span class="ui-radio__content">{{caption}}</span>
+    <label class="ui-radio__item" :class="{'ui-radio__item_list': list}">
+      <input type="radio" :class="{'ui-radio__input_list': list}" class="ui-radio__input" :name="name" :value="value" @input="$emit('input', $event.target.value)" :checked="checked">
+      <span class="ui-radio__content" :class="{'ui-ui-radio__content_list': list}">{{caption}}</span>
     </label>
 </template>
 
@@ -16,7 +16,8 @@
          'caption',
          'name',
          'value',
-         'checked'
+         'checked',
+         'list'
         ], 
         components: {
 
@@ -55,5 +56,13 @@
   }
   .ui-radio__item:hover {
     background-color: #fff7da;
+  }
+
+  .ui-radio__item_list {
+    padding-left: 15px;
+    transition: .3s;
+  }
+  .ui-radio__content_list {
+    font-size: 14px;
   }
 </style>

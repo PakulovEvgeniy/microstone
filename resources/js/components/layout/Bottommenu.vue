@@ -56,7 +56,7 @@
         },
         methods: {
           onScroll(e) {
-            this.$store.commit('setScrolled', window.pageYOffset);  
+            this.$store.state.scrolled=window.pageYOffset;  
           },
           onMouseEnter2() {
             if (!this.nonVisibleAside) {
