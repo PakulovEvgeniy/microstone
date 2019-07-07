@@ -7,12 +7,12 @@
       <div class="ui-collapse__content ui-collapse__content_list" :class="{'ui-collapse__content_in': filterOpen}">
         <div v-if="item.filter_type=='Число'">
           <div class="ui-input-small ui-input-small_list">
-            <span @click="minValue=''" class="ui-input-small__icon ui-input-small__icon_list" :class="{'ui-input-small__icon_hidden': minValue===''}"><i class="fas fa-times"></i></span>
-            <input v-model="minValue" class="ui-input-small__input ui-input-small__input_list" type="text" :placeholder="'от ' + minMaxValue.min">
+            <span @click="clearMinValue" class="ui-input-small__icon ui-input-small__icon_list" :class="{'ui-input-small__icon_hidden': minValue===''}"><i class="fas fa-times"></i></span>
+            <input @input="onValue" v-model="minValue" class="ui-input-small__input ui-input-small__input_list" type="text" :placeholder="'от ' + minMaxValue.min">
           </div>
           <div class="ui-input-small ui-input-small_list">
-            <span @click="maxValue=''" class="ui-input-small__icon ui-input-small__icon_list" :class="{'ui-input-small__icon_hidden': maxValue===''}"><i class="fas fa-times"></i></span>
-            <input v-model="maxValue" :placeholder="'до ' + minMaxValue.max" class="ui-input-small__input ui-input-small__input_list" type="text">
+            <span @click="clearMaxValue" class="ui-input-small__icon ui-input-small__icon_list" :class="{'ui-input-small__icon_hidden': maxValue===''}"><i class="fas fa-times"></i></span>
+            <input @input="onValue" v-model="maxValue" :placeholder="'до ' + minMaxValue.max" class="ui-input-small__input ui-input-small__input_list" type="text">
           </div>
           <div class="ui-radio ui-radio_list">
             <radio-button v-for="it in diapValue" :checked="it.id==curDiap" :key="it.id" :list="true" :name="item.filter_field" :value="it.id" :caption="it.cap" @input="onInput($event)"></radio-button>
@@ -45,29 +45,13 @@ import radioButton from './radio-button.vue';
         },
         computed: {
           ...mapGetters([
-            'productsOfCategory'
+            'grpDataOfCategory'
           ]),
           minMaxValue() {
             if (this.item.filter_type=='Число') {
-              let min = Number.MAX_VALUE;
-              let max = 0;
-              this.productsOfCategory.forEach((el) => {
-                if (this.item.filter_field) {
-                  if (+el[this.item.filter_field] > max) {
-                    max = +el[this.item.filter_field];
-                  }
-                  if (+el[this.item.filter_field] < min) {
-                    min = +el[this.item.filter_field];
-                  }
-                }
-              })
-              if (max==0) {
-                min = 0;
-                max = 1000;
-              }
               return {
-                min: min,
-                max: max
+                min: this.grpDataOfCategory[this.item.id].min,
+                max: this.grpDataOfCategory[this.item.id].max
               }
             } else {
               return {}
@@ -75,7 +59,7 @@ import radioButton from './radio-button.vue';
           },
           activeFiltr() {
             if (this.item.filter_type=='Число') {
-              return this.curDiap>0;
+              return this.minValue !== '' || this.maxValue !== '';
             } else {
               return false;
             }
@@ -84,7 +68,7 @@ import radioButton from './radio-button.vue';
             if (this.item.filter_type=='Число') {
               let d = (this.minMaxValue.max-this.minMaxValue.min)/6;
               let res = [{id: 0, from: this.minMaxValue.min, to: this.minMaxValue.max, cap:'Все'}];
-              let st = this.minMaxValue.min;
+              let st = +this.minMaxValue.min;
               let st1 = st;
               for (let i = 1; i < 7; i++) {
                 let end = Math.min(st1+Math.ceil(d*i), this.minMaxValue.max);
@@ -111,16 +95,45 @@ import radioButton from './radio-button.vue';
           },
           onInput(e) {
             this.curDiap = e;
-          }
-        },
-        watch: {
-          curDiap(val) {
-            if (val == 0) {
+            if (e == 0) {
               this.minValue = '';
               this.maxValue = '';
             } else {
-              this.minValue = this.diapValue[val].from;
-              this.maxValue = this.diapValue[val].to;
+              this.minValue = this.diapValue[e].from == this.minMaxValue.min ? '' : this.diapValue[e].from;
+              this.maxValue = this.diapValue[e].to == this.minMaxValue.max ? '' : this.diapValue[e].to;
+            }
+          },
+          clearMinValue() {
+            this.minValue = '';
+            this.onValue();
+          },
+          clearMaxValue() {
+            this.maxValue = '';
+            this.onValue();
+          },
+          onValue() {
+            let from;
+            if (this.minValue === '') {
+              from = this.minMaxValue.min;
+            } else {
+              from = +this.minValue;
+            }
+            let to;
+            if (this.maxValue === '') {
+              to = this.minMaxValue.max;
+            } else {
+              to = +this.maxValue;
+            }
+            let it = this.diapValue.find((el) => {
+              if (el.id == 0) {
+                return false;
+              }
+              return (el.from == from) && (el.to == to);
+            })
+            if (it) {
+              this.curDiap = it.id;
+            } else {
+              this.curDiap = 0;
             }
           }
         }

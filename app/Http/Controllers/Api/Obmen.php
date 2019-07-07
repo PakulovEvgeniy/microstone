@@ -113,7 +113,10 @@ class Obmen extends Controller
         if ($pr == 'party_params') {
            $prod_id = $par['pp_prodid']; 
            $p_id = $par['pp_id'];
-           $id_val = $par['pp_params'];
+           $id_val = '';
+           if (isset($par['pp_params'])) {
+                $id_val = $par['pp_params'];
+           }
            
 
            PartyParams::where(['party_id1s' => $p_id])->delete();
@@ -200,9 +203,18 @@ class Obmen extends Controller
 			$name = $par['ord_name'];
 			$kod_sort = $par['ord_kod_sort'];
 			$status = $par['ord_status'];
-			$field = $par['ord_field'];
-			$napr = $par['ord_napr'];
-			$ord_type = $par['ord_type'];
+            $field = $par['ord_field'];
+            if (!$field) {
+                $field ='';
+            }
+            $napr = $par['ord_napr'];
+            if (!$napr) {
+                $napr ='';
+            }
+            $ord_type = $par['ord_type'];
+            if (!$ord_type) {
+                $ord_type ='';
+            }
             $ord_param = $par['ord_param'];
             if (!$ord_param) {
                 $ord_param = '';

@@ -29,15 +29,5 @@ export default new Router({
     { path: '/register', component: registerComp, name: 'register' },
     { path: '/password/reset', component: passwordLink, name: 'passwordLink' },
     { path: '/password/reset/:token', component: passwordReset, name: 'passwordReset' }
-  ],
-  scrollBehavior (to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition
-    } else {
-      return false;
-      if (to.matched.some(m => m.meta.scrollToTop)) {
-        return { x: 0, y: 80 } 
-      }
-    }
-  }
+  ]
 });

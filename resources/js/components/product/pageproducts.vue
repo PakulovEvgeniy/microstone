@@ -56,7 +56,7 @@ import leftfilters from '../system/leftfilters.vue';
         computed: {
           ...mapGetters([
             'categoryFilters',
-            'productsOfCategoryFilters',
+            'totalQty',
             'productsOfCategoryPage',
             'getScreenState'
           ]),
@@ -67,10 +67,10 @@ import leftfilters from '../system/leftfilters.vue';
             return 'view-'+this.curMode;
           },
           itemQty() {
-            return this.productsOfCategoryFilters.length;
+            return this.totalQty;
           },
           numPage() {
-            return this.categoryFilters['page'] || 1;
+            return +this.categoryFilters['page'] || 1;
           },
           pageByGroup() {
             if (!this.productsOfCategoryPage.length || this.productsOfCategoryPage[0].group === undefined) {
@@ -82,11 +82,11 @@ import leftfilters from '../system/leftfilters.vue';
             let curGrp = undefined;
             for (let i = 0; i < this.productsOfCategoryPage.length; i++) {
               let el = this.productsOfCategoryPage[i];
-              if (el.group.id != curGrp) {
-                arrGrp[el.group.name] = [];
-                curGrp = el.group.id;
+              if (el.group != curGrp) {
+                arrGrp[el.group] = [];
+                curGrp = el.group;
               }
-              arrGrp[el.group.name].push(el);
+              arrGrp[el.group].push(el);
             }
             return arrGrp;
           },

@@ -38,4 +38,12 @@ class Filters extends Model
         }
     	return $res;
     }
+    public static function getFiltersByChpu($chpu)
+    {
+        $cat = Category_description::where('chpu', $chpu)->first();
+        if ($cat) {
+            return Filters::getFilters($cat->category->id_1s);
+        }
+        return false;
+    }
 }

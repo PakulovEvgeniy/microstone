@@ -3451,7 +3451,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     'paginator': _system_paginator_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
     'left-filters': _system_leftfilters_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(['categoryFilters', 'productsOfCategoryFilters', 'productsOfCategoryPage', 'getScreenState']), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(['categoryFilters', 'totalQty', 'productsOfCategoryPage', 'getScreenState']), {
     curMode: function curMode() {
       return this.categoryFilters.mode == 'tile' ? 'tile' : 'simple';
     },
@@ -3459,10 +3459,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return 'view-' + this.curMode;
     },
     itemQty: function itemQty() {
-      return this.productsOfCategoryFilters.length;
+      return this.totalQty;
     },
     numPage: function numPage() {
-      return this.categoryFilters['page'] || 1;
+      return +this.categoryFilters['page'] || 1;
     },
     pageByGroup: function pageByGroup() {
       if (!this.productsOfCategoryPage.length || this.productsOfCategoryPage[0].group === undefined) {
@@ -3477,12 +3477,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       for (var i = 0; i < this.productsOfCategoryPage.length; i++) {
         var el = this.productsOfCategoryPage[i];
 
-        if (el.group.id != curGrp) {
-          arrGrp[el.group.name] = [];
-          curGrp = el.group.id;
+        if (el.group != curGrp) {
+          arrGrp[el.group] = [];
+          curGrp = el.group;
         }
 
-        arrGrp[el.group.name].push(el);
+        arrGrp[el.group].push(el);
       }
 
       return arrGrp;
@@ -3932,33 +3932,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   components: {
     'radio-button': _radio_button_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['productsOfCategory']), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['grpDataOfCategory']), {
     minMaxValue: function minMaxValue() {
-      var _this = this;
-
       if (this.item.filter_type == 'Число') {
-        var min = Number.MAX_VALUE;
-        var max = 0;
-        this.productsOfCategory.forEach(function (el) {
-          if (_this.item.filter_field) {
-            if (+el[_this.item.filter_field] > max) {
-              max = +el[_this.item.filter_field];
-            }
-
-            if (+el[_this.item.filter_field] < min) {
-              min = +el[_this.item.filter_field];
-            }
-          }
-        });
-
-        if (max == 0) {
-          min = 0;
-          max = 1000;
-        }
-
         return {
-          min: min,
-          max: max
+          min: this.grpDataOfCategory[this.item.id].min,
+          max: this.grpDataOfCategory[this.item.id].max
         };
       } else {
         return {};
@@ -3966,7 +3945,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     activeFiltr: function activeFiltr() {
       if (this.item.filter_type == 'Число') {
-        return this.curDiap > 0;
+        return this.minValue !== '' || this.maxValue !== '';
       } else {
         return false;
       }
@@ -3980,7 +3959,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           to: this.minMaxValue.max,
           cap: 'Все'
         }];
-        var st = this.minMaxValue.min;
+        var st = +this.minMaxValue.min;
         var st1 = st;
 
         for (var i = 1; i < 7; i++) {
@@ -4017,16 +3996,52 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onInput: function onInput(e) {
       this.curDiap = e;
-    }
-  },
-  watch: {
-    curDiap: function curDiap(val) {
-      if (val == 0) {
+
+      if (e == 0) {
         this.minValue = '';
         this.maxValue = '';
       } else {
-        this.minValue = this.diapValue[val].from;
-        this.maxValue = this.diapValue[val].to;
+        this.minValue = this.diapValue[e].from == this.minMaxValue.min ? '' : this.diapValue[e].from;
+        this.maxValue = this.diapValue[e].to == this.minMaxValue.max ? '' : this.diapValue[e].to;
+      }
+    },
+    clearMinValue: function clearMinValue() {
+      this.minValue = '';
+      this.onValue();
+    },
+    clearMaxValue: function clearMaxValue() {
+      this.maxValue = '';
+      this.onValue();
+    },
+    onValue: function onValue() {
+      var from;
+
+      if (this.minValue === '') {
+        from = this.minMaxValue.min;
+      } else {
+        from = +this.minValue;
+      }
+
+      var to;
+
+      if (this.maxValue === '') {
+        to = this.minMaxValue.max;
+      } else {
+        to = +this.maxValue;
+      }
+
+      var it = this.diapValue.find(function (el) {
+        if (el.id == 0) {
+          return false;
+        }
+
+        return el.from == from && el.to == to;
+      });
+
+      if (it) {
+        this.curDiap = it.id;
+      } else {
+        this.curDiap = 0;
       }
     }
   }
@@ -15577,11 +15592,7 @@ var render = function() {
                         class: {
                           "ui-input-small__icon_hidden": _vm.minValue === ""
                         },
-                        on: {
-                          click: function($event) {
-                            _vm.minValue = ""
-                          }
-                        }
+                        on: { click: _vm.clearMinValue }
                       },
                       [_c("i", { staticClass: "fas fa-times" })]
                     ),
@@ -15603,12 +15614,15 @@ var render = function() {
                       },
                       domProps: { value: _vm.minValue },
                       on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.minValue = $event.target.value
-                        }
+                        input: [
+                          function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.minValue = $event.target.value
+                          },
+                          _vm.onValue
+                        ]
                       }
                     })
                   ]
@@ -15626,11 +15640,7 @@ var render = function() {
                         class: {
                           "ui-input-small__icon_hidden": _vm.maxValue === ""
                         },
-                        on: {
-                          click: function($event) {
-                            _vm.maxValue = ""
-                          }
-                        }
+                        on: { click: _vm.clearMaxValue }
                       },
                       [_c("i", { staticClass: "fas fa-times" })]
                     ),
@@ -15652,12 +15662,15 @@ var render = function() {
                       },
                       domProps: { value: _vm.maxValue },
                       on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.maxValue = $event.target.value
-                        }
+                        input: [
+                          function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.maxValue = $event.target.value
+                          },
+                          _vm.onValue
+                        ]
                       }
                     })
                   ]
@@ -32347,10 +32360,16 @@ _router__WEBPACK_IMPORTED_MODULE_2__["default"].beforeEach(function (to, from, n
           var item = findItem(store.state.catalog.items, to.params['id']);
 
           if (item && item.childrens.length == 0) {
+            var para = {};
+            Object.assign(para, to.query);
+            para.chpu = to.params['id'];
+            arrProm.push(store.dispatch('getProductPage', para));
+
             if (to.params['id'] != from.params['id']) {
               arrProm.push(store.dispatch('getOrders', to.params['id']));
               arrProm.push(store.dispatch('getGroups', to.params['id']));
-              arrProm.push(store.dispatch('getProductsCategory', to.params['id']));
+              arrProm.push(store.dispatch('getFilters', to.params['id']));
+              arrProm.push(store.dispatch('getGrpDataOfCategory', to.params['id']));
             }
           } //store.commit('setCategoryFiltersAll',to.query);
 
@@ -35349,23 +35368,7 @@ function PageComponent(name) {
     path: '/password/reset/:token',
     component: _components_pages_passwordreset_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
     name: 'passwordReset'
-  }],
-  scrollBehavior: function scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition;
-    } else {
-      return false;
-
-      if (to.matched.some(function (m) {
-        return m.meta.scrollToTop;
-      })) {
-        return {
-          x: 0,
-          y: 80
-        };
-      }
-    }
-  }
+  }]
 }));
 
 /***/ }),
@@ -35432,7 +35435,11 @@ function createStore() {
           }]
         }
       },
-      productsOfCategory: [],
+      grpDataOfCategory: {},
+      productsOfCategoryPage: {
+        totalQty: 0,
+        items: []
+      },
       filterItems: []
     },
     actions: {
@@ -35578,8 +35585,8 @@ function createStore() {
 
         return getOrders;
       }(),
-      getGroups: function () {
-        var _getGroups = _asyncToGenerator(
+      getFilters: function () {
+        var _getFilters = _asyncToGenerator(
         /*#__PURE__*/
         _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(_ref5, data) {
           var commit, state, res, dat;
@@ -35589,14 +35596,14 @@ function createStore() {
                 case 0:
                   commit = _ref5.commit, state = _ref5.state;
                   _context3.next = 3;
-                  return axios.get('/api/products/groups?chpu=' + data);
+                  return axios.get('/api/products/filters?chpu=' + data);
 
                 case 3:
                   res = _context3.sent;
                   dat = res.data;
 
                   if (dat && dat.status == 'OK') {
-                    commit('setGroups', dat.data);
+                    commit('setFilters', dat.data);
                   }
 
                 case 6:
@@ -35607,14 +35614,14 @@ function createStore() {
           }, _callee3);
         }));
 
-        function getGroups(_x5, _x6) {
-          return _getGroups.apply(this, arguments);
+        function getFilters(_x5, _x6) {
+          return _getFilters.apply(this, arguments);
         }
 
-        return getGroups;
+        return getFilters;
       }(),
-      getProductsCategory: function () {
-        var _getProductsCategory = _asyncToGenerator(
+      getProductPage: function () {
+        var _getProductPage = _asyncToGenerator(
         /*#__PURE__*/
         _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(_ref6, data) {
           var commit, state, res, dat;
@@ -35624,14 +35631,16 @@ function createStore() {
                 case 0:
                   commit = _ref6.commit, state = _ref6.state;
                   _context4.next = 3;
-                  return axios.get('/api/products/products_cat?chpu=' + data);
+                  return axios.get('/api/products/productpage', {
+                    params: data
+                  });
 
                 case 3:
                   res = _context4.sent;
                   dat = res.data;
 
                   if (dat && dat.status == 'OK') {
-                    commit('setProductsCategory', dat.data);
+                    commit('setProductsOfCategoryPage', dat.data);
                   }
 
                 case 6:
@@ -35642,11 +35651,81 @@ function createStore() {
           }, _callee4);
         }));
 
-        function getProductsCategory(_x7, _x8) {
-          return _getProductsCategory.apply(this, arguments);
+        function getProductPage(_x7, _x8) {
+          return _getProductPage.apply(this, arguments);
         }
 
-        return getProductsCategory;
+        return getProductPage;
+      }(),
+      getGroups: function () {
+        var _getGroups = _asyncToGenerator(
+        /*#__PURE__*/
+        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5(_ref7, data) {
+          var commit, state, res, dat;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+            while (1) {
+              switch (_context5.prev = _context5.next) {
+                case 0:
+                  commit = _ref7.commit, state = _ref7.state;
+                  _context5.next = 3;
+                  return axios.get('/api/products/groups?chpu=' + data);
+
+                case 3:
+                  res = _context5.sent;
+                  dat = res.data;
+
+                  if (dat && dat.status == 'OK') {
+                    commit('setGroups', dat.data);
+                  }
+
+                case 6:
+                case "end":
+                  return _context5.stop();
+              }
+            }
+          }, _callee5);
+        }));
+
+        function getGroups(_x9, _x10) {
+          return _getGroups.apply(this, arguments);
+        }
+
+        return getGroups;
+      }(),
+      getGrpDataOfCategory: function () {
+        var _getGrpDataOfCategory = _asyncToGenerator(
+        /*#__PURE__*/
+        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6(_ref8, data) {
+          var commit, state, res, dat;
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+            while (1) {
+              switch (_context6.prev = _context6.next) {
+                case 0:
+                  commit = _ref8.commit, state = _ref8.state;
+                  _context6.next = 3;
+                  return axios.get('/api/products/grpdata?chpu=' + data);
+
+                case 3:
+                  res = _context6.sent;
+                  dat = res.data;
+
+                  if (dat && dat.status == 'OK') {
+                    commit('setGrpDataOfCategory', dat.data);
+                  }
+
+                case 6:
+                case "end":
+                  return _context6.stop();
+              }
+            }
+          }, _callee6);
+        }));
+
+        function getGrpDataOfCategory(_x11, _x12) {
+          return _getGrpDataOfCategory.apply(this, arguments);
+        }
+
+        return getGrpDataOfCategory;
       }()
     },
     mutations: {
@@ -35685,6 +35764,9 @@ function createStore() {
       },
       setNonVisibleAside: function setNonVisibleAside(state, payload) {
         state.nonVisibleAside = payload;
+      },
+      setFilters: function setFilters(state, payload) {
+        state.filterItems = payload;
       },
       setCatalog: function setCatalog(state, payload) {
         state.catalog.date = new Date();
@@ -35736,12 +35818,13 @@ function createStore() {
           }
         }
       },
-      setProductsCategory: function setProductsCategory(state, payload) {
-        state.productsOfCategory = payload;
-
-        if (state.categoryFilters['page']) {
-          state.categoryFilters['page'] = 1;
-        }
+      setGrpDataOfCategory: function setGrpDataOfCategory(state, payload) {
+        state.grpDataOfCategory = payload; //if (state.categoryFilters['page']) {
+        //  state.categoryFilters['page'] = 1;
+        //} 
+      },
+      setProductsOfCategoryPage: function setProductsOfCategoryPage(state, payload) {
+        state.productsOfCategoryPage = payload;
       }
     },
     getters: {
@@ -35805,164 +35888,14 @@ function createStore() {
       categoryFilters: function categoryFilters(state) {
         return state.categoryFilters;
       },
-      productsOfCategory: function productsOfCategory(state) {
-        return state.productsOfCategory;
+      grpDataOfCategory: function grpDataOfCategory(state) {
+        return state.grpDataOfCategory;
       },
-      productsOfCategoryFilters: function productsOfCategoryFilters(state) {
-        var catFilter = state.categoryFilters;
-        var res = state.productsOfCategory;
-
-        if (catFilter['stock']) {
-          if (catFilter['stock'] == 2) {
-            res = res.filter(function (el) {
-              return el.stock && el.stock > 0;
-            });
-          } else if (catFilter['stock'] == 3) {
-            res = res.filter(function (el) {
-              return !el.stock;
-            });
-          }
-        }
-
-        if (catFilter['q']) {
-          res = res.filter(function (el) {
-            var name = el.name.toUpperCase();
-            var sr = catFilter['q'].toUpperCase();
-            return name.indexOf(sr) != -1;
-          });
-        }
-
-        if (catFilter['group']) {
-          if (catFilter['group'] == 3) {
-            res = res.map(function (el) {
-              var newEl = {};
-              Object.assign(newEl, el);
-
-              if (newEl.stock && newEl.stock > 0) {
-                newEl.group = {
-                  id: 1,
-                  name: "В наличии"
-                };
-              } else {
-                newEl.group = {
-                  id: 2,
-                  name: "Под заказ"
-                };
-              }
-
-              return newEl;
-            });
-          } else if (catFilter['group'] != 1) {
-            var grItem = state.topFilters['group'].items.find(function (el) {
-              return el.id == catFilter['group'];
-            });
-
-            if (grItem) {
-              var arr = [];
-              var undIt = {
-                name: 'Неопределено'
-              };
-              var arrGr = [];
-              res.forEach(function (el) {
-                var fPar = el.params.filter(function (it) {
-                  return it.param_type_id == grItem.param_type_id;
-                });
-
-                if (fPar.length) {
-                  fPar.forEach(function (it2) {
-                    var newEl = {};
-                    Object.assign(newEl, el);
-                    var fElGr = arrGr.find(function (gr) {
-                      return gr.name == it2.value;
-                    });
-
-                    if (!fElGr) {
-                      fElGr = {
-                        name: it2.value
-                      };
-                      arrGr.push(fElGr);
-                    }
-
-                    newEl.group = fElGr;
-                    arr.push(newEl);
-                  });
-                } else {
-                  var newEl = {};
-                  Object.assign(newEl, el);
-                  newEl.group = undIt;
-                  arr.push(newEl);
-                }
-              });
-              arrGr = arrGr.sort(function (a, b) {
-                if (a.name == b.name) {
-                  return 0;
-                }
-
-                return a.name < b.name ? -1 : 1;
-              });
-              arrGr.forEach(function (el, ind) {
-                el.id = ind + 1;
-              });
-              undIt.id = arrGr.length + 1;
-              res = arr;
-            }
-          }
-        }
-
-        var sortItem;
-
-        if (catFilter['order']) {
-          sortItem = state.topFilters['order'].items.find(function (el) {
-            return el.id == catFilter['order'];
-          });
-        } else {
-          sortItem = state.topFilters['order'].items[0];
-        }
-
-        if (sortItem['sort_field']) {
-          res.sort(function (a, b) {
-            if (a['group'] !== undefined) {
-              if (a['group'] != b['group']) {
-                return a['group'].id - b['group'].id;
-              }
-            }
-
-            if (sortItem['sort_type'] == 'Число') {
-              if (sortItem['sort_ord'] == 'DESC') {
-                return +b[sortItem['sort_field']] - +a[sortItem['sort_field']];
-              } else {
-                return +a[sortItem['sort_field']] - +b[sortItem['sort_field']];
-              }
-            } else {
-              if (a[sortItem['sort_field']] == b[sortItem['sort_field']]) {
-                return 0;
-              }
-
-              if (sortItem['sort_ord'] == 'DESC') {
-                return a[sortItem['sort_field']] < b[sortItem['sort_field']] ? 1 : -1;
-              } else {
-                return a[sortItem['sort_field']] < b[sortItem['sort_field']] ? -1 : 1;
-              }
-            }
-          });
-        }
-
-        return res;
+      totalQty: function totalQty(state) {
+        return state.productsOfCategoryPage.totalQty;
       },
-      productsOfCategoryPage: function productsOfCategoryPage(state, getters) {
-        var itFilter = getters.productsOfCategoryFilters;
-        var catFilter = state.categoryFilters;
-        var page = 0;
-
-        if (catFilter['page']) {
-          page = parseInt(catFilter['page']);
-        }
-
-        if (!page) {
-          page = 1;
-        }
-
-        return itFilter.slice((page - 1) * 18, page * 18);
+      productsOfCategoryPage: function productsOfCategoryPage(state) {
+        return state.productsOfCategoryPage.items;
       }
     }
   });
@@ -35994,7 +35927,7 @@ s.innerHTML = '.vs-notify{ position:fixed; width:400px; z-index:9999; }' + '.vs-
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\openserver\OSPanel\domains\microstone\resources\js\entry-client.js */"./resources/js/entry-client.js");
+module.exports = __webpack_require__(/*! D:\OpenServer\OSPanel\domains\microstone\resources\js\entry-client.js */"./resources/js/entry-client.js");
 
 
 /***/ })

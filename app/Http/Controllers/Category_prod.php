@@ -23,6 +23,7 @@ class Category_prod extends Controller
 		$topf = [];
 		$prods = [];
 		$filt = [];
+		$itPage = [];
      	if ($id) {
      		$cat = Category::getCategoryByChpu($id);
      		if ($cat) {
@@ -34,7 +35,8 @@ class Category_prod extends Controller
 					$filters = $request->all();
 					$ordItems = Orders::getOrders($cat['id_1s']);
 					$grpItems = Groups::getGroups($cat['id_1s']);
-					$prods = Products::getProductsCategory($cat['id_1s']);
+					$prods = Products::getGrpDataOfProductsCategory($cat['id_1s']);
+					$itPage = Products::getProductsCategoryPage($cat['id_1s'], $filters);
 					$fltItems = Filters::getFilters($cat['id_1s']);
 
 					if (isset($filters['order'])) {
@@ -112,7 +114,10 @@ class Category_prod extends Controller
     		$dat['topFilters'] = $topf;
     	}
     	if (count($prods)) {
-    		$dat['productsOfCategory'] = $prods;
+    		$dat['grpDataOfCategory'] = $prods;
+		}
+		if (count($itPage)) {
+    		$dat['productsOfCategoryPage'] = $itPage;
     	}
     	if (count($filt)) {
     		$dat['filterItems'] = $filt;

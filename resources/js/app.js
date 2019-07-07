@@ -150,10 +150,15 @@ router.beforeEach((to, from, next) => {
 					if (to.params['id']) {
 						let item = findItem(store.state.catalog.items, to.params['id']);
 						if (item && item.childrens.length == 0) {
+							let para = {};
+							Object.assign(para, to.query);
+							para.chpu = to.params['id'];
+							arrProm.push(store.dispatch('getProductPage', para));
 							if (to.params['id'] != from.params['id']) {
 								arrProm.push(store.dispatch('getOrders', to.params['id']));
 								arrProm.push(store.dispatch('getGroups', to.params['id']));
-								arrProm.push(store.dispatch('getProductsCategory', to.params['id']));
+								arrProm.push(store.dispatch('getFilters', to.params['id']));
+								arrProm.push(store.dispatch('getGrpDataOfCategory', to.params['id']));
 							}
 						}
 						//store.commit('setCategoryFiltersAll',to.query);
