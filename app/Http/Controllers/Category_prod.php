@@ -60,8 +60,29 @@ class Category_prod extends Controller
 					if (isset($filters['q'])) {
 						$categoryFilters['q'] = $filters['q'];
 					}
-					
+					if (isset($filters['f']) && is_array($filters['f'])) {
+						$fl = $filters['f'];
+						foreach ($fl as $key => $val) {
+							$pr = $prods[$key];
+							$ar = explode('-', $val);
 
+							if ($pr) {
+								if ($pr['filter_type'] == 'Число') {
+									if (count($ar) == 2) {
+										$categoryFilters['f[' . $key . ']'] = $val;
+										$prods[$key]['minValue'] = $ar[0];
+										$prods[$key]['maxValue'] = $ar[1];	# code...
+									}
+								} else {
+									$categoryFilters['f[' . $key . ']'] = $val;
+									foreach ($ar as $v) {
+										$prods[$key]['fChecked'][] = $v;
+									}
+								}
+							}
+
+						}
+					}
 					$topf = [
 						'order' => [
 							'name' => 'order',

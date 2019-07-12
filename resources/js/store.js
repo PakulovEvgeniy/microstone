@@ -203,8 +203,38 @@ export function createStore () {
       },
       setCategoryFiltersAll(state, payload) {
         let ob = {};
+        let pat = /f\[(\d+)\]/;
+        if (state.grpDataOfCategory) {
+          for (let k in state.grpDataOfCategory) {
+            let el = state.grpDataOfCategory[k];
+            if (el.filter_type == 'Число') {
+              el.minValue = '';
+              el.maxValue = '';
+            } else {
+              el.fChecked = [];
+            }
+          };
+        }
         for (let key in payload) {
           ob[key] = payload[key];
+          let mat = key.match(pat);
+          if (mat) {
+            if (state.grpDataOfCategory[mat[1]]) {
+              let el = state.grpDataOfCategory[mat[1]];
+              if (el.filter_type=='Число') {
+                let ar = payload[key].split('-');
+                if (ar.length == 2) {
+                  el.minValue = ar[0];
+                  el.maxValue = ar[1];
+                }
+              } else {
+                let ar = payload[key].split('-');
+                ar.forEach((it) => {
+                  el.fChecked.push(it);
+                })
+              }
+            }
+          }
         }
         state.categoryFilters = ob;
       },

@@ -44,7 +44,7 @@ class Products extends Model
         $res = [];
         foreach ($lFiltr as $val) {
             $it = [];
-            if ($val['id'] == 4) {
+            if ($val['id_1s'] == 1) {
                 $minmax = PriceParty::getMinMaxPriceForCategory($id_1s);
                 //dd($minmax);
                 $it['filter_type'] = $val['filter_type'];
@@ -54,6 +54,8 @@ class Products extends Model
                 if ($it['max'] == 0) {
                     $it['max'] = 1000;
                 }
+                $it['minValue'] = '';
+                $it['maxValue'] = '';
             } else {
                 if ($val['filter_type'] == 'Число' && $val['param_type_id']) {
                     $minmax = PartyParams::getMinMaxValueForCategory($id_1s, $val['param_type_id']);
@@ -64,15 +66,18 @@ class Products extends Model
                     if ($it['max'] == 0) {
                         $it['max'] = 1000;
                     }
+                    $it['minValue'] = '';
+                    $it['maxValue'] = '';
                 }
                 if ($val['filter_type'] == 'Строка' && $val['param_type_id']) {
                     $items = PartyParams::getListParamsForCategory($id_1s, $val['param_type_id']);
                     $it['filter_type'] = $val['filter_type'];
                     $it['name'] = $val['name'];
                     $it['items'] = $items;
+                    $it['fChecked'] = [];
                 }
             }
-            $res[$val['id']] = $it;
+            $res[$val['id_1s']] = $it;
         }
         return $res;
     }
@@ -91,6 +96,8 @@ class Products extends Model
             }
         }
 
+        
+
         $prd = Products::where(['products.status' => 1, 'parent_id' => $id_1s])
             ->leftJoin('products_descriptions','products.id','=','products_descriptions.products_id')
 			->leftJoin('price_party','products.id_1s','=','price_party.product_id1s')
@@ -99,6 +106,19 @@ class Products extends Model
             
         if (isset($filtr['q']) && $filtr['q']) {
             $prd = $prd->where('name', 'like' , '%' . $filtr['q'] . '%');
+        }
+
+        if (isset($filtr['f']) && is_array($filtr['f'])) {
+          foreach ($filtr['f'] as $key => $value) {
+            if ($key==1) {
+              $arrProds = PriceParty::getProductsByFiltr($id_1s, $value);  
+            } else {
+              $arrProds = PartyParams::getProductsByFiltr($id_1s, $key, $value);
+            }
+            if ($arrProds!==false) {
+              $prd = $prd->whereIn('id_1s', $arrProds);
+            }
+          } 
         }
 
         if (count($param_ord)) {

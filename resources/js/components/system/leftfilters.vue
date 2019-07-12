@@ -2,9 +2,14 @@
     <div class="left-filters">
       <div class="left-filters__list">
         <filter-component v-for="el in filterItems" :key="el.id"
-        :item="el"></filter-component>
+        :item="el" :itemGrp="grpDataOfCategory[el.id_1s] || {}"></filter-component>
       </div>
-      <div class="left-filters__buttons"></div>
+      <div class="left-filters__buttons">
+        <div class="left-filters__buttons-main">
+          <button class="button-ui button-ui_brand left-filters__button" @click="clickUse">Применить</button>
+          <button class="button-ui button-ui_white left-filters__button" @click="clickRem">Сбросить</button>
+        </div>
+      </div>
     </div>
 </template>
 
@@ -18,11 +23,56 @@ import filterComp from './filter-comp.vue';
         },
         computed: {
           ...mapGetters([
-            'filterItems'
+            'filterItems',
+            'grpDataOfCategory',
+            'categoryFilters'
           ])
         },
         components: {
           'filter-component': filterComp
+        },
+        methods: {
+          clickUse() {
+            if (this.$router.currentRoute) {
+              let obj = {};
+              Object.assign(obj, this.categoryFilters);
+              for (let key in this.grpDataOfCategory) {
+                let el = this.grpDataOfCategory[key];
+                if (el.filter_type=="Число") {
+                  if (el.minValue !== '' || el.maxValue !== '') {
+                    obj['f['+key+']'] = ''+(el.minValue==='' ? el.min : el.minValue)+'-'
+                      +(el.maxValue==='' ? el.max : el.maxValue);
+                  } else {
+                    delete obj['f['+key+']'];
+                  }
+                } else {
+                  if (el.fChecked && el.fChecked.length) {
+                    obj['f['+key+']'] = el.fChecked.join('-');
+                  } else {
+                    delete obj['f['+key+']'];
+                  }
+                }
+              }
+
+              this.$router.push({
+                path: this.$router.currentRoute.path,
+                query: obj
+              });
+            }
+          },
+          clickRem() {
+            if (this.$router.currentRoute) {
+              let obj = {};
+              Object.assign(obj, this.categoryFilters);
+              for (let key in this.grpDataOfCategory) {
+                delete obj['f['+key+']'];
+              }
+              this.$router.push({
+                  path: this.$router.currentRoute.path,
+                  query: obj
+              });
+            }
+          }
         }
     }
 </script>
@@ -40,5 +90,14 @@ import filterComp from './filter-comp.vue';
     flex-direction: column;
     align-items: center;
     margin: 20px 0;
+  }
+  .left-filters__buttons-main {
+    width: 100%;
+  }
+  .left-filters__button {
+    display: block;
+    width: 90%;
+    margin: 0 auto 8px;
+    text-align: center;
   }
 </style>

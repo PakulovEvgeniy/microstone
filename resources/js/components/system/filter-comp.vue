@@ -7,19 +7,26 @@
       <div class="ui-collapse__content ui-collapse__content_list" :class="{'ui-collapse__content_in': filterOpen}">
         <div v-if="item.filter_type=='Число'">
           <div class="ui-input-small ui-input-small_list">
-            <span @click="clearMinValue" class="ui-input-small__icon ui-input-small__icon_list" :class="{'ui-input-small__icon_hidden': minValue===''}"><i class="fas fa-times"></i></span>
-            <input @input="onValue" v-model="minValue" class="ui-input-small__input ui-input-small__input_list" type="text" :placeholder="'от ' + minMaxValue.min">
+            <span @click="clearMinValue" class="ui-input-small__icon ui-input-small__icon_list" :class="{'ui-input-small__icon_hidden': itemGrp.minValue===''}"><i class="fas fa-times"></i></span>
+            <input @input="onValue" v-model="itemGrp.minValue" class="ui-input-small__input ui-input-small__input_list" type="text" :placeholder="'от ' + minMaxValue.min">
           </div>
           <div class="ui-input-small ui-input-small_list">
-            <span @click="clearMaxValue" class="ui-input-small__icon ui-input-small__icon_list" :class="{'ui-input-small__icon_hidden': maxValue===''}"><i class="fas fa-times"></i></span>
-            <input @input="onValue" v-model="maxValue" :placeholder="'до ' + minMaxValue.max" class="ui-input-small__input ui-input-small__input_list" type="text">
+            <span @click="clearMaxValue" class="ui-input-small__icon ui-input-small__icon_list" :class="{'ui-input-small__icon_hidden': itemGrp.maxValue===''}"><i class="fas fa-times"></i></span>
+            <input @input="onValue" v-model="itemGrp.maxValue" :placeholder="'до ' + minMaxValue.max" class="ui-input-small__input ui-input-small__input_list" type="text">
           </div>
           <div class="ui-radio ui-radio_list">
             <radio-button v-for="it in diapValue" :checked="it.id==curDiap" :key="it.id" :list="true" :name="item.filter_field" :value="it.id" :caption="it.cap" @input="onInput($event)"></radio-button>
           </div>
         </div>
-        <div v-else>
-          Строка
+        <div  v-else class="ui-list-controls__content">
+          <div v-if="diapValue.length>9" class="ui-input-search ui-input-search_list">
+            <input v-model="fSearch" type="text" placeholder="Поиск" class="ui-input-search__input ui-input-search__input_list">
+            <span class="ui-input-search__icon ui-input-search__icon_search ui-input-search__icon_list"><i class="fa fa-search"></i></span>
+          </div>
+          <div class="ui-checkbox-group ui-checkbox-group_list">
+            <checkbox-button v-for="it in filterDiap" :key="it.id" :list="true" :value="it.id" :caption="it.cap" @input="onInputCheck($event)" :model="itemGrp.fChecked"></checkbox-button>
+          </div>
+          <a v-if="itemGrp.fChecked.length>0" @click="clearCheck" class="ui-link ui-link_red ui-link_pseudolink ui-list-controls__link ui-list-controls__link_clear">Сбросить</a>
         </div>
       </div>
     </div>
@@ -28,30 +35,37 @@
 <script>
 import { mapGetters } from 'vuex';
 import radioButton from './radio-button.vue';
+import checkboxButton from './checkbox-button';
     export default {
         data() {
             return {
               filterOpen: false,
-              minValue: '',
-              maxValue: '',
-              curDiap: 0
+              curDiap: 0,
+              fSearch: ''
             }
         },
         props: [
-          'item'
+          'item',
+          'itemGrp'
         ],
         components: {
-          'radio-button': radioButton
+          'radio-button': radioButton,
+          'checkbox-button': checkboxButton
         },
         computed: {
           ...mapGetters([
-            'grpDataOfCategory'
           ]),
+          minVal() {
+            return this.itemGrp.minVal;
+          },
+          maxVal() {
+            return this.itemGrp.maxVal;
+          },
           minMaxValue() {
-            if (this.item.filter_type=='Число') {
+            if (this.item.filter_type=='Число' && this.itemGrp) {
               return {
-                min: this.grpDataOfCategory[this.item.id].min,
-                max: this.grpDataOfCategory[this.item.id].max
+                min: this.itemGrp.min,
+                max: this.itemGrp.max
               }
             } else {
               return {}
@@ -59,9 +73,9 @@ import radioButton from './radio-button.vue';
           },
           activeFiltr() {
             if (this.item.filter_type=='Число') {
-              return this.minValue !== '' || this.maxValue !== '';
+              return this.itemGrp.minValue !== '' || this.itemGrp.maxValue !== '';
             } else {
-              return false;
+              return this.itemGrp.fChecked.length>0;
             }
           },
           diapValue() {
@@ -85,44 +99,80 @@ import radioButton from './radio-button.vue';
               }
               return res;
             } else {
-              return {}
+              if (this.itemGrp &&  this.itemGrp.items) {
+                return this.itemGrp.items.map((el, ind) => {
+                  return {id: ind, cap: el};
+                }); 
+              }
+              return [];
             }
+          },
+          filterDiap() {
+            if (this.item.filter_type=='Число') {return [];}
+            if (this.fSearch == '') {return this.diapValue;}
+            let fil = this.fSearch.toUpperCase();
+            return this.diapValue.filter((el) => {
+              return el.cap.toUpperCase().indexOf(fil) != -1;
+            })
+          }
+        },
+        beforeMount() {
+          if (!this.itemGrp) {return;}
+          if (this.itemGrp.filter_type=='Строка') {return;}
+          this.onValue();
+        },
+        watch: {
+          '$route' (val) {
+            if (!this.itemGrp) {return;}
+            if (this.itemGrp.filter_type=='Строка') {return;}
+            this.onValue();
           }
         },
         methods: {
           onClick() {
             this.filterOpen = !this.filterOpen;
           },
+          clearCheck() {
+            this.itemGrp.fChecked.splice(0);
+          },
           onInput(e) {
             this.curDiap = e;
             if (e == 0) {
-              this.minValue = '';
-              this.maxValue = '';
+              this.itemGrp.minValue = '';
+              this.itemGrp.maxValue = '';
             } else {
-              this.minValue = this.diapValue[e].from == this.minMaxValue.min ? '' : this.diapValue[e].from;
-              this.maxValue = this.diapValue[e].to == this.minMaxValue.max ? '' : this.diapValue[e].to;
+              this.itemGrp.minValue = this.diapValue[e].from == this.minMaxValue.min ? '' : this.diapValue[e].from;
+              this.itemGrp.maxValue = this.diapValue[e].to == this.minMaxValue.max ? '' : this.diapValue[e].to;
+            }
+          },
+          onInputCheck(e) {
+            let ind = this.itemGrp.fChecked.indexOf(e);
+            if (ind==-1) {
+              this.itemGrp.fChecked.push(e); 
+            } else {
+              this.itemGrp.fChecked.splice(ind, 1);
             }
           },
           clearMinValue() {
-            this.minValue = '';
+            this.itemGrp.minValue = '';
             this.onValue();
           },
           clearMaxValue() {
-            this.maxValue = '';
+            this.itemGrp.maxValue = '';
             this.onValue();
           },
           onValue() {
             let from;
-            if (this.minValue === '') {
+            if (this.itemGrp.minValue === '') {
               from = this.minMaxValue.min;
             } else {
-              from = +this.minValue;
+              from = +this.itemGrp.minValue;
             }
             let to;
-            if (this.maxValue === '') {
+            if (this.itemGrp.maxValue === '') {
               to = this.minMaxValue.max;
             } else {
-              to = +this.maxValue;
+              to = +this.itemGrp.maxValue;
             }
             let it = this.diapValue.find((el) => {
               if (el.id == 0) {
@@ -269,6 +319,29 @@ import radioButton from './radio-button.vue';
   }
   .ui-list-controls_active .ui-collapse__link_list {
     color: #fc8507;
+  }
+  .ui-checkbox-group_list {
+    max-height: 298px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .ui-list-controls__content:after {
+    clear: both;
+    content: '';
+    display: block;
+  }
+  .ui-list-controls__link {
+    font-size: 13px;
+    margin: 5px 0 8px;
+  }
+  .ui-list-controls__link_clear {
+    float: right;
+    margin-right: 16px;
+    margin-bottom: -30px;
+    padding-top: 5px;
+  }
+  .ui-input-search_list {
+    margin: 5px 15px 8px;
   }
   @media (min-width: 992px) {
   .left-filters__list .ui-collapse_list:first-child .ui-collapse__link {

@@ -2207,6 +2207,33 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/checkbox-button.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/checkbox-button.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {};
+  },
+  props: ['caption', 'name', 'value', 'model', 'list'],
+  components: {}
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/filter-comp.vue?vue&type=script&lang=js&":
 /*!*****************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/filter-comp.vue?vue&type=script&lang=js& ***!
@@ -2218,6 +2245,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _radio_button_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./radio-button.vue */ "./resources/js/components/system/radio-button.vue");
+/* harmony import */ var _checkbox_button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./checkbox-button */ "./resources/js/components/system/checkbox-button.vue");
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -2249,27 +2277,41 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       filterOpen: false,
-      minValue: '',
-      maxValue: '',
-      curDiap: 0
+      curDiap: 0,
+      fSearch: ''
     };
   },
-  props: ['item'],
+  props: ['item', 'itemGrp'],
   components: {
-    'radio-button': _radio_button_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+    'radio-button': _radio_button_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    'checkbox-button': _checkbox_button__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['grpDataOfCategory']), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])([]), {
+    minVal: function minVal() {
+      return this.itemGrp.minVal;
+    },
+    maxVal: function maxVal() {
+      return this.itemGrp.maxVal;
+    },
     minMaxValue: function minMaxValue() {
-      if (this.item.filter_type == 'Число') {
+      if (this.item.filter_type == 'Число' && this.itemGrp) {
         return {
-          min: this.grpDataOfCategory[this.item.id].min,
-          max: this.grpDataOfCategory[this.item.id].max
+          min: this.itemGrp.min,
+          max: this.itemGrp.max
         };
       } else {
         return {};
@@ -2277,9 +2319,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     activeFiltr: function activeFiltr() {
       if (this.item.filter_type == 'Число') {
-        return this.minValue !== '' || this.maxValue !== '';
+        return this.itemGrp.minValue !== '' || this.itemGrp.maxValue !== '';
       } else {
-        return false;
+        return this.itemGrp.fChecked.length > 0;
       }
     },
     diapValue: function diapValue() {
@@ -2318,48 +2360,107 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         return res;
       } else {
-        return {};
+        if (this.itemGrp && this.itemGrp.items) {
+          return this.itemGrp.items.map(function (el, ind) {
+            return {
+              id: ind,
+              cap: el
+            };
+          });
+        }
+
+        return [];
       }
+    },
+    filterDiap: function filterDiap() {
+      if (this.item.filter_type == 'Число') {
+        return [];
+      }
+
+      if (this.fSearch == '') {
+        return this.diapValue;
+      }
+
+      var fil = this.fSearch.toUpperCase();
+      return this.diapValue.filter(function (el) {
+        return el.cap.toUpperCase().indexOf(fil) != -1;
+      });
     }
   }),
+  beforeMount: function beforeMount() {
+    if (!this.itemGrp) {
+      return;
+    }
+
+    if (this.itemGrp.filter_type == 'Строка') {
+      return;
+    }
+
+    this.onValue();
+  },
+  watch: {
+    '$route': function $route(val) {
+      if (!this.itemGrp) {
+        return;
+      }
+
+      if (this.itemGrp.filter_type == 'Строка') {
+        return;
+      }
+
+      this.onValue();
+    }
+  },
   methods: {
     onClick: function onClick() {
       this.filterOpen = !this.filterOpen;
+    },
+    clearCheck: function clearCheck() {
+      this.itemGrp.fChecked.splice(0);
     },
     onInput: function onInput(e) {
       this.curDiap = e;
 
       if (e == 0) {
-        this.minValue = '';
-        this.maxValue = '';
+        this.itemGrp.minValue = '';
+        this.itemGrp.maxValue = '';
       } else {
-        this.minValue = this.diapValue[e].from == this.minMaxValue.min ? '' : this.diapValue[e].from;
-        this.maxValue = this.diapValue[e].to == this.minMaxValue.max ? '' : this.diapValue[e].to;
+        this.itemGrp.minValue = this.diapValue[e].from == this.minMaxValue.min ? '' : this.diapValue[e].from;
+        this.itemGrp.maxValue = this.diapValue[e].to == this.minMaxValue.max ? '' : this.diapValue[e].to;
+      }
+    },
+    onInputCheck: function onInputCheck(e) {
+      var ind = this.itemGrp.fChecked.indexOf(e);
+
+      if (ind == -1) {
+        this.itemGrp.fChecked.push(e);
+      } else {
+        this.itemGrp.fChecked.splice(ind, 1);
       }
     },
     clearMinValue: function clearMinValue() {
-      this.minValue = '';
+      this.itemGrp.minValue = '';
       this.onValue();
     },
     clearMaxValue: function clearMaxValue() {
-      this.maxValue = '';
+      this.itemGrp.maxValue = '';
       this.onValue();
     },
     onValue: function onValue() {
       var from;
 
-      if (this.minValue === '') {
+      if (this.itemGrp.minValue === '') {
         from = this.minMaxValue.min;
       } else {
-        from = +this.minValue;
+        from = +this.itemGrp.minValue;
       }
 
       var to;
 
-      if (this.maxValue === '') {
+      if (this.itemGrp.maxValue === '') {
         to = this.minMaxValue.max;
       } else {
-        to = +this.maxValue;
+        to = +this.itemGrp.maxValue;
       }
 
       var it = this.diapValue.find(function (el) {
@@ -2435,15 +2536,66 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {};
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['filterItems'])),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['filterItems', 'grpDataOfCategory', 'categoryFilters'])),
   components: {
     'filter-component': _filter_comp_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  methods: {
+    clickUse: function clickUse() {
+      if (this.$router.currentRoute) {
+        var obj = {};
+        Object.assign(obj, this.categoryFilters);
+
+        for (var key in this.grpDataOfCategory) {
+          var el = this.grpDataOfCategory[key];
+
+          if (el.filter_type == "Число") {
+            if (el.minValue !== '' || el.maxValue !== '') {
+              obj['f[' + key + ']'] = '' + (el.minValue === '' ? el.min : el.minValue) + '-' + (el.maxValue === '' ? el.max : el.maxValue);
+            } else {
+              delete obj['f[' + key + ']'];
+            }
+          } else {
+            if (el.fChecked && el.fChecked.length) {
+              obj['f[' + key + ']'] = el.fChecked.join('-');
+            } else {
+              delete obj['f[' + key + ']'];
+            }
+          }
+        }
+
+        this.$router.push({
+          path: this.$router.currentRoute.path,
+          query: obj
+        });
+      }
+    },
+    clickRem: function clickRem() {
+      if (this.$router.currentRoute) {
+        var obj = {};
+        Object.assign(obj, this.categoryFilters);
+
+        for (var key in this.grpDataOfCategory) {
+          delete obj['f[' + key + ']'];
+        }
+
+        this.$router.push({
+          path: this.$router.currentRoute.path,
+          query: obj
+        });
+      }
+    }
   }
 });
 
@@ -2881,6 +3033,17 @@ __webpack_require__.r(__webpack_exports__);
 /*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/extract-text-webpack-plugin/dist/loader.js??ref--5-0!./node_modules/style-loader!./node_modules/css-loader??ref--5-2!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--5-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/catalog-mode.vue?vue&type=style&index=0&lang=css& ***!
   \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?!./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/checkbox-button.vue?vue&type=style&index=0&lang=css&":
+/*!****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/extract-text-webpack-plugin/dist/loader.js??ref--5-0!./node_modules/style-loader!./node_modules/css-loader??ref--5-2!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--5-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/checkbox-button.vue?vue&type=style&index=0&lang=css& ***!
+  \****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -13826,6 +13989,83 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/checkbox-button.vue?vue&type=template&id=4cf312a7&":
+/*!*************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/checkbox-button.vue?vue&type=template&id=4cf312a7& ***!
+  \*************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "label",
+    { staticClass: "ui-checkbox", class: { "ui-checkbox_list": _vm.list } },
+    [
+      _c("span", [_vm._v(_vm._s(_vm.caption))]),
+      _vm._v(" "),
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.model,
+            expression: "model"
+          }
+        ],
+        staticClass: "ui-checkbox__input",
+        class: { "ui-checkbox__input_list": _vm.list },
+        attrs: { type: "checkbox" },
+        domProps: {
+          value: _vm.value,
+          checked: Array.isArray(_vm.model)
+            ? _vm._i(_vm.model, _vm.value) > -1
+            : _vm.model
+        },
+        on: {
+          input: function($event) {
+            return _vm.$emit("input", $event.target.value)
+          },
+          change: function($event) {
+            var $$a = _vm.model,
+              $$el = $event.target,
+              $$c = $$el.checked ? true : false
+            if (Array.isArray($$a)) {
+              var $$v = _vm.value,
+                $$i = _vm._i($$a, $$v)
+              if ($$el.checked) {
+                $$i < 0 && (_vm.model = $$a.concat([$$v]))
+              } else {
+                $$i > -1 &&
+                  (_vm.model = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
+              }
+            } else {
+              _vm.model = $$c
+            }
+          }
+        }
+      }),
+      _vm._v(" "),
+      _c("span", {
+        staticClass: "ui-checkbox__box",
+        class: { "ui-checkbox__box_list": _vm.list }
+      })
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/filter-comp.vue?vue&type=template&id=511ddbef&":
 /*!*********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/filter-comp.vue?vue&type=template&id=511ddbef& ***!
@@ -13890,7 +14130,8 @@ var render = function() {
                         staticClass:
                           "ui-input-small__icon ui-input-small__icon_list",
                         class: {
-                          "ui-input-small__icon_hidden": _vm.minValue === ""
+                          "ui-input-small__icon_hidden":
+                            _vm.itemGrp.minValue === ""
                         },
                         on: { click: _vm.clearMinValue }
                       },
@@ -13902,8 +14143,8 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.minValue,
-                          expression: "minValue"
+                          value: _vm.itemGrp.minValue,
+                          expression: "itemGrp.minValue"
                         }
                       ],
                       staticClass:
@@ -13912,14 +14153,18 @@ var render = function() {
                         type: "text",
                         placeholder: "от " + _vm.minMaxValue.min
                       },
-                      domProps: { value: _vm.minValue },
+                      domProps: { value: _vm.itemGrp.minValue },
                       on: {
                         input: [
                           function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.minValue = $event.target.value
+                            _vm.$set(
+                              _vm.itemGrp,
+                              "minValue",
+                              $event.target.value
+                            )
                           },
                           _vm.onValue
                         ]
@@ -13938,7 +14183,8 @@ var render = function() {
                         staticClass:
                           "ui-input-small__icon ui-input-small__icon_list",
                         class: {
-                          "ui-input-small__icon_hidden": _vm.maxValue === ""
+                          "ui-input-small__icon_hidden":
+                            _vm.itemGrp.maxValue === ""
                         },
                         on: { click: _vm.clearMaxValue }
                       },
@@ -13950,8 +14196,8 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.maxValue,
-                          expression: "maxValue"
+                          value: _vm.itemGrp.maxValue,
+                          expression: "itemGrp.maxValue"
                         }
                       ],
                       staticClass:
@@ -13960,14 +14206,18 @@ var render = function() {
                         placeholder: "до " + _vm.minMaxValue.max,
                         type: "text"
                       },
-                      domProps: { value: _vm.maxValue },
+                      domProps: { value: _vm.itemGrp.maxValue },
                       on: {
                         input: [
                           function($event) {
                             if ($event.target.composing) {
                               return
                             }
-                            _vm.maxValue = $event.target.value
+                            _vm.$set(
+                              _vm.itemGrp,
+                              "maxValue",
+                              $event.target.value
+                            )
                           },
                           _vm.onValue
                         ]
@@ -13999,13 +14249,94 @@ var render = function() {
                   1
                 )
               ])
-            : _c("div", [_vm._v("\n      Строка\n    ")])
+            : _c("div", { staticClass: "ui-list-controls__content" }, [
+                _vm.diapValue.length > 9
+                  ? _c(
+                      "div",
+                      { staticClass: "ui-input-search ui-input-search_list" },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.fSearch,
+                              expression: "fSearch"
+                            }
+                          ],
+                          staticClass:
+                            "ui-input-search__input ui-input-search__input_list",
+                          attrs: { type: "text", placeholder: "Поиск" },
+                          domProps: { value: _vm.fSearch },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.fSearch = $event.target.value
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm._m(0)
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "ui-checkbox-group ui-checkbox-group_list" },
+                  _vm._l(_vm.filterDiap, function(it) {
+                    return _c("checkbox-button", {
+                      key: it.id,
+                      attrs: {
+                        list: true,
+                        value: it.id,
+                        caption: it.cap,
+                        model: _vm.itemGrp.fChecked
+                      },
+                      on: {
+                        input: function($event) {
+                          return _vm.onInputCheck($event)
+                        }
+                      }
+                    })
+                  }),
+                  1
+                ),
+                _vm._v(" "),
+                _vm.itemGrp.fChecked.length > 0
+                  ? _c(
+                      "a",
+                      {
+                        staticClass:
+                          "ui-link ui-link_red ui-link_pseudolink ui-list-controls__link ui-list-controls__link_clear",
+                        on: { click: _vm.clearCheck }
+                      },
+                      [_vm._v("Сбросить")]
+                    )
+                  : _vm._e()
+              ])
         ]
       )
     ]
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "span",
+      {
+        staticClass:
+          "ui-input-search__icon ui-input-search__icon_search ui-input-search__icon_list"
+      },
+      [_c("i", { staticClass: "fa fa-search" })]
+    )
+  }
+]
 render._withStripped = true
 
 
@@ -14058,12 +14389,35 @@ var render = function() {
       "div",
       { staticClass: "left-filters__list" },
       _vm._l(_vm.filterItems, function(el) {
-        return _c("filter-component", { key: el.id, attrs: { item: el } })
+        return _c("filter-component", {
+          key: el.id,
+          attrs: { item: el, itemGrp: _vm.grpDataOfCategory[el.id_1s] || {} }
+        })
       }),
       1
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "left-filters__buttons" })
+    _c("div", { staticClass: "left-filters__buttons" }, [
+      _c("div", { staticClass: "left-filters__buttons-main" }, [
+        _c(
+          "button",
+          {
+            staticClass: "button-ui button-ui_brand left-filters__button",
+            on: { click: _vm.clickUse }
+          },
+          [_vm._v("Применить")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "button-ui button-ui_white left-filters__button",
+            on: { click: _vm.clickRem }
+          },
+          [_vm._v("Сбросить")]
+        )
+      ])
+    ])
   ])
 }
 var staticRenderFns = []
@@ -32890,6 +33244,93 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/system/checkbox-button.vue":
+/*!************************************************************!*\
+  !*** ./resources/js/components/system/checkbox-button.vue ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _checkbox_button_vue_vue_type_template_id_4cf312a7___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./checkbox-button.vue?vue&type=template&id=4cf312a7& */ "./resources/js/components/system/checkbox-button.vue?vue&type=template&id=4cf312a7&");
+/* harmony import */ var _checkbox_button_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./checkbox-button.vue?vue&type=script&lang=js& */ "./resources/js/components/system/checkbox-button.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _checkbox_button_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./checkbox-button.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/system/checkbox-button.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _checkbox_button_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _checkbox_button_vue_vue_type_template_id_4cf312a7___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _checkbox_button_vue_vue_type_template_id_4cf312a7___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/system/checkbox-button.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/system/checkbox-button.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/components/system/checkbox-button.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_checkbox_button_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./checkbox-button.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/checkbox-button.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_checkbox_button_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/system/checkbox-button.vue?vue&type=style&index=0&lang=css&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/system/checkbox-button.vue?vue&type=style&index=0&lang=css& ***!
+  \*********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_extract_text_webpack_plugin_dist_loader_js_ref_5_0_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_2_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_3_node_modules_vue_loader_lib_index_js_vue_loader_options_checkbox_button_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/extract-text-webpack-plugin/dist/loader.js??ref--5-0!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--5-2!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--5-3!../../../../node_modules/vue-loader/lib??vue-loader-options!./checkbox-button.vue?vue&type=style&index=0&lang=css& */ "./node_modules/extract-text-webpack-plugin/dist/loader.js?!./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/checkbox-button.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_extract_text_webpack_plugin_dist_loader_js_ref_5_0_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_2_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_3_node_modules_vue_loader_lib_index_js_vue_loader_options_checkbox_button_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_extract_text_webpack_plugin_dist_loader_js_ref_5_0_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_2_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_3_node_modules_vue_loader_lib_index_js_vue_loader_options_checkbox_button_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_extract_text_webpack_plugin_dist_loader_js_ref_5_0_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_2_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_3_node_modules_vue_loader_lib_index_js_vue_loader_options_checkbox_button_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_extract_text_webpack_plugin_dist_loader_js_ref_5_0_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_2_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_3_node_modules_vue_loader_lib_index_js_vue_loader_options_checkbox_button_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_extract_text_webpack_plugin_dist_loader_js_ref_5_0_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_2_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_3_node_modules_vue_loader_lib_index_js_vue_loader_options_checkbox_button_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/components/system/checkbox-button.vue?vue&type=template&id=4cf312a7&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/components/system/checkbox-button.vue?vue&type=template&id=4cf312a7& ***!
+  \*******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_checkbox_button_vue_vue_type_template_id_4cf312a7___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./checkbox-button.vue?vue&type=template&id=4cf312a7& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/checkbox-button.vue?vue&type=template&id=4cf312a7&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_checkbox_button_vue_vue_type_template_id_4cf312a7___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_checkbox_button_vue_vue_type_template_id_4cf312a7___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/system/filter-comp.vue":
 /*!********************************************************!*\
   !*** ./resources/js/components/system/filter-comp.vue ***!
@@ -34043,9 +34484,49 @@ function createStore() {
       },
       setCategoryFiltersAll: function setCategoryFiltersAll(state, payload) {
         var ob = {};
+        var pat = /f\[(\d+)\]/;
+
+        if (state.grpDataOfCategory) {
+          for (var k in state.grpDataOfCategory) {
+            var el = state.grpDataOfCategory[k];
+
+            if (el.filter_type == 'Число') {
+              el.minValue = '';
+              el.maxValue = '';
+            } else {
+              el.fChecked = [];
+            }
+          }
+
+          ;
+        }
 
         for (var key in payload) {
           ob[key] = payload[key];
+          var mat = key.match(pat);
+
+          if (mat) {
+            if (state.grpDataOfCategory[mat[1]]) {
+              (function () {
+                var el = state.grpDataOfCategory[mat[1]];
+
+                if (el.filter_type == 'Число') {
+                  var ar = payload[key].split('-');
+
+                  if (ar.length == 2) {
+                    el.minValue = ar[0];
+                    el.maxValue = ar[1];
+                  }
+                } else {
+                  var _ar = payload[key].split('-');
+
+                  _ar.forEach(function (it) {
+                    el.fChecked.push(it);
+                  });
+                }
+              })();
+            }
+          }
         }
 
         state.categoryFilters = ob;
@@ -34168,7 +34649,7 @@ function createStore() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\OpenServer\OSPanel\domains\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
+module.exports = __webpack_require__(/*! D:\openserver\OSPanel\domains\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
 
 
 /***/ })

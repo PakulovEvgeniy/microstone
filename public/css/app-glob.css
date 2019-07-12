@@ -218,7 +218,9 @@ header {
     text-decoration: none;
     color: #333;
 }
-
+.ui-link_red {
+    color: #cc2e12;
+}
 .ui-link:hover {
     text-decoration: none;
     color: #fc5808;

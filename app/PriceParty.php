@@ -16,9 +16,30 @@ class PriceParty extends Model
     {
         $prd = Products::where(['products.status' => 1, 'parent_id' => $id_1s])
             ->leftJoin('price_party','products.id_1s','=','price_party.product_id1s')
-            ->select(DB::raw('MAX(price) as max, MIN(price) as min'))
+            ->select(DB::raw('MAX(CASE WHEN price is null THEN 0 ELSE price END) as max, MIN(CASE WHEN price is null THEN 0 ELSE price END) as min'))
             ->get();
 
-        return ['min' => $prd[0]->min, 'max' => $prd[0]->max];
+        return ['min' => ceil($prd[0]->min), 'max' => round($prd[0]->max)];
+    }
+
+    public static function getProductsByFiltr($id_1s, $val)
+    {
+        $ar = explode('-', $val);
+        if (count($ar)!=2) {
+            return false;
+        }
+        $prd = Products::where(['products.status' => 1, 'parent_id' => $id_1s])
+            ->leftJoin('price_party','products.id_1s','=','price_party.product_id1s')
+            ->select('product_id1s')
+            ->whereRaw('CASE WHEN price is null THEN 0 ELSE price END >= ?', [$ar[0]])
+            ->whereRaw('CASE WHEN price is null THEN 0 ELSE price END <= ?', [$ar[1]])
+            ->groupBy('product_id1s')
+            ->get();
+
+        $res = [];
+        foreach ($prd as $val) {
+            $res[] = $val->product_id1s;
+        }
+        return $res;
     }
 }

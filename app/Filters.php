@@ -30,6 +30,7 @@ class Filters extends Model
         foreach ($rows as $val) {
             $res[] = [
                 'id' => $val->id,
+                'id_1s' => $val->id_1s,
                 'name' => $val->name,
                 'filter_field' => $val->filter_field,
                 'param_type_id' => $val->param_type_id,
