@@ -45,16 +45,7 @@ class Products extends Controller
 				}
 			}
 		}
-		if ($param == 'grpdata') {
-			$qu = $request->all();
-			if (isset($qu['chpu'])) {
-				$id_1s = mod_Products::getProductByChpu($qu['chpu']);
-				if ($id_1s) {
-					$stat = 'OK';
-					$data = mod_Products::getGrpDataOfProductsCategory($id_1s);
-				}
-			}
-		}
+		
 		if ($param == 'groups') {
 			$qu = $request->all();
 			if (isset($qu['chpu'])) {

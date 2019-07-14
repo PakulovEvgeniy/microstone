@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Products;
 
 class Filters extends Model
 {
@@ -28,14 +29,17 @@ class Filters extends Model
         //dd($rows);
         $res = [];
         foreach ($rows as $val) {
+            $it = Products::getGrpDataOfProductsCategory($val, $id_1s);
             $res[] = [
                 'id' => $val->id,
                 'id_1s' => $val->id_1s,
                 'name' => $val->name,
                 'filter_field' => $val->filter_field,
                 'param_type_id' => $val->param_type_id,
-                'filter_type' => $val->filter_type
+                'filter_type' => $val->filter_type,
+                'grp_data' => $it
             ];
+            
         }
     	return $res;
     }

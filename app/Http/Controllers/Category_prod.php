@@ -21,7 +21,6 @@ class Category_prod extends Controller
         $categoryFilters = [];
 		$nonVis = false;
 		$topf = [];
-		$prods = [];
 		$filt = [];
 		$itPage = [];
      	if ($id) {
@@ -35,7 +34,6 @@ class Category_prod extends Controller
 					$filters = $request->all();
 					$ordItems = Orders::getOrders($cat['id_1s']);
 					$grpItems = Groups::getGroups($cat['id_1s']);
-					$prods = Products::getGrpDataOfProductsCategory($cat['id_1s']);
 					$itPage = Products::getProductsCategoryPage($cat['id_1s'], $filters);
 					$fltItems = Filters::getFilters($cat['id_1s']);
 
@@ -63,21 +61,20 @@ class Category_prod extends Controller
 					if (isset($filters['f']) && is_array($filters['f'])) {
 						$fl = $filters['f'];
 						foreach ($fl as $key => $val) {
-							$pr = $prods[$key];
-							$ar = explode('-', $val);
-
-							if ($pr) {
+							$k = array_search($key, array_column($fltItems, 'id_1s'));
+							
+							if ($k !== false) {
+								$pr = $fltItems[$k];
+								$ar = explode('-', $val);
 								if ($pr['filter_type'] == 'Число') {
 									if (count($ar) == 2) {
 										$categoryFilters['f[' . $key . ']'] = $val;
-										$prods[$key]['minValue'] = $ar[0];
-										$prods[$key]['maxValue'] = $ar[1];	# code...
+										$fltItems[$k]['grp_data']['minValue'] = $ar[0];
+										$fltItems[$k]['grp_data']['maxValue'] = $ar[1];
 									}
 								} else {
 									$categoryFilters['f[' . $key . ']'] = $val;
-									foreach ($ar as $v) {
-										$prods[$key]['fChecked'][] = $v;
-									}
+									$fltItems[$k]['grp_data']['fChecked'] = $ar;
 								}
 							}
 
@@ -134,9 +131,6 @@ class Category_prod extends Controller
     	if (count($topf)) {
     		$dat['topFilters'] = $topf;
     	}
-    	if (count($prods)) {
-    		$dat['grpDataOfCategory'] = $prods;
-		}
 		if (count($itPage)) {
     		$dat['productsOfCategoryPage'] = $itPage;
     	}

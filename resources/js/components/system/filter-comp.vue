@@ -45,8 +45,7 @@ import checkboxButton from './checkbox-button';
             }
         },
         props: [
-          'item',
-          'itemGrp'
+          'item'
         ],
         components: {
           'radio-button': radioButton,
@@ -55,6 +54,9 @@ import checkboxButton from './checkbox-button';
         computed: {
           ...mapGetters([
           ]),
+          itemGrp() {
+            return this.item.grp_data;
+          },
           minVal() {
             return this.itemGrp.minVal;
           },

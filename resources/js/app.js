@@ -158,7 +158,7 @@ router.beforeEach((to, from, next) => {
 								arrProm.push(store.dispatch('getOrders', to.params['id']));
 								arrProm.push(store.dispatch('getGroups', to.params['id']));
 								arrProm.push(store.dispatch('getFilters', to.params['id']));
-								arrProm.push(store.dispatch('getGrpDataOfCategory', to.params['id']));
+								//arrProm.push(store.dispatch('getGrpDataOfCategory', to.params['id']));
 							}
 						}
 						//store.commit('setCategoryFiltersAll',to.query);

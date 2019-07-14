@@ -39,16 +39,12 @@ class Products extends Model
     	return false;
     }
 
-    public static function getGrpDataOfProductsCategory($id_1s) {
-        $lFiltr = Filters::getFilters($id_1s);
-        $res = [];
-        foreach ($lFiltr as $val) {
+    public static function getGrpDataOfProductsCategory($val, $id_1s) {
+        
             $it = [];
-            if ($val['id_1s'] == 1) {
+            if ($val->id_1s == 1) {
                 $minmax = PriceParty::getMinMaxPriceForCategory($id_1s);
                 //dd($minmax);
-                $it['filter_type'] = $val['filter_type'];
-                $it['name'] = $val['name'];
                 $it['min'] = !$minmax['min'] ? 0 : $minmax['min'];
                 $it['max'] = !$minmax['max'] ? 0 : $minmax['max'];
                 if ($it['max'] == 0) {
@@ -57,10 +53,8 @@ class Products extends Model
                 $it['minValue'] = '';
                 $it['maxValue'] = '';
             } else {
-                if ($val['filter_type'] == 'Число' && $val['param_type_id']) {
-                    $minmax = PartyParams::getMinMaxValueForCategory($id_1s, $val['param_type_id']);
-                    $it['filter_type'] = $val['filter_type'];
-                    $it['name'] = $val['name'];
+                if ($val->filter_type == 'Число' && $val->param_type_id) {
+                    $minmax = PartyParams::getMinMaxValueForCategory($id_1s, $val->param_type_id);
                     $it['min'] = !$minmax['min'] ? 0 : $minmax['min'];
                     $it['max'] = !$minmax['max'] ? 0 : $minmax['max'];
                     if ($it['max'] == 0) {
@@ -69,17 +63,14 @@ class Products extends Model
                     $it['minValue'] = '';
                     $it['maxValue'] = '';
                 }
-                if ($val['filter_type'] == 'Строка' && $val['param_type_id']) {
-                    $items = PartyParams::getListParamsForCategory($id_1s, $val['param_type_id']);
-                    $it['filter_type'] = $val['filter_type'];
-                    $it['name'] = $val['name'];
+                if ($val->filter_type == 'Строка' && $val->param_type_id) {
+                    $items = PartyParams::getListParamsForCategory($id_1s, $val->param_type_id);
                     $it['items'] = $items;
                     $it['fChecked'] = [];
                 }
             }
-            $res[$val['id_1s']] = $it;
-        }
-        return $res;
+        
+            return $it;
     }
 
     public static function getProductsCategoryPage($id_1s, $filtr) {

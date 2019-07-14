@@ -5,6 +5,7 @@
         <top-filter  :item="topFilters['group']" @input="onInput($event, topFilters['group'].name)" :curValue="categoryFilters[topFilters['group'].name]"></top-filter>
         <top-filter  :item="topFilters['stock']" @input="onInput($event, topFilters['stock'].name)" :curValue="categoryFilters[topFilters['stock'].name]"></top-filter>
       </div>
+      <topfilters-picked></topfilters-picked>
       <div class="top-filters__view-mode">
         <catalog-mode :value="curMode" @input="onInput($event,'mode')"></catalog-mode>
       </div>
@@ -15,6 +16,7 @@
 import { mapGetters } from 'vuex';
 import topFilter from '../system/topfilter.vue';
 import catalogMode from '../system/catalog-mode.vue';
+import topfiltersPicked from './topfilters_picked.vue';
     export default {
         data() {
             return {
@@ -26,7 +28,8 @@ import catalogMode from '../system/catalog-mode.vue';
         ], 
         components: {
           'top-filter': topFilter,
-          'catalog-mode': catalogMode
+          'catalog-mode': catalogMode,
+          'topfilters-picked': topfiltersPicked
         },
         computed: {
           ...mapGetters([

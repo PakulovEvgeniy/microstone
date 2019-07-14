@@ -2,7 +2,7 @@
     <div class="left-filters">
       <div class="left-filters__list">
         <filter-component v-for="el in filterItems" :key="el.id"
-        :item="el" :itemGrp="grpDataOfCategory[el.id_1s] || {}"></filter-component>
+        :item="el"></filter-component>
       </div>
       <div class="left-filters__buttons">
         <div class="left-filters__buttons-main">
@@ -24,8 +24,8 @@ import filterComp from './filter-comp.vue';
         computed: {
           ...mapGetters([
             'filterItems',
-            'grpDataOfCategory',
-            'categoryFilters'
+            'categoryFilters',
+            'getScreenState'
           ])
         },
         components: {
@@ -36,41 +36,43 @@ import filterComp from './filter-comp.vue';
             if (this.$router.currentRoute) {
               let obj = {};
               Object.assign(obj, this.categoryFilters);
-              for (let key in this.grpDataOfCategory) {
-                let el = this.grpDataOfCategory[key];
+              this.filterItems.forEach((el) => {
                 if (el.filter_type=="Число") {
-                  if (el.minValue !== '' || el.maxValue !== '') {
-                    obj['f['+key+']'] = ''+(el.minValue==='' ? el.min : el.minValue)+'-'
-                      +(el.maxValue==='' ? el.max : el.maxValue);
+                  if (el.grp_data.minValue !== '' || el.grp_data.maxValue !== '') {
+                    obj['f['+el.id_1s+']'] = ''+(el.grp_data.minValue==='' ? el.grp_data.min : el.grp_data.minValue)+'-'
+                      +(el.grp_data.maxValue==='' ? el.grp_data.max : el.grp_data.maxValue);
                   } else {
-                    delete obj['f['+key+']'];
+                    delete obj['f['+el.id_1s+']'];
                   }
                 } else {
-                  if (el.fChecked && el.fChecked.length) {
-                    obj['f['+key+']'] = el.fChecked.join('-');
+                  if (el.grp_data.fChecked && el.grp_data.fChecked.length) {
+                    obj['f['+el.id_1s+']'] = el.grp_data.fChecked.join('-');
                   } else {
-                    delete obj['f['+key+']'];
+                    delete obj['f['+el.id_1s+']'];
                   }
                 }
-              }
-
+              });
               this.$router.push({
                 path: this.$router.currentRoute.path,
                 query: obj
               });
+              let scrTop = this.getScreenState == 1 ? 40 : 80;
+              window.scrollTo({ top: scrTop, behavior: 'smooth' });
             }
           },
           clickRem() {
             if (this.$router.currentRoute) {
               let obj = {};
               Object.assign(obj, this.categoryFilters);
-              for (let key in this.grpDataOfCategory) {
-                delete obj['f['+key+']'];
-              }
+              this.filterItems.forEach((el) => {
+                delete obj['f['+el.id_1s+']'];
+              });
               this.$router.push({
                   path: this.$router.currentRoute.path,
                   query: obj
               });
+              let scrTop = this.getScreenState == 1 ? 40 : 80;
+              window.scrollTo({ top: scrTop, behavior: 'smooth' });
             }
           }
         }

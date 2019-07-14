@@ -45,9 +45,6 @@ export function createStore () {
           ]
         }
       },
-      grpDataOfCategory: {
-        
-      },
       productsOfCategoryPage: {
         totalQty: 0,
         items: []
@@ -138,13 +135,6 @@ export function createStore () {
         if (dat && dat.status == 'OK') {
           commit('setGroups', dat.data);
         }
-      },
-      async getGrpDataOfCategory({commit, state}, data) {
-        let res = await axios.get('/api/products/grpdata?chpu='+data);
-        let dat = res.data;
-        if (dat && dat.status == 'OK') {
-          commit('setGrpDataOfCategory', dat.data);
-        }
       }
     },
     mutations: {
@@ -204,33 +194,33 @@ export function createStore () {
       setCategoryFiltersAll(state, payload) {
         let ob = {};
         let pat = /f\[(\d+)\]/;
-        if (state.grpDataOfCategory) {
-          for (let k in state.grpDataOfCategory) {
-            let el = state.grpDataOfCategory[k];
-            if (el.filter_type == 'Число') {
-              el.minValue = '';
-              el.maxValue = '';
-            } else {
-              el.fChecked = [];
-            }
-          };
-        }
+        state.filterItems.forEach((el) => {
+          if (el.filter_type == 'Число') {
+            el.grp_data.minValue = '';
+            el.grp_data.maxValue = '';
+          } else {
+            el.grp_data.fChecked = [];
+          }
+        });
+        
         for (let key in payload) {
           ob[key] = payload[key];
           let mat = key.match(pat);
           if (mat) {
-            if (state.grpDataOfCategory[mat[1]]) {
-              let el = state.grpDataOfCategory[mat[1]];
+            let el = state.filterItems.find((it) => {
+              return it.id_1s == mat[1];
+            });
+            if (el) {
               if (el.filter_type=='Число') {
                 let ar = payload[key].split('-');
                 if (ar.length == 2) {
-                  el.minValue = ar[0];
-                  el.maxValue = ar[1];
+                  el.grp_data.minValue = ar[0];
+                  el.grp_data.maxValue = ar[1];
                 }
               } else {
                 let ar = payload[key].split('-');
                 ar.forEach((it) => {
-                  el.fChecked.push(it);
+                  el.grp_data.fChecked.push(it);
                 })
               }
             }
@@ -259,12 +249,6 @@ export function createStore () {
             state.categoryFilters['group'] = state.topFilters['group'].items[0].id;
           }
         }
-      },
-      setGrpDataOfCategory(state, payload) {
-        state.grpDataOfCategory = payload;
-        //if (state.categoryFilters['page']) {
-        //  state.categoryFilters['page'] = 1;
-        //} 
       },
       setProductsOfCategoryPage(state, payload) {
         state.productsOfCategoryPage = payload;
@@ -330,9 +314,6 @@ export function createStore () {
       },
       categoryFilters(state) {
         return state.categoryFilters;
-      },
-      grpDataOfCategory(state) {
-        return state.grpDataOfCategory;
       },
       totalQty(state) {
         return state.productsOfCategoryPage.totalQty;
