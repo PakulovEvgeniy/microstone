@@ -49,7 +49,8 @@ export function createStore () {
         totalQty: 0,
         items: []
       },
-      filterItems: []
+      filterItems: [],
+      filterItemsDef: []
     },
     actions: {
       setAuth ({ commit }, data) {
@@ -175,7 +176,8 @@ export function createStore () {
         state.nonVisibleAside = payload;
       },
       setFilters (state, payload) {
-        state.filterItems = payload;
+        state.filterItems = payload.filters;
+        state.filterItemsDef = payload.filtersDef;
       },
       setCatalog(state, payload) {
         state.catalog.date = new Date();
@@ -308,6 +310,9 @@ export function createStore () {
       },
       filterItems(state) {
         return state.filterItems;
+      },
+      filterItemsDef(state) {
+        return state.filterItemsDef;
       },
       screenWidth(state) {
         return state.screenWidth;

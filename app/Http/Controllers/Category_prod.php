@@ -8,6 +8,7 @@ use App\Orders;
 use App\Groups;
 use App\Products;
 use App\Filters;
+use App\FiltersDef;
 use JSRender;
 
 class Category_prod extends Controller
@@ -22,6 +23,7 @@ class Category_prod extends Controller
 		$nonVis = false;
 		$topf = [];
 		$filt = [];
+		$filtDef = [];
 		$itPage = [];
      	if ($id) {
      		$cat = Category::getCategoryByChpu($id);
@@ -36,6 +38,7 @@ class Category_prod extends Controller
 					$grpItems = Groups::getGroups($cat['id_1s']);
 					$itPage = Products::getProductsCategoryPage($cat['id_1s'], $filters);
 					$fltItems = Filters::getFilters($cat['id_1s']);
+					$fltItemsDef = FiltersDef::getFiltersDef($cat['id_1s']);
 
 					if (isset($filters['order'])) {
 						$key = array_search($filters['order'], array_column($ordItems, 'id'));
@@ -114,6 +117,7 @@ class Category_prod extends Controller
 					];
 
 					$filt = $fltItems;
+					$filtDef = $fltItemsDef;
      			} 
      		} else {
      			$title = "Каталог товаров";	
@@ -136,6 +140,9 @@ class Category_prod extends Controller
     	}
     	if (count($filt)) {
     		$dat['filterItems'] = $filt;
+    	}
+    	if (count($filtDef)) {
+    		$dat['filterItemsDef'] = $filtDef;
     	}
         $ssr = JSRender::render($request->path(), $dat);
         //$rend = $this->render($request->path()); 

@@ -1905,14 +1905,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -1926,17 +1918,117 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     'show-switch': _system_show_switch_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     'item-block': _system_item_block_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['screenWidth']), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['screenWidth', 'filterItemsDef', 'filterItems', 'categoryFilters']), {
     styleForHeight: function styleForHeight() {
       var ht = this.isCollapse === false ? 'auto' : '42px';
       return {
         'height': ht
       };
+    },
+    curItem: function curItem() {
+      var _this = this;
+
+      var obj = {};
+      var pat = /f\[(\d+)\]/;
+      var fCount = 0;
+
+      for (var key in this.categoryFilters) {
+        if (key.match(pat)) {
+          obj[key] = this.categoryFilters[key];
+          fCount++;
+        }
+      }
+
+      if (fCount == 0) {
+        return undefined;
+      }
+
+      var res = this.filterItemsDef.find(function (elFDef) {
+        var obj2 = {};
+        var f2Count = 0;
+        elFDef.params.forEach(function (item) {
+          var el = _this.filterItems.find(function (elem) {
+            return elem.id_1s == item.filters_id_1s;
+          });
+
+          if (el) {
+            var arr = item.value.split('#-#');
+
+            if (el.filter_type == "Число") {
+              obj2['f[' + el.id_1s + ']'] = '' + (!arr[0] ? el.grp_data.min : arr[0]) + '-' + (!arr[1] ? el.grp_data.max : arr[1]);
+              f2Count++;
+            } else {
+              obj2['f[' + el.id_1s + ']'] = arr.map(function (n) {
+                return el.grp_data.items.findIndex(function (n1) {
+                  return n1 == n;
+                });
+              }).join('-');
+              f2Count++;
+            }
+          }
+        });
+        if (f2Count != fCount) return false;
+
+        for (var _key in obj) {
+          if (obj[_key] != obj2[_key]) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+      return res;
+    },
+    items: function items() {
+      return this.filterItemsDef;
     }
   }),
   methods: {
     onSwitch: function onSwitch(mode) {
       this.isCollapse = mode;
+    },
+    onClickOffer: function onClickOffer(it) {
+      var _this2 = this;
+
+      if (this.$router.currentRoute) {
+        var obj = {};
+        Object.assign(obj, this.categoryFilters);
+        var pat = /f\[(\d+)\]/;
+        var arKey = [];
+
+        for (var key in obj) {
+          if (key.match(pat)) {
+            arKey.push(key);
+          }
+        }
+
+        arKey.forEach(function (k) {
+          delete obj[k];
+        });
+        it.params.forEach(function (item) {
+          var el = _this2.filterItems.find(function (elem) {
+            return elem.id_1s == item.filters_id_1s;
+          });
+
+          if (el) {
+            var arr = item.value.split('#-#');
+
+            if (el.filter_type == "Число") {
+              obj['f[' + el.id_1s + ']'] = '' + (!arr[0] ? el.grp_data.min : arr[0]) + '-' + (!arr[1] ? el.grp_data.max : arr[1]);
+            } else {
+              obj['f[' + el.id_1s + ']'] = arr.map(function (n) {
+                return el.grp_data.items.findIndex(function (n1) {
+                  return n1 == n;
+                });
+              }).join('-');
+            }
+          }
+        });
+        this.$router.push({
+          path: this.$router.currentRoute.path,
+          query: obj
+        });
+      }
     }
   },
   watch: {
@@ -2157,20 +2249,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           });
 
           if (el) {
+            var val = _this.categoryFilters[key].split('-');
+
             if (el.filter_type == 'Число') {
-              if (el.grp_data.minValue !== '' || el.grp_data.maxValue !== '') {
+              if (val[0] || val[1]) {
                 res.push({
                   item: el,
                   id: el.id,
-                  name: el.name + ':' + (el.grp_data.minValue !== '' ? ' от ' + el.grp_data.minValue : '') + (el.grp_data.maxValue !== '' ? ' до ' + el.grp_data.maxValue : '')
+                  name: el.name + ':' + (val[0] !== '' ? ' от ' + val[0] : '') + (val[1] !== '' ? ' до ' + val[1] : '')
                 });
               }
             } else {
-              if (el.grp_data.fChecked.length > 0) {
+              if (val.length > 0) {
                 res.push({
                   item: el,
                   id: el.id,
-                  name: el.name + ': ' + (el.grp_data.fChecked.length == 1 ? el.grp_data.items[el.grp_data.fChecked[0]] : '' + el.grp_data.fChecked.length + ' знач.')
+                  name: el.name + ': ' + (val.length == 1 ? el.grp_data.items[val[0]] : '' + val.length + ' знач.')
                 });
               }
             }
@@ -13692,63 +13786,67 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "products-page__offers" }, [
-    _c(
-      "div",
-      {
-        staticClass: "offer-representation-in-category",
-        style: _vm.styleForHeight
-      },
-      [
-        _c("div", { staticClass: "offers-block" }, [
-          _c(
-            "div",
-            { ref: "inn", staticClass: "inner-block" },
-            [
-              _c("show-switch", {
-                attrs: { type: "show-more", visible: _vm.isCollapse === true },
-                on: {
-                  clickSwitch: function($event) {
-                    return _vm.onSwitch(false)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("item-block", { attrs: { name: "Первый" } }),
-              _vm._v(" "),
-              _c("item-block", { attrs: { name: "Перklkjljвый" } }),
-              _vm._v(" "),
-              _c("item-block", { attrs: { name: "Перjklвый" } }),
-              _vm._v(" "),
-              _c("item-block", { attrs: { name: "Пеljk;kjрвый" } }),
-              _vm._v(" "),
-              _c("item-block", { attrs: { name: "Пеkjlljрвый" } }),
-              _vm._v(" "),
-              _c("item-block", { attrs: { name: "Пеkjljkрвый" } }),
-              _vm._v(" "),
-              _c("item-block", { attrs: { name: "Первый" } }),
-              _vm._v(" "),
-              _c("item-block", { attrs: { name: "Перklkjljвый" } }),
-              _vm._v(" "),
-              _c("item-block", { attrs: { name: "Перjklвый" } }),
-              _vm._v(" "),
-              _c("item-block", { attrs: { name: "Пеljk;kjрвый" } }),
-              _vm._v(" "),
-              _c("show-switch", {
-                attrs: { type: "hide-all", visible: _vm.isCollapse === false },
-                on: {
-                  clickSwitch: function($event) {
-                    return _vm.onSwitch(true)
-                  }
-                }
-              })
-            ],
-            1
-          )
-        ])
-      ]
-    )
-  ])
+  return _vm.filterItemsDef.length
+    ? _c("div", { staticClass: "products-page__offers" }, [
+        _c(
+          "div",
+          {
+            staticClass: "offer-representation-in-category",
+            style: _vm.styleForHeight
+          },
+          [
+            _c("div", { staticClass: "offers-block" }, [
+              _c(
+                "div",
+                { ref: "inn", staticClass: "inner-block" },
+                [
+                  _c("show-switch", {
+                    attrs: {
+                      type: "show-more",
+                      visible: _vm.isCollapse === true
+                    },
+                    on: {
+                      clickSwitch: function($event) {
+                        return _vm.onSwitch(false)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.curItem
+                    ? _c("item-block", { attrs: { name: _vm.curItem.name } })
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm._l(_vm.items, function(it) {
+                    return _c("item-block", {
+                      key: it.id,
+                      attrs: { name: it.name },
+                      on: {
+                        clickOffer: function($event) {
+                          return _vm.onClickOffer(it)
+                        }
+                      }
+                    })
+                  }),
+                  _vm._v(" "),
+                  _c("show-switch", {
+                    attrs: {
+                      type: "hide-all",
+                      visible: _vm.isCollapse === false
+                    },
+                    on: {
+                      clickSwitch: function($event) {
+                        return _vm.onSwitch(true)
+                      }
+                    }
+                  })
+                ],
+                2
+              )
+            ])
+          ]
+        )
+      ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -34430,7 +34528,8 @@ function createStore() {
         totalQty: 0,
         items: []
       },
-      filterItems: []
+      filterItems: [],
+      filterItemsDef: []
     },
     actions: {
       setAuth: function setAuth(_ref, data) {
@@ -34721,7 +34820,8 @@ function createStore() {
         state.nonVisibleAside = payload;
       },
       setFilters: function setFilters(state, payload) {
-        state.filterItems = payload;
+        state.filterItems = payload.filters;
+        state.filterItemsDef = payload.filtersDef;
       },
       setCatalog: function setCatalog(state, payload) {
         state.catalog.date = new Date();
@@ -34868,6 +34968,9 @@ function createStore() {
       },
       filterItems: function filterItems(state) {
         return state.filterItems;
+      },
+      filterItemsDef: function filterItemsDef(state) {
+        return state.filterItemsDef;
       },
       screenWidth: function screenWidth(state) {
         return state.screenWidth;

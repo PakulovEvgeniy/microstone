@@ -21,6 +21,9 @@ use App\Brands;
 use App\Cases;
 use App\Filters;
 use App\FiltersGroups;
+use App\FiltersDef;
+use App\FiltersDefGroups;
+use App\FiltersDefParams;
 
 class Obmen extends Controller
 {
@@ -244,6 +247,45 @@ class Obmen extends Controller
 
 			return 'OK';
 		}
+
+    if ($pr == 'fil_def') {
+      $id = $par['f_id'];
+      $name = $par['f_name'];
+      $kod_sort = $par['f_kod_sort'];
+      $status = $par['f_status'];
+
+      $ord = FiltersDef::firstOrNew(['id_1s' => $id]);
+      $ord->id_1s = $id;
+      $ord->name = $name;
+      $ord->sort_order = $kod_sort;
+      $ord->status = $status;
+      $ord->save();
+
+      FiltersDefGroups::where('filters_def_id', $ord->id)->delete();
+
+      if (isset($par['f_group'])) {
+        foreach ($par['f_group'] as $value) {
+          $grp = new FiltersDefGroups;
+          $grp->filters_def_id = $ord->id;
+          $grp->category_id = $value;
+          $grp->save();
+        }
+      }
+
+      FiltersDefParams::where('filters_def_id', $ord->id)->delete();
+
+      if (isset($par['f_filters_id'])) {
+        for ($i=0; $i < count($par['f_filters_id']); $i++) { 
+          $grp = new FiltersDefParams;
+          $grp->filters_def_id = $ord->id;
+          $grp->filters_id_1s = $par['f_filters_id'][$i];
+          $grp->value = $par['f_filters_val'][$i];
+          $grp->save();
+        }
+      }
+
+      return 'OK';
+    }
 
     if ($pr == 'filter') {
       $id = $par['f_id'];

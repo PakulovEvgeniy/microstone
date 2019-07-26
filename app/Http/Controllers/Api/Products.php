@@ -9,6 +9,7 @@ use App\Orders;
 use App\Groups;
 use App\Products as mod_Products;
 use App\Filters;
+use App\FiltersDef;
 
 
 class Products extends Controller
@@ -57,7 +58,10 @@ class Products extends Controller
 			$qu = $request->all();
 			if (isset($qu['chpu'])) {
 				$stat = 'OK';
-				$data = Filters::getFiltersByChpu($qu['chpu']);
+				$data = [
+					'filters' => Filters::getFiltersByChpu($qu['chpu']),
+					'filtersDef' => FiltersDef::getFiltersDefByChpu($qu['chpu'])
+				];
 			}
 		}
     	return ['status' => $stat, 'data' => $data];

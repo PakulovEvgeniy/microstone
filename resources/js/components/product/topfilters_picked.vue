@@ -36,21 +36,22 @@ import { mapGetters } from 'vuex';
                         return it.id_1s == mat[1];
                     });
                     if (el) {
+                        let val = this.categoryFilters[key].split('-');
                         if (el.filter_type == 'Число') {
-                            if(el.grp_data.minValue !=='' || el.grp_data.maxValue !== '') {
+                            if(val[0] || val[1]) {
                                 res.push({
                                     item: el,
                                     id: el.id,
-                                    name: el.name + ':' + (el.grp_data.minValue !== '' ? ' от ' + el.grp_data.minValue : '') + 
-                                        (el.grp_data.maxValue !== '' ? ' до ' + el.grp_data.maxValue : '')
+                                    name: el.name + ':' + (val[0] !== '' ? ' от ' + val[0] : '') + 
+                                        (val[1] !== '' ? ' до ' + val[1] : '')
                                 });
                             }
                         } else {
-                            if(el.grp_data.fChecked.length > 0) {
+                            if(val.length > 0) {
                                 res.push({
                                     item: el,
                                     id: el.id,
-                                    name: el.name + ': ' + (el.grp_data.fChecked.length == 1 ? el.grp_data.items[el.grp_data.fChecked[0]] : ''+ el.grp_data.fChecked.length + ' знач.')
+                                    name: el.name + ': ' + (val.length == 1 ? el.grp_data.items[val[0]] : ''+ val.length + ' знач.')
                                 });
                             }
                         }

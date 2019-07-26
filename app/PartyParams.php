@@ -81,7 +81,9 @@ class PartyParams extends Model
             $fVal = PartyParams::getListParamsForCategory($id_1s, $fl->param_type_id);
             $val = [];
             foreach ($ar as $v) {
-                $val[] = $fVal[$v];
+                try {
+                    $val[] = $fVal[$v];
+                } catch (\Exception $e) {}
             }
             $prd = $prd->whereIn('value', $val);
         } else {

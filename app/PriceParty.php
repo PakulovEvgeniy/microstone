@@ -28,17 +28,18 @@ class PriceParty extends Model
         if (count($ar)!=2) {
             return false;
         }
+
         $prd = Products::where(['products.status' => 1, 'parent_id' => $id_1s])
             ->leftJoin('price_party','products.id_1s','=','price_party.product_id1s')
-            ->select('product_id1s')
+            ->select('id_1s')
             ->whereRaw('CASE WHEN price is null THEN 0 ELSE price END >= ?', [$ar[0]])
             ->whereRaw('CASE WHEN price is null THEN 0 ELSE price END <= ?', [$ar[1]])
-            ->groupBy('product_id1s')
+            ->groupBy('id_1s')
             ->get();
 
         $res = [];
         foreach ($prd as $val) {
-            $res[] = $val->product_id1s;
+            $res[] = $val->id_1s;
         }
         return $res;
     }
