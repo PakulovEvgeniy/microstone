@@ -4,7 +4,7 @@
         <div class="offers-block">
           <div ref="inn" class="inner-block">
             <show-switch type="show-more" :visible="isCollapse===true" @clickSwitch="onSwitch(false)"></show-switch>
-            <item-block v-if="curItem" :name="curItem.name"></item-block>
+            <item-block v-if="curItem" :name="curItem.name" :active="true" @clickOffer="onOfferClear"></item-block>
             <item-block v-for="it in items" :name="it.name" :key="it.id" @clickOffer="onClickOffer(it)"></item-block>
            
             <show-switch type="hide-all" :visible="isCollapse===false" @clickSwitch="onSwitch(true)"></show-switch>
@@ -69,7 +69,7 @@
                       return el.grp_data.items.findIndex((n1) => {
                         return n1 == n;
                       })
-                    }).join('-');
+                    }).filter(e => e!=-1).join('-');
                     f2Count++;
                   }
                 }
@@ -85,12 +85,38 @@
             return res;
           },
           items() {
-            return this.filterItemsDef;
+            if (!this.curItem) {
+               return this.filterItemsDef; 
+            } else {
+              return this.filterItemsDef.filter((el) => {
+                return el != this.curItem;
+              })
+            }
           }
         },
         methods: {
           onSwitch(mode) {
             this.isCollapse = mode;
+          },
+          onOfferClear() {
+            if (this.$router.currentRoute) {
+              let obj = {};
+              Object.assign(obj, this.categoryFilters);
+              let pat = /f\[(\d+)\]/;
+              let arKey = [];
+              for (let key in obj) {
+                if (key.match(pat)) {
+                  arKey.push(key);
+                }
+              }
+              arKey.forEach((k) => {
+                delete obj[k];
+              })
+              this.$router.push({
+                path: this.$router.currentRoute.path,
+                query: obj
+              });
+            }
           },
           onClickOffer(it) {
             if (this.$router.currentRoute) {
@@ -118,10 +144,11 @@
                     
                   } else {
                     obj['f['+el.id_1s+']'] = arr.map((n) => {
-                      return el.grp_data.items.findIndex((n1) => {
+                      let ind = el.grp_data.items.findIndex((n1) => {
                         return n1 == n;
                       })
-                    }).join('-');
+                      return ind;
+                    }).filter(e => e!=-1).join('-');
                   }
                 }
               });
@@ -134,6 +161,7 @@
         },
         watch: {
           screenWidth() {
+            if (!this.$refs.inn) return;
             if (this.$refs.inn.offsetHeight>42) {
               if (this.isCollapse===null) {
                 this.isCollapse = true;
@@ -144,6 +172,7 @@
           }
         },
         mounted() {
+          if (!this.$refs.inn) return;
           if (this.$refs.inn.offsetHeight>42) {
             this.isCollapse = true;
           };

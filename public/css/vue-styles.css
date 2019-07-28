@@ -697,6 +697,14 @@ main {
   text-decoration: none;
   color: #fc5808;
 }
+.item-block.is-active {
+  font-weight: bold;
+}
+.item-block.is-active .leave-category {
+  margin-left: 5px;
+  display: inline-block;
+  color: #8c8c8c;
+}
 
 .products-page__offers {
   width: 100%;
@@ -1215,26 +1223,79 @@ input[type="radio"]:checked+.ui-radio__content:before {
 }
 
 .left-filters {
-  position: relative;
-  border-radius: 8px;
-  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.16);
-  border: solid 1px transparent;
-  background: #fff;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.16);
+    border: solid 1px transparent;
+    background: #fff;
 }
 .left-filters__buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px 0;
 }
 .left-filters__buttons-main {
-  width: 100%;
+    width: 100%;
 }
 .left-filters__button {
-  display: block;
-  width: 90%;
-  margin: 0 auto 8px;
-  text-align: center;
+    display: block;
+    width: 90%;
+    margin: 0 auto 8px;
+    text-align: center;
+}
+.left-filters .apply-filters-float-btn {
+ border-radius:8px;
+ width:120px;
+ padding:0;
+ font-size:16px;
+ line-height:64px;
+ height:64px;
+ border:none;
+ outline:none;
+ cursor:pointer;
+ text-align:center;
+ color:#fff;
+ background-image:linear-gradient(to top, #fc8507, #ffa218);
+ font-weight:bold;
+ position:absolute;
+ right:-120px;
+ z-index:110
+}
+.left-filters .apply-filters-float-btn:before {
+ display:block;
+ content:'';
+ position:absolute;
+ left:-5px;
+ top:10px;
+ background-image:linear-gradient(45deg, #fc8507, #ffa218);
+ width:45px;
+ height:45px;
+ border-radius:4px;
+ transform:rotate(135deg);
+ z-index:0
+}
+.left-filters .apply-filters-float-btn:after {
+ border-radius:8px;
+ box-shadow:inherit;
+ display:block;
+ content:'\41F\43E\43A\430\437\430\442\44C';
+ position:absolute;
+ left:0;
+ top:0;
+ background-image:inherit;
+ border-radius:inherit;
+ width:100%;
+ height:100%;
+ z-index:1
+}
+.left-filters .apply-filters-float-btn:hover {
+ background-image:linear-gradient(to bottom, #ffbc0b, #ff7400);
+ box-shadow:inset 0 -2px 0 0 rgba(0,0,0,0.2)
+}
+.left-filters .apply-filters-float-btn:hover:before {
+ background-image:linear-gradient(45deg, #ffbc0b, #ff7400);
+ box-shadow:inset -2px 0 0 0 rgba(0,0,0,0.2)
 }
 
 .products-page__top-block {

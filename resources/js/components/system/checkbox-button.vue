@@ -1,7 +1,7 @@
 <template>
     <label class="ui-checkbox" :class="{'ui-checkbox_list': list}">
       <span>{{caption}}</span>
-      <input type="checkbox" :class="{'ui-checkbox__input_list': list}" class="ui-checkbox__input" :value="value" @input="$emit('input', $event.target.value)" v-model="model">
+      <input type="checkbox" :class="{'ui-checkbox__input_list': list}" class="ui-checkbox__input" :value="value" @input="onInput($event)" v-model="model">
       <span class="ui-checkbox__box" :class="{'ui-checkbox__box_list': list}"></span>
     </label>
 </template>
@@ -22,6 +22,11 @@
         ], 
         components: {
 
+        },
+        methods: {
+          onInput(e) {
+            this.$emit('input', e.target)
+          }
         }
     }
 </script>

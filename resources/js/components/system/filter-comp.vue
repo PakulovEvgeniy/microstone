@@ -8,11 +8,11 @@
         <div v-if="item.filter_type=='Число'">
           <div class="ui-input-small ui-input-small_list">
             <span @click="clearMinValue" class="ui-input-small__icon ui-input-small__icon_list" :class="{'ui-input-small__icon_hidden': itemGrp.minValue===''}"><i class="fas fa-times"></i></span>
-            <input @input="onValue" v-model="itemGrp.minValue" class="ui-input-small__input ui-input-small__input_list" type="text" :placeholder="'от ' + minMaxValue.min">
+            <input ref="inp1" @input="onValue($event.target)" v-model="itemGrp.minValue" class="ui-input-small__input ui-input-small__input_list" type="text" :placeholder="'от ' + minMaxValue.min">
           </div>
           <div class="ui-input-small ui-input-small_list">
             <span @click="clearMaxValue" class="ui-input-small__icon ui-input-small__icon_list" :class="{'ui-input-small__icon_hidden': itemGrp.maxValue===''}"><i class="fas fa-times"></i></span>
-            <input @input="onValue" v-model="itemGrp.maxValue" :placeholder="'до ' + minMaxValue.max" class="ui-input-small__input ui-input-small__input_list" type="text">
+            <input ref="inp2" @input="onValue($event.target)" v-model="itemGrp.maxValue" :placeholder="'до ' + minMaxValue.max" class="ui-input-small__input ui-input-small__input_list" type="text">
           </div>
           <div class="ui-radio ui-radio_list">
             <radio-button v-for="it in diapValue" :checked="it.id==curDiap" :key="it.id" :list="true" :name="item.filter_field" :value="it.id" :caption="it.cap" @input="onInput($event)"></radio-button>
@@ -121,13 +121,13 @@ import checkboxButton from './checkbox-button';
         beforeMount() {
           if (!this.itemGrp) {return;}
           if (this.itemGrp.filter_type=='Строка') {return;}
-          this.onValue();
+          this.onValue(true);
         },
         watch: {
           '$route' (val) {
             if (!this.itemGrp) {return;}
             if (this.itemGrp.filter_type=='Строка') {return;}
-            this.onValue();
+            this.onValue(true);
           }
         },
         methods: {
@@ -137,7 +137,8 @@ import checkboxButton from './checkbox-button';
           clearCheck() {
             this.itemGrp.fChecked.splice(0);
           },
-          onInput(e) {
+          onInput(ev) {
+            let e = ev.value;
             this.curDiap = e;
             if (e == 0) {
               this.itemGrp.minValue = '';
@@ -146,24 +147,27 @@ import checkboxButton from './checkbox-button';
               this.itemGrp.minValue = this.diapValue[e].from == this.minMaxValue.min ? '' : this.diapValue[e].from;
               this.itemGrp.maxValue = this.diapValue[e].to == this.minMaxValue.max ? '' : this.diapValue[e].to;
             }
+            this.$emit('change', ev);
           },
-          onInputCheck(e) {
+          onInputCheck(ev) {
+            let e = ev.value
             let ind = this.itemGrp.fChecked.indexOf(e);
             if (ind==-1) {
               this.itemGrp.fChecked.push(e); 
             } else {
               this.itemGrp.fChecked.splice(ind, 1);
             }
+            this.$emit('change', ev);
           },
           clearMinValue() {
             this.itemGrp.minValue = '';
-            this.onValue();
+            this.onValue(this.$refs.inp1);
           },
           clearMaxValue() {
             this.itemGrp.maxValue = '';
-            this.onValue();
+            this.onValue(this.$refs.inp2);
           },
-          onValue() {
+          onValue(fromRoute) {
             let from;
             if (this.itemGrp.minValue === '') {
               from = this.minMaxValue.min;
@@ -186,6 +190,9 @@ import checkboxButton from './checkbox-button';
               this.curDiap = it.id;
             } else {
               this.curDiap = 0;
+            }
+            if (fromRoute !== true) {
+              this.$emit('change', fromRoute); 
             }
           }
         }

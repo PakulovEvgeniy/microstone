@@ -1962,6 +1962,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 return el.grp_data.items.findIndex(function (n1) {
                   return n1 == n;
                 });
+              }).filter(function (e) {
+                return e != -1;
               }).join('-');
               f2Count++;
             }
@@ -1980,15 +1982,45 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return res;
     },
     items: function items() {
-      return this.filterItemsDef;
+      var _this2 = this;
+
+      if (!this.curItem) {
+        return this.filterItemsDef;
+      } else {
+        return this.filterItemsDef.filter(function (el) {
+          return el != _this2.curItem;
+        });
+      }
     }
   }),
   methods: {
     onSwitch: function onSwitch(mode) {
       this.isCollapse = mode;
     },
+    onOfferClear: function onOfferClear() {
+      if (this.$router.currentRoute) {
+        var obj = {};
+        Object.assign(obj, this.categoryFilters);
+        var pat = /f\[(\d+)\]/;
+        var arKey = [];
+
+        for (var key in obj) {
+          if (key.match(pat)) {
+            arKey.push(key);
+          }
+        }
+
+        arKey.forEach(function (k) {
+          delete obj[k];
+        });
+        this.$router.push({
+          path: this.$router.currentRoute.path,
+          query: obj
+        });
+      }
+    },
     onClickOffer: function onClickOffer(it) {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.$router.currentRoute) {
         var obj = {};
@@ -2006,7 +2038,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           delete obj[k];
         });
         it.params.forEach(function (item) {
-          var el = _this2.filterItems.find(function (elem) {
+          var el = _this3.filterItems.find(function (elem) {
             return elem.id_1s == item.filters_id_1s;
           });
 
@@ -2017,9 +2049,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               obj['f[' + el.id_1s + ']'] = '' + (!arr[0] ? el.grp_data.min : arr[0]) + '-' + (!arr[1] ? el.grp_data.max : arr[1]);
             } else {
               obj['f[' + el.id_1s + ']'] = arr.map(function (n) {
-                return el.grp_data.items.findIndex(function (n1) {
+                var ind = el.grp_data.items.findIndex(function (n1) {
                   return n1 == n;
                 });
+                return ind;
+              }).filter(function (e) {
+                return e != -1;
               }).join('-');
             }
           }
@@ -2033,6 +2068,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   watch: {
     screenWidth: function screenWidth() {
+      if (!this.$refs.inn) return;
+
       if (this.$refs.inn.offsetHeight > 42) {
         if (this.isCollapse === null) {
           this.isCollapse = true;
@@ -2043,6 +2080,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   mounted: function mounted() {
+    if (!this.$refs.inn) return;
+
     if (this.$refs.inn.offsetHeight > 42) {
       this.isCollapse = true;
     }
@@ -2434,7 +2473,12 @@ __webpack_require__.r(__webpack_exports__);
     return {};
   },
   props: ['caption', 'name', 'value', 'model', 'list'],
-  components: {}
+  components: {},
+  methods: {
+    onInput: function onInput(e) {
+      this.$emit('input', e.target);
+    }
+  }
 });
 
 /***/ }),
@@ -2604,7 +2648,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return;
     }
 
-    this.onValue();
+    this.onValue(true);
   },
   watch: {
     '$route': function $route(val) {
@@ -2616,7 +2660,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return;
       }
 
-      this.onValue();
+      this.onValue(true);
     }
   },
   methods: {
@@ -2626,7 +2670,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     clearCheck: function clearCheck() {
       this.itemGrp.fChecked.splice(0);
     },
-    onInput: function onInput(e) {
+    onInput: function onInput(ev) {
+      var e = ev.value;
       this.curDiap = e;
 
       if (e == 0) {
@@ -2636,8 +2681,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.itemGrp.minValue = this.diapValue[e].from == this.minMaxValue.min ? '' : this.diapValue[e].from;
         this.itemGrp.maxValue = this.diapValue[e].to == this.minMaxValue.max ? '' : this.diapValue[e].to;
       }
+
+      this.$emit('change', ev);
     },
-    onInputCheck: function onInputCheck(e) {
+    onInputCheck: function onInputCheck(ev) {
+      var e = ev.value;
       var ind = this.itemGrp.fChecked.indexOf(e);
 
       if (ind == -1) {
@@ -2645,16 +2693,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       } else {
         this.itemGrp.fChecked.splice(ind, 1);
       }
+
+      this.$emit('change', ev);
     },
     clearMinValue: function clearMinValue() {
       this.itemGrp.minValue = '';
-      this.onValue();
+      this.onValue(this.$refs.inp1);
     },
     clearMaxValue: function clearMaxValue() {
       this.itemGrp.maxValue = '';
-      this.onValue();
+      this.onValue(this.$refs.inp2);
     },
-    onValue: function onValue() {
+    onValue: function onValue(fromRoute) {
       var from;
 
       if (this.itemGrp.minValue === '') {
@@ -2684,6 +2734,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       } else {
         this.curDiap = 0;
       }
+
+      if (fromRoute !== true) {
+        this.$emit('change', fromRoute);
+      }
     }
   }
 });
@@ -2705,11 +2759,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {};
   },
-  props: ['name'],
+  props: ['name', 'active'],
   methods: {
     onClick: function onClick() {
       this.$emit('clickOffer');
@@ -2749,17 +2806,47 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      floatBtn: false,
+      timeInt: null,
+      top: 0
+    };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['filterItems', 'categoryFilters', 'getScreenState'])),
   components: {
     'filter-component': _filter_comp_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   methods: {
+    onChange: function onChange(ev) {
+      var _this = this;
+
+      console.log(ev);
+      this.top = ev.parentElement.offsetTop - 16 - ev.parentElement.parentElement.scrollTop;
+
+      if (this.timeInt) {
+        clearInterval(this.timeInt);
+      }
+
+      this.floatBtn = true;
+      this.timeInt = setTimeout(function () {
+        _this.timeInt = null;
+        _this.floatBtn = false;
+      }, 4000);
+    },
+    clickUseFloat: function clickUseFloat() {
+      if (this.timeInt) {
+        clearInterval(this.timeInt);
+      }
+
+      this.timeInt = null;
+      this.floatBtn = false;
+      this.clickUse();
+    },
     clickUse: function clickUse() {
       if (this.$router.currentRoute) {
         var obj = {};
@@ -2944,7 +3031,12 @@ __webpack_require__.r(__webpack_exports__);
     return {};
   },
   props: ['caption', 'name', 'value', 'checked', 'list'],
-  components: {}
+  components: {},
+  methods: {
+    onInput: function onInput(e) {
+      this.$emit('input', e.target);
+    }
+  }
 });
 
 /***/ }),
@@ -13813,7 +13905,10 @@ var render = function() {
                   }),
                   _vm._v(" "),
                   _vm.curItem
-                    ? _c("item-block", { attrs: { name: _vm.curItem.name } })
+                    ? _c("item-block", {
+                        attrs: { name: _vm.curItem.name, active: true },
+                        on: { clickOffer: _vm.onOfferClear }
+                      })
                     : _vm._e(),
                   _vm._v(" "),
                   _vm._l(_vm.items, function(it) {
@@ -14337,7 +14432,7 @@ var render = function() {
         },
         on: {
           input: function($event) {
-            return _vm.$emit("input", $event.target.value)
+            return _vm.onInput($event)
           },
           change: function($event) {
             var $$a = _vm.model,
@@ -14454,6 +14549,7 @@ var render = function() {
                           expression: "itemGrp.minValue"
                         }
                       ],
+                      ref: "inp1",
                       staticClass:
                         "ui-input-small__input ui-input-small__input_list",
                       attrs: {
@@ -14473,7 +14569,9 @@ var render = function() {
                               $event.target.value
                             )
                           },
-                          _vm.onValue
+                          function($event) {
+                            return _vm.onValue($event.target)
+                          }
                         ]
                       }
                     })
@@ -14507,6 +14605,7 @@ var render = function() {
                           expression: "itemGrp.maxValue"
                         }
                       ],
+                      ref: "inp2",
                       staticClass:
                         "ui-input-small__input ui-input-small__input_list",
                       attrs: {
@@ -14526,7 +14625,9 @@ var render = function() {
                               $event.target.value
                             )
                           },
-                          _vm.onValue
+                          function($event) {
+                            return _vm.onValue($event.target)
+                          }
                         ]
                       }
                     })
@@ -14665,9 +14766,18 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "item-block" }, [
-    _c("a", { on: { click: _vm.onClick } }, [_vm._v(_vm._s(_vm.name))])
-  ])
+  return _c(
+    "div",
+    { staticClass: "item-block", class: { "is-active": _vm.active } },
+    [
+      _c("a", { on: { click: _vm.onClick } }, [
+        _vm._v("\n    " + _vm._s(_vm.name) + "\n    "),
+        _vm.active
+          ? _c("i", { staticClass: "fas fa-times leave-category" })
+          : _vm._e()
+      ])
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -14696,7 +14806,11 @@ var render = function() {
       "div",
       { staticClass: "left-filters__list" },
       _vm._l(_vm.filterItems, function(el) {
-        return _c("filter-component", { key: el.id, attrs: { item: el } })
+        return _c("filter-component", {
+          key: el.id,
+          attrs: { item: el },
+          on: { change: _vm.onChange }
+        })
       }),
       1
     ),
@@ -14721,7 +14835,15 @@ var render = function() {
           [_vm._v("Сбросить")]
         )
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _vm.floatBtn
+      ? _c("div", {
+          staticClass: "apply-filters-float-btn",
+          style: { top: _vm.top + "px" },
+          on: { click: _vm.clickUseFloat }
+        })
+      : _vm._e()
   ])
 }
 var staticRenderFns = []
@@ -14876,11 +14998,7 @@ var render = function() {
         class: { "ui-radio__input_list": _vm.list },
         attrs: { type: "radio", name: _vm.name },
         domProps: { value: _vm.value, checked: _vm.checked },
-        on: {
-          input: function($event) {
-            return _vm.$emit("input", $event.target.value)
-          }
-        }
+        on: { input: _vm.onInput }
       }),
       _vm._v(" "),
       _c(
@@ -34997,7 +35115,7 @@ function createStore() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\openserver\OSPanel\domains\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
+module.exports = __webpack_require__(/*! D:\OpenServer\OSPanel\domains\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
 
 
 /***/ })

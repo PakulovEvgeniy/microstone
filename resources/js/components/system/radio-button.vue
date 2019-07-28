@@ -1,6 +1,6 @@
 <template>
     <label class="ui-radio__item" :class="{'ui-radio__item_list': list}">
-      <input type="radio" :class="{'ui-radio__input_list': list}" class="ui-radio__input" :name="name" :value="value" @input="$emit('input', $event.target.value)" :checked="checked">
+      <input type="radio" :class="{'ui-radio__input_list': list}" class="ui-radio__input" :name="name" :value="value" @input="onInput" :checked="checked">
       <span class="ui-radio__content" :class="{'ui-ui-radio__content_list': list}">{{caption}}</span>
     </label>
 </template>
@@ -21,6 +21,11 @@
         ], 
         components: {
 
+        },
+        methods: {
+          onInput(e) {
+            this.$emit('input', e.target)
+          }
         }
     }
 </script>

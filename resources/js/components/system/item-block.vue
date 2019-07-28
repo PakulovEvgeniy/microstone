@@ -1,6 +1,9 @@
 <template>
-    <div class="item-block">
-      <a @click="onClick">{{name}}</a>
+    <div class="item-block" :class="{'is-active' : active}">
+      <a @click="onClick">
+        {{name}}
+        <i v-if="active" class="fas fa-times leave-category"></i>
+      </a>
     </div>
 </template>
 
@@ -12,7 +15,8 @@
             }
         },
         props: [
-          'name'
+          'name',
+          'active'
         ],
         methods: {
           onClick() {
@@ -42,5 +46,13 @@
   .item-block a:hover {
     text-decoration: none;
     color: #fc5808;
+  }
+  .item-block.is-active {
+    font-weight: bold;
+  }
+  .item-block.is-active .leave-category {
+    margin-left: 5px;
+    display: inline-block;
+    color: #8c8c8c;
   }
 </style>
