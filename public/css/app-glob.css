@@ -52,6 +52,13 @@ body {
     background-color: #f6f6f6;
     min-width: 320px;
 }
+body.blocked {
+    overflow: hidden;
+    touch-action: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
 header {
     background: #f6f6f6;
     font-size: 13px;
@@ -247,6 +254,9 @@ header {
     color: #333;
     border: 1px solid #d9d9d9;
 }
+.button-ui_white:active {
+    box-shadow: inset 0 2px 0 0 rgba(0,0,0,0.2);
+}
 .button-ui_icon {
     min-width: 40px;
     padding: 0;
@@ -261,12 +271,12 @@ header {
 
 .button-ui_brand {
     color: #fff;
-    background-image: linear-gradient(to top, #fc8507, #ffa218);
+    background-image: linear-gradient(to top, #1D71B8, #2288DB);
     font-weight: bold;
 }
 
 .button-ui_brand:hover {
-    background-image: linear-gradient(to bottom, #ffbc0b, #ff7400);
+    background-image: linear-gradient(to bottom, #5BA8E6, #175C95);
     box-shadow: inset 0 -2px 0 0 rgba(0,0,0,0.2);
 }
 .w-product-voblers, .w-review-voblers {
@@ -314,6 +324,18 @@ header {
 	.container {
     	width: 960px;
 	}
+}
+
+@media (max-width: 991px) and (min-width: 768px) {
+  .button-ui {
+    height: 48px;
+  }
+}
+
+@media (max-width: 767px) {
+  .button-ui {
+    height: 44px;
+  }
 }
 
 @media (max-width: 991px) {
@@ -372,7 +394,7 @@ header {
       margin-bottom: 1em;
     }
   .button-ui_white:hover {
-    background-image: linear-gradient(to bottom, #ffbc0b, #ff7400);
+    background-image: linear-gradient(to bottom, #5BA8E6, #175C95);
     box-shadow: inset 0 -2px 0 0 rgba(0,0,0,0.2);
     color: #fff;
     border: none;
@@ -491,4 +513,8 @@ header {
   visibility: visible;
   opacity: 1;
   transition: opacity .15s;
+}
+
+.hide {
+    display: none !important;
 }

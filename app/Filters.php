@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Products;
+use App\FiltersDiap;
 
 class Filters extends Model
 {
@@ -14,6 +15,10 @@ class Filters extends Model
     public function filters_groups()
     {
         return $this->hasMany('App\FiltersGroups');
+    }
+    public function filters_diap()
+    {
+        return $this->hasMany('App\FiltersDiap');
     }
 
     public static function getFilters($id_1s)
@@ -30,6 +35,7 @@ class Filters extends Model
         $res = [];
         foreach ($rows as $val) {
             $it = Products::getGrpDataOfProductsCategory($val, $id_1s);
+            $diap = FiltersDiap::getDiaps($val->id);
             $res[] = [
                 'id' => $val->id,
                 'id_1s' => $val->id_1s,
@@ -37,7 +43,9 @@ class Filters extends Model
                 'filter_field' => $val->filter_field,
                 'param_type_id' => $val->param_type_id,
                 'filter_type' => $val->filter_type,
-                'grp_data' => $it
+                'mark' => $val->mark,
+                'grp_data' => $it,
+                'diaps' => $diap
             ];
             
         }

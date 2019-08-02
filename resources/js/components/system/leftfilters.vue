@@ -1,5 +1,13 @@
 <template>
-    <div class="left-filters">
+    <div class="left-filters" :class="{'active': fl_showed}">
+      <div class="left-filters__mobile-header">
+        <span>Фильтры</span>
+        <i class="fas fa-times" @click="$emit('close_filtr')"></i>
+      </div>
+      <div class="left-filters__offers">
+        <product-offers></product-offers>
+      </div>
+      <leftfilter-picked @close_filtr="$emit('close_filtr')"></leftfilter-picked>
       <div class="left-filters__list">
         <filter-component v-for="el in filterItems" :key="el.id"
         :item="el" @change="onChange"></filter-component>
@@ -17,6 +25,8 @@
 <script>
 import { mapGetters } from 'vuex';
 import filterComp from './filter-comp.vue'; 
+import leftFilterPicked from '../product/leftfilters_picked.vue';
+import productOffers from '../product/product-offers.vue';
     export default {
         data() {
             return {
@@ -25,6 +35,9 @@ import filterComp from './filter-comp.vue';
               top: 0
             }
         },
+        props: [
+          'fl_showed'
+        ],
         computed: {
           ...mapGetters([
             'filterItems',
@@ -33,12 +46,13 @@ import filterComp from './filter-comp.vue';
           ])
         },
         components: {
-          'filter-component': filterComp
+          'filter-component': filterComp,
+          'leftfilter-picked': leftFilterPicked,
+          'product-offers': productOffers
         },
 
         methods: {
           onChange(ev) {
-            console.log(ev);
             this.top = ev.parentElement.offsetTop - 16 - ev.parentElement.parentElement.scrollTop;
             if (this.timeInt) {
               clearInterval(this.timeInt);
@@ -58,6 +72,7 @@ import filterComp from './filter-comp.vue';
             this.clickUse();
           },
           clickUse() {
+            this.$emit('close_filtr')
             if (this.$router.currentRoute) {
               let obj = {};
               Object.assign(obj, this.categoryFilters);
@@ -86,6 +101,7 @@ import filterComp from './filter-comp.vue';
             }
           },
           clickRem() {
+            this.$emit('close_filtr');
             if (this.$router.currentRoute) {
               let obj = {};
               Object.assign(obj, this.categoryFilters);
@@ -140,7 +156,7 @@ import filterComp from './filter-comp.vue';
  cursor:pointer;
  text-align:center;
  color:#fff;
- background-image:linear-gradient(to top, #fc8507, #ffa218);
+ background-image:linear-gradient(to top, #1D71B8, #2288DB);
  font-weight:bold;
  position:absolute;
  right:-120px;
@@ -152,7 +168,7 @@ import filterComp from './filter-comp.vue';
  position:absolute;
  left:-5px;
  top:10px;
- background-image:linear-gradient(45deg, #fc8507, #ffa218);
+ background-image:linear-gradient(45deg, #1D71B8, #2288DB);
  width:45px;
  height:45px;
  border-radius:4px;
@@ -174,11 +190,91 @@ import filterComp from './filter-comp.vue';
  z-index:1
 }
 .left-filters .apply-filters-float-btn:hover {
- background-image:linear-gradient(to bottom, #ffbc0b, #ff7400);
+ background-image:linear-gradient(to bottom, #5BA8E6, #175C95);
  box-shadow:inset 0 -2px 0 0 rgba(0,0,0,0.2)
 }
 .left-filters .apply-filters-float-btn:hover:before {
- background-image:linear-gradient(45deg, #ffbc0b, #ff7400);
+ background-image:linear-gradient(45deg, #5BA8E6, #175C95);
  box-shadow:inset -2px 0 0 0 rgba(0,0,0,0.2)
+}
+.left-filters__mobile-header {
+    display: none;
+}
+.left-filters__offers {
+  display: none;
+}
+@media (max-width: 991px) {
+.left-filters {
+    display: block;
+    position: fixed;
+    border-radius: 0;
+    top: 0;
+    right: -75%;
+    z-index: 1100;
+    width: 75%;
+    background: #fff;
+    overflow-y: auto;
+    height: 100%;
+    padding-top: 60px;
+  }
+  .left-filters.active {
+    right: 0;
+  }
+  .left-filters.active {
+    right: 0;
+  }
+  .left-filters__mobile-header {
+    display: block;
+    position: fixed;
+    top: 0;
+    width: 75%;
+    height: 60px;
+    z-index: 1000;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 3px 4px 0 rgba(0,0,0,0.2);
+  }
+  .left-filters__mobile-header i {
+    position: absolute;
+    top: 20px;
+    right: 29px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  .left-filters__buttons-main {
+    display: none;
+    flex-direction: row-reverse;
+    height: 66px;
+    position: fixed;
+    bottom: 0;
+    background: #fff;
+    width: 75%;
+    margin: 0;
+    padding: 11px;
+    z-index: 1000;
+    box-shadow: 0 -4px 8px 0 rgba(0,0,0,0.16);
+  }
+  .left-filters.active .left-filters__buttons-main {
+    right: 0;
+    display: flex;
+  }
+  .left-filters__button {
+    flex-grow: 1;
+    margin: 0 8px;
+  }
+  .apply-filters-float-btn {
+    display: none;
+  }
+  .left-filters__offers {
+    display: block;
+  }
+  .left-filters__buttons {
+    margin: 33px 0;
+  }
+}
+@media (max-width: 767px) {
+  .left-filters.active, .left-filters__buttons-main, .left-filters__mobile-header {
+    width: 100%;
+  }
 }
 </style>

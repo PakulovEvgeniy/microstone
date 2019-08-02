@@ -3,25 +3,41 @@
       <div class="pagination-widget">
         <ul class="pagination-widget__pages">
           <li class="pagination-widget__page">
-            <a @click="onClick(1)" class="pagination-widget__page-link">
+            <a 
+              @click="onClick(1)" 
+              class="pagination-widget__page-link"
+              :class="{'pagination-widget__page-link_disabled' : 1==curPage}"
+            >
               <i class="fas fa-angle-double-left"></i>
             </a>
           </li>
           <li class="pagination-widget__page">
-            <a @click="onClick(prevPage)" class="pagination-widget__page-link">
+            <a 
+              @click="onClick(prevPage)" 
+              class="pagination-widget__page-link"
+              :class="{'pagination-widget__page-link_disabled' : prevPage==curPage}"
+            >
               <i class="fas fa-angle-left"></i>
             </a>
           </li>
-          <li class="pagination-widget__page" v-for="it in pages" :key="it" :class="{'pagination-widget__page_active': it == numPage}">
+          <li class="pagination-widget__page" v-for="it in pages" :key="it" 
+            :class="{'pagination-widget__page_active': it == curPage}"
+          >
             <a class="pagination-widget__page-link" @click="onClick(it)">{{it}}</a>
           </li>
           <li class="pagination-widget__page">
-            <a @click="onClick(nextPage)" class="pagination-widget__page-link">
+            <a @click="onClick(nextPage)" 
+              class="pagination-widget__page-link"
+              :class="{'pagination-widget__page-link_disabled' : nextPage==curPage}"
+            >
               <i class="fas fa-angle-right"></i>
             </a>
           </li>
           <li class="pagination-widget__page">
-            <a @click="onClick(lastPage)" class="pagination-widget__page-link">
+            <a @click="onClick(lastPage)" 
+              class="pagination-widget__page-link"
+              :class="{'pagination-widget__page-link_disabled' : lastPage==curPage}"
+            >
               <i class="fas fa-angle-double-right"></i>
             </a>
           </li>
@@ -50,21 +66,21 @@
             return Math.ceil(this.itemQty/18);
           },
           prevPage() {
-            let pr = this.numPage - 1;
+            let pr = this.curPage - 1;
             if (pr<1) {
               pr = 1;
             }
             return pr;
           },
           nextPage() {
-            let pr = this.numPage + 1;
+            let pr = this.curPage + 1;
             if (pr>this.lastPage) {
               pr = this.lastPage;
             }
             return pr;
           },
           pages() {
-            let start = this.numPage - 4;
+            let start = this.curPage - 4;
             if (start < 1) {
               start=1;
             }
@@ -81,10 +97,19 @@
               arr.push(i);
             }
             return arr;
+          },
+          curPage() {
+            if (this.numPage>this.lastPage) {
+              return 1;
+            }
+            return this.numPage;
           }
         },
         methods: {
           onClick(num) {
+            if (num==this.curPage) {
+              return;
+            }
             this.$emit('changePage', num);
           }
         }
@@ -124,14 +149,30 @@
     box-sizing: border-box;
   }
   .pagination-widget__page-link:hover {
-    background-color: #fff7da;
-    border: solid 3px #fff7da;
-    color: #fc8507;
+    background-color: #E8F2FB;
+    border: solid 3px #E8F2FB;
+    color: #1D71B8;
     padding-top: 11px;
   }
   .pagination-widget__page_active {
     border: #fff;
-    border-bottom: solid 3px #fc8507;
-    color: #fc8507;
+    border-bottom: solid 3px #1D71B8;
+    color: #1D71B8;
+  }
+  .pagination-widget__page_active a {
+    cursor: not-allowed;
+  }
+  .pagination-widget__page_active a:hover {
+    background-color: #fff;
+    border-color: #fff;
+  }
+  .pagination-widget__page-link_disabled {
+    cursor: not-allowed;
+    color: #777;
+  }
+  .pagination-widget__page-link_disabled:hover {
+    background-color: #fff;
+    border-color: #fff;
+    color: #777;
   }
 </style>

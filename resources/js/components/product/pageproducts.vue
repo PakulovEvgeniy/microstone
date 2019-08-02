@@ -1,19 +1,28 @@
 <template>
     <div class="page-products">
+      <div class="products-page__mobile-search">
+         <quick-seach @quickseach="onQuickSeach"></quick-seach>
+      </div>
       <div class="products-page__top-block">
-        <product-offers></product-offers>
-        <top-filters :curMode="curMode"></top-filters>
+        <products-mobile-buttons 
+          :curMode="curMode"
+          @changeMode="changeMode"
+          @click_sort="tf_showed=!tf_showed"
+          @click_filtr="fl_showed=!fl_showed"
+        ></products-mobile-buttons>
+        <div v-if="filterItemsDef.length" class="products-page__offers" >
+            <product-offers></product-offers>
+        </div>
+        <top-filters :curMode="curMode" :tf_showed="tf_showed"></top-filters>
       </div>
       <div class="products-page__content">
         <div class="products-page__left-block">
+          <div class="data-filters-left-top">
           <div>
-            <div class="ui-input-search ui-input-search_catalog-filter left-top-filters-search-input">
-              <input ref="inpFind" class="ui-input-search__input ui-input-search__input_catalog-filter" placeholder="Поиск по категории" :value="valFindCat">
-              <span class="ui-input-search__icon ui-input-search__icon_clear ui-input-search__icon_catalog-filter" :class="{'ui-input-search__icon_clear-visible' : visFindCat}" @click="onQuickSeach(false)"><i class="fas fa-times"></i></span>
-              <span class="ui-input-search__icon ui-input-search__icon_search ui-input-search__icon_catalog-filter"><i class="fa fa-search" @click="onQuickSeach(true)"></i></span>
-            </div>
+            <quick-seach @quickseach="onQuickSeach"></quick-seach>
           </div>
-          <left-filters></left-filters>
+          </div>
+          <left-filters :fl_showed="fl_showed" @close_filtr="fl_showed=false"></left-filters>
         </div>
         <div class="products-page__list">
           <div class="products-list">
@@ -27,6 +36,9 @@
               <paginator v-if="itemQty>0" :itemQty="itemQty" :numPage="numPage" @changePage="onChangePage($event)"></paginator>
             </div>
           </div>
+          <div class="products-list__loader">
+            <div class="loader-container" :class="classLoad"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -39,11 +51,15 @@ import topFilters from './top-filters.vue';
 import catalogItem from './catalog-item.vue';
 import paginator from '../system/paginator.vue';
 import leftfilters from '../system/leftfilters.vue';
+import quickSeach from '../system/quick-seach-input';
+import productsMobileButtons from './products-mb';
     export default {
         data() {
             return {
               curGroup: '',
-              quickValue: ''
+              quickValue: '',
+              tf_showed: false,
+              fl_showed:false
             }
         },
         components: {
@@ -51,14 +67,17 @@ import leftfilters from '../system/leftfilters.vue';
           'top-filters': topFilters,
           'catalog-item': catalogItem,
           'paginator' : paginator,
-          'left-filters': leftfilters
+          'left-filters': leftfilters,
+          'quick-seach' : quickSeach,
+          'products-mobile-buttons': productsMobileButtons
         },
         computed: {
           ...mapGetters([
             'categoryFilters',
             'totalQty',
             'productsOfCategoryPage',
-            'getScreenState'
+            'getScreenState',
+            'filterItemsDef'
           ]),
           curMode() {
             return this.categoryFilters.mode == 'tile' ? 'tile' : 'simple';
@@ -90,14 +109,37 @@ import leftfilters from '../system/leftfilters.vue';
             }
             return arrGrp;
           },
-          visFindCat() {
-            return  this.categoryFilters['q'] ? true : false;
-          },
-          valFindCat() {
-            return  this.categoryFilters['q'] || '';
+          classLoad() {
+            if (this.fl_showed) {
+              return 'open-filters'
+            }
+            return 'hide';
+          }
+        },
+        watch: {
+          classLoad(p1) {
+            let body = document.querySelector('body');
+            if (body) {
+              if (p1 == 'open-filters') {
+                body.classList.add('blocked');
+              } else {
+                body.classList.remove('blocked');
+              }
+            }
           }
         },
         methods: {
+          changeMode() {
+            if (this.$router.currentRoute) {
+              let obj = {};
+              Object.assign(obj, this.categoryFilters);
+              obj['mode'] = this.curMode == 'tile' ? 'simple' : 'tile';
+              this.$router.push({
+                path: this.$router.currentRoute.path,
+                query: obj
+              });
+            }
+          },
           onChangePage(num) {
             if (this.$router.currentRoute) {
               let obj = {};
@@ -115,15 +157,12 @@ import leftfilters from '../system/leftfilters.vue';
               window.scrollTo({ top: scrTop, behavior: 'smooth' });
             }
           },
-          onQuickSeach(isSearch) {
+          onQuickSeach(event) {
             if (this.$router.currentRoute) {
               let obj = {};
               Object.assign(obj, this.categoryFilters);
-              if (isSearch) {
-                if (!this.$refs['inpFind'].value) {
-                  return;
-                }
-                obj['q'] = this.$refs['inpFind'].value;
+              if (event.isSearch) {
+                obj['q'] = event.value;
               } else {
                 delete obj['q'];
               }
@@ -210,7 +249,6 @@ import leftfilters from '../system/leftfilters.vue';
   }
   .catalog-items-list.view-tile .n-catalog-product .n-catalog-product__main {
     flex-direction: column;
-    height: 100%;
   }
   .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__info {
     margin-bottom: 4px;
@@ -413,66 +451,22 @@ import leftfilters from '../system/leftfilters.vue';
   .products-list .items-group__title_first {
      margin-top: 0px;
   }
-  .ui-input-search {
-    position: relative;
-    background: #fff;
-    border: 1px solid #d9d9d9;
-    border-radius: 8px;
-    height: 40px;
-    line-height: 38px;
-    font-size: 14px;
-  }
-  .ui-input-search.ui-input-search_catalog-filter {
-    border-radius: 8px;
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.16);
-    border: solid 1px transparent;
-    background: #fff;
-    margin-bottom: 12px;
-  }
-  .ui-input-search__input {
-    color: #333;
-    padding: 0 45px 0 12px;
-    height: 100%;
-    width: 100%;
-    border-radius: 8px;
-    border: none;
-    outline: none;
-    font-size: 16px;
-  }
-  .ui-input-search__input.ui-input-search__input_catalog-filter {
-    background-color: #fff;
-  }
-  .ui-input-search__icon {
-    background: linear-gradient(270deg, #fff 45%, rgba(234,234,234,0));
-    color: #8c8c8c;
+  .products-list__loader .loader-container {
     position: absolute;
-    right: 5px;
     top: 0;
-    font-size: 16px;
+    left: 0;
+    width: 100%;
     height: 100%;
-    width: 40px;
-    text-align: center;
-    cursor: pointer;
+    background: rgba(255,255,255,0.7);
+    z-index: 100;
+    overflow: hidden;
   }
-  .ui-input-search__icon_clear {
-    display: none;
+  .products-list__loader .open-filters.loader-container {
+    padding: 0;
   }
-  .ui-input-search__icon.ui-input-search__icon_catalog-filter {
-    background: linear-gradient(270deg, #fff 45%, rgba(234,234,234,0));
-  }
-  .ui-input-search__icon_search i:before, .ui-input-search__icon_clear i:before {
-    speak: none;
-    display: inline-block;
-    line-height: 1;
-  }
-  .ui-input-search__icon:hover {
-    color: #333;
-  }
-  .ui-input-search__icon_clear-visible+.ui-input-search__icon_search {
-    display: none;
-  }
-  .ui-input-search__icon_clear-visible {
-    display: block;
+  .products-page__offers {
+    width: 100%;
+    border-bottom: 1px solid #eaeaea;
   }
   @media (min-width: 992px) {
     .left-top-filters-search-input {
@@ -481,6 +475,9 @@ import leftfilters from '../system/leftfilters.vue';
       margin-bottom: 12px;
       height: 40px;
       background: #f2f2f2;
+    }
+    .products-page__mobile-search {
+      display: none;
     }
   }
   @media (min-width: 1200px) {
@@ -520,6 +517,19 @@ import leftfilters from '../system/leftfilters.vue';
     .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__info .product-info__title-description {
       height: auto;
     }
+    .data-filters-left-top {
+      display: none;
+    }
+    .products-page__mobile-search {
+      display: block;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      height: 48px;
+      background: #f2f2f2;
+    }
+    .products-page__offers {
+        display: none;
+    }
   }
   @media (min-width: 768px) {
     .catalog-items-list.view-tile .catalog-item:nth-of-type(3n) {
@@ -536,6 +546,12 @@ import leftfilters from '../system/leftfilters.vue';
     }
     .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__info .product-info__title {
       width: 400px;
+    }
+    .products-list__loader .loader-container {
+      position: fixed;
+      width: calc(100% + 40px);
+      z-index: 1091;
+      background: rgba(0,0,0,0.7);
     }
   }
   @media (max-width: 767px) {
@@ -594,6 +610,12 @@ import leftfilters from '../system/leftfilters.vue';
     }
     .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__avails {
       display: block;
+    }
+    .products-list__loader .loader-container {
+      position: fixed;
+      width: 100%;
+      left: 0;
+      background: rgba(0,0,0,0.7);
     }
   }
 </style>

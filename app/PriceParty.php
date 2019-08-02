@@ -33,7 +33,7 @@ class PriceParty extends Model
             ->leftJoin('price_party','products.id_1s','=','price_party.product_id1s')
             ->select('id_1s')
             ->whereRaw('CASE WHEN price is null THEN 0 ELSE price END >= ?', [$ar[0]])
-            ->whereRaw('CASE WHEN price is null THEN 0 ELSE price END <= ?', [$ar[1]])
+            ->whereRaw('FLOOR(CASE WHEN price is null THEN 0 ELSE price END) <= ?', [$ar[1]])
             ->groupBy('id_1s')
             ->get();
 

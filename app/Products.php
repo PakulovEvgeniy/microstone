@@ -201,7 +201,7 @@ class Products extends Model
         $page = 1;
         if (isset($filtr['page'])) {
             $page = intval($filtr['page']);
-            if (!$page) {
+            if (!$page || $page>ceil($qty/18)) {
                 $page = 1;
             }
         }

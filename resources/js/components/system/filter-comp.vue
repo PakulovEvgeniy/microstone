@@ -26,7 +26,9 @@
           <div class="ui-checkbox-group ui-checkbox-group_list">
             <checkbox-button v-for="it in filterDiap" :key="it.id" :list="true" :value="it.id" :caption="it.cap" @input="onInputCheck($event)" :model="itemGrp.fChecked"></checkbox-button>
           </div>
-          <a v-if="itemGrp.fChecked.length>0" @click="clearCheck" class="ui-link ui-link_red ui-link_pseudolink ui-list-controls__link ui-list-controls__link_clear">Сбросить</a>
+          <div>
+            <a v-if="itemGrp.fChecked.length>0" @click="clearCheck($event)" class="ui-link ui-link_red ui-link_pseudolink ui-list-controls__link ui-list-controls__link_clear">Сбросить</a>
+          </div>
         </div>
       </div>
     </div>
@@ -84,20 +86,35 @@ import checkboxButton from './checkbox-button';
             if (this.item.filter_type=='Число') {
               let d = (this.minMaxValue.max-this.minMaxValue.min)/6;
               let res = [{id: 0, from: this.minMaxValue.min, to: this.minMaxValue.max, cap:'Все'}];
-              let st = +this.minMaxValue.min;
-              let st1 = st;
-              for (let i = 1; i < 7; i++) {
-                let end = Math.min(st1+Math.ceil(d*i), this.minMaxValue.max);
-                let cap = '' + st + ' - ' + end;
-                if (i == 1) {
-                  cap = 'Менее ' + end;
+              
+              if (this.item.diaps.length) {
+                this.item.diaps.forEach((el, ind) => {
+                  let st = +el.value1 ? +el.value1 : +this.minMaxValue.min;
+                  let end = +el.value2 ? +el.value2 : +this.minMaxValue.max;
+                  let cap;
+                  if (el.descr1 && el.descr2) {
+                    cap = el.descr1 + ' - ' + el.descr2;
+                  } else {
+                    cap = el.descr1 + el.descr2;
+                  }
+                  res.push({id: ind+1, from: st, to: end, cap: cap});
+                });
+              } else {
+                let st = +this.minMaxValue.min;
+                let st1 = st;
+                for (let i = 1; i < 7; i++) {
+                  let end = Math.min(st1+Math.ceil(d*i), this.minMaxValue.max);
+                  let cap = '' + st + (this.item.mark ? ' ' + this.item.mark : '') + ' - ' + end + (this.item.mark ? ' ' + this.item.mark : '');
+                  if (i == 1) {
+                    cap = 'Менее ' + end + (this.item.mark ? ' ' + this.item.mark : '');
+                  }
+                  if (i == 6) {
+                    cap = '' + st + (this.item.mark ? ' ' + this.item.mark : '') + ' и более';
+                    end = this.minMaxValue.max;
+                  }
+                  res.push({id: i, from: st, to: end, cap: cap});
+                  st = end + 1;
                 }
-                if (i == 6) {
-                  cap = '' + st + ' и более';
-                  end = this.minMaxValue.max;
-                }
-                res.push({id: i, from: st, to: end, cap: cap});
-                st = end + 1;
               }
               return res;
             } else {
@@ -134,7 +151,8 @@ import checkboxButton from './checkbox-button';
           onClick() {
             this.filterOpen = !this.filterOpen;
           },
-          clearCheck() {
+          clearCheck(ev) {
+            this.$emit('change', ev.target);
             this.itemGrp.fChecked.splice(0);
           },
           onInput(ev) {
@@ -249,13 +267,13 @@ import checkboxButton from './checkbox-button';
     line-height: 1;
   }
   .ui-collapse__link_left:hover {
-    color: #fc8507;
+    color: #1D71B8;
   }
   .ui-collapse__link_list:hover {
-    background-color: #fff7da;
+    background-color: #E8F2FB;
   }
   .ui-collapse__link_list:hover i {
-    color: #fc8507;
+    color: #1D71B8;
   }
   .ui-collapse__content {
     margin-top: 10px;
@@ -286,7 +304,7 @@ import checkboxButton from './checkbox-button';
   .ui-input-small_list {
     display: inline-block;
     margin: 5px;
-    width: 43%;
+    width: 42%;
   }
   .ui-input-small_list:first-child {
     margin-left: 15px;
@@ -327,7 +345,7 @@ import checkboxButton from './checkbox-button';
     height: 0;
   }
   .ui-list-controls_active .ui-collapse__link_list {
-    color: #fc8507;
+    color: #1D71B8;
   }
   .ui-checkbox-group_list {
     max-height: 298px;

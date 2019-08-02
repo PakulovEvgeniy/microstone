@@ -1,5 +1,5 @@
 <template>
-    <div v-show="needFilters.length" class="top-filters__picked">
+    <div v-show="needFilters.length" class="left-filters__picked">
       <span v-if="needFilters.length" class="picked-filter">
           <button @click="clickRem" class="picked-filter__reset-btn picked-filter__reset-btn_all">Сбросить фильтры</button>
       </span>
@@ -63,6 +63,7 @@ import { mapGetters } from 'vuex';
         },
         methods: {
           clickRem() {
+            this.$emit('close_filtr');
             if (this.$router.currentRoute) {
               let obj = {};
               Object.assign(obj, this.categoryFilters);
@@ -76,6 +77,7 @@ import { mapGetters } from 'vuex';
             }
           },
           clearFiltr(el) {
+            this.$emit('close_filtr');
             if (this.$router.currentRoute) {
               let obj = {};
               Object.assign(obj, this.categoryFilters);
@@ -91,20 +93,20 @@ import { mapGetters } from 'vuex';
 </script>
 
 <style>
-  .top-filters__picked {
-    display: flex;
+  .left-filters__picked {
+    display: none;
     flex-wrap: wrap;
     width: calc(100% - 60px);
     margin-top: 10px;
   }
-  .top-filters__picked:empty {
+  .left-filters__picked:empty {
     display: none;
   }
-  .top-filters__picked .picked-filter {
+  .left-filters__picked .picked-filter {
     margin: 0 10px 10px 0;
     display: block;
   }
-  .top-filters__picked .picked-filter__reset-btn {
+  .left-filters__picked .picked-filter__reset-btn {
     background: rgba(29, 113, 184, 0.9);
     font-size: 12px;
     border-radius: 100px;
@@ -115,19 +117,21 @@ import { mapGetters } from 'vuex';
     border: 1px solid rgba(29, 113, 184, 0.9);
     cursor: pointer;
   }
-  .top-filters__picked .picked-filter__reset-btn_all {
+  .left-filters__picked .picked-filter__reset-btn_all {
     background: #fff;
     border: 1px solid #8c8c8c;
     color: #333;
   }
-  .top-filters__picked .picked-filter__reset-btn i {
+  .left-filters__picked .picked-filter__reset-btn i {
     float: right;
     margin-left: 4px;
     line-height: 24px;
   }
   @media (max-width: 991px) {
-    .top-filters__picked {
-      display: none;
+    .left-filters__picked {
+      display: flex;
+      padding: 0 20px;
+      width: 100%;
     }
   }
 </style>

@@ -90,7 +90,7 @@ class PartyParams extends Model
             $prd = $prd
             ->whereRaw('not value is null')
             ->whereRaw('CAST(value as DECIMAL(15,5)) >= ?', [$ar[0]])
-            ->whereRaw('CAST(value as DECIMAL(15,5)) <= ?', [$ar[1]]);
+            ->whereRaw('FLOOR(CAST(value as DECIMAL(15,5))) <= ?', [$ar[1]]);
         }
             
         $prd = $prd->groupBy('product_id1s')

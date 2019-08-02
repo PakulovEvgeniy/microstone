@@ -1,5 +1,5 @@
 <template>
-    <div class="item-block" :class="{'is-active' : active}">
+    <div class="item-block collapsible" :class="{'is-active' : active}">
       <a @click="onClick">
         {{name}}
         <i v-if="active" class="fas fa-times leave-category"></i>

@@ -1,7 +1,7 @@
 <template>
     <div class="menu-dropdown" :class="{'menu-dropdown-active' : active}">
       <i v-if="icon_before" :class="icon_before"></i>
-      <a ref="activator" class="menu-dropdown-target" @click="onClick"><slot name="activator"></slot></a>
+      <a class="menu-dropdown-target" @click="onClick($event)"><slot name="activator"></slot></a>
       <i v-if="icon_after" :class="icon_after"></i>
       <ul class="menu-dropdown-items">
         <slot></slot>
@@ -13,7 +13,8 @@
     export default {
         data() {
             return {
-              active: false  
+              active: false,
+              curActive: null  
             }
         }, 
         props: [
@@ -21,12 +22,15 @@
           'icon_before'
         ],
         methods: {
-          onClick() {
+          onClick(e) {
             this.active = !this.active;
+            this.curActive = e.target;
+            this.$emit('input', this.active);
           },
           onClickDocument(e) {
-            if(e.target !== this.$refs['activator']) {
+            if(e.target !== this.curActive) {
               this.active = false;
+              this.$emit('input', this.active);
             }
           }
         },

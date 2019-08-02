@@ -1,17 +1,32 @@
 <template>
-    <div v-if="filterItemsDef.length" class="products-page__offers" >
-      <div class="offer-representation-in-category" :style="styleForHeight">
+      <div class="offer-representation-in-category" :style="styleForHeight"
+        :class="{'mobile-collapsed' : !mobileCollapse}"
+      >
         <div class="offers-block">
           <div ref="inn" class="inner-block">
-            <show-switch type="show-more" :visible="isCollapse===true" @clickSwitch="onSwitch(false)"></show-switch>
+            <div class="block-heading mobile-offer-expand-container">
+              <button @click="mobileCollapse = !mobileCollapse" class="button-ui button-ui_white mobile-offer-expand-container__button">
+                <span><i class="fa" :class="clShevron"></i>Подборки фильтров</span>
+              </button>
+            </div>
+            <show-switch v-if="this.getScreenState>1" type="show-more" :visible="isCollapse===true" @clickSwitch="onSwitch(false)"></show-switch>
             <item-block v-if="curItem" :name="curItem.name" :active="true" @clickOffer="onOfferClear"></item-block>
             <item-block v-for="it in items" :name="it.name" :key="it.id" @clickOffer="onClickOffer(it)"></item-block>
-           
-            <show-switch type="hide-all" :visible="isCollapse===false" @clickSwitch="onSwitch(true)"></show-switch>
+            
+            <show-switch v-if="this.getScreenState>1" type="hide-all" :visible="isCollapse===false" @clickSwitch="onSwitch(true)"></show-switch>
+            <div class="mobile-buttons collapsible">
+              <button class="button-ui button-ui_white mobile-btn mobile-btn_show-more">
+                Показать еще
+                <i class="fa fa-chevron-down"></i>
+              </button>
+              <button v-if="false" class="button-ui button-ui_white mobile-btn mobile-btn_hide">
+                <i class="fa fa-chevron-up"></i>
+                Скрыть
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 </template>
 
 <script>
@@ -21,7 +36,8 @@
     export default {
         data() {
             return {
-              isCollapse: null
+              isCollapse: null,
+              mobileCollapse: false
             }
         },
         components: {
@@ -33,13 +49,23 @@
             'screenWidth',
             'filterItemsDef',
             'filterItems',
-            'categoryFilters'
+            'categoryFilters',
+            'getScreenState'
           ]),
           styleForHeight() {
+            if (this.getScreenState == 1) {
+              return {'height' : 'auto'}
+            }
             let ht = this.isCollapse===false ? 'auto' : '42px';
             return {'height' : ht}
           },
+          clShevron() {
+            return this.mobileCollapse ? 'fa-chevron-up' : 'fa-chevron-down';
+          },
           curItem() {
+            if (this.getScreenState == 1) {
+              return undefined;
+            }
             let obj = {};
             let pat = /f\[(\d+)\]/;
             let fCount = 0;
@@ -181,22 +207,56 @@
 </script>
 
 <style>
-  .products-page__offers {
-    width: 100%;
-    border-bottom: 1px solid #eaeaea;
-  }
+  
   .offer-representation-in-category .inner-block {
     padding: 0 20px;
+  }
+  .offer-representation-in-category .mobile-offer-expand-container__button {
+    width: 100%;
+  }
+  .offer-representation-in-category .mobile-offer-expand-container__button span {
+    position: relative;
+  }
+  .mobile-offer-expand-container__button i {
+    color: #333;
+    font-size: 13px;
+    margin-right: 5px;
+  }
+  .offer-representation-in-category .mobile-buttons {
+    display: none;
+    flex-wrap: wrap;
+    padding: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
   @media (min-width: 992px){
     .offer-representation-in-category {
       margin: 1em 0;
       overflow: hidden;
     }
+    .offer-representation-in-category .mobile-offer-expand-container {
+      display: none;
+    }
   }
   @media (max-width: 991px) {
-    .products-page__offers {
-        display: none;
+    .offer-representation-in-category {
+      margin: 6px 0;
+    }
+    .offer-representation-in-category .mobile-offer-expand-container {
+      margin-bottom: 20px;
+      margin-top: 15px;
+    }
+    .offer-representation-in-category.mobile-collapsed .inner-block .collapsible {
+      display: none;
+    }
+    .offer-representation-in-category .mobile-buttons {
+      display: flex;
+      flex-wrap: nowrap;
+      min-height: 64px;
+    }
+    .offer-representation-in-category .mobile-buttons .mobile-btn {
+      margin: 0 4px;
+      padding: 0 10px;
     }
   }
 </style>

@@ -60,7 +60,7 @@
     border: 5px solid rgb(29, 113, 184);
   }
   .ui-radio__item:hover {
-    background-color: #fff7da;
+    background-color: #E8F2FB;
   }
 
   .ui-radio__item_list {

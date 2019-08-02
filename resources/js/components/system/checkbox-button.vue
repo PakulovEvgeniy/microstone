@@ -100,7 +100,7 @@
     animation: checkbox-check 125ms 250ms cubic-bezier(0.4, 0, 0.23, 1) forwards;
   }
   .ui-checkbox_list:hover {
-    background-color: #fff7da;
+    background-color: #E8F2FB;
   }
   @keyframes shrink-bounce  {
     0%{transform:scale(1)}33%{transform:scale(0.85)}100%{transform:scale(1)}

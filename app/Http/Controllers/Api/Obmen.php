@@ -21,6 +21,7 @@ use App\Brands;
 use App\Cases;
 use App\Filters;
 use App\FiltersGroups;
+use App\FiltersDiap;
 use App\FiltersDef;
 use App\FiltersDefGroups;
 use App\FiltersDefParams;
@@ -301,6 +302,11 @@ class Obmen extends Controller
       if (!$ord_param) {
         $ord_param = '';
       }
+      $mark = $par['f_mark'];
+      if (!$mark) {
+        $mark = '';
+      }
+
       $ord = Filters::firstOrNew(['id_1s' => $id]);
       $ord->id_1s = $id;
       $ord->name = $name;
@@ -309,6 +315,7 @@ class Obmen extends Controller
       $ord->filter_field = $field;
       $ord->filter_type = $ord_type;
       $ord->param_type_id = $ord_param;   
+      $ord->mark = $mark;
       $ord->save();
 
       FiltersGroups::where('filters_id', $ord->id)->delete();
@@ -319,6 +326,22 @@ class Obmen extends Controller
           $grp = new FiltersGroups;
           $grp->filters_id = $ord->id;
           $grp->category_id = $value;
+          $grp->save();
+        }
+      }
+
+      FiltersDiap::where('filters_id', $ord->id)->delete();
+
+      if (isset($par['f_diap'])) {
+
+        foreach ($par['f_diap'] as $value) {
+          $arr = explode('#-#', $value);
+          $grp = new FiltersDiap;
+          $grp->filters_id = $ord->id;
+          $grp->value1 = $arr[0];
+          $grp->descr1 = $arr[1];
+          $grp->value2 = $arr[2];
+          $grp->descr2 = $arr[3];
           $grp->save();
         }
       }
