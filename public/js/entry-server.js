@@ -2081,7 +2081,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       isCollapse: null,
-      mobileCollapse: false
+      mobileCollapse: false,
+      showAll: false
     };
   },
   components: {
@@ -2167,12 +2168,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     items: function items() {
       var _this2 = this;
 
-      if (!this.curItem) {
-        return this.filterItemsDef;
+      if (this.getScreenState == 1) {
+        if (this.showAll) {
+          return this.filterItemsDef;
+        } else {
+          return this.filterItemsDef.slice(0, 6);
+        }
       } else {
-        return this.filterItemsDef.filter(function (el) {
-          return el != _this2.curItem;
-        });
+        if (!this.curItem) {
+          return this.filterItemsDef;
+        } else {
+          return this.filterItemsDef.filter(function (el) {
+            return el != _this2.curItem;
+          });
+        }
       }
     }
   }),
@@ -2204,6 +2213,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     onClickOffer: function onClickOffer(it) {
       var _this3 = this;
+
+      if (this.getScreenState == 1) {
+        this.mobileCollapse = false;
+        this.$emit('close_filtr');
+      }
 
       if (this.$router.currentRoute) {
         var obj = {};
@@ -14431,9 +14445,9 @@ var render = function() {
                 })
               : _vm._e(),
             _vm._v(" "),
-            _vm._l(_vm.items, function(it) {
+            _vm._l(_vm.items, function(it, ind) {
               return _c("item-block", {
-                key: it.id,
+                key: ind,
                 attrs: { name: it.name },
                 on: {
                   clickOffer: function($event) {
@@ -14457,13 +14471,47 @@ var render = function() {
                 })
               : _vm._e(),
             _vm._v(" "),
-            _c("div", { staticClass: "mobile-buttons collapsible" }, [
-              _vm._m(0),
-              _vm._v(" "),
-              false
-                ? undefined
-                : _vm._e()
-            ])
+            this.filterItemsDef > 6
+              ? _c("div", { staticClass: "mobile-buttons collapsible" }, [
+                  !_vm.showAll
+                    ? _c(
+                        "button",
+                        {
+                          staticClass:
+                            "button-ui button-ui_white mobile-btn mobile-btn_show-more",
+                          on: {
+                            click: function($event) {
+                              _vm.showAll = true
+                            }
+                          }
+                        },
+                        [
+                          _vm._v("\n          Показать все\n          "),
+                          _c("i", { staticClass: "fa fa-chevron-down" })
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.showAll
+                    ? _c(
+                        "button",
+                        {
+                          staticClass:
+                            "button-ui button-ui_white mobile-btn mobile-btn_hide",
+                          on: {
+                            click: function($event) {
+                              _vm.showAll = false
+                            }
+                          }
+                        },
+                        [
+                          _c("i", { staticClass: "fa fa-chevron-up" }),
+                          _vm._v("\n          Скрыть\n        ")
+                        ]
+                      )
+                    : _vm._e()
+                ])
+              : _vm._e()
           ],
           2
         )
@@ -14471,23 +14519,7 @@ var render = function() {
     ]
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      {
-        staticClass: "button-ui button-ui_white mobile-btn mobile-btn_show-more"
-      },
-      [
-        _vm._v("\n          Показать еще\n          "),
-        _c("i", { staticClass: "fa fa-chevron-down" })
-      ]
-    )
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -15466,7 +15498,15 @@ var render = function() {
       _c(
         "div",
         { staticClass: "left-filters__offers" },
-        [_c("product-offers")],
+        [
+          _c("product-offers", {
+            on: {
+              close_filtr: function($event) {
+                return _vm.$emit("close_filtr")
+              }
+            }
+          })
+        ],
         1
       ),
       _vm._v(" "),
@@ -36149,7 +36189,7 @@ function createStore() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\openserver\OSPanel\domains\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
+module.exports = __webpack_require__(/*! D:\OpenServer\OSPanel\domains\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
 
 
 /***/ })

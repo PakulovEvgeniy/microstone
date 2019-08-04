@@ -12,14 +12,14 @@
             <show-switch v-if="this.getScreenState>1" type="show-more" :visible="isCollapse===true" @clickSwitch="onSwitch(false)"></show-switch>
             <item-block v-if="curItem" :name="curItem.name" :active="true" @clickOffer="onOfferClear"></item-block>
             <item-block v-for="it in items" :name="it.name" :key="it.id" @clickOffer="onClickOffer(it)"></item-block>
-            
+                        
             <show-switch v-if="this.getScreenState>1" type="hide-all" :visible="isCollapse===false" @clickSwitch="onSwitch(true)"></show-switch>
-            <div class="mobile-buttons collapsible">
-              <button class="button-ui button-ui_white mobile-btn mobile-btn_show-more">
-                Показать еще
+            <div v-if="this.filterItemsDef>6" class="mobile-buttons collapsible">
+              <button @click="showAll = true" v-if="!showAll" class="button-ui button-ui_white mobile-btn mobile-btn_show-more">
+                Показать все
                 <i class="fa fa-chevron-down"></i>
               </button>
-              <button v-if="false" class="button-ui button-ui_white mobile-btn mobile-btn_hide">
+              <button @click="showAll = false" v-if="showAll" class="button-ui button-ui_white mobile-btn mobile-btn_hide">
                 <i class="fa fa-chevron-up"></i>
                 Скрыть
               </button>
@@ -37,7 +37,8 @@
         data() {
             return {
               isCollapse: null,
-              mobileCollapse: false
+              mobileCollapse: false,
+              showAll: false
             }
         },
         components: {
@@ -111,12 +112,20 @@
             return res;
           },
           items() {
-            if (!this.curItem) {
-               return this.filterItemsDef; 
+            if (this.getScreenState == 1) {
+              if (this.showAll) {
+                return this.filterItemsDef;
+              } else {
+                return this.filterItemsDef.slice(0,6);
+              }
             } else {
-              return this.filterItemsDef.filter((el) => {
-                return el != this.curItem;
-              })
+              if (!this.curItem) {
+               return this.filterItemsDef; 
+              } else {
+                return this.filterItemsDef.filter((el) => {
+                  return el != this.curItem;
+                })
+              }
             }
           }
         },
@@ -145,6 +154,10 @@
             }
           },
           onClickOffer(it) {
+            if (this.getScreenState == 1) {
+              this.mobileCollapse = false;
+              this.$emit('close_filtr');
+            }
             if (this.$router.currentRoute) {
               let obj = {};
               Object.assign(obj, this.categoryFilters);

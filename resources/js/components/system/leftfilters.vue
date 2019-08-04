@@ -5,7 +5,7 @@
         <i class="fas fa-times" @click="$emit('close_filtr')"></i>
       </div>
       <div class="left-filters__offers">
-        <product-offers></product-offers>
+        <product-offers @close_filtr="$emit('close_filtr')"></product-offers>
       </div>
       <leftfilter-picked @close_filtr="$emit('close_filtr')"></leftfilter-picked>
       <div class="left-filters__list">
