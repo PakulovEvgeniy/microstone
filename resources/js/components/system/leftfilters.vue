@@ -17,6 +17,7 @@
           <button class="button-ui button-ui_brand left-filters__button" @click="clickUse">Применить</button>
           <button class="button-ui button-ui_white left-filters__button" @click="clickRem">Сбросить</button>
         </div>
+        <router-link class="left-filters__button left-filters__button_extended-link ui-link ui-link_blue" :to="filtrPath">Все фильтры <i class="fas fa-long-arrow-alt-right"></i></router-link>
       </div>
       <div v-if="floatBtn" class="apply-filters-float-btn" :style="{'top': top+'px'}" @click="clickUseFloat"></div>
     </div>
@@ -43,7 +44,13 @@ import productOffers from '../product/product-offers.vue';
             'filterItems',
             'categoryFilters',
             'getScreenState'
-          ])
+          ]),
+          filtrPath() {
+            return {
+              path: this.$router.currentRoute.path+'/filters',
+              query: this.categoryFilters
+            }
+          }
         },
         components: {
           'filter-component': filterComp,
@@ -203,6 +210,19 @@ import productOffers from '../product/product-offers.vue';
 .left-filters__offers {
   display: none;
 }
+.left-filters__button_extended-link {
+    margin-top: 12px;
+    padding-right: 22px;
+}
+.left-filters__button_extended-link i {
+  position: relative;
+}
+
+.left-filters__button_extended-link i:before {
+    position: absolute;
+    top: -12px;
+    left: 6px;
+}
 @media (max-width: 991px) {
 .left-filters {
     display: block;
@@ -270,6 +290,22 @@ import productOffers from '../product/product-offers.vue';
   }
   .left-filters__buttons {
     margin: 33px 0;
+  }
+  .left-filters__button_extended-link {
+    margin-bottom: 70px;
+    border-radius: 8px;
+    height: 40px;
+    padding: 8px 20px;
+    font-size: 16px;
+    outline: none;
+    background: #fff;
+    color: #333 !important;
+    border: 1px solid #d9d9d9;
+    cursor: pointer;
+    width: 80%;
+  }
+  .left-filters__button_extended-link i {
+    display: none;
   }
 }
 @media (max-width: 767px) {

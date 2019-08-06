@@ -146,7 +146,7 @@ router.beforeEach((to, from, next) => {
 		store.dispatch('getCatalog')
 		.then((res) => {
 				let arrProm = [];
-				if (to.path.indexOf('/category') != -1) {
+				if (to.path.indexOf('/category') != -1 && to.path.indexOf('/filters') == -1) {
 					if (to.params['id']) {
 						let item = findItem(store.state.catalog.items, to.params['id']);
 						if (item && item.childrens.length == 0) {
@@ -163,6 +163,9 @@ router.beforeEach((to, from, next) => {
 						}
 						//store.commit('setCategoryFiltersAll',to.query);
 					}
+				}
+				if (to.path.indexOf('/filters') != -1) {
+					 store.commit('setNonVisibleAside', true);
 				}
 				return Promise.all(arrProm);
 		})

@@ -6,6 +6,7 @@ import registerComp from './components/pages/register.vue';
 import passwordLink from './components/pages/passwordlink.vue';
 import passwordReset from './components/pages/passwordreset.vue';
 import Category from './components/pages/category.vue';
+import CategoryF from './components/pages/categoryfilters.vue';
 import Home from './components/pages/home.vue';
 
 Vue.use(Router);
@@ -21,7 +22,8 @@ export default new Router({
   routes: [
     { path: '/', component: Home, name: 'home' },
     { path: '/category', component: Category, name: 'allCategory' },
-    { path: '/category/:id', component: Category, name: 'category', meta: { scrollToTop: true } },
+    { path: '/category/:id', component: Category, name: 'category'},
+    { path: '/category/:idF/filters', component: CategoryF, name: 'filtersCategory'},
     { path: '/about', component: PageComp, name: 'about' },
     { path: '/contact', component: PageComponent('Contact'), name: 'contact' },
     { path: '/account', component: PageComponent('Account'), name: 'account' },
