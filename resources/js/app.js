@@ -166,6 +166,14 @@ router.beforeEach((to, from, next) => {
 				}
 				if (to.path.indexOf('/filters') != -1) {
 					 store.commit('setNonVisibleAside', true);
+					 if (to.params['idF']) {
+						let item = findItem(store.state.catalog.items, to.params['idF']);
+						if (item && item.childrens.length == 0) {
+							if (to.params['idF'] != from.params['idF']) {
+								arrProm.push(store.dispatch('getFilters', to.params['idF']));
+							}
+						}
+					 }
 				}
 				return Promise.all(arrProm);
 		})

@@ -2189,6 +2189,29 @@ input[type="radio"]:checked+.ui-radio__content:before {
     margin-top: 5px;
 }
 
+.extended-filters-wrap {
+  border-radius: 4px;
+  box-shadow: inset 0 -1px 0 0 rgba(0,0,0,0.1);
+  width: 100%;
+  display: inline-block;
+  border: 1px solid #ddd;
+  position: relative;
+  background-color: #fff;
+  margin-bottom: 30px;
+  padding: 15px 14px;
+}
+.extended-filters-wrap .filter-list {
+    display: flex;
+}
+.extended-filters-wrap .col {
+    flex-grow: 1;
+    margin-right: 2%;
+    width: 23.5%;
+}
+.extended-filters-wrap .col:last-child {
+    margin-right: 0;
+} 
+
 .catalog-subcatalog .space {
   border: none !important;
   border-right: 1px solid #ddd !important;
