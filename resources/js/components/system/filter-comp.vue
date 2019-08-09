@@ -41,7 +41,7 @@ import checkboxButton from './checkbox-button';
     export default {
         data() {
             return {
-              filterOpen: false,
+              fltOpen: null,
               curDiap: 0,
               fSearch: ''
             }
@@ -81,6 +81,12 @@ import checkboxButton from './checkbox-button';
             } else {
               return this.itemGrp.fChecked.length>0;
             }
+          },
+          filterOpen() {
+            if (this.fltOpen === null) {
+              return this.activeFiltr;
+            }
+            return this.fltOpen;
           },
           diapValue() {
             if (this.item.filter_type=='Число') {
@@ -149,7 +155,11 @@ import checkboxButton from './checkbox-button';
         },
         methods: {
           onClick() {
-            this.filterOpen = !this.filterOpen;
+            if (this.activeFiltr && this.fltOpen === null) {
+              this.fltOpen = false;
+            } else {
+              this.fltOpen = !this.fltOpen;
+            }
           },
           clearCheck(ev) {
             this.$emit('change', ev.target);

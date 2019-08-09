@@ -14,6 +14,7 @@ class Category_Filter extends Controller
      	$data = ['date' => '', 'items' => $items];
      	$id = $request->route('idF');
 		$title = 'Подобрать по параметрам';
+		$categoryFilters = [];
 		$filt = [];
      	if ($id) {
      		$cat = Category::getCategoryByChpu($id);
@@ -22,6 +23,47 @@ class Category_Filter extends Controller
 				  $count = Category::getCountChild($cat['id_1s']);
      			  if ($count == 0) {
 					$filt = Filters::getFilters($cat['id_1s']);
+					$filters = $request->all();
+					if (isset($filters['order'])) {
+						$categoryFilters['order'] = $filters['order'];
+					} 
+					if (isset($filters['group'])) {
+						$categoryFilters['group'] =  $filters['group'];
+					} 
+					if (isset($filters['stock'])) {
+						$categoryFilters['stock'] = $filters['stock'];
+					}
+					if (isset($filters['mode'])) {
+						$categoryFilters['mode'] = $filters['mode'];
+					}
+					if (isset($filters['page'])) {
+						$categoryFilters['page'] = $filters['page'];
+					}
+					if (isset($filters['q'])) {
+						$categoryFilters['q'] = $filters['q'];
+					}
+					if (isset($filters['f']) && is_array($filters['f'])) {
+						$fl = $filters['f'];
+						foreach ($fl as $key => $val) {
+							$k = array_search($key, array_column($filt, 'id_1s'));
+							
+							if ($k !== false) {
+								$pr = $filt[$k];
+								$ar = explode('-', $val);
+								if ($pr['filter_type'] == 'Число') {
+									if (count($ar) == 2) {
+										$categoryFilters['f[' . $key . ']'] = $val;
+										$filt[$k]['grp_data']['minValue'] = $ar[0];
+										$filt[$k]['grp_data']['maxValue'] = $ar[1];
+									}
+								} else {
+									$categoryFilters['f[' . $key . ']'] = $val;
+									$filt[$k]['grp_data']['fChecked'] = $ar;
+								}
+							}
+
+						}
+					}
 				  }
      		}
      	}
@@ -33,6 +75,9 @@ class Category_Filter extends Controller
 		
 		if (count($filt)) {
     		$dat['filterItems'] = $filt;
+    	}
+    	if (count($categoryFilters)) {
+    		$dat['categoryFilters'] = $categoryFilters;
     	}
 
     	$ssr = JSRender::render($request->path(), $dat);

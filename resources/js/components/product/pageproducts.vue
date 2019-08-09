@@ -128,6 +128,12 @@ import productsMobileButtons from './products-mb';
             }
           }
         },
+        beforeDestroy() {
+          let body = document.querySelector('body');
+          if (body) {
+             body.classList.remove('blocked');
+          }
+        },
         methods: {
           changeMode() {
             if (this.$router.currentRoute) {

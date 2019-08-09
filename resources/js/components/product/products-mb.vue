@@ -15,8 +15,8 @@
           </button>
         </div>
         <div class="mobile-buttons__view-mode">
-          <button class="button-ui button-ui_white mobile-btn mobile-btn_view-mode">
-            <i class="fas" :class="className" @click="onClick"></i>
+          <button @click="onClick" class="button-ui button-ui_white mobile-btn mobile-btn_view-mode">
+            <i class="fas" :class="className"></i>
           </button>
         </div>
       </div>

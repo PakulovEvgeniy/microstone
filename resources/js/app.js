@@ -143,7 +143,7 @@ router.beforeEach((to, from, next) => {
 			return next();
 		}
 		
-		store.dispatch('getCatalog')
+		Promise.all([store.dispatch('getCatalog'), store.dispatch('getBanners')])
 		.then((res) => {
 				let arrProm = [];
 				if (to.path.indexOf('/category') != -1 && to.path.indexOf('/filters') == -1) {
@@ -180,7 +180,7 @@ router.beforeEach((to, from, next) => {
 		.then((res) => {
 			store.commit('setNonVisibleMain', false);
 			if (to.path.indexOf('/category') != -1) {
-					if (to.params['id']) {
+					if (to.params['id'] || to.params['idF']) {
 						store.commit('setCategoryFiltersAll',to.query);
 					}
 				}

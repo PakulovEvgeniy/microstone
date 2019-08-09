@@ -54,6 +54,12 @@ class Products extends Controller
 				$data = Groups::getGroupsByChpu($qu['chpu']);
 			}
 		}
+
+		if ($param == 'banners') {
+			$stat = 'OK';
+    		$data = Category::getBanners();
+		}
+
 		if ($param == 'filters') {
 			$qu = $request->all();
 			if (isset($qu['chpu'])) {

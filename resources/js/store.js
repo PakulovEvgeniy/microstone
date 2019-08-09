@@ -23,6 +23,10 @@ export function createStore () {
         date: '',
         items: []
       },
+      banners: {
+        date: '',
+        items: []
+      },
       categoryFilters: {},
       groupValues: [],
       topFilters: {
@@ -109,6 +113,25 @@ export function createStore () {
           commit('setCatalog', dat.data);
         }
       },
+      async getBanners({commit, state}, data) {
+        if (state.banners.items.length) {
+          if (!state.banners.date) {
+            state.banners.date = new Date();
+            return;
+          }
+          let nDat = new Date();
+          let dif = (nDat.getTime() - state.catalog.date.getTime())/1000;
+          if (dif<=3600) {
+            return;
+          }
+        }
+        let res = await axios.get('/api/products/banners');
+        let dat = res.data;
+
+        if (dat && dat.status == 'OK') {
+          commit('setBanners', dat.data);
+        }
+      },
       async getOrders({commit, state}, data) {
         let res = await axios.get('/api/products/orders?chpu='+data);
         let dat = res.data;
@@ -182,6 +205,10 @@ export function createStore () {
       setCatalog(state, payload) {
         state.catalog.date = new Date();
         state.catalog.items = payload;
+      },
+      setBanners(state, payload) {
+        state.banners.date = new Date();
+        state.banners.items = payload;
       },
       setCategoryFilters(state, payload) {
         if (state.categoryFilters[payload.name] === undefined) {
@@ -277,6 +304,9 @@ export function createStore () {
       },
       getCatalog (state) {
         return state.catalog;
+      },
+      banners (state) {
+        return state.banners.items;
       },
       auth (state) {
         return state.auth;

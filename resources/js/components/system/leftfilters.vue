@@ -79,7 +79,7 @@ import productOffers from '../product/product-offers.vue';
             this.clickUse();
           },
           clickUse() {
-            this.$emit('close_filtr')
+            this.$emit('close_filtr');
             if (this.$router.currentRoute) {
               let obj = {};
               Object.assign(obj, this.categoryFilters);

@@ -35,6 +35,38 @@ class Category extends Model
     	return $count;
     }
 
+    public static function getBanners()
+    {
+        $dat = [];
+
+        $dat[] = [
+            'id' => 1,
+            'image' => JSRender::resizeImage('catalog/banners/banner_00.jpg',908,266)
+        ];
+
+        $dat[] = [
+            'id' => 2,
+            'image' => JSRender::resizeImage('catalog/banners/banner_01.jpg',908,266)
+        ];
+
+        $dat[] = [
+            'id' => 3,
+            'image' => JSRender::resizeImage('catalog/banners/banner_02.jpg',908,266)
+        ];
+
+        $dat[] = [
+            'id' => 4,
+            'image' => JSRender::resizeImage('catalog/banners/banner_03.jpg',908,266)
+        ];
+
+        $dat[] = [
+            'id' => 5,
+            'image' => JSRender::resizeImage('catalog/banners/banner_04.jpg',908,266)
+        ];
+
+        return $dat;
+    }
+
     public static function getCatalog($parent)
 	{
 		$dat = [];
