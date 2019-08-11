@@ -5,11 +5,11 @@
           <div class="n-catalog-product__info">
             <div class="product-info">
               <div class="product-info__image">
-                <a>
+                <router-link :to="'/product/'+item.chpu">
                   <picture>
                     <img :src="item.image">
                   </picture>
-                </a>
+                </router-link>
                 <div class="product-info__code">
                   <span>Код:</span>
                   <span>{{item.sku}}</span>
@@ -17,15 +17,13 @@
               </div>
               <div class="product-info__title">
                 <div class="product-info__title-link">
-                  <a class="ui-link">{{item.name}}</a>
+                  <router-link :to="'/product/'+item.chpu" class="ui-link">{{item.name}}</router-link>
                 </div>
                 <span class="product-info__title-description">
                   {{item.small_desc}}
                 </span>
                 <div class="product-info__voblers">
-                  <div class="w-product-voblers">
-                    <div class="vobler">Акция</div>
-                  </div>
+                  <voblers></voblers>
                 </div>
               </div>
               <div class="product-info__social">
@@ -62,7 +60,7 @@
               <i class="far fa-clock"></i>
             </button>
             <div class="primary-btn">
-              <button class="button-ui button-ui_brand" :class="{'button-ui_passive' : !inItem}">Купить</button>
+              <button @click="clickBuy" class="button-ui button-ui_brand" :class="{'button-ui_passive' : !inItem}">Купить</button>
             </div>
           </div>
         </div>
@@ -82,7 +80,7 @@
 </template>
 
 <script>
- 
+  import voblers from './voblers.vue';
     export default {
         data() {
             return {
@@ -104,6 +102,14 @@
             } else {
               return '0';
             }
+          }
+        },
+        components: {
+          voblers
+        },
+        methods: {
+          clickBuy() {
+            this.$router.push('/product/'+this.item.chpu);
           }
         }
     }

@@ -26,7 +26,6 @@
     padding-left: 0;
     padding-right: 0;
     padding-top: 8px;
-    margin-top: 0;
     margin-bottom: 15px;
     border-radius: 0;
     font-size: 13px;

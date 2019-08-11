@@ -25,6 +25,7 @@ use App\FiltersDiap;
 use App\FiltersDef;
 use App\FiltersDefGroups;
 use App\FiltersDefParams;
+use App\ProductPictures;
 
 class Obmen extends Controller
 {
@@ -467,6 +468,16 @@ class Obmen extends Controller
                $pp->value_id = $ar_val[2];
                $pp->save();
              }
+            }
+            ProductPictures::where(['product_id1s' => $id_1s])->delete();
+            if (isset($par['pr_pict'])) {
+                foreach ($par['pr_pict'] as $val) {
+                    $pp = new ProductPictures;
+                    $pp->product_id1s = $id_1s;
+                    $pp->party_id1s = '';
+                    $pp->image = 'catalog/' . $val;
+                    $pp->save();
+                } 
             }
 
             return 'OK';

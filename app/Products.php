@@ -11,6 +11,8 @@ use App\Groups;
 use App\Filters;
 use App\PartyParams;
 use App\PriceParty;
+use App\ProductsDescriptions;
+use App\ProductPictures;
 
 class Products extends Model
 {
@@ -35,6 +37,46 @@ class Products extends Model
     	$cat = Category_description::where('chpu', $chpu)->first();
     	if ($cat) {
     		return $cat->category->id_1s;
+    	}
+    	return false;
+    }
+    public static function getId_1sByChpu($chpu)
+    {
+    	$prod = ProductsDescriptions::where('chpu', $chpu)->first();
+    	if ($prod) {
+    		return $prod->products->id_1s;
+    	}
+    	return false;
+    }
+
+    public static function getProduct($id_1s)
+    {
+        $prod = Products::where('id_1s', $id_1s)->first();
+
+        $pict = ProductPictures::getPictures($id_1s);
+        $pc = [];
+        $pc1 = [];
+        $pc[] = JSRender::resizeImage($prod->image,325,240);
+        $pc1[] = JSRender::resizeImage($prod->image,68,55);
+        foreach ($pict as $val) {
+            if ($val['image'] != $prod->image) {
+                $pc[] = JSRender::resizeImage($val['image'],325,240);
+                $pc1[] = JSRender::resizeImage($val['image'],68,55);
+            }
+        }
+        
+    	if ($prod) {
+            $res=[
+                'id' => $prod->id,
+                'id_1s' => $prod->id_1s,
+                'name' => $prod->products_descriptions->name,
+                'parent_id' => $prod->parent_id,
+                'chpu' => $prod->products_descriptions->chpu,
+                'sku' => $prod->sku,
+                'images' => $pc,
+                'images2' => $pc1
+            ];
+    		return $res;
     	}
     	return false;
     }

@@ -1,0 +1,233 @@
+<template>
+    <div class="product-page" v-title="title">
+      <bread-crump v-show="getScreenState>1" :links="breadItems"></bread-crump>
+      <h1 class="price-item-title" v-html="product.name"></h1>
+      <div class="price-item-code">
+          Код товара:
+          <span>{{product.sku}}</span>
+      </div>
+      <voblers></voblers>
+      <div class="price-item">
+          <div class="node-block">
+              <div class="item-header">
+                  <div class="col-header col-photo">
+                      <div class="main-image-slider-wrap">
+                          <owl-carousel :pictQty="1" :images="product.images" :width="335" type="img" :curPicture="curPicture"></owl-carousel>
+                          <a class="button-left"><i class="fa fa-chevron-left" @click="clickPrev"></i></a>
+                          <a class="button-right"><i class="fa fa-chevron-right" @click="clickNext"></i></a>
+                      </div>
+                      <div class="thumb-slider-wrap">
+                          <owl-carousel :pictQty="4" :images="product.images2" 
+                            :width="81" type="thumb" :curPicture="curPicture"
+                            @changePict="curPicture=$event"
+                          ></owl-carousel>
+                          <a class="button-left"><i class="fa fa-chevron-left" @click="clickPrev"></i></a>
+                          <a class="button-right"><i class="fa fa-chevron-right" @click="clickNext"></i></a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+</template>
+
+<script>
+    import { mapGetters } from 'vuex';
+    import Breadcrump from '../system/breadcrump.vue';
+    import voblers from '../product/voblers.vue';
+    import OwlCarousel from '../system/owl-carousel.vue';
+    export default {
+        data() {
+            return {
+               curPicture: 0
+            }
+        },
+        computed: {
+          ...mapGetters([
+            'getCatalog',
+            'getScreenState',
+            'product'
+          ]),
+          title() {
+              return this.product.name;
+          },
+          breadItems() {
+            let arr = [];
+            if (this.product.name) {
+                let par = this.product.parent_id;
+                arr.unshift({
+                    id: this.product.id_1s,
+                    name: this.product.name,
+                    link: '/product/'+this.product.chpu
+                });
+                while (par) {
+                    let it = this.findItemById(this.getCatalog.items, par);
+                    arr.unshift({
+                        id: it.id,
+                        name: it.name,
+                        link: '/category/'+it.chpu
+                    });
+                    par = it.parent_id
+                }
+            }
+            arr.unshift({
+                id: 0,
+                name: 'Каталог',
+                link: '/category'
+            })
+            return arr;
+          }
+        },
+        methods: {
+          findItemById(items, id) {
+                for (let i = 0; i<items.length ; i++) {
+                    let it = items[i];
+                    if (it.id_1s == id) {
+                        return it;
+                    }
+                    if (it.childrens.length) {
+                        let itm = this.findItemById(it.childrens, id);
+                        if (itm) {return itm}
+                    }
+                }
+            },
+            clickNext() {
+                this.curPicture++;
+                if (this.curPicture>=this.product.images.length) {
+                    this.curPicture = 0;
+                }
+            },
+            clickPrev() {
+                this.curPicture--;
+                if (this.curPicture<0) {
+                    this.curPicture = this.product.images.length-1;
+                }
+            } 
+        },
+        components: {
+            'bread-crump': Breadcrump,
+            voblers,
+            'owl-carousel': OwlCarousel
+        }
+    }
+</script>
+
+<style>
+   .price-item-title {
+        font-size: 28px;
+        font-weight: normal;
+        margin-bottom: 11px;
+    } 
+    .price-item-code {
+        color: #bbb;
+        font-size: 1.1em;
+        margin: 0 0 1em;
+        display: inline-block;
+        vertical-align: top;
+    }
+    .price-item-code + .w-product-voblers {
+        margin-left: 20px;
+    }
+    .node-block {
+        border-radius: 4px;
+        box-shadow: inset 0 -1px 0 0 rgba(0,0,0,0.1);
+        width: 100%;
+        display: inline-block;
+        border: 1px solid #ddd;
+        position: relative;
+        background-color: #fff;
+    }
+    .item-header {
+        margin-left: 0;
+        margin-right: 0;
+        padding: 1em;
+        position: relative;
+    }
+    .item-header .col-header.col-photo {
+        position: relative;
+    }
+    .item-header .col-header.col-photo .main-image-slider-wrap {
+        position: relative;
+        padding: 0 25px;
+    }
+    .item-header .col-header.col-photo .thumb-slider-wrap {
+        margin: 10px 0;
+        width: 384px;
+        position: relative;
+        padding: 0 30px 0 31px;
+    }
+    .main-image-slider-wrap .image-slider .owl-wrapper .owl-item {
+        height: 240px;
+        display: table-cell;
+        vertical-align: middle;
+    }
+    .thumb-slider-wrap .image-slider .owl-wrapper .owl-item {
+        height: 50px;
+        display: table-cell;
+        vertical-align: middle;
+    }
+    .item-header .col-header.col-photo .button-left, .item-header .col-header.col-photo .button-right {
+        display: inline;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        opacity: .5;
+        width: 25px;
+    }
+    .item-header .col-header.col-photo .button-left {
+        left: 7px;
+    }
+    .item-header .col-header.col-photo .button-right {
+        right: 7px;
+    }
+    .item-header .col-header.col-photo .main-image-slider-wrap .button-left, .item-header .col-header.col-photo .main-image-slider-wrap .button-right {
+        width: 25px;
+    }
+    .item-header .col-header.col-photo .button-left i, .item-header .col-header.col-photo .button-right i {
+        text-align: center;
+        top: 50%;
+        margin-top: -11px;
+        font-size: 20px;
+        text-decoration: none;
+        width: 100%;
+        position: absolute;
+        color: #b3b3b3;
+    }
+    .item-header .col-header.col-photo .button-left:hover, .item-header .col-header.col-photo .button-right:hover {
+        background: #e6e6e6;
+    }
+    .item-header .col-header.col-photo .thumb-slider-wrap .owl-item .thumb {
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        display: table-cell;
+        height: 54px;
+        position: relative;
+        text-align: center;
+        vertical-align: middle;
+        width: 70px;
+    }
+    .item-header .col-header.col-photo .thumb-slider-wrap .owl-item .thumb.active {
+        border-color: #777;
+    }
+    @media (max-width: 991px) {
+        .price-item-title {
+            font-size: 20px;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+        .price-item-code {
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+    }
+    @media (min-width: 992px) {
+        .item-header .col-header {
+            float: left;
+        }
+        .item-header .col-header.col-photo {
+            margin: 0 25px 0 0;
+            max-height: 330px;
+            width: 385px;
+        }
+    }
+</style>

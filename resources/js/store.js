@@ -54,7 +54,8 @@ export function createStore () {
         items: []
       },
       filterItems: [],
-      filterItemsDef: []
+      filterItemsDef: [],
+      product: {}
     },
     actions: {
       setAuth ({ commit }, data) {
@@ -137,6 +138,13 @@ export function createStore () {
         let dat = res.data;
         if (dat && dat.status == 'OK') {
           commit('setOrders', dat.data);
+        }
+      },
+      async getProduct({commit, state}, data) {
+        let res = await axios.get('/api/products/product?chpu='+data);
+        let dat = res.data;
+        if (dat && dat.status == 'OK') {
+          commit('setProduct', dat.data);
         }
       },
       async getFilters({commit, state}, data) {
@@ -281,6 +289,9 @@ export function createStore () {
       },
       setProductsOfCategoryPage(state, payload) {
         state.productsOfCategoryPage = payload;
+      },
+      setProduct(state, payload) {
+        state.product = payload;
       }
     },
     getters: {
@@ -355,7 +366,10 @@ export function createStore () {
       },
       productsOfCategoryPage(state) {
         return state.productsOfCategoryPage.items
-      }
+      },
+      product(state) {
+        return state.product;
+      },
     }
   })
 }

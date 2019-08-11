@@ -54,6 +54,16 @@ class Products extends Controller
 				$data = Groups::getGroupsByChpu($qu['chpu']);
 			}
 		}
+		if ($param == 'product') {
+			$qu = $request->all();
+			if (isset($qu['chpu'])) {
+				$id_1s = mod_Products::getId_1sByChpu($qu['chpu']);
+				if ($id_1s) {
+					$stat = 'OK';
+					$data = mod_Products::getProduct($id_1s);
+				}
+			}
+		}
 
 		if ($param == 'banners') {
 			$stat = 'OK';

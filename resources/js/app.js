@@ -142,7 +142,6 @@ router.beforeEach((to, from, next) => {
 			store.commit('setNonVisibleMain', false);
 			return next();
 		}
-		
 		Promise.all([store.dispatch('getCatalog'), store.dispatch('getBanners')])
 		.then((res) => {
 				let arrProm = [];
@@ -174,6 +173,12 @@ router.beforeEach((to, from, next) => {
 							}
 						}
 					 }
+				}
+				if (to.path.indexOf('/product') != -1) {
+					store.commit('setNonVisibleAside', true);
+					if (to.params['id'] != from.params['id']) {
+						arrProm.push(store.dispatch('getProduct', to.params['id']));
+					}
 				}
 				return Promise.all(arrProm);
 		})
