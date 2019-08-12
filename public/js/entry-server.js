@@ -1759,6 +1759,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1766,10 +1772,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      curPicture: 0
+      curPicture: 0,
+      width: 355
     };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['getCatalog', 'getScreenState', 'product']), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['getCatalog', 'getScreenState', 'product', 'screenWidth']), {
     title: function title() {
       return this.product.name;
     },
@@ -1840,6 +1847,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     'bread-crump': _system_breadcrump_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     voblers: _product_voblers_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     'owl-carousel': _system_owl_carousel_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+  },
+  watch: {
+    screenWidth: function screenWidth(val) {
+      if (this.getScreenState > 1) {
+        this.width = 335;
+        return;
+      }
+
+      this.width = this.$refs.carus.clientWidth - 50;
+    }
+  },
+  mounted: function mounted() {
+    if (this.getScreenState > 1) {
+      this.width = 335;
+      return;
+    }
+
+    this.width = this.$refs.carus.clientWidth - 50;
   }
 });
 
@@ -3821,7 +3846,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      leftPict: 0
+    };
   },
   props: ['images', 'width', 'type', 'curPicture', 'pictQty'],
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])([]), {
@@ -3829,7 +3856,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.images.length * this.width * 2 + 'px';
     },
     transWrapper: function transWrapper() {
-      return 'translate3d(' + -this.width * this.curPicture + 'px, 0px, 0px)';
+      return 'translate3d(' + -this.width * this.leftPict + 'px, 0px, 0px)';
     }
   }),
   methods: {
@@ -3837,6 +3864,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (this.pictQty > 1 && ind != this.curPicture) {
         this.$emit('changePict', ind);
       }
+    }
+  },
+  watch: {
+    curPicture: function curPicture(val) {
+      var stInd = this.leftPict;
+      var endInd = stInd + this.pictQty - 1;
+
+      if (val >= stInd && val <= endInd) {
+        return;
+      }
+
+      if (val > endInd) {
+        this.leftPict += val - endInd;
+        return;
+      }
+
+      this.leftPict = val;
     }
   }
 });
@@ -14789,6 +14833,40 @@ var render = function() {
         attrs: { links: _vm.breadItems }
       }),
       _vm._v(" "),
+      _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.getScreenState < 2,
+              expression: "getScreenState<2"
+            }
+          ],
+          staticClass: "category-up"
+        },
+        [
+          _c(
+            "router-link",
+            { attrs: { to: _vm.breadItems[_vm.breadItems.length - 2].link } },
+            [
+              _c("i", { staticClass: "fa fa-chevron-left" }),
+              _vm._v(" "),
+              _c("div", {
+                staticClass: "caption",
+                domProps: {
+                  innerHTML: _vm._s(
+                    _vm.breadItems[_vm.breadItems.length - 2].name
+                  )
+                }
+              })
+            ]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
       _c("h1", {
         staticClass: "price-item-title",
         domProps: { innerHTML: _vm._s(_vm.product.name) }
@@ -14804,7 +14882,7 @@ var render = function() {
       _c("div", { staticClass: "price-item" }, [
         _c("div", { staticClass: "node-block" }, [
           _c("div", { staticClass: "item-header" }, [
-            _c("div", { staticClass: "col-header col-photo" }, [
+            _c("div", { ref: "carus", staticClass: "col-header col-photo" }, [
               _c(
                 "div",
                 { staticClass: "main-image-slider-wrap" },
@@ -14813,32 +14891,46 @@ var render = function() {
                     attrs: {
                       pictQty: 1,
                       images: _vm.product.images,
-                      width: 335,
+                      width: _vm.width,
                       type: "img",
                       curPicture: _vm.curPicture
                     }
                   }),
                   _vm._v(" "),
-                  _c("a", { staticClass: "button-left" }, [
-                    _c("i", {
-                      staticClass: "fa fa-chevron-left",
+                  _c(
+                    "a",
+                    {
+                      staticClass: "button-left",
                       on: { click: _vm.clickPrev }
-                    })
-                  ]),
+                    },
+                    [_c("i", { staticClass: "fa fa-chevron-left" })]
+                  ),
                   _vm._v(" "),
-                  _c("a", { staticClass: "button-right" }, [
-                    _c("i", {
-                      staticClass: "fa fa-chevron-right",
+                  _c(
+                    "a",
+                    {
+                      staticClass: "button-right",
                       on: { click: _vm.clickNext }
-                    })
-                  ])
+                    },
+                    [_c("i", { staticClass: "fa fa-chevron-right" })]
+                  )
                 ],
                 1
               ),
               _vm._v(" "),
               _c(
                 "div",
-                { staticClass: "thumb-slider-wrap" },
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.product.images.length > 1,
+                      expression: "product.images.length>1"
+                    }
+                  ],
+                  staticClass: "thumb-slider-wrap"
+                },
                 [
                   _c("owl-carousel", {
                     attrs: {
@@ -14855,19 +14947,23 @@ var render = function() {
                     }
                   }),
                   _vm._v(" "),
-                  _c("a", { staticClass: "button-left" }, [
-                    _c("i", {
-                      staticClass: "fa fa-chevron-left",
+                  _c(
+                    "a",
+                    {
+                      staticClass: "button-left",
                       on: { click: _vm.clickPrev }
-                    })
-                  ]),
+                    },
+                    [_c("i", { staticClass: "fa fa-chevron-left" })]
+                  ),
                   _vm._v(" "),
-                  _c("a", { staticClass: "button-right" }, [
-                    _c("i", {
-                      staticClass: "fa fa-chevron-right",
+                  _c(
+                    "a",
+                    {
+                      staticClass: "button-right",
                       on: { click: _vm.clickNext }
-                    })
-                  ])
+                    },
+                    [_c("i", { staticClass: "fa fa-chevron-right" })]
+                  )
                 ],
                 1
               )

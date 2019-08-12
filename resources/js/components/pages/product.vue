@@ -1,6 +1,12 @@
 <template>
     <div class="product-page" v-title="title">
       <bread-crump v-show="getScreenState>1" :links="breadItems"></bread-crump>
+      <div v-show="getScreenState<2" class="category-up">
+          <router-link :to="breadItems[breadItems.length-2].link">
+              <i class="fa fa-chevron-left"></i>
+              <div class="caption" v-html="breadItems[breadItems.length-2].name"></div>
+          </router-link>
+      </div>
       <h1 class="price-item-title" v-html="product.name"></h1>
       <div class="price-item-code">
           Код товара:
@@ -10,19 +16,19 @@
       <div class="price-item">
           <div class="node-block">
               <div class="item-header">
-                  <div class="col-header col-photo">
+                  <div ref="carus" class="col-header col-photo">
                       <div class="main-image-slider-wrap">
-                          <owl-carousel :pictQty="1" :images="product.images" :width="335" type="img" :curPicture="curPicture"></owl-carousel>
-                          <a class="button-left"><i class="fa fa-chevron-left" @click="clickPrev"></i></a>
-                          <a class="button-right"><i class="fa fa-chevron-right" @click="clickNext"></i></a>
+                          <owl-carousel :pictQty="1" :images="product.images" :width="width" type="img" :curPicture="curPicture"></owl-carousel>
+                          <a @click="clickPrev" class="button-left"><i class="fa fa-chevron-left"></i></a>
+                          <a @click="clickNext" class="button-right"><i class="fa fa-chevron-right"></i></a>
                       </div>
-                      <div class="thumb-slider-wrap">
+                      <div v-show="product.images.length>1" class="thumb-slider-wrap">
                           <owl-carousel :pictQty="4" :images="product.images2" 
                             :width="81" type="thumb" :curPicture="curPicture"
                             @changePict="curPicture=$event"
                           ></owl-carousel>
-                          <a class="button-left"><i class="fa fa-chevron-left" @click="clickPrev"></i></a>
-                          <a class="button-right"><i class="fa fa-chevron-right" @click="clickNext"></i></a>
+                          <a @click="clickPrev" class="button-left"><i class="fa fa-chevron-left"></i></a>
+                          <a @click="clickNext" class="button-right"><i class="fa fa-chevron-right"></i></a>
                       </div>
                   </div>
               </div>
@@ -39,14 +45,16 @@
     export default {
         data() {
             return {
-               curPicture: 0
+               curPicture: 0,
+               width: 355
             }
         },
         computed: {
           ...mapGetters([
             'getCatalog',
             'getScreenState',
-            'product'
+            'product',
+            'screenWidth'
           ]),
           title() {
               return this.product.name;
@@ -108,6 +116,22 @@
             'bread-crump': Breadcrump,
             voblers,
             'owl-carousel': OwlCarousel
+        },
+        watch: {
+            screenWidth(val) {
+                if (this.getScreenState>1) {
+                    this.width = 335;
+                    return;
+                }
+                this.width = this.$refs.carus.clientWidth - 50; 
+            }
+        },
+        mounted() {
+           if (this.getScreenState>1) {
+                this.width = 335;
+                return;
+            }
+            this.width = this.$refs.carus.clientWidth - 50;  
         }
     }
 </script>
@@ -209,6 +233,38 @@
     .item-header .col-header.col-photo .thumb-slider-wrap .owl-item .thumb.active {
         border-color: #777;
     }
+    .item-header .col-header.col-photo .main-image-slider-wrap .owl-item {
+        text-align: center;
+    }
+    .item-header::after {
+        content: " ";
+        display: table;
+        clear: both;
+    }
+    .category-up {
+        width: calc(100% + 20px);
+        margin: 0 -10px;
+        background-color: #fff;
+        border-bottom: 1px solid #ddd;
+    }
+    .category-up a {
+        display: block;
+        text-decoration: none !important;
+        width: 100%;
+        color: #333;
+    }
+    .category-up a i {
+        font-size: 13px;
+        line-height: 59px;
+        display: inline-block;
+        vertical-align: middle;
+        padding: 0 5px 0 33px;
+    }
+    .category-up a .caption {
+        color: #3a3a3a;
+        display: inline-block;
+        line-height: 60px;
+    }
     @media (max-width: 991px) {
         .price-item-title {
             font-size: 20px;
@@ -218,6 +274,13 @@
         .price-item-code {
             margin-left: 20px;
             margin-right: 20px;
+        }
+        .item-header .col-header.col-photo .thumb-slider-wrap {
+            display: none;
+        }
+        .item-header .col-header.col-photo {
+            max-height: 250px;
+            width: auto;
         }
     }
     @media (min-width: 992px) {

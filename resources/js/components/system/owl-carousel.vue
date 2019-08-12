@@ -19,6 +19,7 @@
     export default {
         data() {
             return {
+              leftPict: 0
             }
         },
         props: [
@@ -35,7 +36,7 @@
             return this.images.length * this.width * 2 + 'px';
           },
           transWrapper() {
-            return 'translate3d('+ -this.width*this.curPicture + 'px, 0px, 0px)';
+            return 'translate3d('+ -this.width*this.leftPict + 'px, 0px, 0px)';
           }
         },
         methods: {
@@ -44,6 +45,20 @@
                 this.$emit('changePict', ind);
               }
             }
+        },
+        watch: {
+          curPicture(val) {
+            let stInd = this.leftPict;
+            let endInd = stInd + this.pictQty - 1;
+            if (val >= stInd && val <= endInd) {
+              return;
+            }
+            if (val > endInd) {
+              this.leftPict+=(val-endInd);
+              return;
+            }
+            this.leftPict = val;
+          }
         }
     }
 </script>

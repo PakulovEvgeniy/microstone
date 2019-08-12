@@ -322,6 +322,9 @@ header {
     aside {
         display: none;
     }
+    .main-search-form-container {
+      display: block;
+    }
 }
 
 @media (min-width: 992px) {
