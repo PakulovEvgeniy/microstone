@@ -58,10 +58,12 @@ class Products extends Model
         $pc1 = [];
         $pc[] = JSRender::resizeImage($prod->image,325,240);
         $pc1[] = JSRender::resizeImage($prod->image,68,55);
+        $pc2[] = '/image/' . $prod->image;
         foreach ($pict as $val) {
             if ($val['image'] != $prod->image) {
                 $pc[] = JSRender::resizeImage($val['image'],325,240);
                 $pc1[] = JSRender::resizeImage($val['image'],68,55);
+                $pc2[] = '/image/' . $val['image'];
             }
         }
         
@@ -74,8 +76,11 @@ class Products extends Model
                 'chpu' => $prod->products_descriptions->chpu,
                 'sku' => $prod->sku,
                 'images' => $pc,
-                'images2' => $pc1
+                'images2' => $pc1,
+                'bigImages' => $pc2
             ];
+            $prod->popul = $prod->popul+1;
+            $prod->save();
     		return $res;
     	}
     	return false;
@@ -169,7 +174,7 @@ class Products extends Model
                 });
             }
         }
-        $prd = $prd->select('id_1s', 'products.id as id', 'description', 'chpu' ,'parent_id', 'name', 'sku', 'image', DB::raw('MAX(price) as max_price, MIN(price) as min_price, 
+        $prd = $prd->select('id_1s', 'products.id as id', 'description', 'chpu' ,'parent_id', 'name', 'sku', 'image', 'popul', DB::raw('MAX(price) as max_price, MIN(price) as min_price, 
 					SUM(stock) as stock, SUM(sold) as sold'));
         if (count($fld)) {
             for ($i=0; $i < count($fld); $i++) { 
@@ -198,7 +203,7 @@ class Products extends Model
             }
         }
         
-        $prd = $prd->groupBy('id_1s', 'id', 'name', 'description', 'chpu', 'parent_id', 'sku', 'image');
+        $prd = $prd->groupBy('id_1s', 'id', 'name', 'description', 'chpu', 'parent_id', 'sku', 'image', 'popul');
 
         $order = 3;
         if (isset($filtr['order'])) {

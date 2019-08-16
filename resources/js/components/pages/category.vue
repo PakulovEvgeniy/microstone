@@ -206,12 +206,18 @@
     .category-items-desktop a {
         background: white;
         border-radius: 4px;
-        box-shadow: inset 0 -1px 0 0 rgba(0,0,0,0.1);
         border: 1px solid #ddd;
         width: 217px;
         padding: 15px;
         margin-right: 10px;
         margin-bottom: 10px;
+    }
+    .category-items-desktop a:hover {
+      box-shadow: 0 2px 7px 1px #babbd1;
+      -moz-transition: box-shadow .2s;
+      -o-transition: box-shadow .2s;
+      -webkit-transition: box-shadow .2s;
+      transition: box-shadow .2s;
     }
     .category-items-desktop .image {
         width: 100%;

@@ -152,6 +152,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   mounted: function mounted() {
     this.$store.commit('setScreenWidth', window.innerWidth);
+    this.$store.commit('setScreenHeight', window.innerHeight);
     window.addEventListener('resize', this.onResize);
   },
   beforeDestroy: function beforeDestroy() {
@@ -160,6 +161,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   methods: {
     onResize: function onResize() {
       this.$store.state.screenWidth = window.innerWidth;
+      this.$store.state.screenHeight = window.innerHeight;
     },
     onClick: function onClick() {
       window.scrollTo({
@@ -1722,6 +1724,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _system_breadcrump_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../system/breadcrump.vue */ "./resources/js/components/system/breadcrump.vue");
 /* harmony import */ var _product_voblers_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../product/voblers.vue */ "./resources/js/components/product/voblers.vue");
 /* harmony import */ var _system_owl_carousel_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../system/owl-carousel.vue */ "./resources/js/components/system/owl-carousel.vue");
+/* harmony import */ var _system_overblock_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../system/overblock.vue */ "./resources/js/components/system/overblock.vue");
+/* harmony import */ var vue_dragscroll__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-dragscroll */ "./node_modules/vue-dragscroll/dist/vue-dragscroll.min.js");
+/* harmony import */ var vue_dragscroll__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue_dragscroll__WEBPACK_IMPORTED_MODULE_5__);
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -1765,6 +1770,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
@@ -1773,10 +1795,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       curPicture: 0,
-      width: 355
+      width: 355,
+      bigPicture: false,
+      bigPictStyle: {
+        left: 0,
+        top: 0,
+        'max-height': 0,
+        'max-width': 0
+      },
+      divStyle: {
+        width: 'auto',
+        height: 'auto'
+      }
     };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['getCatalog', 'getScreenState', 'product', 'screenWidth']), {
+  directives: {
+    'dragscroll': vue_dragscroll__WEBPACK_IMPORTED_MODULE_5__["dragscroll"]
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['getCatalog', 'getScreenState', 'product', 'screenWidth', 'screenHeight']), {
     title: function title() {
       return this.product.name;
     },
@@ -1841,12 +1877,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (this.curPicture < 0) {
         this.curPicture = this.product.images.length - 1;
       }
+    },
+    clickPict: function clickPict(val) {
+      var _this = this;
+
+      //console.dir(this.$refs.big_pict);
+      this.bigPicture = true;
+      setTimeout(function () {
+        _this.bigPictStyle['max-width'] = _this.screenWidth + 'px';
+        _this.bigPictStyle['max-height'] = _this.screenHeight + 'px';
+        _this.divStyle.width = 'auto';
+        _this.divStyle.height = 'auto';
+        setTimeout(function () {
+          _this.bigPictStyle.left = 'calc(50% - ' + parseInt(_this.$refs.big_pict.clientWidth / 2) + 'px)';
+          _this.bigPictStyle.top = 'calc(50% - ' + parseInt(_this.$refs.big_pict.clientHeight / 2) + 'px)';
+          _this.divStyle.width = _this.$refs.big_pict.clientWidth + 'px';
+          _this.divStyle.height = _this.$refs.big_pict.clientHeight + 'px';
+        }, 0);
+      }, 0);
     }
   },
   components: {
     'bread-crump': _system_breadcrump_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     voblers: _product_voblers_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    'owl-carousel': _system_owl_carousel_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+    'owl-carousel': _system_owl_carousel_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    'over-block': _system_overblock_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   watch: {
     screenWidth: function screenWidth(val) {
@@ -1856,6 +1911,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       this.width = this.$refs.carus.clientWidth - 50;
+      if (this.bigPicture) this.clickPict();
+    },
+    screenHeight: function screenHeight(val) {
+      if (this.bigPicture) this.clickPict();
     }
   },
   mounted: function mounted() {
@@ -3813,6 +3872,54 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/overblock.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/overblock.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {};
+  },
+  props: ['active'],
+  methods: {
+    onClick: function onClick() {
+      this.$emit('clickOver');
+    }
+  },
+  watch: {
+    active: function active(val) {
+      var body = document.querySelector('body');
+
+      if (body) {
+        if (val) {
+          body.classList.add('blocked');
+        } else {
+          body.classList.remove('blocked');
+        }
+      }
+    }
+  },
+  beforeDestroy: function beforeDestroy() {
+    var body = document.querySelector('body');
+
+    if (body) {
+      body.classList.remove('blocked');
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/owl-carousel.vue?vue&type=script&lang=js&":
 /*!******************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/owl-carousel.vue?vue&type=script&lang=js& ***!
@@ -3847,7 +3954,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      leftPict: 0
+      leftPict: 0,
+      dragStart: false,
+      offset: 0,
+      startX: 0,
+      startFirst: 0
     };
   },
   props: ['images', 'width', 'type', 'curPicture', 'pictQty'],
@@ -3856,7 +3967,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.images.length * this.width * 2 + 'px';
     },
     transWrapper: function transWrapper() {
-      return 'translate3d(' + -this.width * this.leftPict + 'px, 0px, 0px)';
+      return 'translate3d(' + (-this.width * this.leftPict + this.offset) + 'px, 0px, 0px)';
+    },
+    transition: function transition() {
+      if (!this.dragStart) {
+        return 'all 200ms ease 0s';
+      }
     }
   }),
   methods: {
@@ -3864,6 +3980,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (this.pictQty > 1 && ind != this.curPicture) {
         this.$emit('changePict', ind);
       }
+    },
+    onSwipeStart: function onSwipeStart(e) {
+      this.dragStart = true;
+      this.startX = e.clientX;
+      this.startFirst = this.startX;
+      this.$refs.slider.onpointermove = this.onSwipeMove;
+      this.$refs.slider.setPointerCapture(e.pointerId);
+    },
+    onSwipeEnd: function onSwipeEnd(e) {
+      this.dragStart = false;
+      this.$refs.slider.onpointermove = null;
+      this.$refs.slider.releasePointerCapture(e.pointerId);
+      var offset = e.clientX - this.startFirst;
+
+      if (offset > 9) {
+        this.offset = 0;
+        this.$emit('changePict', Math.max(this.curPicture - 1, 0));
+      } else if (offset < -9) {
+        this.offset = 0;
+        this.$emit('changePict', Math.min(this.curPicture + 1, this.images.length - 1));
+      } else {
+        this.offset = 0;
+        this.onClick();
+      }
+    },
+    onSwipeMove: function onSwipeMove(e) {
+      var offs = e.clientX - this.startX;
+      this.startX = e.clientX;
+      this.offset = this.offset + offs;
+    },
+    onClick: function onClick() {
+      this.$emit('clickPicture');
     }
   },
   watch: {
@@ -4533,6 +4681,17 @@ __webpack_require__.r(__webpack_exports__);
 /*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/extract-text-webpack-plugin/dist/loader.js??ref--5-0!./node_modules/style-loader!./node_modules/css-loader??ref--5-2!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--5-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/leftfilters.vue?vue&type=style&index=0&lang=css& ***!
   \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ "./node_modules/extract-text-webpack-plugin/dist/loader.js?!./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/overblock.vue?vue&type=style&index=0&lang=css&":
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/extract-text-webpack-plugin/dist/loader.js??ref--5-0!./node_modules/style-loader!./node_modules/css-loader??ref--5-2!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--5-3!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/overblock.vue?vue&type=style&index=0&lang=css& ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -12833,6 +12992,18 @@ Popper.Defaults = Defaults;
 
 /***/ }),
 
+/***/ "./node_modules/vue-dragscroll/dist/vue-dragscroll.min.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/vue-dragscroll/dist/vue-dragscroll.min.js ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(e,t){ true?module.exports=t():undefined}("undefined"!=typeof self?self:this,function(){return function(e){function t(n){if(o[n])return o[n].exports;var r=o[n]={i:n,l:!1,exports:{}};return e[n].call(r.exports,r,r.exports,t),r.l=!0,r.exports}var o={};return t.m=e,t.c=o,t.d=function(e,o,n){t.o(e,o)||Object.defineProperty(e,o,{configurable:!1,enumerable:!0,get:n})},t.n=function(e){var o=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(o,"a",o),o},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="/dist/",t(t.s=0)}([function(e,t,o){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.dragscroll=void 0;var n=o(1),r=function(e){return e&&e.__esModule?e:{default:e}}(n),i={install:function(e,t){var o=Number(e.version.split(".")[0]),n=Number(e.version.split(".")[1]);if(o<2&&n<1)throw new Error("v-dragscroll supports vue version 2.1 and above. You are using Vue@"+e.version+". Please upgrade to the latest version of Vue.");e.directive("dragscroll",r.default)}};"undefined"!=typeof window&&window.Vue&&(window.VueDragscroll=i,window.Vue.use(i)),t.dragscroll=r.default,t.default=i},function(e,t,o){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},r=o(2),i=function(e){return e&&e.__esModule?e:{default:e}}(r),l=["mousedown","touchstart"],d=["mousemove","touchmove"],s=["mouseup","touchend"],u=function(e,t,o){var r=e,u=!0;"boolean"==typeof t.value?u=t.value:"object"===n(t.value)?("string"==typeof t.value.target?(r=e.querySelector(t.value.target))||console.error("There is no element with the current target value."):void 0!==t.value.target&&console.error("The parameter \"target\" should be be either 'undefined' or 'string'."),"boolean"==typeof t.value.active?u=t.value.active:void 0!==t.value.active&&console.error("The parameter \"active\" value should be either 'undefined', 'true' or 'false'.")):void 0!==t.value&&console.error("The passed value should be either 'undefined', 'true' or 'false' or 'object'.");var a=function(){var e=void 0,n=void 0,u=void 0,a=!1,c=!1;r.md=function(o){o.preventDefault();var i=o instanceof window.MouseEvent,l=i?o.pageX:o.touches[0].pageX,d=i?o.pageY:o.touches[0].pageY,s=document.elementFromPoint(l-window.pageXOffset,d-window.pageYOffset),a="nochilddrag"===t.arg,f=t.modifiers.noleft,v=t.modifiers.noright,m=t.modifiers.nomiddle,p=t.modifiers.noback,w=t.modifiers.noforward,h="firstchilddrag"===t.arg,y=s===r,g=s===r.firstChild,b=a?void 0!==s.dataset.dragscroll:void 0===s.dataset.noDragscroll;(y||b&&(!h||g))&&(1===o.which&&f||2===o.which&&m||3===o.which&&v||4===o.which&&p||5===o.which&&w||(u=1,e=i?o.clientX:o.touches[0].clientX,n=i?o.clientY:o.touches[0].clientY,"touchstart"===o.type&&(c=!0)))},r.mu=function(e){u=0,a&&i.default.emitEvent(o,"dragscrollend"),a=!1,"touchend"===e.type&&!0===c?(e.target.click(),c=!1):e.target.focus()},r.mm=function(l){var d=l instanceof window.MouseEvent,s=void 0,c=void 0,f={};if(u){a||i.default.emitEvent(o,"dragscrollstart"),a=!0;var v=r.scrollLeft+r.clientWidth>=r.scrollWidth||0===r.scrollLeft,m=r.scrollTop+r.clientHeight>=r.scrollHeight||0===r.scrollTop;s=-e+(e=d?l.clientX:l.touches[0].clientX),c=-n+(n=d?l.clientY:l.touches[0].clientY),t.modifiers.pass?(r.scrollLeft-=t.modifiers.y?-0:s,r.scrollTop-=t.modifiers.x?-0:c,r===document.body&&(r.scrollLeft-=t.modifiers.y?-0:s,r.scrollTop-=t.modifiers.x?-0:c),(v||t.modifiers.y)&&window.scrollBy(-s,0),(m||t.modifiers.x)&&window.scrollBy(0,-c)):(t.modifiers.x&&(c=-0),t.modifiers.y&&(s=-0),r.scrollLeft-=s,r.scrollTop-=c,r===document.body&&(r.scrollLeft-=s,r.scrollTop-=c)),f.deltaX=-s,f.deltaY=-c,i.default.emitEvent(o,"dragscrollmove",f)}},i.default.addEventListeners(r,l,r.md),i.default.addEventListeners(window,s,r.mu),i.default.addEventListeners(window,d,r.mm)};u?"complete"===document.readyState?a():window.addEventListener("load",a):(i.default.removeEventListeners(r,l,r.md),i.default.removeEventListeners(window,s,r.mu),i.default.removeEventListeners(window,d,r.mm))};t.default={bind:function(e,t,o){u(e,t,o)},update:function(e,t,o,n){JSON.stringify(t.value)!==JSON.stringify(t.oldValue)&&u(e,t,o)},unbind:function(e,t,o){var n=e;i.default.removeEventListeners(n,l,n.md),i.default.removeEventListeners(window,s,n.mu),i.default.removeEventListeners(window,d,n.mm)}}},function(e,t,o){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default={addEventListeners:function(e,t,o){for(var n=0,r=t.length;n<r;n++)e.addEventListener(t[n],o)},removeEventListeners:function(e,t,o){for(var n=0,r=t.length;n<r;n++)e.removeEventListener(t[n],o)},emitEvent:function(e,t,o){if(e.componentInstance)e.componentInstance.$emit(t,o);else{var n=void 0;"function"==typeof window.CustomEvent?n=new window.CustomEvent(t,{detail:o}):(n=document.createEvent("CustomEvent"),n.initCustomEvent(t,!0,!0,o)),e.elm.dispatchEvent(n)}}}}])});
+//# sourceMappingURL=vue-dragscroll.min.js.map
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/App.vue?vue&type=template&id=332fccf4&":
 /*!******************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/App.vue?vue&type=template&id=332fccf4& ***!
@@ -14894,6 +15065,12 @@ var render = function() {
                       width: _vm.width,
                       type: "img",
                       curPicture: _vm.curPicture
+                    },
+                    on: {
+                      clickPicture: _vm.clickPict,
+                      changePict: function($event) {
+                        _vm.curPicture = $event
+                      }
                     }
                   }),
                   _vm._v(" "),
@@ -14913,6 +15090,54 @@ var render = function() {
                       on: { click: _vm.clickNext }
                     },
                     [_c("i", { staticClass: "fa fa-chevron-right" })]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.bigPicture,
+                          expression: "bigPicture"
+                        }
+                      ],
+                      ref: "big_pict",
+                      staticClass: "big-picture",
+                      style: _vm.bigPictStyle
+                    },
+                    [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "close",
+                          on: {
+                            click: function($event) {
+                              _vm.bigPicture = false
+                            }
+                          }
+                        },
+                        [_c("i", { staticClass: "fas fa-times" })]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          directives: [
+                            { name: "dragscroll", rawName: "v-dragscroll" }
+                          ],
+                          style: _vm.divStyle
+                        },
+                        [
+                          _c("img", {
+                            attrs: {
+                              src: _vm.product.bigImages[_vm.curPicture]
+                            }
+                          })
+                        ]
+                      )
+                    ]
                   )
                 ],
                 1
@@ -14943,7 +15168,8 @@ var render = function() {
                     on: {
                       changePict: function($event) {
                         _vm.curPicture = $event
-                      }
+                      },
+                      clickPicture: _vm.clickPict
                     }
                   }),
                   _vm._v(" "),
@@ -14970,7 +15196,16 @@ var render = function() {
             ])
           ])
         ])
-      ])
+      ]),
+      _vm._v(" "),
+      _c("over-block", {
+        attrs: { active: _vm.bigPicture },
+        on: {
+          clickOver: function($event) {
+            _vm.bigPicture = false
+          }
+        }
+      })
     ],
     1
   )
@@ -16941,6 +17176,34 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/overblock.vue?vue&type=template&id=854303b8&":
+/*!*******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/overblock.vue?vue&type=template&id=854303b8& ***!
+  \*******************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", {
+    staticClass: "over-block",
+    class: { "is-active": _vm.active },
+    on: { click: _vm.onClick }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/owl-carousel.vue?vue&type=template&id=0bf5d224&":
 /*!**********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/owl-carousel.vue?vue&type=template&id=0bf5d224& ***!
@@ -16961,8 +17224,21 @@ var render = function() {
       _c(
         "div",
         {
+          ref: "slider",
           staticClass: "owl-wrapper",
-          style: { width: _vm.widthWrapper, transform: _vm.transWrapper }
+          style: {
+            width: _vm.widthWrapper,
+            transform: _vm.transWrapper,
+            transition: _vm.transition
+          },
+          on: {
+            pointerdown: function($event) {
+              return _vm.onSwipeStart($event)
+            },
+            pointerup: function($event) {
+              return _vm.onSwipeEnd($event)
+            }
+          }
         },
         _vm._l(_vm.images, function(el, ind) {
           return _c(
@@ -16985,7 +17261,14 @@ var render = function() {
                 },
                 [
                   _c("a", { staticClass: "lightbox-img" }, [
-                    _c("img", { attrs: { src: el } })
+                    _c("img", {
+                      attrs: { src: el },
+                      on: {
+                        mousedown: function($event) {
+                          $event.preventDefault()
+                        }
+                      }
+                    })
                   ])
                 ]
               )
@@ -32432,6 +32715,334 @@ if (false) {} else {
 
 /***/ }),
 
+/***/ "./node_modules/vue2-touch-events/index.js":
+/*!*************************************************!*\
+  !*** ./node_modules/vue2-touch-events/index.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ *
+ * @author    Jerry Bendy
+ * @since     4/12/2017
+ */
+
+function touchX(event) {
+    if(event.type.indexOf("mouse") !== -1){
+        return event.clientX;
+    }
+    return event.touches[0].clientX;
+}
+
+function touchY(event) {
+    if(event.type.indexOf("mouse") !== -1){
+        return event.clientY;
+    }
+    return event.touches[0].clientY;
+}
+
+var isPassiveSupported = (function() {
+    var supportsPassive = false;
+    try {
+        var opts = Object.defineProperty({}, 'passive', {
+            get: function() {
+                supportsPassive = true;
+            }
+        });
+        window.addEventListener('test', null, opts);
+    } catch (e) {}
+    return supportsPassive;
+})()
+
+
+var vueTouchEvents = {
+    install: function (Vue, options) {
+
+        // Set default options
+        options = Object.assign({}, {
+            disableClick: false,
+            tapTolerance: 10,
+            swipeTolerance: 30,
+            longTapTimeInterval: 400,
+            touchClass: ''
+        }, options || {})
+
+
+        function touchStartEvent(event) {
+            var $this = this.$$touchObj,
+                isTouchEvent = event.type.indexOf("touch") >= 0,
+                isMouseEvent = event.type.indexOf("mouse") >= 0
+
+            if (isTouchEvent) {
+                $this.lastTouchStartTime = event.timeStamp
+            }
+
+            if (isMouseEvent && $this.lastTouchStartTime && event.timeStamp - $this.lastTouchStartTime < 350) {
+                return
+            }
+
+            if ($this.touchStarted) {
+                return
+            }
+
+            addTouchClass(this)
+
+            $this.touchStarted = true
+
+            $this.touchMoved = false
+            $this.swipeOutBounded = false
+
+            $this.startX = touchX(event)
+            $this.startY = touchY(event)
+
+            $this.currentX = 0
+            $this.currentY = 0
+
+            $this.touchStartTime = event.timeStamp
+
+            triggerEvent(event, this, 'start')
+        }
+
+        function touchMoveEvent(event) {
+            var $this = this.$$touchObj
+
+            $this.currentX = touchX(event)
+            $this.currentY = touchY(event)
+
+            if (!$this.touchMoved) {
+                var tapTolerance = options.tapTolerance
+
+                $this.touchMoved = Math.abs($this.startX - $this.currentX) > tapTolerance ||
+                    Math.abs($this.startY - $this.currentY) > tapTolerance
+
+                if($this.touchMoved){
+                    triggerEvent(event, this, 'moved')
+                }
+
+            } else if (!$this.swipeOutBounded) {
+                var swipeOutBounded = options.swipeTolerance
+
+                $this.swipeOutBounded = Math.abs($this.startX - $this.currentX) > swipeOutBounded &&
+                    Math.abs($this.startY - $this.currentY) > swipeOutBounded
+            }
+
+            if($this.touchMoved){
+                triggerEvent(event, this, 'moving')
+            }
+        }
+
+        function touchCancelEvent() {
+            var $this = this.$$touchObj
+
+            removeTouchClass(this)
+
+            $this.touchStarted = $this.touchMoved = false
+            $this.startX = $this.startY = 0
+        }
+
+        function touchEndEvent(event) {
+            var $this = this.$$touchObj,
+                isTouchEvent = event.type.indexOf("touch") >= 0,
+                isMouseEvent = event.type.indexOf("mouse") >= 0
+
+            if (isTouchEvent) {
+                $this.lastTouchEndTime = event.timeStamp
+            }
+
+            if (isMouseEvent && $this.lastTouchEndTime && event.timeStamp - $this.lastTouchEndTime < 350) {
+                return
+            }
+
+            $this.touchStarted = false
+
+            removeTouchClass(this)
+
+            // Fix #33, Trigger `end` event when touch stopped
+            triggerEvent(event, this, 'end')
+
+            if (!$this.touchMoved) {
+                // detect if this is a longTap event or not
+                if ($this.callbacks.longtap && event.timeStamp - $this.touchStartTime > options.longTapTimeInterval) {
+                    event.preventDefault()
+                    triggerEvent(event, this, 'longtap')
+
+                } else {
+                    // emit tap event
+                    triggerEvent(event, this, 'tap')
+                }
+
+            } else if (!$this.swipeOutBounded) {
+                var swipeOutBounded = options.swipeTolerance, direction
+
+                if (Math.abs($this.startX - $this.currentX) < swipeOutBounded) {
+                    direction = $this.startY > $this.currentY ? "top" : "bottom"
+
+                } else {
+                    direction = $this.startX > $this.currentX ? "left" : "right"
+                }
+
+                // Only emit the specified event when it has modifiers
+                if ($this.callbacks['swipe.' + direction]) {
+                    triggerEvent(event, this, 'swipe.' + direction, direction)
+
+                } else {
+                    // Emit a common event when it has no any modifier
+                    triggerEvent(event, this, 'swipe', direction)
+                }
+            }
+        }
+
+        function mouseEnterEvent() {
+            addTouchClass(this)
+        }
+
+        function mouseLeaveEvent() {
+            removeTouchClass(this)
+        }
+
+        function triggerEvent(e, $el, eventType, param) {
+            var $this = $el.$$touchObj
+
+            // get the callback list
+            var callbacks = $this.callbacks[eventType] || []
+            if (callbacks.length === 0) {
+                return null
+            }
+
+            for (var i = 0; i < callbacks.length; i++) {
+                var binding = callbacks[i]
+
+                if (binding.modifiers.stop) {
+                    e.stopPropagation();
+                }
+
+                if (binding.modifiers.prevent) {
+                    e.preventDefault();
+                }
+
+                // handle `self` modifier`
+                if (binding.modifiers.self && e.target !== e.currentTarget) {
+                    continue
+                }
+
+                if (typeof binding.value === 'function') {
+                    if (param) {
+                        binding.value(param, e)
+                    } else {
+                        binding.value(e)
+                    }
+                }
+            }
+        }
+
+        function addTouchClass($el) {
+            var className = $el.$$touchClass || options.touchClass
+            className && $el.classList.add(className)
+        }
+
+        function removeTouchClass($el) {
+            var className = $el.$$touchClass || options.touchClass
+            className && $el.classList.remove(className)
+        }
+
+        Vue.directive('touch', {
+            bind: function ($el, binding) {
+
+                $el.$$touchObj = $el.$$touchObj || {
+                        // an object contains all callbacks registered,
+                        // key is event name, value is an array
+                        callbacks: {},
+                        // prevent bind twice, set to true when event bound
+                        hasBindTouchEvents: false
+                    }
+
+
+                // register callback
+                var eventType = binding.arg || 'tap'
+                switch (eventType) {
+                    case 'swipe':
+                        var _m = binding.modifiers
+                        if (_m.left || _m.right || _m.top || _m.bottom) {
+                            for (var i in binding.modifiers) {
+                                if (['left', 'right', 'top', 'bottom'].indexOf(i) >= 0) {
+                                    var _e = 'swipe.' + i
+                                    $el.$$touchObj.callbacks[_e] = $el.$$touchObj.callbacks[_e] || []
+                                    $el.$$touchObj.callbacks[_e].push(binding)
+                                }
+                            }
+                        } else {
+                            $el.$$touchObj.callbacks.swipe = $el.$$touchObj.callbacks.swipe || []
+                            $el.$$touchObj.callbacks.swipe.push(binding)
+                        }
+                        break
+
+                    default:
+                        $el.$$touchObj.callbacks[eventType] = $el.$$touchObj.callbacks[eventType] || []
+                        $el.$$touchObj.callbacks[eventType].push(binding)
+                }
+
+                // prevent bind twice
+                if ($el.$$touchObj.hasBindTouchEvents) {
+                    return
+                }
+
+                var passiveOpt = isPassiveSupported ? { passive: true } : false;
+                $el.addEventListener('touchstart', touchStartEvent, passiveOpt)
+                $el.addEventListener('touchmove', touchMoveEvent, passiveOpt)
+                $el.addEventListener('touchcancel', touchCancelEvent)
+                $el.addEventListener('touchend', touchEndEvent)
+
+                $el.addEventListener('mousedown', touchStartEvent)
+                $el.addEventListener('mousemove', touchMoveEvent)
+                $el.addEventListener('mouseup', touchEndEvent)
+                $el.addEventListener('mouseenter', mouseEnterEvent)
+                $el.addEventListener('mouseleave', mouseLeaveEvent)
+
+                // set bind mark to true
+                $el.$$touchObj.hasBindTouchEvents = true
+            },
+
+            unbind: function ($el) {
+                $el.removeEventListener('touchstart', touchStartEvent)
+                $el.removeEventListener('touchmove', touchMoveEvent)
+                $el.removeEventListener('touchcancel', touchCancelEvent)
+                $el.removeEventListener('touchend', touchEndEvent)
+
+                $el.removeEventListener('mousedown', touchStartEvent)
+                $el.removeEventListener('mousemove', touchMoveEvent)
+                $el.removeEventListener('mouseup', touchEndEvent)
+                $el.removeEventListener('mouseenter', mouseEnterEvent)
+                $el.removeEventListener('mouseleave', mouseLeaveEvent)
+
+                // remove vars
+                delete $el.$$touchObj
+            }
+        })
+
+        Vue.directive('touch-class', {
+            bind: function ($el, binding) {
+                $el.$$touchClass = binding.value
+            },
+            unbind: function ($el) {
+                delete $el.$$touchClass
+            }
+        })
+    }
+}
+
+
+/*
+ * Exports
+ */
+if (true) {
+    module.exports = vueTouchEvents
+
+} else {}
+
+
+/***/ }),
+
 /***/ "./node_modules/vuex/dist/vuex.esm.js":
 /*!********************************************!*\
   !*** ./node_modules/vuex/dist/vuex.esm.js ***!
@@ -33498,6 +34109,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./store */ "./resources/js/store.js");
 /* harmony import */ var v_tooltip__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! v-tooltip */ "./node_modules/v-tooltip/dist/v-tooltip.esm.js");
 /* harmony import */ var _components_product_subcategory_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/product/subcategory.vue */ "./resources/js/components/product/subcategory.vue");
+/* harmony import */ var vue2_touch_events__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue2-touch-events */ "./node_modules/vue2-touch-events/index.js");
+/* harmony import */ var vue2_touch_events__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(vue2_touch_events__WEBPACK_IMPORTED_MODULE_6__);
+
 
 
 
@@ -33531,6 +34145,7 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.directive('title', {
 });
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(VsNotify);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(v_tooltip__WEBPACK_IMPORTED_MODULE_4__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue2_touch_events__WEBPACK_IMPORTED_MODULE_6___default.a);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('subcategory', _components_product_subcategory_vue__WEBPACK_IMPORTED_MODULE_5__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('vs-notify', {
   template: '<div :class="[\'vs-notify\', group]" :style="styles"><transition-group :name="trans" mode="out-in">' + '<div :class="it.type" v-for="it in list" :key="it.id">' + '<slot name="body" :class="it.type" :item="it" :close="function(){ end(it) }">' + '<div @click.stop="end(it)" v-html="it.text"></div>' + '</slot>' + '</div>' + '</transition-group></div>',
@@ -36890,6 +37505,93 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/system/overblock.vue":
+/*!******************************************************!*\
+  !*** ./resources/js/components/system/overblock.vue ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _overblock_vue_vue_type_template_id_854303b8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./overblock.vue?vue&type=template&id=854303b8& */ "./resources/js/components/system/overblock.vue?vue&type=template&id=854303b8&");
+/* harmony import */ var _overblock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./overblock.vue?vue&type=script&lang=js& */ "./resources/js/components/system/overblock.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _overblock_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./overblock.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/system/overblock.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _overblock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _overblock_vue_vue_type_template_id_854303b8___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _overblock_vue_vue_type_template_id_854303b8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/system/overblock.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/system/overblock.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/system/overblock.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./overblock.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/overblock.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/system/overblock.vue?vue&type=style&index=0&lang=css&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/system/overblock.vue?vue&type=style&index=0&lang=css& ***!
+  \***************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_extract_text_webpack_plugin_dist_loader_js_ref_5_0_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_2_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_3_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/extract-text-webpack-plugin/dist/loader.js??ref--5-0!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--5-2!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--5-3!../../../../node_modules/vue-loader/lib??vue-loader-options!./overblock.vue?vue&type=style&index=0&lang=css& */ "./node_modules/extract-text-webpack-plugin/dist/loader.js?!./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/overblock.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_extract_text_webpack_plugin_dist_loader_js_ref_5_0_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_2_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_3_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_extract_text_webpack_plugin_dist_loader_js_ref_5_0_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_2_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_3_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_extract_text_webpack_plugin_dist_loader_js_ref_5_0_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_2_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_3_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_extract_text_webpack_plugin_dist_loader_js_ref_5_0_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_2_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_3_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_extract_text_webpack_plugin_dist_loader_js_ref_5_0_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_5_2_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_5_3_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/components/system/overblock.vue?vue&type=template&id=854303b8&":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/components/system/overblock.vue?vue&type=template&id=854303b8& ***!
+  \*************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_template_id_854303b8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./overblock.vue?vue&type=template&id=854303b8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/overblock.vue?vue&type=template&id=854303b8&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_template_id_854303b8___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_template_id_854303b8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/system/owl-carousel.vue":
 /*!*********************************************************!*\
   !*** ./resources/js/components/system/owl-carousel.vue ***!
@@ -37587,6 +38289,7 @@ function createStore() {
       settings: {},
       scrolled: 0,
       screenWidth: 0,
+      screenHeight: 0,
       nonVisibleMain: false,
       nonVisibleAside: false,
       visBacdrop: false,
@@ -37996,6 +38699,9 @@ function createStore() {
       setScreenWidth: function setScreenWidth(state, payload) {
         state.screenWidth = payload;
       },
+      setScreenHeight: function setScreenHeight(state, payload) {
+        state.screenHeight = payload;
+      },
       setVisBacdrop: function setVisBacdrop(state, payload) {
         state.visBacdrop = payload;
       },
@@ -38177,6 +38883,9 @@ function createStore() {
       screenWidth: function screenWidth(state) {
         return state.screenWidth;
       },
+      screenHeight: function screenHeight(state) {
+        return state.screenHeight;
+      },
       categoryFilters: function categoryFilters(state) {
         return state.categoryFilters;
       },
@@ -38202,7 +38911,7 @@ function createStore() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\OpenServer\OSPanel\domains\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
+module.exports = __webpack_require__(/*! D:\openserver\OSPanel\domains\microstone\resources\js\entry-server.js */"./resources/js/entry-server.js");
 
 
 /***/ })

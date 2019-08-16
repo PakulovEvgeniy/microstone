@@ -29,6 +29,8 @@
     },
     "dependencies": {
         "v-tooltip": "^2.0.2",
-        "vue-recaptcha": "^1.1.1"
+        "vue-dragscroll": "^1.10.0",
+        "vue-recaptcha": "^1.1.1",
+        "vue2-touch-events": "^2.0.0"
     }
 }

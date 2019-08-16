@@ -13,6 +13,7 @@ export function createStore () {
       settings: {},
       scrolled: 0,
       screenWidth: 0,
+      screenHeight: 0,
       nonVisibleMain: false,
       nonVisibleAside: false,
       visBacdrop:false,
@@ -191,6 +192,9 @@ export function createStore () {
       setScreenWidth (state, payload) {
         state.screenWidth = payload;
       },
+      setScreenHeight (state, payload) {
+        state.screenHeight = payload;
+      },
       setVisBacdrop (state, payload) {
         state.visBacdrop = payload;
       },
@@ -357,6 +361,9 @@ export function createStore () {
       },
       screenWidth(state) {
         return state.screenWidth;
+      },
+      screenHeight(state) {
+        return state.screenHeight;
       },
       categoryFilters(state) {
         return state.categoryFilters;

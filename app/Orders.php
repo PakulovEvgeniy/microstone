@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Category_description;
+use App\Category;
 
 class Orders extends Model
 {
@@ -37,6 +38,13 @@ class Orders extends Model
                 'sort_type' => $val->sort_type
             ];
         }
+
+        $cat = Category::where('id_1s', $id_1s)->first();
+        if ($cat) {
+            $cat->popul = $cat->popul + 1;
+            $cat->save();
+        }
+
     	return $res;
     }
     public static function getParamsOrders($id_1s)

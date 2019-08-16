@@ -40,6 +40,7 @@
         },
         mounted() {
           this.$store.commit('setScreenWidth',window.innerWidth);
+          this.$store.commit('setScreenHeight',window.innerHeight);
           window.addEventListener('resize', this.onResize);
         },
         beforeDestroy () {
@@ -48,6 +49,7 @@
         methods: {
           onResize() {
             this.$store.state.screenWidth = window.innerWidth;
+            this.$store.state.screenHeight = window.innerHeight;
           },
           onClick() {
             window.scrollTo({ top: 0, behavior: 'smooth' });

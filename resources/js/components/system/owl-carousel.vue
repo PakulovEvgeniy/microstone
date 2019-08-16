@@ -1,11 +1,11 @@
 <template>
     <div class="image-slider owl-carousel">
       <div class="owl-wrapper-outer">
-        <div class="owl-wrapper" :style="{'width': widthWrapper, 'transform': transWrapper}">
-          <div class="owl-item" v-for="(el, ind) in images" :key="ind" :style="{'width': width + 'px'}">
+        <div ref="slider" @pointerdown="onSwipeStart($event)" @pointerup="onSwipeEnd($event)" class="owl-wrapper" :style="{'width': widthWrapper, 'transform': transWrapper, 'transition': transition}">
+          <div  class="owl-item" v-for="(el, ind) in images" :key="ind" :style="{'width': width + 'px'}">
             <div :class="[type, {'active': curPicture==ind}]" @mouseenter="onMouseEnter(ind)">
               <a class="lightbox-img">
-                <img :src="el">
+                <img @mousedown.prevent :src="el">
               </a>
             </div>
           </div>
@@ -19,7 +19,11 @@
     export default {
         data() {
             return {
-              leftPict: 0
+              leftPict: 0,
+              dragStart: false,
+              offset: 0,
+              startX: 0,
+              startFirst: 0
             }
         },
         props: [
@@ -36,7 +40,12 @@
             return this.images.length * this.width * 2 + 'px';
           },
           transWrapper() {
-            return 'translate3d('+ -this.width*this.leftPict + 'px, 0px, 0px)';
+            return 'translate3d('+ (-this.width*this.leftPict+this.offset) + 'px, 0px, 0px)';
+          },
+          transition() {
+            if (!this.dragStart) {
+              return 'all 200ms ease 0s';
+            } 
           }
         },
         methods: {
@@ -44,6 +53,38 @@
               if (this.pictQty>1 && ind!=this.curPicture) {
                 this.$emit('changePict', ind);
               }
+            },
+            onSwipeStart(e) {
+
+              this.dragStart = true;
+              this.startX = e.clientX;
+              this.startFirst = this.startX;
+              this.$refs.slider.onpointermove = this.onSwipeMove;
+              this.$refs.slider.setPointerCapture(e.pointerId);
+            },
+            onSwipeEnd(e) {
+              this.dragStart = false;
+              this.$refs.slider.onpointermove = null;
+              this.$refs.slider.releasePointerCapture(e.pointerId);
+              let offset = e.clientX - this.startFirst;
+              if (offset>9) {
+                this.offset = 0;
+                this.$emit('changePict', Math.max(this.curPicture-1,0));
+              } else if (offset<-9){
+                this.offset = 0;
+                this.$emit('changePict', Math.min(this.curPicture+1, this.images.length-1));
+              } else {
+                this.offset = 0;
+                this.onClick();
+              }
+            },
+            onSwipeMove(e) {
+              let offs = e.clientX - this.startX;
+              this.startX = e.clientX;
+              this.offset = this.offset + offs;
+            },
+            onClick() {
+              this.$emit('clickPicture');
             }
         },
         watch: {
@@ -86,7 +127,6 @@
     position: relative;
     left: 0px;
     display: block;
-    transition: all 200ms ease 0s;
   }
   .lightbox-img img {
     vertical-align: middle;

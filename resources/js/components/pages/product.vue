@@ -18,14 +18,28 @@
               <div class="item-header">
                   <div ref="carus" class="col-header col-photo">
                       <div class="main-image-slider-wrap">
-                          <owl-carousel :pictQty="1" :images="product.images" :width="width" type="img" :curPicture="curPicture"></owl-carousel>
+                          <owl-carousel :pictQty="1" :images="product.images" 
+                            :width="width" type="img" 
+                            :curPicture="curPicture"
+                            @clickPicture="clickPict"
+                            @changePict="curPicture=$event"
+                          ></owl-carousel>
                           <a @click="clickPrev" class="button-left"><i class="fa fa-chevron-left"></i></a>
                           <a @click="clickNext" class="button-right"><i class="fa fa-chevron-right"></i></a>
+                          <div  :style="bigPictStyle" ref="big_pict" v-show="bigPicture" class="big-picture">
+                              <a @click="bigPicture=false" class="close">
+                                  <i class="fas fa-times"></i>
+                              </a>
+                              <div v-dragscroll :style="divStyle">
+                                <img :src="product.bigImages[curPicture]">
+                              </div>
+                          </div>
                       </div>
                       <div v-show="product.images.length>1" class="thumb-slider-wrap">
                           <owl-carousel :pictQty="4" :images="product.images2" 
                             :width="81" type="thumb" :curPicture="curPicture"
                             @changePict="curPicture=$event"
+                            @clickPicture="clickPict"
                           ></owl-carousel>
                           <a @click="clickPrev" class="button-left"><i class="fa fa-chevron-left"></i></a>
                           <a @click="clickNext" class="button-right"><i class="fa fa-chevron-right"></i></a>
@@ -34,6 +48,7 @@
               </div>
           </div>
       </div>
+      <over-block :active="bigPicture" @clickOver="bigPicture=false"></over-block>
     </div>
 </template>
 
@@ -42,19 +57,36 @@
     import Breadcrump from '../system/breadcrump.vue';
     import voblers from '../product/voblers.vue';
     import OwlCarousel from '../system/owl-carousel.vue';
+    import overBlock from '../system/overblock.vue';
+    import { dragscroll } from 'vue-dragscroll';
     export default {
         data() {
             return {
                curPicture: 0,
-               width: 355
+               width: 355,
+               bigPicture: false,
+               bigPictStyle: {
+                left: 0,
+                top: 0,
+                'max-height': 0,
+                'max-width': 0
+               },
+               divStyle: {
+                width: 'auto',
+                height: 'auto'
+               }
             }
+        },
+        directives: {
+          'dragscroll': dragscroll
         },
         computed: {
           ...mapGetters([
             'getCatalog',
             'getScreenState',
             'product',
-            'screenWidth'
+            'screenWidth',
+            'screenHeight'
           ]),
           title() {
               return this.product.name;
@@ -110,12 +142,29 @@
                 if (this.curPicture<0) {
                     this.curPicture = this.product.images.length-1;
                 }
+            },
+            clickPict(val) {
+                //console.dir(this.$refs.big_pict);
+                this.bigPicture = true;
+                setTimeout(() => {
+                    this.bigPictStyle['max-width'] = this.screenWidth+'px';
+                    this.bigPictStyle['max-height'] = this.screenHeight+'px';
+                    this.divStyle.width = 'auto';
+                    this.divStyle.height = 'auto';
+                    setTimeout(() => {
+                         this.bigPictStyle.left = 'calc(50% - '+parseInt(this.$refs.big_pict.clientWidth/2) +'px)';
+                         this.bigPictStyle.top =  'calc(50% - '+parseInt(this.$refs.big_pict.clientHeight/2) +'px)';
+                         this.divStyle.width = this.$refs.big_pict.clientWidth + 'px';
+                         this.divStyle.height = this.$refs.big_pict.clientHeight + 'px';
+                    }, 0);
+                }, 0);
             } 
         },
         components: {
             'bread-crump': Breadcrump,
             voblers,
-            'owl-carousel': OwlCarousel
+            'owl-carousel': OwlCarousel,
+            'over-block': overBlock
         },
         watch: {
             screenWidth(val) {
@@ -123,15 +172,19 @@
                     this.width = 335;
                     return;
                 }
-                this.width = this.$refs.carus.clientWidth - 50; 
+                this.width = this.$refs.carus.clientWidth - 50;
+                if (this.bigPicture) this.clickPict();
+            },
+            screenHeight(val) {
+              if (this.bigPicture) this.clickPict();  
             }
         },
         mounted() {
            if (this.getScreenState>1) {
                 this.width = 335;
                 return;
-            }
-            this.width = this.$refs.carus.clientWidth - 50;  
+           }
+           this.width = this.$refs.carus.clientWidth - 50; 
         }
     }
 </script>
@@ -264,6 +317,43 @@
         color: #3a3a3a;
         display: inline-block;
         line-height: 60px;
+    }
+    .big-picture {
+        padding: 10px;
+        -ms-box-shadow: 0 0 60px #ccc;
+        -moz-box-shadow: 0 0 60px #ccc;
+        -webkit-box-shadow: 0 0 60px #ccc;
+        box-shadow: 0 0 60px #ccc;
+        background-color: white;
+        position: fixed;
+        z-index: 10000;
+        display: block;
+        top: 50%;
+        left: 50%;
+        width: auto;
+        height: auto;
+        max-width: 200px;
+        max-height: 200px;
+        overflow: hidden;
+    }
+    .big-picture .close {
+        position: absolute;
+        right: 0px;
+        top: 5px;
+        cursor: pointer;
+        height: 20px;
+        width: 20px;
+        z-index: 100;
+        color: #d8d8d8;
+    }
+    .big-picture .close:hover {
+        color: gray;
+    }
+    .big-picture div {
+        position: relative;
+        overflow: hidden;
+        margin-top: -10px;
+        margin-left: -10px;
     }
     @media (max-width: 991px) {
         .price-item-title {

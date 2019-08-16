@@ -4,6 +4,7 @@ import router from './router';
 import {createStore} from './store';
 import VTooltip from 'v-tooltip';
 import Subcategory from './components/product/subcategory.vue';
+import Vue2TouchEvents from 'vue2-touch-events'
 
 var store = createStore();
 
@@ -26,6 +27,7 @@ Vue.directive('title', {
 
 Vue.use(VsNotify);
 Vue.use(VTooltip);
+Vue.use(Vue2TouchEvents);
 Vue.component('subcategory', Subcategory);
 Vue.component('vs-notify',
 {
