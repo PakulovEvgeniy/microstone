@@ -24,9 +24,17 @@ export function createStore () {
         date: '',
         items: []
       },
+      brands: {
+        date: '',
+        items: []
+      },
       banners: {
         date: '',
         items: []
+      },
+      popularProducts: {
+        category: [],
+        product: []
       },
       categoryFilters: {},
       groupValues: [],
@@ -115,6 +123,25 @@ export function createStore () {
           commit('setCatalog', dat.data);
         }
       },
+      async getBrands({commit, state}, data) {
+        if (state.brands.items.length) {
+          if (!state.brands.date) {
+            state.brands.date = new Date();
+            return;
+          }
+          let nDat = new Date();
+          let dif = (nDat.getTime() - state.brands.date.getTime())/1000;
+          if (dif<=3600) {
+            return;
+          }
+        }
+        let res = await axios.get('/api/products/brands');
+        let dat = res.data;
+
+        if (dat && dat.status == 'OK') {
+          commit('setBrands', dat.data);
+        }
+      },
       async getBanners({commit, state}, data) {
         if (state.banners.items.length) {
           if (!state.banners.date) {
@@ -122,7 +149,7 @@ export function createStore () {
             return;
           }
           let nDat = new Date();
-          let dif = (nDat.getTime() - state.catalog.date.getTime())/1000;
+          let dif = (nDat.getTime() - state.banners.date.getTime())/1000;
           if (dif<=3600) {
             return;
           }
@@ -132,6 +159,13 @@ export function createStore () {
 
         if (dat && dat.status == 'OK') {
           commit('setBanners', dat.data);
+        }
+      },
+      async getPopularProducts({commit, state}, data) {
+        let res = await axios.get('/api/products/popular');
+        let dat = res.data;
+        if (dat && dat.status == 'OK') {
+          commit('setPopularProducts', dat.data);
         }
       },
       async getOrders({commit, state}, data) {
@@ -218,6 +252,10 @@ export function createStore () {
         state.catalog.date = new Date();
         state.catalog.items = payload;
       },
+      setBrands(state, payload) {
+        state.brands.date = new Date();
+        state.brands.items = payload;
+      },
       setBanners(state, payload) {
         state.banners.date = new Date();
         state.banners.items = payload;
@@ -296,6 +334,10 @@ export function createStore () {
       },
       setProduct(state, payload) {
         state.product = payload;
+      },
+      setPopularProducts(state, payload) {
+        state.popularProducts.category = payload.category;
+        state.popularProducts.product = payload.product;
       }
     },
     getters: {
@@ -322,6 +364,9 @@ export function createStore () {
       },
       banners (state) {
         return state.banners.items;
+      },
+      brands (state) {
+        return state.brands.items;
       },
       auth (state) {
         return state.auth;
@@ -377,6 +422,9 @@ export function createStore () {
       product(state) {
         return state.product;
       },
+      popularProducts(state) {
+        return state.popularProducts
+      }
     }
   })
 }

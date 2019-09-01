@@ -63,7 +63,7 @@
         data() {
             return {
                curPicture: 0,
-               width: 355,
+               width: 335,
                bigPicture: false,
                bigPictStyle: {
                 left: 0,
@@ -165,6 +165,11 @@
             voblers,
             'owl-carousel': OwlCarousel,
             'over-block': overBlock
+        },
+        beforeRouteEnter (to, from, next) {
+          next(vm => {
+            vm.$store.commit('setNonVisibleAside', true);
+          })
         },
         watch: {
             screenWidth(val) {

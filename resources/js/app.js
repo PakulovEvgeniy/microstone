@@ -144,10 +144,14 @@ router.beforeEach((to, from, next) => {
 			store.commit('setNonVisibleMain', false);
 			return next();
 		}
-		Promise.all([store.dispatch('getCatalog'), store.dispatch('getBanners')])
+		Promise.all([store.dispatch('getCatalog')])
 		.then((res) => {
 				let arrProm = [];
-				if (to.path.indexOf('/category') != -1 && to.path.indexOf('/filters') == -1) {
+				if (to.name == 'home') {
+					arrProm.push(store.dispatch('getBanners'));
+					arrProm.push(store.dispatch('getPopularProducts'));
+				}
+				if (to.name == 'category') {
 					if (to.params['id']) {
 						let item = findItem(store.state.catalog.items, to.params['id']);
 						if (item && item.childrens.length == 0) {
@@ -165,8 +169,8 @@ router.beforeEach((to, from, next) => {
 						//store.commit('setCategoryFiltersAll',to.query);
 					}
 				}
-				if (to.path.indexOf('/filters') != -1) {
-					 store.commit('setNonVisibleAside', true);
+				if (to.name == 'filtersCategory') {
+					 //store.commit('setNonVisibleAside', true);
 					 if (to.params['idF']) {
 						let item = findItem(store.state.catalog.items, to.params['idF']);
 						if (item && item.childrens.length == 0) {
@@ -176,11 +180,14 @@ router.beforeEach((to, from, next) => {
 						}
 					 }
 				}
-				if (to.path.indexOf('/product') != -1) {
-					store.commit('setNonVisibleAside', true);
+				if (to.name == 'product') {
+					//store.commit('setNonVisibleAside', true);
 					if (to.params['id'] != from.params['id']) {
 						arrProm.push(store.dispatch('getProduct', to.params['id']));
 					}
+				}
+				if (to.name == 'allManufacturer') {
+					arrProm.push(store.dispatch('getBrands'));
 				}
 				return Promise.all(arrProm);
 		})

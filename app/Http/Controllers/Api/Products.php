@@ -10,6 +10,7 @@ use App\Groups;
 use App\Products as mod_Products;
 use App\Filters;
 use App\FiltersDef;
+use App\Brands;
 
 
 class Products extends Controller
@@ -53,6 +54,21 @@ class Products extends Controller
 				$stat = 'OK';
 				$data = Groups::getGroupsByChpu($qu['chpu']);
 			}
+		}
+		if ($param == 'popular') {
+			//$qu = $request->all();
+			//if (isset($qu['chpu'])) {
+			$stat = 'OK';
+			$data = [
+				'category' => Category::getPopularCategory(),
+				'product' => mod_Products::getPopularProduct()
+			];
+			//}
+		}
+		if ($param == 'brands') {
+			
+			$stat = 'OK';
+			$data = Brands::getBrands();
 		}
 		if ($param == 'product') {
 			$qu = $request->all();

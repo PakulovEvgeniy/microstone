@@ -22,6 +22,15 @@ class PriceParty extends Model
         return ['min' => ceil($prd[0]->min), 'max' => round($prd[0]->max)];
     }
 
+    public static function getMinMaxPriceForProduct($id_1s)
+    {
+        $prd = PriceParty::where(['product_id1s' => $id_1s, 'status' => 1])
+            ->select(DB::raw('MAX(price) as max, MIN(price) as min'))
+            ->get();
+
+        return ['min' => $prd[0]->min ? $prd[0]->min : 0, 'max' => $prd[0]->max ? $prd[0]->max : 0];
+    }
+
     public static function getProductsByFiltr($id_1s, $val)
     {
         $ar = explode('-', $val);

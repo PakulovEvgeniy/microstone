@@ -200,6 +200,11 @@
         components: {
             'bread-crump': Breadcrump,
             'filter-component': filterComp
+        },
+        beforeRouteEnter (to, from, next) {
+          next(vm => {
+            vm.$store.commit('setNonVisibleAside', true);
+          })
         }
     }
 </script>

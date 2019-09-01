@@ -9,6 +9,7 @@ import Category from './components/pages/category.vue';
 import CategoryF from './components/pages/categoryfilters.vue';
 import Home from './components/pages/home.vue';
 import Product from './components/pages/product.vue';
+import Manufacturer from './components/pages/manufacturer.vue';
 
 Vue.use(Router);
 
@@ -26,6 +27,8 @@ export default new Router({
     { path: '/category/:id', component: Category, name: 'category'},
     { path: '/category/:idF/filters', component: CategoryF, name: 'filtersCategory'},
     { path: '/product/:id', component: Product, name: 'product'},
+    { path: '/manufacturer', component: Manufacturer, name: 'allManufacturer' },
+    { path: '/manufacturer/:id', component: Manufacturer, name: 'manufacturer'},
     { path: '/about', component: PageComp, name: 'about' },
     { path: '/contact', component: PageComponent('Contact'), name: 'contact' },
     { path: '/account', component: PageComponent('Account'), name: 'account' },

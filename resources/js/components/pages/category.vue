@@ -169,10 +169,6 @@
             'bread-crump': Breadcrump,
             'page-products': PageProducts
         },
-        beforeRouteLeave (to, from, next) {
-            this.$store.commit('setNonVisibleAside', false);
-            next();
-        },
         beforeRouteEnter (to, from, next) {
           next(vm => {
             vm.setVisibleSide(vm.$route.params['id']);

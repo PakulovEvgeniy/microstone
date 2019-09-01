@@ -20,6 +20,39 @@ class PartyParams extends Model
     	return $prd->toArray();
     }
 
+    public static function getArrayOfParams($id_1s, $par_t) {
+    	$prd = PartyParams::where(['product_id1s' => $id_1s, 'param_type_id' => $par_t])
+    		->select('value')
+    		->groupBy('value')
+            ->get();
+        $res = [];
+        foreach ($prd as $val) {
+            $res[] = $val->value;
+        }
+    	return $res;
+    }
+
+    public static function getManufacturesByProduct($id_1s) {
+        $type_pr = ParamTypes::where('name', 'Производитель')->first();
+        $type_pr = $type_pr->id;
+
+    	$prd = PartyParams::where(['product_id1s' => $id_1s, 'param_type_id' => $type_pr])
+            ->select('value', 'value_id', 'full_name', 'logo')
+            ->leftJoin('brands','party_params.value_id','=','brands.id')
+    		->groupBy('value', 'value_id', 'full_name', 'logo')
+            ->get();
+        $res = [];
+        foreach ($prd as $val) {
+            $res[] = [
+              'id' => $val->value_id,
+              'name' => $val->value,
+              'full_name' => $val->full_name,
+              'logo' => $val->logo
+            ];
+        }
+    	return $res;
+    }
+
     public static function getMinMaxValueForCategory($id_1s, $param_type_id)
     {
         $prd = Products::where(['products.status' => 1, 'parent_id' => $id_1s])

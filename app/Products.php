@@ -13,6 +13,7 @@ use App\PartyParams;
 use App\PriceParty;
 use App\ProductsDescriptions;
 use App\ProductPictures;
+use App\ParamTypes;
 
 class Products extends Model
 {
@@ -48,6 +49,32 @@ class Products extends Model
     	}
     	return false;
     }
+    
+    public static function getPopularProduct() {
+        $res = [];
+        $type_pr = ParamTypes::where('name', 'Производитель')->first();
+        $type_pr = $type_pr->id;
+
+
+        $row = Products::where(['products.status' => 1])
+            ->orderBy('popul', 'DESC')
+            ->limit(8)->get();
+        foreach ($row as $val) {
+            $arr_manuf = PartyParams::getArrayOfParams($val->id_1s, $type_pr);
+            $price = PriceParty::getMinMaxPriceForProduct($val->id_1s);
+
+            $res[] = [
+                'id' => $val->id,
+                'image' => JSRender::resizeImage($val->image,80,80),
+                'name' => $val->products_descriptions->name,
+                'chpu' => $val->products_descriptions->chpu,
+                'manuf' => $arr_manuf,
+                'min_price' => $price['min'],
+                'max_price' => $price['max']
+            ];
+        }
+        return $res;
+    }
 
     public static function getProduct($id_1s)
     {
@@ -66,8 +93,10 @@ class Products extends Model
                 $pc2[] = '/image/' . $val['image'];
             }
         }
-        
+
+                
     	if ($prod) {
+            $arr_manuf = PartyParams::getManufacturesByProduct($id_1s);
             $res=[
                 'id' => $prod->id,
                 'id_1s' => $prod->id_1s,
@@ -77,7 +106,8 @@ class Products extends Model
                 'sku' => $prod->sku,
                 'images' => $pc,
                 'images2' => $pc1,
-                'bigImages' => $pc2
+                'bigImages' => $pc2,
+                'manuf' => $arr_manuf
             ];
             $prod->popul = $prod->popul+1;
             $prod->save();

@@ -67,6 +67,22 @@ class Category extends Model
         return $dat;
     }
 
+    public static function getPopularCategory() {
+        $res = [];
+        $row = Category::where(['status' => 1])
+            ->orderBy('popul', 'DESC')
+            ->limit(8)->get();
+        foreach ($row as $val) {
+            $res[] = [
+                'id' => $val->id,
+                'image' => JSRender::resizeImage($val->image,80,80),
+                'name' => $val->category_description->name,
+                'chpu' => $val->category_description->chpu
+            ];
+        }
+        return $res;
+    }
+
     public static function getCatalog($parent)
 	{
 		$dat = [];

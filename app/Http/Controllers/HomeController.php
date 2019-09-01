@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Category;
+use App\Products;
 use JSRender;
 
 class HomeController extends Controller
@@ -16,7 +17,11 @@ class HomeController extends Controller
 
         $ssr = JSRender::render($request->path(), [
             'catalog' => $data,
-            'banners' => $ban
+            'banners' => $ban,
+            'popularProducts' => [
+                'category' => Category::getPopularCategory(),
+                'product' => Products:: getPopularProduct()
+            ]
         ]);
         //$rend = $this->render($request->path()); 
         //$ssr = phpinfo();

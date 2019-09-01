@@ -5,7 +5,7 @@
           <div  class="owl-item" v-for="(el, ind) in images" :key="ind" :style="{'width': width + 'px'}">
             <div :class="[type, {'active': curPicture==ind}]" @mouseenter="onMouseEnter(ind)">
               <a class="lightbox-img">
-                <img @mousedown.prevent :src="el">
+                <img @mousedown.prevent :src="el" :style="{'max-width': width + 'px'}">
               </a>
             </div>
           </div>
