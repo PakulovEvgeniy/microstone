@@ -100,12 +100,14 @@ class Obmen extends Controller
            }
            $stat = 1;
 
-
+           $chpu = $this->translit($name);
+           
            $ord = Brands::firstOrNew(['id' => $id]);
            $ord->id = $id;
            $ord->name = $name;
            $ord->full_name = $fullname;
            $ord->cite = $cite;
+           $ord->chpu = $chpu;
            $ord->comment = $opis;
            $ord->kod_sort = $kod_sort;
            $ord->logo = 'catalog/' . $pict;

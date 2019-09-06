@@ -189,15 +189,23 @@ router.beforeEach((to, from, next) => {
 				if (to.name == 'allManufacturer') {
 					arrProm.push(store.dispatch('getBrands'));
 				}
+				if (to.name == 'manufacturer') {
+					arrProm.push(store.dispatch('getBrands'));
+					arrProm.push(store.dispatch('getCurBrand', to.params['id']));
+				}
 				return Promise.all(arrProm);
 		})
 		.then((res) => {
 			store.commit('setNonVisibleMain', false);
 			if (to.path.indexOf('/category') != -1) {
-					if (to.params['id'] || to.params['idF']) {
-						store.commit('setCategoryFiltersAll',to.query);
-					}
+				if (to.params['id'] || to.params['idF']) {
+					store.commit('setCategoryFiltersAll',to.query);
 				}
+			} else if (to.name == 'allManufacturer') {
+				if (to.query && to.query.page !== undefined) {
+					store.commit('setPageManuf', +to.query.page)
+				};
+			}
 			next();
 		})
 		.catch(e => {

@@ -20,6 +20,7 @@ export function createStore () {
       idTimeStartBack: null,
       idTimeStopBack: null,
       resetEmail: {},
+      pageManuf: 1,
       catalog: {
         date: '',
         items: []
@@ -28,6 +29,7 @@ export function createStore () {
         date: '',
         items: []
       },
+      curBrand: {},
       banners: {
         date: '',
         items: []
@@ -168,6 +170,13 @@ export function createStore () {
           commit('setPopularProducts', dat.data);
         }
       },
+      async getCurBrand({commit, state}, data) {
+        let res = await axios.get('/api/products/curbrand?chpu='+data);
+        let dat = res.data;
+        if (dat && dat.status == 'OK') {
+          commit('setCurBrand', dat.data);
+        }
+      },
       async getOrders({commit, state}, data) {
         let res = await axios.get('/api/products/orders?chpu='+data);
         let dat = res.data;
@@ -243,6 +252,12 @@ export function createStore () {
       },
       setNonVisibleAside (state, payload) {
         state.nonVisibleAside = payload;
+      },
+      setPageManuf (state, payload) {
+        state.pageManuf = payload;
+      },
+      setCurBrand (state, payload) {
+        state.curBrand = payload;
       },
       setFilters (state, payload) {
         state.filterItems = payload.filters;
@@ -424,6 +439,12 @@ export function createStore () {
       },
       popularProducts(state) {
         return state.popularProducts
+      },
+      pageManuf(state) {
+        return state.pageManuf
+      },
+      curBrand(state) {
+        return state.curBrand;
       }
     }
   })

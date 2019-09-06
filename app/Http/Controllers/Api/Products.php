@@ -30,6 +30,13 @@ class Products extends Controller
 				$data = Orders::getOrdersByChpu($qu['chpu']);
 			}
 		}
+		if ($param == 'curbrand') {
+			$qu = $request->all();
+			if (isset($qu['chpu'])) {
+				$stat = 'OK';
+				$data = Brands::getBrandByChpu($qu['chpu']);
+			}
+		}
 		if ($param == 'products_cat') {
 			$qu = $request->all();
 			if (isset($qu['chpu'])) {

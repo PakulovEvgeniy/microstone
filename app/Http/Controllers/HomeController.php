@@ -18,6 +18,7 @@ class HomeController extends Controller
         $ssr = JSRender::render($request->path(), [
             'catalog' => $data,
             'banners' => $ban,
+            'nonVisibleAside' => false,
             'popularProducts' => [
                 'category' => Category::getPopularCategory(),
                 'product' => Products:: getPopularProduct()

@@ -14,13 +14,35 @@ class Manufacturer extends Controller
         //return;
         $data = ['date' => '', 'items' => Category::getCatalog('')];
         $brands = ['date' => '', 'items' => Brands::getBrands()];
-        
-        $ssr = JSRender::render($request->path(), [
+
+        $filters = $request->all();
+        $page = 1;
+        if (isset($filters['page'])) {
+           $page = $filters['page'];
+        }
+
+        $id = $request->route('id');
+        $curBrand = [];
+        if ($id) {
+           $curBrand = Brands::getBrandByChpu($id); 
+        }
+
+        $title = 'Производители';
+
+        $dat = [
             'catalog' => $data,
-            'brands' => $brands
-        ]);
+            'brands' => $brands,
+            'nonVisibleAside' => true,
+            'pageManuf' => $page
+        ];
+        if (count($curBrand)) {
+            $dat['curBrand'] = $curBrand;
+            $title = $curBrand['full_name'];
+        }
+
+        $ssr = JSRender::render($request->path(), $dat);
         //$rend = $this->render($request->path()); 
         //$ssr = phpinfo();
-        return view('app', ['ssr' => $ssr, 'title' => 'Производители']);
+        return view('app', ['ssr' => $ssr, 'title' => $title]);
     }
 }
