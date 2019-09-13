@@ -40,9 +40,9 @@
                   <li><a>Списки</a></li>
                   <li><a>Уведомления</a></li>
                   <li><a>Обратная связь</a></li>
-                  <li><a @click.prevent="onExit">Выход</a>
-                      <form ref='logoutform' id="logout-form" :action="this.$router.options.base+'logout'" method="POST" style="display: none;">
-                       <input type="hidden" name="_token" id="csrf-token" :value="this.csrf">
+                  <li><a @click.prevent="$refs['logoutform'].submit()">Выход</a>
+                      <form ref='logoutform' id="logout-form" action="/logout" method="POST" style="display: none;">
+                       <input type="hidden" name="_token" id="csrf-token" :value="csrf">
                       </form>
                   </li>
                 </dropdown-menu>
@@ -61,8 +61,17 @@
                 </span>
               </div>
             </form>
+            <div class="mobile-header-btns">
+              <router-link class="btn-cart-link" to="/">
+                <i class="fa fa-shopping-cart btn-cart-link__cart"></i>
+                <span v-if="cartQty" class="btn-cart-link__badge">{{cartQty}}</span>
+              </router-link>
+              
+              <i @click="menuOpen = !menuOpen" class="fas btn-cart-link__menu" :class="{'has-notifies': hasNotifies, 'fa-bars': !menuOpen, 'fa-times': menuOpen}"></i>
+            </div>
           </div>
         </div>
+        <header-menu :open="menuOpen" @click="menuOpen=false"></header-menu>
       </div>
     </div>
 </template>
@@ -71,10 +80,11 @@
   import { mapGetters } from 'vuex';
   import UvedomlComp from './UvedomlComponent';
   import Dropdown from '../system/Dropdown';
+  import headerMenu from './header-menu.vue';
     export default {
         data() {
             return {
-                
+              menuOpen: false  
             }
         }, 
         computed: {
@@ -82,17 +92,18 @@
             'settings',
             'auth',
             'userEmail',
-            'csrf'
+            'csrf',
+            'cartQty',
+            'hasNotifies'
           ])
         }, 
         components: {
           'uvedoml-component': UvedomlComp,
-          'dropdown-menu': Dropdown
+          'dropdown-menu': Dropdown,
+          headerMenu
         }, 
         methods: {
-          onExit() {
-            this.$refs['logoutform'].submit();
-          }
+          
         }
     }
 </script>
@@ -160,6 +171,68 @@
       border-radius: 8px;
       border: none;
       outline: none;
+    }
+    .mobile-header-btns .btn-cart-link__cart {
+      color: #8c8c8c;
+      font-size: 20px;
+      margin-right: 8px;
+      line-height: 60px;
+    }
+    .mobile-header-btns .btn-cart-link {
+      color: #ffa218;
+      background: transparent;
+      font-weight: bold;
+      text-decoration: none;
+      position: relative;
+      width: 44px;
+    }
+    .mobile-header-btns {
+      position: relative;
+      height: 60px;
+      display: flex;
+    }
+    .mobile-header-btns>* {
+      display: block;
+      text-align: center;
+    }
+    .mobile-header-btns .btn-cart-link__menu {
+      color: #8c8c8c;
+      height: 60px;
+      margin: 0;
+      transition: background-color .1s ease;
+      width: 44px;
+      font-size: 21px;
+      cursor: pointer;
+      line-height: 60px;
+    }
+    .mobile-header-btns .btn-cart-link__menu.fa-times {
+      font-size: 25px;
+    }
+    .mobile-header-btns .btn-cart-link__badge {
+      border-radius: 13px;
+      background-image: linear-gradient(to top, #1D71B8, #2288DB);
+      color: #fff;
+      font-size: 12px;
+      font-weight: bolder;
+      height: 20px;
+      left: 15px;
+      padding-top: 3px;
+      position: absolute;
+      text-align: center;
+      top: 10px;
+      width: 20px;
+      line-height: 13px;
+    }
+    .btn-cart-link__menu.has-notifies:after {
+      background-color: #1D71B8;
+      border: 3px solid #fff;
+      border-radius: 10px;
+      content: ' ';
+      height: 13px;
+      position: absolute;
+      right: 5px;
+      top: 14px;
+      width: 13px;
     }
   }
   .basic-controls .main-search-form-button-container {

@@ -1,7 +1,7 @@
 <template>
     <label class="ui-checkbox" :class="{'ui-checkbox_list': list}">
       <span>{{caption}}</span>
-      <input type="checkbox" :class="{'ui-checkbox__input_list': list}" class="ui-checkbox__input" :value="value" @input="onInput($event)" v-model="model">
+      <input type="checkbox" :class="{'ui-checkbox__input_list': list}" class="ui-checkbox__input" :value="value" @change="onInput($event)" :checked="checked">
       <span class="ui-checkbox__box" :class="{'ui-checkbox__box_list': list}"></span>
     </label>
 </template>
@@ -17,7 +17,7 @@
          'caption',
          'name',
          'value',
-         'model',
+         'checked',
          'list'
         ], 
         components: {

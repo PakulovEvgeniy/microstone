@@ -1,8 +1,20 @@
 <template>
-    <div v-title="calcTitle">
+    <div class="manufacturer" v-title="calcTitle">
+      <page-top-back 
+        :link="!curManufacture ? '/' : '/manufacturer'" 
+        :name="!curManufacture ? 'Домашняя страница' : 'Производители'"
+      >
+      </page-top-back>
       <bread-crump v-show="getScreenState>1" :links="breadItems"></bread-crump>
+      <h1 v-if="getScreenState<2">{{calcTitle}}</h1>
+      <div class="category-items-phone">
+        <category-item-phone v-if="!curManufacture" :back="true" @click="isPodr = !isPodr"
+          :right="!isPodr" :alignright="!isPodr" :noborder="true" :name="isPodr ? 'Кратко' : 'Подробно'"
+        >
+        </category-item-phone>
+      </div>
       <div class="manuf-page__content">
-          <div class="manuf-page__left">
+          <div v-show="(getScreenState>1) || (!isPodr && !curManufacture)" class="manuf-page__left">
               <div class="left-manuf">
                   <div class="toc-index">
                       <h4>Производители</h4>
@@ -29,8 +41,8 @@
                   </div>
               </div>
           </div>
-          <div class="manuf-page__list">
-            <h1>{{calcTitle}}</h1>
+          <div v-show="getScreenState>1 || isPodr || curManufacture" class="manuf-page__list">
+            <h1 v-if="getScreenState>1">{{calcTitle}}</h1>
             <template v-if="!curManufacture">
               <article class="post-item" v-for="it in brandsPagyPage" :key="it.id">
                 <div class="post-item-image">
@@ -75,7 +87,7 @@
                     <div class="subpages-item" v-for="it in brandsCat" :key="it.idP">
                       <img :src="it.imageP" width="80" height="80" :alt="it.nameP">
                       <h2>{{it.nameP}}</h2>
-                      <ul>
+                      <ul class="subpages-subcat">
                         <li v-for="el in it.child" :key="el.id">
                           <router-link :to="el.chpu">
                             <img :src="el.image" width="35" height="35" :alt="el.name">
@@ -96,16 +108,19 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import AnchorRouterLink from 'vue-anchor-router-link';
+    import AnchorRouterLink from '../system/vue-anchor-router-link';
     import paginator from '../system/paginator.vue';
     import itemTabs from '../system/item-tabs.vue';
     import Breadcrump from '../system/breadcrump.vue';
+    import pageTopBack from '../system/page-top-back.vue';
+    import categoryItemPhone from '../product/category-item-phone.vue';
 
     export default {
         data() {
             return {
                 title: 'Производители',
-                activeTab: 0
+                activeTab: 0,
+                isPodr: false
             }
         },
         computed: {
@@ -233,7 +248,9 @@
           AnchorRouterLink,
           paginator,
           itemTabs,
-          'bread-crump': Breadcrump
+          'bread-crump': Breadcrump,
+          'page-top-back': pageTopBack,
+          categoryItemPhone
         },
         beforeRouteEnter (to, from, next) {
           next(vm => {
@@ -246,7 +263,7 @@
 <style>
   .manuf-page__left {
     height: 100%;
-    margin-right: 20px;
+    width: 100%;
   }
   .manuf-page__list {
     max-width: 902px;
@@ -305,11 +322,14 @@
     text-decoration: none;
     color: tomato;
   }
-  .manuf-page__list h1 {
+  .manuf-page__list h1, .manufacturer h1 {
     font-size: 28px;
     margin-top: 20px;
     font-weight: normal;
     margin-top: 0;
+  }
+  .manufacturer > h1 {
+    display: none;
   }
   .post-item {
     margin-bottom: 10px;
@@ -449,6 +469,9 @@
   .subpages li a:hover span{
     color: tomato;
   }
+  .category-items-phone {
+    display: none;
+  }
   @media (min-width: 1200px) {
     .manuf-page__left {
       width: 278px;
@@ -458,4 +481,40 @@
         width: calc(100% - 278px - 20px);
     }
   }
+  @media (max-width: 1199px) and (min-width: 992px) {
+    .manuf-page__left {
+      width: 234px;
+      margin-right: 12px;
+    }
+    .manuf-page__list {
+        width: calc(100% - 234px - 12px);
+    }
+  }
+  @media (max-width: 991px) {
+    .toc-index h4 {
+      display: none;
+    }
+    .manufacturer > h1 {
+      display: block;
+    }
+    .toc-index-list {
+      margin-top: 1.5em;
+    }
+    .toc-index a {
+      font: 20px monospace;
+      padding: .5em .5em;
+    }
+    .toc-list a {
+      line-height: 1.5em;
+      margin-bottom: .6em;
+      font-size: 18px;
+    }
+    .subpages-subcat a {
+      width: 100%;
+      line-height: 45px;
+    }
+    .category-items-phone {
+      display: block;
+    }
+   } 
 </style>

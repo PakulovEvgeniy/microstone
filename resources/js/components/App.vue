@@ -20,6 +20,7 @@
       <div :style="{right: leftTopBtn+'px'}" v-show="scrolled>200" id="scroll-top-button" @click="onClick">
         <i class="fas fa-arrow-up"></i>
       </div>
+      <wait-load></wait-load>
     </div>
 </template>
 
@@ -27,6 +28,7 @@
   import HeaderComponent from './layout/Header.vue';
   import CategoryMenu from './product/categorymenu.vue';
   import { mapGetters } from 'vuex';
+  import waitLoad from './system/wait-load.vue';
 
     export default {
         data() {
@@ -36,7 +38,8 @@
         }, 
         components: {
           'header-component': HeaderComponent,
-          'category-menu': CategoryMenu
+          'category-menu': CategoryMenu,
+          'wait-load': waitLoad
         },
         mounted() {
           this.$store.commit('setScreenWidth',window.innerWidth);

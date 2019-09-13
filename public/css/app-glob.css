@@ -52,6 +52,9 @@ body {
     background-color: #f6f6f6;
     min-width: 320px;
 }
+main {
+  display: block;
+}
 body.blocked {
     overflow: hidden;
     touch-action: none;
@@ -72,7 +75,7 @@ header {
 .container {
 	margin: 0 auto;
 }
-.container::after {
+.container:after {
 	content: " ";
     display: table;
     clear: both;
@@ -107,7 +110,6 @@ header {
     	margin: 0;
     	list-style: none;
     	justify-content: flex-start;
-    	align-items: center;
 }
 
 .main-search-form {
@@ -173,6 +175,7 @@ header {
 }
 .header-buttons {
 	display: block;
+  min-width: 418px;
 }
 
 .header-buttons .btn-cart {

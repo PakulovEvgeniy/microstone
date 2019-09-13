@@ -84,7 +84,7 @@
   .slide-inner img {
     display: block;
     border: 0;
-    width: 908px;
+    width: 100%;
     height: 266px;
   }
   .slider-box-wrapper .bx-wrapper {
@@ -95,6 +95,7 @@
     overflow: hidden;
     position: relative;
     height: 266px;
+    background-color: #fff;
   }
   .bx-viewport ul {
     width: auto;
@@ -186,8 +187,12 @@
     }
   }
   @media (max-width: 991px) {
-    .slider-box-wrapper {
-      display: none;
+    .slide-inner img {
+      width: 100%;
+      height: 205px;
+    }
+    .bx-viewport {
+      height: 205px;
     }
   }
 </style>

@@ -45,4 +45,9 @@
     color: rgb(29, 113, 184);
     text-decoration: none;
   }
+  @media (max-width: 991px) {
+    .breadcrump {
+      display: none;
+    }
+  }
 </style>

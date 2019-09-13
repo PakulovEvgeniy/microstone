@@ -66,7 +66,26 @@ export function createStore () {
       },
       filterItems: [],
       filterItemsDef: [],
-      product: {}
+      product: {},
+      activeWait: {
+        'block': false,
+        'wait': false
+      },
+      cart: {
+        cart_items: [
+          {id: 0}
+        ]
+      },
+      wishlist: {
+        items: [
+          {id: 0}
+        ]
+      },
+      waitlist: {
+        items: [
+          {id: 0}
+        ]
+      }
     },
     actions: {
       setAuth ({ commit }, data) {
@@ -105,6 +124,7 @@ export function createStore () {
         } else {
              $notify("alert", e.message, "error");
         }
+        commit('setActiveWait', {'wait': false, 'block': false});
       },
       async getCatalog({commit, state}, data) {
         if (state.catalog.items.length) {
@@ -353,6 +373,17 @@ export function createStore () {
       setPopularProducts(state, payload) {
         state.popularProducts.category = payload.category;
         state.popularProducts.product = payload.product;
+      },
+      setActiveWait(state, payload) {
+        if (typeof(payload) == 'boolean') {
+          state.activeWait.wait = payload;
+        } else {
+          state.activeWait.wait = payload.wait;
+          state.activeWait.block = payload.block;
+        }
+      },
+      setActiveBlock(state, payload) {
+        state.activeWait.block = payload
       }
     },
     getters: {
@@ -445,6 +476,21 @@ export function createStore () {
       },
       curBrand(state) {
         return state.curBrand;
+      },
+      activeWait(state) {
+        return state.activeWait;
+      },
+      cartQty(state) {
+        return state.cart.cart_items.length;
+      },
+      hasNotifies(state) {
+        return true
+      },
+      wishlist(state) {
+        return state.wishlist;
+      },
+      waitlist(state) {
+        return state.waitlist;
       }
     }
   })

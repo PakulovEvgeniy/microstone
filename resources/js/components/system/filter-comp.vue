@@ -24,7 +24,7 @@
             <span class="ui-input-search__icon ui-input-search__icon_search ui-input-search__icon_list"><i class="fa fa-search"></i></span>
           </div>
           <div class="ui-checkbox-group ui-checkbox-group_list">
-            <checkbox-button v-for="it in filterDiap" :key="it.id" :list="true" :value="it.id" :caption="it.cap" @input="onInputCheck($event)" :model="itemGrp.fChecked"></checkbox-button>
+            <checkbox-button v-for="it in filterDiap" :key="it.id" :list="true" :value="it.id" :caption="it.cap" @input="onInputCheck($event)" :checked="itemGrp.fChecked.find(el => el==it.id)"></checkbox-button>
           </div>
           <div>
             <a v-if="itemGrp.fChecked.length>0" @click="clearCheck($event)" class="ui-link ui-link_red ui-link_pseudolink ui-list-controls__link ui-list-controls__link_clear">Сбросить</a>
@@ -196,6 +196,12 @@ import checkboxButton from './checkbox-button';
             this.onValue(this.$refs.inp2);
           },
           onValue(fromRoute) {
+            //if (fromRoute !== true) {
+            //  if (this.$refs.inp2 == fromRoute) {
+            //    console.log(fromRoute.value);
+            //    console.log(this.itemGrp.maxValue)
+            //  }
+            //}
             let from;
             if (this.itemGrp.minValue === '') {
               from = this.minMaxValue.min;

@@ -1,5 +1,12 @@
 <template>
     <div v-title="title">
+      <nav class="main-page-panel-link">
+        <router-link to="/category">
+          <i class="fas fa-shopping-bag bag"></i>
+          <span>Каталог</span>
+          <i class="fa fa-chevron-right arrow"></i>
+        </router-link>
+      </nav>
       <banner :bannerList="banners"></banner>
       <div class="good-list">
         <h2>Популярные товары и категории</h2>
@@ -132,9 +139,67 @@
       font-size: 11px;
       color: #333;
     }
+    .main-page-panel-link {
+      position: relative;
+      display: none;
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+    .main-page-panel-link:before {
+      background: rgba(29, 113, 184,0.8);
+      display: block;
+      content: ' ';
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .main-page-panel-link a {
+      color: #fff;
+      display: block;
+      text-decoration: none !important;
+      position: absolute;
+      top: 0;
+      line-height: 23px;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      padding-left: 65px;
+    }
+    .main-page-panel-link a:before {
+      display: inline-block;
+      content: ' ';
+      height: 100%;
+      vertical-align: middle;
+    }
+    .main-page-panel-link a span {
+      display: inline-block;
+      vertical-align: middle;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .main-page-panel-link a i {
+      position: absolute;
+      bottom: auto;
+      font-size: 25px;
+      top: calc(50% - 15px);
+    }
+    .main-page-panel-link a .arrow {
+      right: 30px;
+    }
+    .main-page-panel-link a .bag {
+      left: 30px;
+    }
     @media (max-width: 991px) {
       .good-list {
         display: none;
+      }
+      .main-page-panel-link {
+        height: 90px;
+        display: block;
       }
     }
     @media (max-width: 1199px) and (min-width: 992px) {

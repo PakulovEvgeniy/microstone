@@ -15,6 +15,7 @@
         "cross-env": "^5.1",
         "jquery": "^3.4.0",
         "laravel-mix": "^4.0.7",
+        "laravel-mix-polyfill": "^1.1.0",
         "lodash": "^4.17.15",
         "mini-css-extract-plugin": "^0.6.0",
         "popper.js": "^1.12",
@@ -28,6 +29,8 @@
         "vuex": "^3.1.0"
     },
     "dependencies": {
+        "@babel/preset-env": "^7.6.0",
+        "core-js": "^2.5.7",
         "v-tooltip": "^2.0.2",
         "vue-anchor-router-link": "^0.8.4",
         "vue-dragscroll": "^1.10.0",

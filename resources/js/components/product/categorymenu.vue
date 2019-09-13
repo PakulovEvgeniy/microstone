@@ -133,6 +133,7 @@ import { mapGetters } from 'vuex';
   }
   .catalog li>a {
     min-height: 40px;
+    height: 40px;
   }
   .catalog>li:last-child {
     box-shadow: inset 0 -1px 0 0 #ddd;

@@ -1,9 +1,6 @@
 <template>
     <div class="category-item"  v-title="itemHeader">
-      <div class="products-page__mobile-back" v-show="!itemChilds.length">
-        <i class="fa fa-chevron-left"></i>
-        <router-link class="products-page__mobile-back-link" :to="parLink">{{parName}}</router-link>
-      </div>
+      <page-top-back v-if="!itemChilds.length" :link="parLink" :name="parName"></page-top-back>
       <bread-crump v-show="getScreenState>1" :links="breadItems"></bread-crump>
       <h1 v-html="itemHeader"></h1>
       <div class="item-descr" v-html="itemDescr"></div>
@@ -17,31 +14,10 @@
               </router-link>
           </div>
           <div v-show="getScreenState<2" class="category-items-phone">
-              <div class="category-item-phone back">
-                  <router-link :to="parLink">
-                      <i class="fa fa-chevron-left"></i>
-                      <div class="caption">
-                          <div class="vertical-container">
-                              <span>{{parName}}</span>
-                          </div>
-                      </div>
-                  </router-link>
-              </div>
-              <div v-for="it in itemChilds" :key="it.id" class="category-item-phone">
-                  <router-link :to="'/category/'+it.chpu">
-                      <div class="image">
-                          <picture><img width="35px" height="35px" :src="it.image2"></picture>
-                      </div>
-                      <div class="caption">
-                          <div class="vertical-container">
-                              <span>{{it.name}}</span>
-                          </div>
-                      </div>
-                      <div class="category-link">
-                          <i class="fa fa-chevron-right"></i>
-                      </div>
-                  </router-link>
-              </div>
+              <category-item-phone :link="parLink" :back="true" :name="parName">
+              </category-item-phone>
+              <category-item-phone v-for="it in itemChilds" :key="it.id" :link="'/category/'+it.chpu" :image="it.image2" :name="it.name" :right="true">
+              </category-item-phone>
           </div>
       </div>
       <page-products v-else></page-products>
@@ -52,6 +28,8 @@
     import { mapGetters } from 'vuex';
     import Breadcrump from '../system/breadcrump.vue';
     import PageProducts from '../product/pageproducts.vue';
+    import pageTopBack from '../system/page-top-back.vue';
+    import categoryItemPhone from '../product/category-item-phone.vue';
     export default {
         data() {
             return {
@@ -167,7 +145,9 @@
         }, 
         components: {
             'bread-crump': Breadcrump,
-            'page-products': PageProducts
+            'page-products': PageProducts,
+            'page-top-back': pageTopBack,
+            categoryItemPhone
         },
         beforeRouteEnter (to, from, next) {
           next(vm => {
@@ -242,99 +222,4 @@
         margin-bottom: 5px;
         margin-top: 5px;
     }
-    .products-page__mobile-back {
-        display: none;
-        padding: 20px 15px;
-    }
-    .products-page__mobile-back i {
-        font-size: 13px;
-    }
-    .products-page__mobile-back-link {
-        text-decoration: none;
-        color: #333;
-        padding-left: 5px;
-        margin-right: 5px;
-    }
-    .products-page__mobile-back-link:hover {
-        color: #00608d;
-        text-decoration: underline;
-    }
-    .category-item-phone {
-        width: 100%;
-        height: 95px;
-        display: block;
-        border-bottom: 1px solid #ddd;
-        padding-left: 45px;
-        background-color: white;
-    }
-    .category-item-phone.back {
-        background-color: #f5f4f5;
-    }
-    .category-item-phone a {
-        color: #333;
-        display: table;
-        height: 100%;
-        text-decoration: none;
-        width: 100%;
-    }
-    .category-item-phone i {
-        display: inline-block;
-        font-size: 13px;
-        line-height: 60px;
-        margin-left: -12px;
-        text-align: center;
-        width: 36px;
-    }
-    .category-item-phone .caption, .category-item-phone .category-link {
-        display: table-cell;
-        font-size: 13px;
-        height: 100%;
-    }
-    .category-item-phone .caption2 {
-        vertical-align: middle;
-    }
-    .category-item-phone:first-child a .caption {
-        padding-left: 0;
-    }
-    .category-item-phone .category-link>i {
-        color: #ccc;
-    }
-    .category-item-phone:hover, .category-item-phone:focus {
-        background-color: #f6f6f6;
-    }
-  @media (max-width: 991px) {
-    .products-page__mobile-back {
-      display: block;
-    }
-    .category-item-phone {
-        height: 60px;
-        padding: 0 36px;
-    }
-    .category-item-phone .caption {
-        font-size: 16px !important;
-        line-height: 60px;
-        padding: 0 13px;
-        width: 100%;
-    }
-    .category-item-phone .caption>* {
-        line-height: normal;
-    }
-    .category-item-phone .image {
-        display: block;
-        line-height: 60px;
-        position: relative;
-        text-align: center;
-        top: 13px;
-        width: 36px;
-    }
-  }
-
-  @media (max-width: 991px) and (min-width: 768px) {
-    .products-page__mobile-back {
-      padding: 20px 0;
-    }
-    .category-item-phone .caption {
-        padding-left: 15px;
-    }
-  }
 </style>

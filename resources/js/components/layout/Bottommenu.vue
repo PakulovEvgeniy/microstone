@@ -95,6 +95,9 @@
 </script>
 
 <style>
+   .logo-container {
+    min-width: 220px;
+   }
    .logo-container .logo-chevron {
       width: 30px;
       background: none;

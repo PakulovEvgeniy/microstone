@@ -134,84 +134,91 @@ function findItem(items, id) {
 router.beforeEach((to, from, next) => {
 	if (inLoginInterface(to.path)) {
 		store.commit('setNonVisibleMain', true)
-		next()
-	} else {
-		if (global && global.process && global.process.env.VUE_ENV == 'server') {
-			store.commit('setNonVisibleMain', false);
-			return next();
-		}
-		if (!from.name) {
-			store.commit('setNonVisibleMain', false);
-			return next();
-		}
-		Promise.all([store.dispatch('getCatalog')])
-		.then((res) => {
-				let arrProm = [];
-				if (to.name == 'home') {
-					arrProm.push(store.dispatch('getBanners'));
-					arrProm.push(store.dispatch('getPopularProducts'));
-				}
-				if (to.name == 'category') {
-					if (to.params['id']) {
-						let item = findItem(store.state.catalog.items, to.params['id']);
-						if (item && item.childrens.length == 0) {
-							let para = {};
-							Object.assign(para, to.query);
-							para.chpu = to.params['id'];
-							arrProm.push(store.dispatch('getProductPage', para));
-							if (to.params['id'] != from.params['id']) {
-								arrProm.push(store.dispatch('getOrders', to.params['id']));
-								arrProm.push(store.dispatch('getGroups', to.params['id']));
-								arrProm.push(store.dispatch('getFilters', to.params['id']));
-								//arrProm.push(store.dispatch('getGrpDataOfCategory', to.params['id']));
-							}
-						}
-						//store.commit('setCategoryFiltersAll',to.query);
-					}
-				}
-				if (to.name == 'filtersCategory') {
-					 //store.commit('setNonVisibleAside', true);
-					 if (to.params['idF']) {
-						let item = findItem(store.state.catalog.items, to.params['idF']);
-						if (item && item.childrens.length == 0) {
-							if (to.params['idF'] != from.params['idF']) {
-								arrProm.push(store.dispatch('getFilters', to.params['idF']));
-							}
-						}
-					 }
-				}
-				if (to.name == 'product') {
-					//store.commit('setNonVisibleAside', true);
-					if (to.params['id'] != from.params['id']) {
-						arrProm.push(store.dispatch('getProduct', to.params['id']));
-					}
-				}
-				if (to.name == 'allManufacturer') {
-					arrProm.push(store.dispatch('getBrands'));
-				}
-				if (to.name == 'manufacturer') {
-					arrProm.push(store.dispatch('getBrands'));
-					arrProm.push(store.dispatch('getCurBrand', to.params['id']));
-				}
-				return Promise.all(arrProm);
-		})
-		.then((res) => {
-			store.commit('setNonVisibleMain', false);
-			if (to.path.indexOf('/category') != -1) {
-				if (to.params['id'] || to.params['idF']) {
-					store.commit('setCategoryFiltersAll',to.query);
-				}
-			} else if (to.name == 'allManufacturer') {
-				if (to.query && to.query.page !== undefined) {
-					store.commit('setPageManuf', +to.query.page)
-				};
-			}
-			next();
-		})
-		.catch(e => {
-            store.dispatch('showError', e);
-        });
+		return next();
+	} 
+	if (global && global.process && global.process.env.VUE_ENV == 'server') {
+		store.commit('setNonVisibleMain', false);
+		return next();
 	}
+	if (!from.name) {
+		store.commit('setNonVisibleMain', false);
+		return next();
+	}
+	store.commit('setActiveBlock', true);
+	let ta = setTimeout(() => {
+		store.commit('setActiveWait', true);
+	}, 200);
+	Promise.all([store.dispatch('getCatalog')])
+	.then((res) => {
+			let arrProm = [];
+			if (to.name == 'home') {
+				arrProm.push(store.dispatch('getBanners'));
+				arrProm.push(store.dispatch('getPopularProducts'));
+			}
+			if (to.name == 'category') {
+				if (to.params['id']) {
+					let item = findItem(store.state.catalog.items, to.params['id']);
+					if (item && item.childrens.length == 0) {
+						let para = {};
+						Object.assign(para, to.query);
+						para.chpu = to.params['id'];
+						arrProm.push(store.dispatch('getProductPage', para));
+						if (to.params['id'] != from.params['id']) {
+							arrProm.push(store.dispatch('getOrders', to.params['id']));
+							arrProm.push(store.dispatch('getGroups', to.params['id']));
+							arrProm.push(store.dispatch('getFilters', to.params['id']));
+							//arrProm.push(store.dispatch('getGrpDataOfCategory', to.params['id']));
+						}
+					}
+					//store.commit('setCategoryFiltersAll',to.query);
+				}
+			}
+			if (to.name == 'filtersCategory') {
+				 //store.commit('setNonVisibleAside', true);
+				 if (to.params['idF']) {
+					let item = findItem(store.state.catalog.items, to.params['idF']);
+					if (item && item.childrens.length == 0) {
+						if (to.params['idF'] != from.params['idF']) {
+							arrProm.push(store.dispatch('getFilters', to.params['idF']));
+						}
+					}
+				 }
+			}
+			if (to.name == 'product') {
+				//store.commit('setNonVisibleAside', true);
+				if (to.params['id'] != from.params['id']) {
+					arrProm.push(store.dispatch('getProduct', to.params['id']));
+				}
+			}
+			if (to.name == 'allManufacturer') {
+				arrProm.push(store.dispatch('getBrands'));
+			}
+			if (to.name == 'manufacturer') {
+				arrProm.push(store.dispatch('getBrands'));
+				arrProm.push(store.dispatch('getCurBrand', to.params['id']));
+			}
+			return Promise.all(arrProm);
+	})
+	.then((res) => {
+		store.commit('setNonVisibleMain', false);
+		if (to.path.indexOf('/category') != -1) {
+			if (to.params['id'] || to.params['idF']) {
+				store.commit('setCategoryFiltersAll',to.query);
+			}
+		} else if (to.name == 'allManufacturer') {
+			if (to.query && to.query.page !== undefined) {
+				store.commit('setPageManuf', +to.query.page)
+			};
+		}
+		clearTimeout(ta);
+		store.commit('setActiveWait', {'wait': false, 'block': false});
+		next();
+	})
+	.catch(e => {
+		clearTimeout(ta);
+        store.dispatch('showError', e);
+    });
+	
 })
 
 export default new Vue({
