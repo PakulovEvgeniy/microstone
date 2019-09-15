@@ -1815,9 +1815,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         top: 0,
         behavior: 'smooth'
       });
+    },
+    blockBody: function blockBody(scrSt, val) {
+      var body = document.querySelector('body');
+
+      if (body) {
+        if (scrSt < 2) {
+          if (val) {
+            body.classList.add('blocked');
+          } else {
+            body.classList.remove('blocked');
+          }
+        } else {
+          body.classList.remove('blocked');
+        }
+      }
     }
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_8__["mapGetters"])(['settings', 'nonVisibleMain', 'nonVisibleAside', 'scrolled', 'screenWidth']), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_8__["mapGetters"])(['settings', 'nonVisibleMain', 'nonVisibleAside', 'scrolled', 'screenWidth', 'bodyBlocked', 'getScreenState']), {
     leftTopBtn: function leftTopBtn() {
       var res;
       res = Math.max(this.screenWidth / 2 - 670, 30);
@@ -1833,7 +1848,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return this.$store.state;
     }
-  })
+  }),
+  watch: {
+    bodyBlocked: function bodyBlocked(val) {
+      this.blockBody(this.getScreenState, val);
+    },
+    getScreenState: function getScreenState(val) {
+      this.blockBody(val, this.bodyBlocked);
+    }
+  }
 });
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
@@ -2543,42 +2566,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       idTime2: null
     };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_5__["mapGetters"])(['isBottomMenuFixed', 'getScreenState', 'visBacdrop', 'nonVisibleAside', 'idTimeStartBack', 'idTimeStopBack'])),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_5__["mapGetters"])(['isBottomMenuFixed', 'getScreenState', 'visBacdrop', 'nonVisibleAside', 'idTimeStartBack', 'idTimeStopBack', 'visBacdrop'])),
   methods: {
     onScroll: function onScroll(e) {
       this.$store.state.scrolled = window.pageYOffset;
     },
     onMouseEnter2: function onMouseEnter2() {
-      var _this = this;
-
-      if (!this.nonVisibleAside) {
-        return;
-      }
-
-      if (this.visBacdrop) {
-        clearTimeout(this.idTimeStopBack);
-        return;
-      }
-
-      this.$store.commit('setIdTimeStartBack', setTimeout(function () {
-        _this.$store.commit('setVisBacdrop', true);
-      }, 300));
-    },
-    onMouseLeave2: function onMouseLeave2() {
-      var _this2 = this;
-
-      if (!this.nonVisibleAside) {
-        return;
-      }
-
-      if (!this.visBacdrop) {
-        clearTimeout(this.idTimeStartBack);
-        return;
-      }
-
-      this.$store.commit('setIdTimeStopBack', setTimeout(function () {
-        _this2.$store.commit('setVisBacdrop', false);
-      }, 300));
+      this.$store.commit('setVisBacdrop', !this.visBacdrop);
     }
   },
   mounted: function mounted() {
@@ -2767,6 +2761,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
@@ -2783,7 +2780,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     'dropdown-menu': _system_Dropdown__WEBPACK_IMPORTED_MODULE_7__["default"],
     headerMenu: _header_menu_vue__WEBPACK_IMPORTED_MODULE_8__["default"]
   },
-  methods: {}
+  methods: {},
+  beforeDestroy: function beforeDestroy() {
+    this.$store.commit('setBodyBlocked', false);
+  },
+  watch: {
+    menuOpen: function menuOpen(val) {
+      this.$store.commit('setBodyBlocked', val);
+    }
+  }
 });
 
 /***/ }),
@@ -3633,7 +3638,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es6.function.name */ "./node_modules/core-js/modules/es6.function.name.js");
 /* harmony import */ var core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_function_name__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _system_vue_anchor_router_link__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../system/vue-anchor-router-link */ "./resources/js/components/system/vue-anchor-router-link.vue");
+/* harmony import */ var _system_vue_anchor_router_link__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../system/vue-anchor-router-link */ "./resources/js/components/system/vue-anchor-router-link.vue");
 /* harmony import */ var _system_paginator_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../system/paginator.vue */ "./resources/js/components/system/paginator.vue");
 /* harmony import */ var _system_item_tabs_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../system/item-tabs.vue */ "./resources/js/components/system/item-tabs.vue");
 /* harmony import */ var _system_breadcrump_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../system/breadcrump.vue */ "./resources/js/components/system/breadcrump.vue");
@@ -3897,7 +3902,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   components: {
-    AnchorRouterLink: _system_vue_anchor_router_link__WEBPACK_IMPORTED_MODULE_14__["default"],
+    AnchorRouterLink: _system_vue_anchor_router_link__WEBPACK_IMPORTED_MODULE_8__["default"],
     paginator: _system_paginator_vue__WEBPACK_IMPORTED_MODULE_9__["default"],
     itemTabs: _system_item_tabs_vue__WEBPACK_IMPORTED_MODULE_10__["default"],
     'bread-crump': _system_breadcrump_vue__WEBPACK_IMPORTED_MODULE_11__["default"],
@@ -4998,23 +5003,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   }),
   watch: {
     classLoad: function classLoad(p1) {
-      var body = document.querySelector('body');
-
-      if (body) {
-        if (p1 == 'open-filters') {
-          body.classList.add('blocked');
-        } else {
-          body.classList.remove('blocked');
-        }
+      if (p1 == 'open-filters') {
+        this.$store.commit('setBodyBlocked', true);
+      } else {
+        this.$store.commit('setBodyBlocked', false);
       }
     }
   },
   beforeDestroy: function beforeDestroy() {
-    var body = document.querySelector('body');
-
-    if (body) {
-      body.classList.remove('blocked');
-    }
+    this.$store.commit('setBodyBlocked', false);
   },
   methods: {
     changeMode: function changeMode() {
@@ -6245,6 +6242,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     },
     clearCheck: function clearCheck(ev) {
+      this.fltOpen = true;
       this.$emit('change', ev.target);
       this.itemGrp.fChecked.splice(0);
     },
@@ -6283,12 +6281,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.onValue(this.$refs.inp2);
     },
     onValue: function onValue(fromRoute) {
-      //if (fromRoute !== true) {
-      //  if (this.$refs.inp2 == fromRoute) {
-      //    console.log(fromRoute.value);
-      //    console.log(this.itemGrp.maxValue)
-      //  }
-      //}
+      if (fromRoute !== true) {
+        if (this.$refs.inp2 == fromRoute) {
+          if (this.itemGrp.maxValue == fromRoute.value) {
+            return;
+          }
+
+          this.itemGrp.maxValue = fromRoute.value;
+        } else if (this.$refs.inp1 == fromRoute) {
+          if (this.itemGrp.minValue == fromRoute.value) {
+            return;
+          }
+
+          this.itemGrp.minValue = fromRoute.value;
+        }
+      }
+
       var from;
 
       if (this.itemGrp.minValue === '') {
@@ -19966,13 +19974,7 @@ var render = function() {
             _c("div", { staticClass: "header-bottom-container" }, [
               _c(
                 "div",
-                {
-                  staticClass: "logo-container",
-                  on: {
-                    mouseenter: _vm.onMouseEnter2,
-                    mouseleave: _vm.onMouseLeave2
-                  }
-                },
+                { staticClass: "logo-container" },
                 [
                   _c(
                     "router-link",
@@ -19991,14 +19993,36 @@ var render = function() {
                     [_vm._v("MICROSTONE")]
                   ),
                   _vm._v(" "),
-                  _vm._m(0)
+                  _c(
+                    "span",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.nonVisibleAside,
+                          expression: "nonVisibleAside"
+                        },
+                        {
+                          name: "tooltip",
+                          rawName: "v-tooltip.bottom",
+                          value: "Каталог товаров",
+                          expression: "'Каталог товаров'",
+                          modifiers: { bottom: true }
+                        }
+                      ],
+                      staticClass: "logo-chevron",
+                      on: { click: _vm.onMouseEnter2 }
+                    },
+                    [_c("i", { staticClass: "fa fa-chevron-down" })]
+                  )
                 ],
                 1
               ),
               _vm._v(" "),
-              _vm._m(1),
+              _vm._m(0),
               _vm._v(" "),
-              _vm._m(2)
+              _vm._m(1)
             ])
           ])
         ]
@@ -20006,14 +20030,6 @@ var render = function() {
     : _vm._e()
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "logo-chevron" }, [
-      _c("i", { staticClass: "fa fa-chevron-down" })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -20180,7 +20196,19 @@ var render = function() {
                       _vm._v(" "),
                       _c("li", [_c("a", [_vm._v("Обмен и возврат товара")])]),
                       _vm._v(" "),
-                      _c("li", [_c("a", [_vm._v("Информация для юр. лиц")])])
+                      _c("li", [_c("a", [_vm._v("Информация для юр. лиц")])]),
+                      _vm._v(" "),
+                      _c(
+                        "li",
+                        [
+                          _c(
+                            "router-link",
+                            { attrs: { to: "/manufacturer" } },
+                            [_vm._v("Производители")]
+                          )
+                        ],
+                        1
+                      )
                     ]
                   )
                 ],
@@ -23809,14 +23837,6 @@ var render = function() {
                     ),
                     _vm._v(" "),
                     _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.itemGrp.minValue,
-                          expression: "itemGrp.minValue"
-                        }
-                      ],
                       ref: "inp1",
                       staticClass:
                         "ui-input-small__input ui-input-small__input_list",
@@ -23826,21 +23846,9 @@ var render = function() {
                       },
                       domProps: { value: _vm.itemGrp.minValue },
                       on: {
-                        input: [
-                          function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.itemGrp,
-                              "minValue",
-                              $event.target.value
-                            )
-                          },
-                          function($event) {
-                            return _vm.onValue($event.target)
-                          }
-                        ]
+                        input: function($event) {
+                          return _vm.onValue($event.target)
+                        }
                       }
                     })
                   ]
@@ -23865,14 +23873,6 @@ var render = function() {
                     ),
                     _vm._v(" "),
                     _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.itemGrp.maxValue,
-                          expression: "itemGrp.maxValue"
-                        }
-                      ],
                       ref: "inp2",
                       staticClass:
                         "ui-input-small__input ui-input-small__input_list",
@@ -23882,21 +23882,9 @@ var render = function() {
                       },
                       domProps: { value: _vm.itemGrp.maxValue },
                       on: {
-                        input: [
-                          function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.itemGrp,
-                              "maxValue",
-                              $event.target.value
-                            )
-                          },
-                          function($event) {
-                            return _vm.onValue($event.target)
-                          }
-                        ]
+                        input: function($event) {
+                          return _vm.onValue($event.target)
+                        }
                       }
                     })
                   ]
@@ -46757,6 +46745,7 @@ function createStore() {
       idTimeStopBack: null,
       resetEmail: {},
       pageManuf: 1,
+      bodyBlocked: false,
       catalog: {
         date: '',
         items: []
@@ -47467,6 +47456,9 @@ function createStore() {
       },
       setActiveBlock: function setActiveBlock(state, payload) {
         state.activeWait.block = payload;
+      },
+      setBodyBlocked: function setBodyBlocked(state, payload) {
+        state.bodyBlocked = payload;
       }
     },
     getters: {
@@ -47574,6 +47566,9 @@ function createStore() {
       },
       waitlist: function waitlist(state) {
         return state.waitlist;
+      },
+      bodyBlocked: function bodyBlocked(state) {
+        return state.bodyBlocked;
       }
     }
   });
@@ -47605,7 +47600,7 @@ s.innerHTML = '.vs-notify{ position:fixed; width:400px; z-index:9999; }' + '.vs-
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\openserver\OSPanel\domains\microstone\resources\js\entry-client.js */"./resources/js/entry-client.js");
+module.exports = __webpack_require__(/*! D:\OpenServer\OSPanel\domains\microstone\resources\js\entry-client.js */"./resources/js/entry-client.js");
 
 
 /***/ })

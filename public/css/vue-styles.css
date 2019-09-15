@@ -382,19 +382,29 @@
 
 .logo-container {
   min-width: 220px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .logo-container .logo-chevron {
-    width: 30px;
-    background: none;
     display: inline-block;
-    height: 60px;
-    vertical-align: top;
-    line-height: 60px;
-    padding-left: 5px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding-top: 7px;
+    border-radius: 50%;
+    cursor: pointer;
 }
 .logo-chevron i {
-   opacity: 0.5;
    color: #fff;
+   display: inline-block;
+}
+.logo-chevron:hover {
+   background: #fff;
+   opacity: 0.5;
+}
+.logo-chevron:hover i {
+  color: rgb(122, 122, 122);
 }
 .logo-container a {
   font-family: 'DigitalMono-7';
@@ -404,7 +414,6 @@
   color: #fff;
   text-decoration: none;
   line-height: 40px;
-  margin-top: 10px;
 }
 
 .catalog {
@@ -2317,6 +2326,9 @@ input[type="radio"]:checked+.ui-radio__content:before {
     background: #f2f2f2;
 }
 .products-page__mobile-search {
+    display: none;
+}
+.products-list__loader {
     display: none;
 }
 }

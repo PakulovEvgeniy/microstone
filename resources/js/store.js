@@ -21,6 +21,7 @@ export function createStore () {
       idTimeStopBack: null,
       resetEmail: {},
       pageManuf: 1,
+      bodyBlocked: false,
       catalog: {
         date: '',
         items: []
@@ -384,6 +385,9 @@ export function createStore () {
       },
       setActiveBlock(state, payload) {
         state.activeWait.block = payload
+      },
+      setBodyBlocked(state, payload) {
+        state.bodyBlocked = payload;
       }
     },
     getters: {
@@ -491,6 +495,9 @@ export function createStore () {
       },
       waitlist(state) {
         return state.waitlist;
+      },
+      bodyBlocked(state) {
+        return state.bodyBlocked;
       }
     }
   })

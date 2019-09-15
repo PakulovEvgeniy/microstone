@@ -56,6 +56,20 @@
           },
           onClick() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
+          },
+          blockBody(scrSt, val) {
+            let body = document.querySelector('body');
+            if (body) {
+              if (scrSt<2) {
+                if (val) {
+                  body.classList.add('blocked');
+                } else {
+                  body.classList.remove('blocked');
+                }
+              } else {
+                body.classList.remove('blocked');
+              }
+            }
           }
         },
         computed: {
@@ -64,7 +78,9 @@
             'nonVisibleMain',
             'nonVisibleAside',
             'scrolled',
-            'screenWidth'
+            'screenWidth',
+            'bodyBlocked',
+            'getScreenState'
           ]),
           leftTopBtn() {
             let res;
@@ -80,6 +96,14 @@
               } 
               return this.$store.state;
            } 
+        },
+        watch: {
+          bodyBlocked(val) {
+            this.blockBody(this.getScreenState, val);
+          },
+          getScreenState(val) {
+            this.blockBody(val, this.bodyBlocked);
+          }
         }
     }
 </script>

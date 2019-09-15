@@ -118,21 +118,15 @@ import productsMobileButtons from './products-mb';
         },
         watch: {
           classLoad(p1) {
-            let body = document.querySelector('body');
-            if (body) {
               if (p1 == 'open-filters') {
-                body.classList.add('blocked');
+                this.$store.commit('setBodyBlocked', true);
               } else {
-                body.classList.remove('blocked');
+                this.$store.commit('setBodyBlocked', false);
               }
-            }
           }
         },
         beforeDestroy() {
-          let body = document.querySelector('body');
-          if (body) {
-             body.classList.remove('blocked');
-          }
+          this.$store.commit('setBodyBlocked', false);
         },
         methods: {
           changeMode() {
@@ -483,6 +477,9 @@ import productsMobileButtons from './products-mb';
       background: #f2f2f2;
     }
     .products-page__mobile-search {
+      display: none;
+    }
+    .products-list__loader {
       display: none;
     }
   }

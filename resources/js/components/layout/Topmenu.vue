@@ -20,6 +20,9 @@
                   <li><a>Узнать статус заказа</a></li>
                   <li><a>Обмен и возврат товара</a></li>
                   <li><a>Информация для юр. лиц</a></li>
+                  <li>
+                    <router-link to="/manufacturer">Производители</router-link>
+                  </li>
               </dropdown-menu>
             </li>
             <uvedoml-component></uvedoml-component>
@@ -104,6 +107,14 @@
         }, 
         methods: {
           
+        },
+        beforeDestroy() {
+          this.$store.commit('setBodyBlocked', false);
+        },
+        watch: {
+          menuOpen(val) {
+            this.$store.commit('setBodyBlocked', val);
+          }
         }
     }
 </script>

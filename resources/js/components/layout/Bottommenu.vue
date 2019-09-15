@@ -2,9 +2,9 @@
     <nav v-if="getScreenState>1" class="header-bottom" :class="{'header-fixed': isBottomMenuFixed}">
     <div class="container">
       <div class="header-bottom-container">
-        <div  class="logo-container" @mouseenter="onMouseEnter2" @mouseleave="onMouseLeave2">
+        <div  class="logo-container">
           <router-link v-tooltip.bottom="'Вернуться на главную страницу'" to='/'>MICROSTONE</router-link>
-          <span class="logo-chevron"><i class="fa fa-chevron-down"></i></span>
+          <span @click="onMouseEnter2" v-show="nonVisibleAside" v-tooltip.bottom="'Каталог товаров'" class="logo-chevron"><i class="fa fa-chevron-down"></i></span>
         </div>
         <form class="main-search-form" method="get">
           <div class="main-search-form-container">
@@ -51,7 +51,8 @@
             'visBacdrop',
             'nonVisibleAside',
             'idTimeStartBack',
-            'idTimeStopBack'
+            'idTimeStopBack',
+            'visBacdrop'
           ])
         },
         methods: {
@@ -59,28 +60,7 @@
             this.$store.state.scrolled=window.pageYOffset;  
           },
           onMouseEnter2() {
-            if (!this.nonVisibleAside) {
-              return;
-            }
-            if (this.visBacdrop) {
-              clearTimeout(this.idTimeStopBack);
-              return;
-            }
-            this.$store.commit('setIdTimeStartBack',setTimeout(() => {
-              this.$store.commit('setVisBacdrop', true);
-            }, 300));
-          },
-          onMouseLeave2() {
-            if (!this.nonVisibleAside) {
-              return;
-            }
-            if (!this.visBacdrop) {
-              clearTimeout(this.idTimeStartBack);
-              return;
-            }
-            this.$store.commit('setIdTimeStopBack',setTimeout(() => {
-              this.$store.commit('setVisBacdrop', false);
-            }, 300));
+            this.$store.commit('setVisBacdrop',!this.visBacdrop);
           }
         },
         mounted() {
@@ -97,21 +77,30 @@
 <style>
    .logo-container {
     min-width: 220px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
    }
    .logo-container .logo-chevron {
-      width: 30px;
-      background: none;
       display: inline-block;
-      height: 60px;
-      vertical-align: top;
-      line-height: 60px;
-      padding-left: 5px;
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      padding-top: 7px;
+      border-radius: 50%;
+      cursor: pointer;
    }
    .logo-chevron i {
-     opacity: 0.5;
      color: #fff;
+     display: inline-block;
    }
-
+  .logo-chevron:hover {
+     background: #fff;
+     opacity: 0.5;
+  }
+  .logo-chevron:hover i {
+    color: rgb(122, 122, 122);
+  }
   .logo-container a {
     font-family: 'DigitalMono-7';
     font-weight: normal;
@@ -120,6 +109,5 @@
     color: #fff;
     text-decoration: none;
     line-height: 40px;
-    margin-top: 10px;
   }
 </style>

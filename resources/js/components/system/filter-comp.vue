@@ -8,11 +8,11 @@
         <div v-if="item.filter_type=='Число'">
           <div class="ui-input-small ui-input-small_list">
             <span @click="clearMinValue" class="ui-input-small__icon ui-input-small__icon_list" :class="{'ui-input-small__icon_hidden': itemGrp.minValue===''}"><i class="fas fa-times"></i></span>
-            <input ref="inp1" @input="onValue($event.target)" v-model="itemGrp.minValue" class="ui-input-small__input ui-input-small__input_list" type="text" :placeholder="'от ' + minMaxValue.min">
+            <input ref="inp1" @input="onValue($event.target)" :value="itemGrp.minValue" class="ui-input-small__input ui-input-small__input_list" type="text" :placeholder="'от ' + minMaxValue.min">
           </div>
           <div class="ui-input-small ui-input-small_list">
             <span @click="clearMaxValue" class="ui-input-small__icon ui-input-small__icon_list" :class="{'ui-input-small__icon_hidden': itemGrp.maxValue===''}"><i class="fas fa-times"></i></span>
-            <input ref="inp2" @input="onValue($event.target)" v-model="itemGrp.maxValue" :placeholder="'до ' + minMaxValue.max" class="ui-input-small__input ui-input-small__input_list" type="text">
+            <input ref="inp2" @input="onValue($event.target)" :value="itemGrp.maxValue" :placeholder="'до ' + minMaxValue.max" class="ui-input-small__input ui-input-small__input_list" type="text">
           </div>
           <div class="ui-radio ui-radio_list">
             <radio-button v-for="it in diapValue" :checked="it.id==curDiap" :key="it.id" :list="true" :name="item.filter_field" :value="it.id" :caption="it.cap" @input="onInput($event)"></radio-button>
@@ -162,6 +162,7 @@ import checkboxButton from './checkbox-button';
             }
           },
           clearCheck(ev) {
+            this.fltOpen = true;
             this.$emit('change', ev.target);
             this.itemGrp.fChecked.splice(0);
           },
@@ -196,12 +197,19 @@ import checkboxButton from './checkbox-button';
             this.onValue(this.$refs.inp2);
           },
           onValue(fromRoute) {
-            //if (fromRoute !== true) {
-            //  if (this.$refs.inp2 == fromRoute) {
-            //    console.log(fromRoute.value);
-            //    console.log(this.itemGrp.maxValue)
-            //  }
-            //}
+            if (fromRoute !== true) {
+              if (this.$refs.inp2 == fromRoute) {
+                if (this.itemGrp.maxValue == fromRoute.value) {
+                  return;
+                }
+                this.itemGrp.maxValue = fromRoute.value;
+              } else if (this.$refs.inp1 == fromRoute) {
+                if (this.itemGrp.minValue == fromRoute.value) {
+                  return;
+                }
+                this.itemGrp.minValue = fromRoute.value;
+              }
+            }
             let from;
             if (this.itemGrp.minValue === '') {
               from = this.minMaxValue.min;
