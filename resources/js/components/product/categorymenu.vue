@@ -104,7 +104,9 @@ import { mapGetters } from 'vuex';
     }
 </script>
 
-<style>
+<style lang="less">
+  @import '../../../less/vars';
+
   .catalog {
     position: relative;
     margin-left: -1px;
@@ -125,7 +127,7 @@ import { mapGetters } from 'vuex';
     font-size: 13px;
   }
   .catalog li a {
-    color: #333;
+    color: @block-color;
     display: flex;
     align-items: center;
     text-decoration: none;

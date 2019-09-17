@@ -1,0 +1,297 @@
+@font-face {
+    font-family: 'DigitalMono-7';
+    src: url('../fonts/Digital-7Mono.woff2') format('woff2'),
+        url('../fonts/Digital-7Mono.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+h3 {
+  margin: 0;
+  padding-top: 10px;
+}
+
+*, :after, :before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+ul, ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    color: #3b3b3b;
+    &:hover {
+        color: tomato;
+        text-decoration: underline;
+    }
+}
+
+html {
+    font-size: 10px;
+    -webkit-tap-highlight-color: transparent;
+}
+html, body {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "PTSans","Helvetica","Arial",sans-serif;
+    font-size: 16px;
+    line-height: 1.42857;
+    color: @block-color;
+    background-color: #f6f6f6;
+    min-width: 320px;
+    &.blocked {
+       overflow: hidden;
+        touch-action: none;
+        position: fixed;
+        top: 0;
+        left: 0; 
+    }
+}
+main {
+  display: block;
+}
+
+header {
+    background: #f6f6f6;
+    font-size: 13px;
+    position: relative;
+    z-index: 1001;
+}
+.hidden {
+    display: none !important;
+    visibility: hidden !important;
+}
+.container {
+    margin: 0 auto;
+    &:after {
+       content: " ";
+        display: table;
+        clear: both; 
+    }
+    @media (min-width: 1200px) {
+        width: 1170px;
+    }
+    @media (max-width: 1199px) and (min-width: 992px) {
+        width: 960px;
+    }
+    @media (max-width: 991px) {
+      width: 100%;
+      padding: 0 10px;
+    }
+}
+
+.ui-link {
+    transition: .3s;
+    text-decoration: none;
+    color: @block-color;
+    &:hover {
+       text-decoration: none;
+       color: #fc5808; 
+    }
+    &_red {
+       color: #cc2e12; 
+    }
+    &_blue {
+      color: #0d61af;
+    }
+    &_pseudolink {
+      border-bottom: 1px dotted;
+    }
+}
+
+.button-ui {
+    border-radius: 8px;
+    height: 40px;
+    padding: 0;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    &_white {
+        background: #fff;
+        color: #333;
+        border: 1px solid #d9d9d9;
+        &:active {
+            box-shadow: inset 0 2px 0 0 rgba(0,0,0,0.2);
+        }
+        &:hover {
+            background: #f9f9f9;
+            @media (min-width: 992px) {
+                background-image: linear-gradient(to bottom, #5BA8E6, #175C95);
+                box-shadow: inset 0 -2px 0 0 rgba(0,0,0,0.2);
+                color: #fff;
+                border: none;
+                font-weight: bold;  
+            }
+        }   
+    }
+    &_passive {
+        @media (min-width: 992px) {
+            background: #fff;
+            color: @block-color;
+            border: 1px solid #d9d9d9;
+            font-weight: normal;
+        }
+    }
+    &_icon {
+        min-width: 40px;
+        padding: 0;
+        color: #8c8c8c;
+        i {
+            font-size: 14px;
+        }    
+    }
+    &_brand {
+        color: #fff;
+        background-image: linear-gradient(to top, #1D71B8, #2288DB);
+        font-weight: bold;
+        &:hover {
+            background-image: linear-gradient(to bottom, #5BA8E6, #175C95);
+            box-shadow: inset 0 -2px 0 0 rgba(0,0,0,0.2);        
+        }
+    }
+    @media (max-width: 991px) and (min-width: 768px) {
+        height: 48px;
+    }
+    @media (max-width: 767px) {
+        height: 44px;
+    }
+}
+
+.tooltip {
+  display: block !important;
+  z-index: 10000;
+  font-size: 12px;
+  .tooltip-inner {
+    background: black;
+    color: white;
+    border-radius: 16px;
+    padding: 5px 10px 4px;
+  }
+  .tooltip-arrow {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      position: absolute;
+      margin: 5px;
+      border-color: black;
+      z-index: 1;
+  }
+}
+
+.tooltip[x-placement^="top"] {
+  margin-bottom: 5px;
+  .tooltip-arrow {
+      border-width: 5px 5px 0 5px;
+      border-left-color: transparent !important;
+      border-right-color: transparent !important;
+      border-bottom-color: transparent !important;
+      bottom: -5px;
+      left: calc(50% - 5px);
+      margin-top: 0;
+      margin-bottom: 0;
+  }
+}
+
+.tooltip[x-placement^="bottom"] {
+  margin-top: 5px;
+  .tooltip-arrow {
+      border-width: 0 5px 5px 5px;
+      border-left-color: transparent !important;
+      border-right-color: transparent !important;
+      border-top-color: transparent !important;
+      top: -5px;
+      left: calc(50% - 5px);
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+}
+
+
+.tooltip[x-placement^="right"] {
+  margin-left: 5px;
+  .tooltip-arrow {
+      border-width: 5px 5px 5px 0;
+      border-left-color: transparent !important;
+      border-top-color: transparent !important;
+      border-bottom-color: transparent !important;
+      left: -5px;
+      top: calc(50% - 5px);
+      margin-left: 0;
+      margin-right: 0;
+    }
+}
+
+.tooltip[x-placement^="left"] {
+  margin-right: 5px;
+  .tooltip-arrow {
+      border-width: 5px 0 5px 5px;
+      border-top-color: transparent !important;
+      border-right-color: transparent !important;
+      border-bottom-color: transparent !important;
+      right: -5px;
+      top: calc(50% - 5px);
+      margin-left: 0;
+      margin-right: 0;
+    }
+}
+
+
+.tooltip.popover .popover-inner {
+  background: #f9f9f9;
+  color: black;
+  padding: 24px;
+  border-radius: 5px;
+  box-shadow: 0 5px 30px rgba(black, .1);
+}
+
+.tooltip.popover .popover-arrow {
+  border-color: #f9f9f9;
+}
+
+.tooltip[aria-hidden='true'] {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .15s, visibility .15s;
+}
+
+.tooltip[aria-hidden='false'] {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity .15s;
+}
+
+.hide {
+    display: none !important;
+}
+
+@media (max-width: 991px) {
+    aside {
+        display: none;
+    }
+}
+
+@media (min-width: 992px) {
+    aside {
+        width: 220px;
+        margin-right: 20px;
+        float: left;
+    }
+    aside+main {
+        margin-left: 260px;
+    }
+    aside>* {
+      margin-bottom: 1em;
+    }
+}

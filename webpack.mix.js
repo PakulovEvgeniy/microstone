@@ -18,8 +18,18 @@ mix.js('resources/js/entry-client.js', 'public/js')
 	})
 
 mix.js('resources/js/entry-server.js', 'public/js');
+mix.less('resources/less/app.less','public/css')
+.styles([
+    'public/css/app-vue.css',
+    'public/css/app.css'
+],'public/css/app.css');
+
+
 
 mix.options({
-    extractVueStyles: true
+    extractVueStyles: 'public/css/app-vue.css',
+    postCss: [
+            require("css-mqpacker")
+        ]
 });
 

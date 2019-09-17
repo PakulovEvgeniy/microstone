@@ -1,6 +1,11 @@
 <template>
     <div id="app">
-      <vs-notify group="alert" position="top center" transition="ntf-top" :duration="4000"></vs-notify>
+      <vs-notify 
+        group="alert" 
+        position="top center" 
+        transition="ntf-top" 
+        :duration="4000">
+      </vs-notify>
       <div v-if = "!nonVisibleMain">
         <header-component></header-component>
       </div>
@@ -17,7 +22,11 @@
         <router-link :to="{ name: 'about' }">About</router-link>
         <router-link :to="{ name: 'contact' }">Contact</router-link>
       </div>
-      <div :style="{right: leftTopBtn+'px'}" v-show="scrolled>200" id="scroll-top-button" @click="onClick">
+      <div 
+        :style="{right: leftTopBtn+'px'}" 
+        v-show="scrolled>200" 
+        id="scroll-top-button" 
+        @click="onClick">
         <i class="fas fa-arrow-up"></i>
       </div>
       <wait-load></wait-load>
@@ -108,7 +117,8 @@
     }
 </script>
 
-<style>
+<style lang="less">
+   @import '../../less/vars';
   main {
     position: relative;
   }
@@ -128,29 +138,26 @@
     border-radius: 12px;
     opacity: .88;
     background: #fff;
-  }
-  #scroll-top-button i {
-    font-size: 18px;
-    color: #8c8c8c;
-    margin-top: 3px;
-  }
-  #scroll-top-button i:hover {
-    color: #333;
-  }
-  @media (min-width: 1200px) {
-    #scroll-top-button {
+    i {
+      font-size: 18px;
+      color: #8c8c8c;
+      margin-top: 3px;
+      &:hover {
+        color: @block-color;    
+      }
+    }
+    @media (min-width: 1200px) {
       margin-bottom: 24px;
     }
-  }
-  @media (max-width: 1199px) and (min-width: 992px) {
-    #scroll-top-button {
+    @media (max-width: 1199px) and (min-width: 992px) {
       bottom: 24px;
       right: 5px;
     }
-  }
-  @media (max-width: 991px) {
-    #scroll-top-button {
+    @media (max-width: 991px) {
       display: none;
     }
   }
+  
+  
+  
 </style>

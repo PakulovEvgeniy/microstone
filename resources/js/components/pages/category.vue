@@ -162,7 +162,7 @@
     }
 </script>
 
-<style>
+<style lang="less">
     .category-item h1 {
         margin-top: 0;
         padding-top: 0;
