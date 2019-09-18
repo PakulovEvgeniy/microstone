@@ -11,10 +11,8 @@ const less = require('gulp-less');
 const webpack = require('webpack-stream');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const rename = require("gulp-rename");
-const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
+var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-let ManifestPlugin = require('laravel-mix/src/webpackPlugins/ManifestPlugin');
-let MockEntryPlugin = require('laravel-mix/src/webpackPlugins/MockEntryPlugin');
 
 
 console.log(process.argv.indexOf('--dev'));
@@ -27,16 +25,22 @@ function clear() {
 	return del('./public/css/*');
 }
 
-function server() {
-	return gulp.src('./resources/js/entry-server.js')
+function server(cb) {
+	gulp.src('./resources/js/entry-server.js')
 		.pipe(webpack({
 			mode: isProd ? 'production' : 'development',
-			target: 'web',
+			watch: true,
+			entry: {
+				'entry-server': [
+				  './resources/js/entry-server.js'
+				],
+				'entry-client': [
+				  './resources/js/entry-client.js'
+				]
+			},
 			output: {
-    			libraryTarget: 'commonjs2',
-    			filename: 'entry-server.js'
+    			filename: '[name].js'
   			},
-  			externals: Object.keys(require('./package.json').dependencies),
 			module: {
 				rules: [
 					{
@@ -50,14 +54,14 @@ function server() {
       				{
 				        test: /\.css$/,
 				        use: [
-				          'vue-style-loader',
+						  MiniCssExtractPlugin.loader,
 				          'css-loader'
 				        ]
 				    },
 				    {
 					  test: /\.less$/,
 					  use: [
-					    'vue-style-loader',
+					    MiniCssExtractPlugin.loader,
 					    'css-loader',
 					    'less-loader'
 					  ]
@@ -65,10 +69,45 @@ function server() {
 				]
 			},
   			plugins: [
-        		new VueLoaderPlugin(),
-  			]
+				new VueLoaderPlugin(),
+				new MiniCssExtractPlugin({
+					filename: '../../resources/less/vue-styles.less',
+					ignoreOrder: false
+				})
+			],
+			stats: {
+				"hash": false,
+				"version": false,
+				"timings": false,
+				"children": false,
+				"errorDetails": false,
+				"entrypoints": false,
+				"performance": false,
+				"chunks": false,
+				"modules": false,
+				"reasons": false,
+				"source": false,
+				"publicPath": false,
+				"builtAt": false
+			},
+			resolve: {
+				extensions: [
+				  "*",
+				  ".wasm",
+				  ".mjs",
+				  ".js",
+				  ".jsx",
+				  ".json",
+				  ".vue"
+				],
+				alias: {
+				  "vue$": "vue/dist/vue.common.js"
+				}
+			}
+			  
 		}))
-		.pipe(gulp.dest('./public/js'))
+		.pipe(gulp.dest('./public/js'));
+	cb();
 }
 
 function styles() {
@@ -86,8 +125,8 @@ function styles() {
 		.pipe(gulpif(isSync, browserSync.stream()));
 }
 
-let build = gulp.series(clear,
-	gulp.parallel(styles, server)
+let build = gulp.series(clear,server
+	//gulp.parallel(styles)
 );
 
 function watch() {
@@ -95,13 +134,14 @@ function watch() {
 		browserSync.init({
 		  open: 'external',
 	      host: 'microstone',
-	      proxy: 'http://microstone:81',
+	      proxy: 'http://microstone',
 	      port: 3000
 		});
 	}
 	gulp.watch('./resources/less/**/*.less', styles);
+	gulp.watch(['./public/js/entry-client.js', './public/js/entry-server.js', './app/**/*.*']).on('change', browserSync.reload);
 }
 
 gulp.task('build', build);
-gulp.task('watch', gulp.series(build, watch));
+gulp.task('watch', gulp.parallel(build, watch));
 
