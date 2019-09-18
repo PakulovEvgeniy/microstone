@@ -37,7 +37,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import radioButton from './radio-button.vue';
-import checkboxButton from './checkbox-button';
+import checkboxButton from './checkbox-button.vue';
     export default {
         data() {
             return {

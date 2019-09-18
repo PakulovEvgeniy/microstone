@@ -81,8 +81,8 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import UvedomlComp from './UvedomlComponent';
-  import Dropdown from '../system/Dropdown';
+  import UvedomlComp from './UvedomlComponent.vue';
+  import Dropdown from '../system/Dropdown.vue';
   import headerMenu from './header-menu.vue';
     export default {
         data() {

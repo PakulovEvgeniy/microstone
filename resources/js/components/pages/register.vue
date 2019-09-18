@@ -12,9 +12,9 @@
 </template>
 
 <script>
-  import MicrostoneLogo from '../../components/layout/microstone_logo';
-  import ReglogDialog from '../layout/reglog_dialog';
-  import Registration from '../forms/registartion';
+  import MicrostoneLogo from '../layout/microstone_logo.vue';
+  import ReglogDialog from '../layout/reglog_dialog.vue';
+  import Registration from '../forms/registartion.vue';
   import { mapGetters } from 'vuex';
     export default {
         data() {

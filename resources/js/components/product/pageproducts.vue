@@ -51,8 +51,8 @@ import topFilters from './top-filters.vue';
 import catalogItem from './catalog-item.vue';
 import paginator from '../system/paginator.vue';
 import leftfilters from '../system/leftfilters.vue';
-import quickSeach from '../system/quick-seach-input';
-import productsMobileButtons from './products-mb';
+import quickSeach from '../system/quick-seach-input.vue';
+import productsMobileButtons from './products-mb.vue';
     export default {
         data() {
             return {

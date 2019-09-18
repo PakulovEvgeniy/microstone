@@ -108,7 +108,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import AnchorRouterLink from '../system/vue-anchor-router-link';
+    import AnchorRouterLink from '../system/vue-anchor-router-link.vue';
     import paginator from '../system/paginator.vue';
     import itemTabs from '../system/item-tabs.vue';
     import Breadcrump from '../system/breadcrump.vue';
