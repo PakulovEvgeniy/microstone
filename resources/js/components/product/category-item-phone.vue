@@ -84,23 +84,20 @@ import { mapGetters } from 'vuex';
     }
     .category-item-phone a {
         color: #333;
-        display: table;
+        display: flex;
+        align-items: center;
         height: 100%;
         text-decoration: none;
         width: 100%;
     }
     .category-item-phone i {
-        display: inline-block;
         font-size: 13px;
-        line-height: 60px;
         margin-left: -12px;
         text-align: center;
         width: 36px;
     }
     .category-item-phone .caption, .category-item-phone .category-link {
-        display: table-cell;
         font-size: 13px;
-        height: 100%;
     }
     .category-item-phone .caption.right {
       text-align: right;
@@ -128,7 +125,6 @@ import { mapGetters } from 'vuex';
     }
     .category-item-phone .caption {
         font-size: 16px !important;
-        line-height: 60px;
         padding: 0 13px;
         width: 100%;
     }
@@ -136,11 +132,6 @@ import { mapGetters } from 'vuex';
         line-height: normal;
     }
     .category-item-phone .image {
-        display: block;
-        line-height: 60px;
-        position: relative;
-        text-align: center;
-        top: 13px;
         width: 36px;
     }
   }

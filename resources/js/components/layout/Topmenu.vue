@@ -4,7 +4,7 @@
         <div class="container">
           <ul class="header-top-menu-list">
             <li>
-              <i class="fas fa-phone"></i>
+              <i class="fa fa-phone"></i>
               <span class="header-top-phone">{{ settings['company_phone'] }}</span>
               <span class="header-top-calltime">{{ settings['company_calltime'] }}</span>
             </li>
@@ -54,23 +54,16 @@
           </ul>
           <div class="basic-controls">
             <div  class="logo-container">
-              <router-link to='/'>MICROSTONE</router-link>
+              <router-link to='/'><span>MICRO</span><span>STONE</span></router-link>
             </div>
-            <form class="main-search-form" method="get">
-              <div class="main-search-form-container">
-                <input type="text" class="main-search-form-input" name="search" placeholder="Поиск по каталогу" autocomplete="off">
-                <span class="main-search-form-button-container">
-                  <i class="fa fa-search"></i>
-                </span>
-              </div>
-            </form>
+            <main-seach-form></main-seach-form>
             <div class="mobile-header-btns">
               <router-link class="btn-cart-link" to="/">
                 <i class="fa fa-shopping-cart btn-cart-link__cart"></i>
                 <span v-if="cartQty" class="btn-cart-link__badge">{{cartQty}}</span>
               </router-link>
               
-              <i @click="menuOpen = !menuOpen" class="fas btn-cart-link__menu" :class="{'has-notifies': hasNotifies, 'fa-bars': !menuOpen, 'fa-times': menuOpen}"></i>
+              <i @click="menuOpen = !menuOpen" class="fa btn-cart-link__menu" :class="{'has-notifies': hasNotifies, 'fa-bars': !menuOpen, 'fa-times': menuOpen}"></i>
             </div>
           </div>
         </div>
@@ -84,6 +77,7 @@
   import UvedomlComp from './UvedomlComponent.vue';
   import Dropdown from '../system/Dropdown.vue';
   import headerMenu from './header-menu.vue';
+  import mainSeachForm from '../forms/main-seach-form.vue';
     export default {
         data() {
             return {
@@ -103,7 +97,8 @@
         components: {
           'uvedoml-component': UvedomlComp,
           'dropdown-menu': Dropdown,
-          headerMenu
+          headerMenu,
+          mainSeachForm
         }, 
         methods: {
           
@@ -119,11 +114,16 @@
     }
 </script>
 
-<style>
-  .header-top-menu-list > li {
-    display: inline-block;
-    margin-left: 15px;
-    line-height: 40px;
+<style lang="less">
+  .header-top-menu-list {
+    > li {
+      display: inline-block;
+      margin-left: 15px;
+      line-height: 40px;
+    }
+    .fa-phone {
+      font-size: 12px !important;
+    }
   }
   .header-top-phone {
     font-weight: bold;
@@ -140,17 +140,13 @@
     padding-left: 0;
   }
   .basic-controls .logo-container a {
-    font-family: 'DigitalMono-7';
     font-weight: bold;
-    font-style: normal;
     font-size: 40px;
     color: #0d61af;
-    text-decoration: none;
-    line-height: 40px;
-    margin-top: 10px;
+    line-height: 20px;
   }
   .basic-controls .logo-container {
-    margin-left: 20px;
+    margin-left: 40px;
   }
   @media (min-width: 992px){
     .basic-controls { 
@@ -166,23 +162,7 @@
       background-color: #fff;
       border-bottom: solid 1px #d8d8d8;
     }
-    .main-search-form-container {
-      position: relative;
-      background: #eaeaea;
-      border-radius: 8px;
-      height: 40px;
-      font-size: 14px;
-    }
-    .main-search-form-input {
-      background: #eaeaea;
-      color: #333;
-      padding-left: 12px;
-      height: 95%;
-      width: calc(100% - 45px);
-      border-radius: 8px;
-      border: none;
-      outline: none;
-    }
+    
     .mobile-header-btns .btn-cart-link__cart {
       color: #8c8c8c;
       font-size: 20px;
@@ -246,23 +226,5 @@
       width: 13px;
     }
   }
-  .basic-controls .main-search-form-button-container {
-    color: #8c8c8c;
-    position: absolute;
-    right: 8px;
-    top: 0;
-    height: 30px;
-    width: 40px;
-    text-align: center;
-    cursor: pointer;
-    height: 39px;
-  }
-  .basic-controls .main-search-form-button-container i {
-    position: absolute;
-    top: 13px;
-    font-size: 16px;
-  }
-  .basic-controls .main-search-form-button-container:hover i {
-    color: #333;
-  }
+  
 </style>

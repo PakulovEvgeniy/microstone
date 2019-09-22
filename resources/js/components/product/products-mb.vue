@@ -4,7 +4,7 @@
         <div class="mobile-buttons__sort">
           <button @click="$emit('click_sort')" class="button-ui button-ui_white mobile-btn mobile-btn_sort">
             <span class="mobile-btn_sort-text">Сортировка</span>
-            <i class="fas fa-sort-amount-down"></i>
+            <i class="fa fa-sort-amount-asc"></i>
           </button>
         </div>
         <div class="mobile-buttons__filters">
@@ -16,7 +16,7 @@
         </div>
         <div class="mobile-buttons__view-mode">
           <button @click="onClick" class="button-ui button-ui_white mobile-btn mobile-btn_view-mode">
-            <i class="fas" :class="className"></i>
+            <i class="fa" :class="className"></i>
           </button>
         </div>
       </div>

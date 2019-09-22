@@ -1,6 +1,6 @@
 <template>
     <div class="page__mobile-back" v-show="getScreenState<2">
-      <i class="fa fa-chevron-left"></i>
+      <i class="fa fa-chevron-left"></i>&nbsp;
       <router-link class="page__mobile-back-link" :to="link">{{name}}</router-link>
     </div>
 </template>
@@ -47,7 +47,8 @@
   }
   @media (max-width: 991px) {
     .page__mobile-back {
-      display: block;
+      display: flex;
+      align-items: center;
     }
   }
   @media (max-width: 991px) and (min-width: 768px) {

@@ -10,6 +10,7 @@ import CategoryF from './components/pages/categoryfilters.vue';
 import Home from './components/pages/home.vue';
 import Product from './components/pages/product.vue';
 import Manufacturer from './components/pages/manufacturer.vue';
+import Not_found from './components/pages/not_found.vue';
 
 Vue.use(Router);
 
@@ -35,6 +36,7 @@ export default new Router({
     { path: '/login', component: loginComp, name: 'login' },
     { path: '/register', component: registerComp, name: 'register' },
     { path: '/password/reset', component: passwordLink, name: 'passwordLink' },
-    { path: '/password/reset/:token', component: passwordReset, name: 'passwordReset' }
+    { path: '/password/reset/:token', component: passwordReset, name: 'passwordReset' },
+    { path: '/*', component: Not_found, name: 'not-found'}
   ]
 });

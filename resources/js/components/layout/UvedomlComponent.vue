@@ -1,7 +1,7 @@
 <template>
     <li v-tooltip="'Уведомлений нет'" class="notification-container menu-dropdown">
         <a class="title inactive menu-dropdown-target">
-            <i class="fas fa-bell"></i>
+            <i class="fa fa-bell"></i>
         </a>
         <div class="notification-block menu-dropdown-items">
             <div>ddsds</div>

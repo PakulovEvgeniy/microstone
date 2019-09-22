@@ -8,7 +8,7 @@
               class="pagination-widget__page-link"
               :class="{'pagination-widget__page-link_disabled' : 1==curPage}"
             >
-              <i class="fas fa-angle-double-left"></i>
+              <i class="fa fa-angle-double-left"></i>
             </a>
           </li>
           <li class="pagination-widget__page">
@@ -17,7 +17,7 @@
               class="pagination-widget__page-link"
               :class="{'pagination-widget__page-link_disabled' : prevPage==curPage}"
             >
-              <i class="fas fa-angle-left"></i>
+              <i class="fa fa-angle-left"></i>
             </a>
           </li>
           <li class="pagination-widget__page" v-for="it in pages" :key="it" 
@@ -30,7 +30,7 @@
               class="pagination-widget__page-link"
               :class="{'pagination-widget__page-link_disabled' : nextPage==curPage}"
             >
-              <i class="fas fa-angle-right"></i>
+              <i class="fa fa-angle-right"></i>
             </a>
           </li>
           <li class="pagination-widget__page">
@@ -38,7 +38,7 @@
               class="pagination-widget__page-link"
               :class="{'pagination-widget__page-link_disabled' : lastPage==curPage}"
             >
-              <i class="fas fa-angle-double-right"></i>
+              <i class="fa fa-angle-double-right"></i>
             </a>
           </li>
         </ul>

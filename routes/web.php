@@ -19,6 +19,7 @@ Route::get('/manufacturer/{id?}', 'Manufacturer@get');
 Route::get('/about', 'AppController@get');
 Route::get('/contact', 'AppController@get');
 Route::get('/account', 'AppController@get');
+Route::any('/{any}', 'Not_found@get')->where('any', '.*');
 
 Auth::routes();
 

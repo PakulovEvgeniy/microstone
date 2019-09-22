@@ -111,11 +111,11 @@ Vue.component('vs-notify',
 });
 
 
-function inLoginInterface(path) {
-	let exPath = ['/login','/register','/password'];
-	return exPath.findIndex((el) => {
-		return path.indexOf(el) !== -1; 
-	}) !== -1;
+function inLoginInterface(name) {
+	let exPath = ['login','register','passwordLink', 'passwordReset'];
+	return exPath.find((el) => {
+		return el == name; 
+	});
 }
 
 function findItem(items, id) {
@@ -132,7 +132,7 @@ function findItem(items, id) {
 }
 
 router.beforeEach((to, from, next) => {
-	if (inLoginInterface(to.path)) {
+	if (inLoginInterface(to.name)) {
 		store.commit('setNonVisibleMain', true)
 		return next();
 	} 

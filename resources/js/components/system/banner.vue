@@ -2,10 +2,10 @@
   <div class="slider-box-wrapper">
     <div class="slider-box">
       <div class="bx-wrapper">
-        <div class="bx-viewport">
+        <div class="bx-viewport" :style="{height: heigtW+'px'}">
           <ul>
             <li :style="{'opacity': ind==curBanner ? 1 : 0}" v-for="(it, ind) in bannerList" :key="it.id">
-                <div class="slide-inner"><img :src="it.image"></div>       
+                <div class="slide-inner"><img ref="image" :src="it.image"></div>       
             </li>
           </ul>
         </div>
@@ -35,17 +35,35 @@
         data() {
             return {
               curBanner: 0,
-              interval:undefined  
+              interval:undefined,
+              heightView: 0  
             }
         },
         props: [
           'bannerList'
         ],
         computed: {
-          
+          ...mapGetters([
+            'getScreenState',
+            'screenWidth'
+          ]),
+          heigtW() {
+            switch (this.getScreenState) {
+              case 1:
+                return this.heightView==0 ?205 : this.heightView;
+              case 2:
+                return 205;
+              default:
+                return 266;
+            }
+          }
         },
         mounted() {
-          this.interval = setInterval(this.next, 3000)
+          this.interval = setInterval(this.next, 3000);
+          this.heightView = this.$refs['image'][0].clientHeight;
+          this.$refs.image[0].onload = () => {
+            this.heightView = this.$refs['image'][0].clientHeight;
+          }
         },
         beforeDestroy() {
           clearInterval(this.interval);
@@ -65,6 +83,11 @@
             if (this.curBanner>=this.bannerList.length) {
               this.curBanner = 0;
             }
+          }
+        },
+        watch: {
+          screenWidth(val) {
+            this.heightView = this.$refs['image'][0].clientHeight;
           }
         }
     }
@@ -189,7 +212,7 @@
   @media (max-width: 991px) {
     .slide-inner img {
       width: 100%;
-      height: 205px;
+      height: auto;
     }
     .bx-viewport {
       height: 205px;

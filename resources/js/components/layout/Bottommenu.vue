@@ -3,24 +3,19 @@
     <div class="container">
       <div class="header-bottom-container">
         <div  class="logo-container">
-          <router-link v-tooltip.bottom="'Вернуться на главную страницу'" to='/'>MICROSTONE</router-link>
+          <router-link v-tooltip.bottom="'Вернуться на главную страницу'" to='/'>
+            MICROSTONE
+          </router-link>
           <span @click="onMouseEnter2" v-show="nonVisibleAside" v-tooltip.bottom="'Каталог товаров'" class="logo-chevron"><i class="fa fa-chevron-down"></i></span>
         </div>
-        <form class="main-search-form" method="get">
-          <div class="main-search-form-container">
-            <input type="text" class="main-search-form-input" name="search" placeholder="Поиск по каталогу" autocomplete="off">
-            <span class="main-search-form-button-container">
-              <button tabindex="2" type="submit" class="main-search-form-button"><i class="fa fa-search"></i></button>
-            </span>
-          </div>
-        </form>
+        <main-seach-form></main-seach-form>
         <div class="header-buttons">
           <a class="btn-info">
-            <i class="far fa-clock"></i>
+            <i class="fa fa-clock-o"></i>
             <span>Лист ожидания</span>
           </a>
           <a class="btn-info">
-            <i class="far fa-heart"></i>
+            <i class="fa fa-heart"></i>
             <span>Мои списки</span>
           </a>
           <a class="btn-cart">
@@ -36,6 +31,7 @@
 </template>
 
 <script>
+import mainSeachForm from '../forms/main-seach-form.vue';
   import { mapGetters } from 'vuex';
     export default {
         data() {
@@ -54,6 +50,9 @@
             'idTimeStopBack',
             'visBacdrop'
           ])
+        },
+        components: {
+          mainSeachForm
         },
         methods: {
           onScroll(e) {
@@ -88,56 +87,12 @@
       list-style: none;
       justify-content: flex-start;
     }
-  }
-
-  .main-search-form {
-    flex-grow: 1;
-    padding: 10px 20px;
-    &-container {
-      display: table;
-      width: 100%;
-    }
-    &-input {
-      border-radius: 4px 0 0 4px;
-      box-shadow: none;
-      box-sizing: border-box;
-      width: 100%;
-      font-size: 15px;
-    }
-    &-button {
-      border-radius: 0 4px 4px 0;
-      box-shadow: none;
-      position: relative;
-      height: 40px;
-      width: 60px;
-      border: 1px solid #fff;
-      background: #fff;
-      outline: none;
-      border-left: none;
-      cursor: pointer;
-      &-container {
-        display: table-cell;
-        z-index: 2;
-        height: 40px;
-        width: 1%;
-        vertical-align: middle;
-        i {
-          color: #9898a1;
-          font-size: 16px;
-        }
-        &::before {
-          position: absolute;
-          left: 0;
-          top: 50%;
-          margin-top: -10px;
-          height: 20px;
-          width: 0;
-          content: " ";
-          color: transparent;
-          font-size: 0;
-          border-left: solid 1px #e6e6e6;
-        }
-      }
+    &.header-fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      box-shadow: 0 0 10px 0 rgba(0,0,0,0.25);
     }
   }
 
@@ -181,10 +136,11 @@
     line-height: 20px;
     font-weight: 400;
     padding: 20px 10px;
+    &:hover {
+      background: rgba(255,255,255,0.2);
+    }
   }
-  &:hover {
-    background: rgba(255,255,255,0.2);
-  }
+  
   i {
     color: #fff;
     font-size: .9em;
@@ -226,5 +182,15 @@
       text-decoration: none;
       line-height: 40px;
     } 
+  }
+  @media (max-width: 991px){
+    .logo-container {
+      min-width: 70px;
+      width: 70px;
+      span {
+        display: block;
+        font-size: 20px;
+      }
+    }
   }
 </style>

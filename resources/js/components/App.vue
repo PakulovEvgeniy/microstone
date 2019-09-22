@@ -118,7 +118,7 @@
 </script>
 
 <style lang="less">
-   @import '../../less/vars';
+  @import '../../less/vars';
   main {
     position: relative;
   }

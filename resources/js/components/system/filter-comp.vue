@@ -7,11 +7,11 @@
       <div class="ui-collapse__content ui-collapse__content_list" :class="{'ui-collapse__content_in': filterOpen}">
         <div v-if="item.filter_type=='Число'">
           <div class="ui-input-small ui-input-small_list">
-            <span @click="clearMinValue" class="ui-input-small__icon ui-input-small__icon_list" :class="{'ui-input-small__icon_hidden': itemGrp.minValue===''}"><i class="fas fa-times"></i></span>
+            <span @click="clearMinValue" class="ui-input-small__icon ui-input-small__icon_list" :class="{'ui-input-small__icon_hidden': itemGrp.minValue===''}"><i class="fa fa-times"></i></span>
             <input ref="inp1" @input="onValue($event.target)" :value="itemGrp.minValue" class="ui-input-small__input ui-input-small__input_list" type="text" :placeholder="'от ' + minMaxValue.min">
           </div>
           <div class="ui-input-small ui-input-small_list">
-            <span @click="clearMaxValue" class="ui-input-small__icon ui-input-small__icon_list" :class="{'ui-input-small__icon_hidden': itemGrp.maxValue===''}"><i class="fas fa-times"></i></span>
+            <span @click="clearMaxValue" class="ui-input-small__icon ui-input-small__icon_list" :class="{'ui-input-small__icon_hidden': itemGrp.maxValue===''}"><i class="fa fa-times"></i></span>
             <input ref="inp2" @input="onValue($event.target)" :value="itemGrp.maxValue" :placeholder="'до ' + minMaxValue.max" class="ui-input-small__input ui-input-small__input_list" type="text">
           </div>
           <div class="ui-radio ui-radio_list">
@@ -189,11 +189,11 @@ import checkboxButton from './checkbox-button.vue';
             this.$emit('change', ev);
           },
           clearMinValue() {
-            this.itemGrp.minValue = '';
+            this.$refs.inp1.value = '';
             this.onValue(this.$refs.inp1);
           },
           clearMaxValue() {
-            this.itemGrp.maxValue = '';
+            this.$refs.inp2.value = '';
             this.onValue(this.$refs.inp2);
           },
           onValue(fromRoute) {

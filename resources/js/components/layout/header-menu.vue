@@ -2,20 +2,20 @@
     <div class="header-menu" :class="{'open' : open}">
      <ul class="header-menu-list" @click="onClick()">
        <li class="menu-item-phone">
-         <a :href="'tel:'+settings['company_phone']"><i class="fas fa-phone icon"></i>{{settings['company_phone']}}<span class="phone-worktime">{{settings['company_calltime']}}</span></a>
+         <a :href="'tel:'+settings['company_phone']"><i class="fa fa-phone icon"></i>{{settings['company_phone']}}<span class="phone-worktime">{{settings['company_calltime']}}</span></a>
        </li>
        <li class="user-section">
          <router-link v-if="!auth" to="/login">
-           <i class="fas fa-user icon"></i>
+           <i class="fa fa-user icon"></i>
            Войти в личный кабинет
          </router-link>
          <div v-else class="user-wrapper">
            <router-link class="user" to="/account">
-              <i class="fas fa-user icon"></i>
+              <i class="fa fa-user icon"></i>
               {{userEmail}}
            </router-link>
            <a class="logout" @click.prevent="$refs['logoutform2'].submit()">
-             <i class="fas fa-sign-out-alt"></i>
+             <i class="fa fa-sign-out-alt"></i>
              <br>
              <span>Выход</span>
              <form ref='logoutform2' id="logout-form2" action="/logout" method="POST" style="display: none;">
@@ -26,33 +26,33 @@
        </li>
        <li class="menu-item-catalog">
          <router-link to="/category">
-           <i class="fas fa-shopping-bag icon"></i>
+           <i class="fa fa-shopping-basket icon"></i>
            Каталог
          </router-link>
        </li>
        <li class="menu-item-wishlist">
          <router-link class="btn-wishlist-link" to="/wishlist">
-           <i class="far fa-heart icon"></i>
+           <i class="fa fa-heart-o icon"></i>
            Избранное
            <span v-show="wishlist.items.length" class="btn-wishlist-link__badge">{{wishlist.items.length}}</span>
          </router-link>
        </li>
        <li class="menu-item-waitlist">
          <router-link class="btn-waitlist-link" to="/waitlist">
-           <i class="far fa-clock icon"></i>
+           <i class="fa fa-clock-o icon"></i>
            Ожидаемое
            <span v-show="waitlist.items.length" class="btn-waitlist-link__badge">{{waitlist.items.length}}</span>
          </router-link>
        </li>
        <li class="menu-item-actions">
          <router-link class="btn-actions-link" to="/actions">
-          <i class="fas fa-tags icon"></i>
+          <i class="fa fa-tags icon"></i>
            Акции
          </router-link>
        </li>
        <li class="menu-item-home">
          <router-link class="btn-home-link" to="/">
-          <i class="fas fa-home icon"></i>
+          <i class="fa fa-home icon"></i>
            Главная страница
          </router-link>
        </li>

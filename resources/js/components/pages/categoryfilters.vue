@@ -3,7 +3,7 @@
       <bread-crump v-show="getScreenState>1" :links="breadItems"></bread-crump>
       <h1>
         <router-link class="extended-filters-to-category" :to="filtrPath">
-            <i class="fas fa-reply"></i>
+            <i class="fa fa-reply"></i>
             Вернуться в каталог
         </router-link>
         Все фильтры

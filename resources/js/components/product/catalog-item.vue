@@ -29,14 +29,14 @@
               <div class="product-info__social">
                 <div class="product-info__stat">
                   <div class="product-info__rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="far fa-star"></i>
-                    <i class="far fa-star"></i>
-                    <i class="far fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
+                    <i class="fa fa-star-o"></i>
                   </div>
                   <a class="product-info__comments-count ui-link ui-link_blue">
-                    <i class="far fa-comment-alt"></i>
+                    <i class="fa fa-comment-o"></i>
                     &nbsp;1
                   </a>
                 </div>
@@ -47,17 +47,17 @@
             <div class="product-price">
               <div class="product-price__current">
                 {{price}}
-                <i class="product-price__rub_icon fas fa-ruble-sign"></i>
+                <i class="product-price__rub_icon fa fa-rub"></i>
               </div>
               <div v-if="item.sold" class="product-price__sold">Продажи: <span>{{item.sold}} шт.</span></div>
             </div>
           </div>
           <div class="n-catalog-product__buttons">
             <button v-tooltip.top="'Добавить в избранное'" class="button-ui button-ui_white button-ui_icon wishlist-btn">
-              <i class="far fa-heart"></i>
+              <i class="fa fa-heart-o"></i>
             </button>
             <button v-tooltip.top="'Добавить в лист ожидания'" class="button-ui button-ui_white button-ui_icon waitlist-btn">
-              <i class="far fa-clock"></i>
+              <i class="fa fa-clock-o"></i>
             </button>
             <div class="primary-btn">
               <button @click="clickBuy" class="button-ui button-ui_brand" :class="{'button-ui_passive' : !inItem}">Купить</button>
