@@ -2,9 +2,12 @@
     <div v-title="title" class="account">
       <div class="account__menu">
         <div class="account__menu_content">
+          <i class="fa account__menu_menu" :class="{'fa-bars': !open, 'fa-times': open}" @click="open = !open"></i>
+          <account-mobile-menu :open="open" :menu="menu" @click="open=false"></account-mobile-menu>
           <ul class="account__menu_ul">
             <li v-for="it in menu" :key="it.id">
-              <router-link :to="it.link" class="account__menu_link"><i class="fa" :class="it.icon"></i>{{it.name}}</router-link></li>
+              <router-link :to="it.link" class="account__menu_link"><i class="fa" :class="it.icon"></i>{{it.name}}</router-link>
+            </li>
           </ul>
         </div>
       </div>
@@ -24,9 +27,11 @@
     import addresses from './accountcomps/addresses.vue';
     import orders from './accountcomps/orders.vue';
     import setup from './accountcomps/setup.vue';
+    import accountMobileMenu from './accountcomps/account-mobile-menu.vue';
     export default {
         data() {
             return {
+                open: false,
                 menu: [
                  {
                    id: 0,
@@ -97,12 +102,21 @@
           contragents,
           addresses,
           orders,
-          setup
+          setup,
+          accountMobileMenu
         },
         beforeRouteEnter (to, from, next) {
           next(vm => {
             vm.$store.commit('setNonVisibleAside', true);
           })
+        },
+        beforeDestroy() {
+          this.$store.commit('setBodyBlocked', false);
+        },
+        watch: {
+          open(val) {
+            this.$store.commit('setBodyBlocked', val);
+          }
         }
     }
 </script>
@@ -150,6 +164,9 @@
           color: #8c8c8c;
         }
       }
+      &_menu {
+        display: none;
+      }
     }
     &__content {
       width: calc(100% - (180px + 22px));
@@ -180,6 +197,16 @@
           left: 0;
           box-shadow: 0 4px 8px 0 rgba(0,0,0,0.16);
         }
+      }
+      &_menu {
+        display: block;
+        position: absolute;
+        right: 20px;
+        top: -57px;
+        font-size: 21px;
+        cursor: pointer;
+        z-index: 2;
+        color: #8c8c8c;
       }
     }
     .account__content {

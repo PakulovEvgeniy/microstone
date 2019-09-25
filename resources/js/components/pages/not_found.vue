@@ -72,6 +72,7 @@
         .main-search-form {
           padding-right: 0;
           padding-left: 0;
+          width: 100%;
           &-container, &-input {
             background: #eaeaea;  
           }  
