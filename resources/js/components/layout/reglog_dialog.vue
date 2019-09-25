@@ -17,7 +17,7 @@
   .rl-dialog {
     border: 2px solid #ccc;
     border-radius: 15px;
-    width: 530px;
+    max-width: 530px;
     margin: 15px auto;
     background-color: #fff;
     padding-bottom: 15px;
@@ -31,12 +31,12 @@
     margin-bottom: 10px;
     color: #c20000;
     text-align: center;
-    padding: 5px 5px 7px 5px;
+    padding: 5px 0px 7px 0px;
   }
 
   .rl-dialog input {
     font-size: 16px;
-    width: 444px;
+    width: 100%;
     height: 30px;
     margin-top: 7px;
     margin-bottom: 10px;
@@ -48,13 +48,11 @@
     visibility: hidden;
     width: 30px;
   }
-  .rl-dialog *{
-    box-sizing:content-box;
-  }
   .rl-dialog a{
     color: #0493d9;
     text-decoration: none;
     font-weight: 700;
+    display: inline;
   }
 
  .rl-dialog .btn {
@@ -175,8 +173,8 @@
     .registration {
         position: relative;
         margin-left: 40px;
+        margin-right: 40px;
         color: #404040;
-        width: 450px;
     }
     
     .controls {

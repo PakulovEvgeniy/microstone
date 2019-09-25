@@ -2,7 +2,7 @@
     <div v-title="title">
       <nav class="main-page-panel-link">
         <router-link to="/category">
-          <i class="fas fa-shopping-bag bag"></i>
+          <i class="fa fa-shopping-bag bag"></i>
           <span>Каталог</span>
           <i class="fa fa-chevron-right arrow"></i>
         </router-link>

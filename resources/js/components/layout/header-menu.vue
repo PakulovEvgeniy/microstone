@@ -15,7 +15,7 @@
               {{userEmail}}
            </router-link>
            <a class="logout" @click.prevent="$refs['logoutform2'].submit()">
-             <i class="fa fa-sign-out-alt"></i>
+             <i class="fa fa-sign-out"></i>
              <br>
              <span>Выход</span>
              <form ref='logoutform2' id="logout-form2" action="/logout" method="POST" style="display: none;">

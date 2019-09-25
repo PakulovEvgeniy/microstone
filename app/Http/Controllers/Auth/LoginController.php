@@ -61,7 +61,8 @@ class LoginController extends Controller
                 'status' => 'success',
                 'email' => $user->email,
                 'redirectTo' => $this->redirectPath(),
-                'csrf' => csrf_token()
+                'csrf' => csrf_token(),
+                'message' => 'Вы успешно авторизовались'
             ];   
         }
     }

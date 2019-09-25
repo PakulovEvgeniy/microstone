@@ -11,6 +11,10 @@ import Home from './components/pages/home.vue';
 import Product from './components/pages/product.vue';
 import Manufacturer from './components/pages/manufacturer.vue';
 import Not_found from './components/pages/not_found.vue';
+import Account from './components/pages/account.vue';
+
+import auth from './middleware/auth.js';
+import guest from './middleware/guest.js';
 
 Vue.use(Router);
 
@@ -32,9 +36,34 @@ export default new Router({
     { path: '/manufacturer/:id', component: Manufacturer, name: 'manufacturer'},
     { path: '/about', component: PageComp, name: 'about' },
     { path: '/contact', component: PageComponent('Contact'), name: 'contact' },
-    { path: '/account', component: PageComponent('Account'), name: 'account' },
-    { path: '/login', component: loginComp, name: 'login' },
-    { path: '/register', component: registerComp, name: 'register' },
+    { path: '/account', component: Account, name: 'account',
+      meta: {
+          middleware: [
+            auth
+          ]
+      }
+    },
+    { path: '/account/:id', component: Account, name: 'account_id',
+      meta: {
+          middleware: [
+            auth
+          ]
+      }
+    },
+    { path: '/login', component: loginComp, name: 'login',
+      meta: {
+          middleware: [
+            guest
+          ]
+      }
+    },
+    { path: '/register', component: registerComp, name: 'register',
+      meta: {
+          middleware: [
+            guest
+          ]
+      }
+    },
     { path: '/password/reset', component: passwordLink, name: 'passwordLink' },
     { path: '/password/reset/:token', component: passwordReset, name: 'passwordReset' },
     { path: '/*', component: Not_found, name: 'not-found'}

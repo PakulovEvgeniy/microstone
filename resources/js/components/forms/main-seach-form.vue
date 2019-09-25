@@ -1,7 +1,7 @@
 <template>
-    <form class="main-search-form" method="get">
+    <form class="main-search-form" method="get" :class="{'focus': focus}">
         <div class="main-search-form-container">
-        <input type="text" class="main-search-form-input" name="search" placeholder="Поиск по каталогу" autocomplete="off">
+        <input @focus="focus = true" @blur="focus = false" type="text" class="main-search-form-input" name="search" placeholder="Поиск по каталогу" autocomplete="off" :value="curValue">
         <span class="main-search-form-button-container">
             <i class="fa fa-search"></i>
         </span>
@@ -14,9 +14,12 @@ import { mapGetters, mapActions} from 'vuex';
     export default {
         data() {
             return {
-                
+              focus: false  
             }
         },
+        props: [
+          'curValue'
+        ],
         computed: {
            
         },
@@ -31,7 +34,9 @@ import { mapGetters, mapActions} from 'vuex';
 <style lang="less">
     .main-search-form {
     flex-grow: 1;
-    padding: 10px 20px;
+    padding: 10px 5px;
+    z-index: 2;
+    transition: all .5s ease-in-out 0s;
     &-container {
       width: 100%;
       position: relative;
@@ -89,5 +94,24 @@ import { mapGetters, mapActions} from 'vuex';
       .main-search-form-container, .main-search-form-container input {
           background: #fff;
       }
+  }
+
+  @media (max-width: 991px) {
+      .main-search-form {
+        flex-grow: 0;
+        width: calc(100% - 197px);
+      }
+  }
+
+
+
+  @media (max-width: 767px) {
+    .main-search-form + .mobile-header-btns {
+      position: absolute;
+      right: 0;
+    }
+    .main-search-form.focus {
+      width: calc(100% - 92px);
+    }
   }
 </style>

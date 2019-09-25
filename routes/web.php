@@ -18,9 +18,12 @@ Route::get('/product/{id}', 'Product_page@get');
 Route::get('/manufacturer/{id?}', 'Manufacturer@get');
 Route::get('/about', 'AppController@get');
 Route::get('/contact', 'AppController@get');
-Route::get('/account', 'AppController@get');
-Route::any('/{any}', 'Not_found@get')->where('any', '.*');
+Route::get('/account/{id?}', 'Account\Account@get');
 
 Auth::routes();
+
+Route::any('/{any}', 'Not_found@get')->where('any', '.*');
+
+
 
 //Route::get('/home', 'HomeController@index')->name('home');

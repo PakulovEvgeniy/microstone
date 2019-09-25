@@ -79,7 +79,8 @@ class RegisterController extends Controller
                 'status' => 'success',
                 'email' => $user->email,
                 'redirectTo' => $this->redirectPath(),
-                'csrf' => csrf_token()
+                'csrf' => csrf_token(),
+                'message' => 'Регистрация прошла успешно!'
             ];   
         }
     }

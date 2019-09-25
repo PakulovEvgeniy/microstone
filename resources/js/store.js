@@ -3,7 +3,9 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
+
 export function createStore () {
+  let ta=undefined;
   return new Vuex.Store({
     state: {
       name: '',
@@ -112,6 +114,16 @@ export function createStore () {
           vm.$notify("alert", dat.message, "success");
         }
       },
+      showWait({commit}, data) {
+        commit('setActiveBlock', true);
+        ta = setTimeout(() => {
+          commit('setActiveWait', true);
+        }, 200);
+      },
+      closeWait({commit}, data) {
+        clearTimeout(ta);
+        commit('setActiveWait', {'wait': false, 'block': false});
+      },
       showError({commit}, data) {
         let e = data;
         if (e.response && e.response.data && e.response.data.errors) {
@@ -125,6 +137,7 @@ export function createStore () {
         } else {
              $notify("alert", e.message, "error");
         }
+        clearTimeout(ta);
         commit('setActiveWait', {'wait': false, 'block': false});
       },
       async getCatalog({commit, state}, data) {

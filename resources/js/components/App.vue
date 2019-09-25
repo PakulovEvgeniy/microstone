@@ -27,7 +27,7 @@
         v-show="scrolled>200" 
         id="scroll-top-button" 
         @click="onClick">
-        <i class="fas fa-arrow-up"></i>
+        <i class="fa fa-arrow-up"></i>
       </div>
       <wait-load></wait-load>
     </div>

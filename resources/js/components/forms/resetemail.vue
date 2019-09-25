@@ -74,11 +74,14 @@ import { mapGetters, mapActions } from 'vuex';
             },
             ...mapActions({
                 setAuth: 'setAuth',
-                showError: 'showError'
+                showError: 'showError',
+                showWait: 'showWait',
+                closeWait: 'closeWait'
             }),
             onSubmit() {
                 this.error = '';
                 this.isQuery = true;
+                this.showWait();
                 axios.post('/password/reset', {   
                     _token: this.csrf,
                     password: this.password.value,
@@ -88,6 +91,7 @@ import { mapGetters, mapActions } from 'vuex';
                 })
                 .then(response => {
                     this.isQuery = false;
+                    this.closeWait();
                     this.setAuth({
                         dat: response.data,
                         vm: this

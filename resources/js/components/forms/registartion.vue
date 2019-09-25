@@ -104,11 +104,14 @@ import { mapGetters, mapActions } from 'vuex';
             },
             ...mapActions({
                 setAuth: 'setAuth',
-                showError: 'showError'
+                showError: 'showError',
+                showWait: 'showWait',
+                closeWait: 'closeWait'
             }),
             onSubmit() {
                 this.error = '';
                 this.isQuery = true;
+                this.showWait();
                 axios.post('/register', {   
                     _token: this.csrf,
                     email: this.login.value,
@@ -117,6 +120,7 @@ import { mapGetters, mapActions } from 'vuex';
                 })
                 .then(response => {
                     this.isQuery = false;
+                    this.closeWait();
                     this.setAuth({
                         dat: response.data,
                         vm: this
@@ -145,7 +149,6 @@ import { mapGetters, mapActions } from 'vuex';
         margin: 7px 0 7px 0;
         font-size: 15px;
         position: relative;
-        height: 40px;
     }
     .policy {
         width: 30px;
@@ -211,6 +214,5 @@ import { mapGetters, mapActions } from 'vuex';
     }
     .policy-text {
         margin-left: 30px;
-        position: absolute;
     }
 </style>

@@ -4,7 +4,8 @@ import router from './router';
 import {createStore} from './store';
 import VTooltip from 'v-tooltip';
 import Subcategory from './components/product/subcategory.vue';
-import Vue2TouchEvents from 'vue2-touch-events'
+import Vue2TouchEvents from 'vue2-touch-events';
+import middlewarePipeline from './middlewarePipeline';
 
 var store = createStore();
 
@@ -113,9 +114,10 @@ Vue.component('vs-notify',
 
 function inLoginInterface(name) {
 	let exPath = ['login','register','passwordLink', 'passwordReset'];
-	return exPath.find((el) => {
+	let elem =  exPath.find((el) => {
 		return el == name; 
 	});
+	return elem !== undefined;
 }
 
 function findItem(items, id) {
@@ -132,22 +134,34 @@ function findItem(items, id) {
 }
 
 router.beforeEach((to, from, next) => {
-	if (inLoginInterface(to.name)) {
-		store.commit('setNonVisibleMain', true)
-		return next();
-	} 
-	if (global && global.process && global.process.env.VUE_ENV == 'server') {
-		store.commit('setNonVisibleMain', false);
+	if (global && global.process) {
+		store.commit('setNonVisibleMain', inLoginInterface(to.name));
 		return next();
 	}
 	if (!from.name) {
-		store.commit('setNonVisibleMain', false);
+		store.commit('setNonVisibleMain', inLoginInterface(to.name));
 		return next();
 	}
-	store.commit('setActiveBlock', true);
-	let ta = setTimeout(() => {
-		store.commit('setActiveWait', true);
-	}, 200);
+
+	if (to.meta.middleware) {
+        const middleware = to.meta.middleware
+    	const context = {
+        	to,
+        	from,
+        	next,
+        	store
+    	}
+    	const res = middleware[0]({
+    		...context, 
+    		next: middlewarePipeline(context, middleware, 1)
+    	});
+    	if (res !== true) {
+    		return;
+    	}
+    }
+
+	store.dispatch('showWait');
+	
 	Promise.all([store.dispatch('getCatalog')])
 	.then((res) => {
 			let arrProm = [];
@@ -200,7 +214,7 @@ router.beforeEach((to, from, next) => {
 			return Promise.all(arrProm);
 	})
 	.then((res) => {
-		store.commit('setNonVisibleMain', false);
+		store.commit('setNonVisibleMain', inLoginInterface(to.name));
 		if (to.path.indexOf('/category') != -1) {
 			if (to.params['id'] || to.params['idF']) {
 				store.commit('setCategoryFiltersAll',to.query);
@@ -210,12 +224,10 @@ router.beforeEach((to, from, next) => {
 				store.commit('setPageManuf', +to.query.page)
 			};
 		}
-		clearTimeout(ta);
-		store.commit('setActiveWait', {'wait': false, 'block': false});
+		store.dispatch('closeWait');
 		next();
 	})
 	.catch(e => {
-		clearTimeout(ta);
         store.dispatch('showError', e);
     });
 	

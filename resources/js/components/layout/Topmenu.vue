@@ -36,7 +36,7 @@
                   <template v-slot:activator>
                     {{ userEmail }}
                   </template>  
-                  <li><a>Профиль</a></li>
+                  <li><router-link to="/account">Профиль</router-link></li>
                   <li><a>Контрагенты</a></li>
                   <li><a>Бонусы</a></li>
                   <li><a>Заказы</a></li>

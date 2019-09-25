@@ -80,10 +80,13 @@ import { mapGetters, mapActions} from 'vuex';
                 return this[param].edit && !this[param].valid
             },
             ...mapActions({
-                showError: 'showError'
+                showError: 'showError',
+                showWait: 'showWait',
+                closeWait: 'closeWait'
             }),
             onSubmit() {
                 this.error = '';
+                this.showWait();
                 this.isQuery = true;
                 axios.post('/password/email', {   
                     _token: this.csrf,
@@ -98,6 +101,7 @@ import { mapGetters, mapActions} from 'vuex';
                         this.resetRecaptcha();
                     }
                     if (dat.success) {
+                        this.closeWait();
                         this.isSendEmail = true;
                         this.$notify("alert", dat.status, "success");
                     }
