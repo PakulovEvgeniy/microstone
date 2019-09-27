@@ -2,11 +2,11 @@
     <div v-title="title" class="account">
       <div class="account__menu">
         <div class="account__menu_content">
-          <i class="fa account__menu_menu" :class="{'fa-bars': !open, 'fa-times': open}" @click="open = !open"></i>
+          <i class="fa account__menu_menu" :class="{'fa-bars': !open, 'fa-times': open}" @click="onClickOpen()"></i>
           <account-mobile-menu :open="open" :menu="menu" @click="open=false"></account-mobile-menu>
           <ul class="account__menu_ul">
             <li v-for="it in menu" :key="it.id">
-              <router-link :to="it.link" class="account__menu_link"><i class="fa" :class="it.icon"></i>{{it.name}}</router-link>
+              <router-link :to="it.link" class="account__menu_link" :class="{'open': open}"><i class="fa" :class="it.icon"></i>{{it.name}}</router-link>
             </li>
           </ul>
         </div>
@@ -26,6 +26,12 @@
     import contragents from './accountcomps/contragents.vue';
     import addresses from './accountcomps/addresses.vue';
     import orders from './accountcomps/orders.vue';
+    import bonuses from './accountcomps/bonus.vue';
+    import notification from './accountcomps/notification.vue';
+    import wishlist from './accountcomps/wishlist.vue';
+    import waitlist from './accountcomps/waitlist.vue';
+    import achievements from './accountcomps/achievements.vue';
+    import feedback from './accountcomps/feedback.vue';
     import setup from './accountcomps/setup.vue';
     import accountMobileMenu from './accountcomps/account-mobile-menu.vue';
     export default {
@@ -64,6 +70,42 @@
                    name: 'Заказы'
                  },
                  {
+                   id: 'bonuses',
+                   icon: 'fa-pinterest-p',
+                   link: '/account/bonuses',
+                   name: 'Бонусы'
+                 },
+                 {
+                   id: 'notification',
+                   icon: 'fa-bell',
+                   link: '/account/notification',
+                   name: 'Уведомления'
+                 },
+                 {
+                   id: 'wishlist',
+                   icon: 'fa-heart',
+                   link: '/account/wishlist',
+                   name: 'Мои списки'
+                 },
+                 {
+                   id: 'waitlist',
+                   icon: 'fa-clock-o',
+                   link: '/account/waitlist',
+                   name: 'Лист ожидания'
+                 },
+                 {
+                   id: 'achievements',
+                   icon: 'fa-star',
+                   link: '/account/achievements',
+                   name: 'Достижения'
+                 },
+                 {
+                   id: 'feedback',
+                   icon: 'fa-commenting',
+                   link: '/account/feedback',
+                   name: 'Обратная связь'
+                 },
+                 {
                    id: 'setup',
                    icon: 'fa-cog',
                    link: '/account/setup',
@@ -74,6 +116,7 @@
         },
         computed: {
           ...mapGetters([
+            'bodyBlocked'
           ]),
           curMenu() {
             if (this.$route.params.id) {
@@ -94,7 +137,12 @@
           }
         },
         methods: {
-            
+          onClickOpen() {
+            if (!this.open && this.bodyBlocked) {
+              return;
+            }
+            this.open = !this.open;
+          }  
         },
         components: {
           profile,
@@ -103,6 +151,12 @@
           addresses,
           orders,
           setup,
+          bonuses,
+          notification,
+          wishlist,
+          waitlist,
+          achievements,
+          feedback,
           accountMobileMenu
         },
         beforeRouteEnter (to, from, next) {
@@ -152,6 +206,9 @@
             color: #333;
           }
           cursor: default;
+          &.open {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+          }
         }
         &:hover {
           background: #eee;
@@ -201,8 +258,12 @@
       &_menu {
         display: block;
         position: absolute;
-        right: 20px;
-        top: -57px;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        right: 10px;
+        top: -62px;
         font-size: 21px;
         cursor: pointer;
         z-index: 2;

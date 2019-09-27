@@ -63,7 +63,7 @@
                 <span v-if="cartQty" class="btn-cart-link__badge">{{cartQty}}</span>
               </router-link>
               
-              <i @click="menuOpen = !menuOpen" class="fa btn-cart-link__menu" :class="{'has-notifies': hasNotifies, 'fa-bars': !menuOpen, 'fa-times': menuOpen}"></i>
+              <i @click="onClickOpen" class="fa btn-cart-link__menu" :class="{'has-notifies': hasNotifies, 'fa-bars': !menuOpen, 'fa-times': menuOpen}"></i>
             </div>
           </div>
         </div>
@@ -91,7 +91,8 @@
             'userEmail',
             'csrf',
             'cartQty',
-            'hasNotifies'
+            'hasNotifies',
+            'bodyBlocked'
           ])
         }, 
         components: {
@@ -101,7 +102,12 @@
           mainSeachForm
         }, 
         methods: {
-          
+          onClickOpen() {
+            if (!this.menuOpen && this.bodyBlocked) {
+              return;
+            }
+            this.menuOpen = !this.menuOpen;
+          }
         },
         beforeDestroy() {
           this.$store.commit('setBodyBlocked', false);

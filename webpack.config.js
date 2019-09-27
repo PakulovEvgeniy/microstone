@@ -7,6 +7,14 @@ const mode = process.env.NODE_ENV;
 const isDev = mode==='development';
 const isProd = !isDev;
 
+let mapS = process.env.MAP_S;
+if (mapS && mapS=='yes') {
+  mapS = 'inline-source-map'
+} else {
+  mapS = false;
+}
+
+
 
 let conf = {
   watch: isDev,
@@ -75,7 +83,7 @@ let conf = {
 let conf2 = {
   watch: isDev,
   mode: mode,
-  devtool: 'inline-source-map',
+  devtool: mapS,
   entry: {
   	'entry-client': ['./resources/js/entry-client.js']
   },
