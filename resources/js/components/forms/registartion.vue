@@ -127,6 +127,7 @@ import { mapGetters, mapActions } from 'vuex';
                     });
                 })
                 .catch(e => {
+                    console.log(e);
                     this.resetRecaptcha();
                     this.showError(e);
                     this.isQuery = false;

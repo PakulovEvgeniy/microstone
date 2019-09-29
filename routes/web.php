@@ -20,7 +20,7 @@ Route::get('/about', 'AppController@get');
 Route::get('/contact', 'AppController@get');
 Route::get('/account/{id?}', 'Account\Account@get');
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::any('/{any}', 'Not_found@get')->where('any', '.*');
 

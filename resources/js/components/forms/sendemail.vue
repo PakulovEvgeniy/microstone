@@ -107,7 +107,8 @@ import { mapGetters, mapActions} from 'vuex';
                     }
                 })
                 .catch(e => {
-                    this.resetRecaptcha();
+                    this.resetRecaptcha();1
+                    console.log(e);
                     this.showError(e);
                     this.isQuery = false;
 

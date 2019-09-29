@@ -12,6 +12,7 @@ import Product from './components/pages/product.vue';
 import Manufacturer from './components/pages/manufacturer.vue';
 import Not_found from './components/pages/not_found.vue';
 import Account from './components/pages/account.vue';
+import emailVerify from './components/pages/email-verify.vue';
 
 import auth from './middleware/auth.js';
 import guest from './middleware/guest.js';
@@ -64,8 +65,21 @@ export default new Router({
           ]
       }
     },
-    { path: '/password/reset', component: passwordLink, name: 'passwordLink' },
-    { path: '/password/reset/:token', component: passwordReset, name: 'passwordReset' },
+    { path: '/password/reset', component: passwordLink, name: 'passwordLink',
+      meta: {
+         middleware: [
+          guest
+        ]
+      }
+    },
+    { path: '/password/reset/:token', component: passwordReset, name: 'passwordReset',
+    meta: {
+      middleware: [
+          guest
+        ]
+      }
+    },
+    { path: '/email/verify', component: emailVerify, name: 'emailVerify'},
     { path: '/*', component: Not_found, name: 'not-found'}
   ]
 });
