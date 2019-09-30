@@ -13,6 +13,7 @@
               @changeValid="onChangeValid('email', $event)"
               :validate="{'pattern': /^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$/, 'message': 'Неправильный email адрес.'}"
             ></input-row>
+            <router-link to="/email/verify">nhjhgjhjh</router-link>
           </div>
       </form>
     </div>

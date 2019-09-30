@@ -78,6 +78,7 @@ class RegisterController extends Controller
             return [
                 'status' => 'success',
                 'email' => $user->email,
+                'isVerify' => $user->hasVerifiedEmail(),
                 'redirectTo' => $this->redirectPath(),
                 'csrf' => csrf_token(),
                 'message' => 'Регистрация прошла успешно!'

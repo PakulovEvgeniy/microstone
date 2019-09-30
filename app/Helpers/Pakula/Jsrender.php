@@ -210,9 +210,11 @@ class Jsrender {
         $state['settings'] = $data;
         $state['auth'] = Auth::check();
         if ($state['auth']) {
-        	$state['userEmail'] = Auth::user()->email;
+            $state['userEmail'] = Auth::user()->email;
+            $state['isVerify'] = Auth::user()->hasVerifiedEmail();
         } else {
-        	$state['userEmail'] = '';
+            $state['userEmail'] = '';
+            $state['isVerify'] = false;
         }
         $data_str = urlencode(json_encode($state));
 

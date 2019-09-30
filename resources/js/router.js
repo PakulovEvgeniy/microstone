@@ -16,6 +16,7 @@ import emailVerify from './components/pages/email-verify.vue';
 
 import auth from './middleware/auth.js';
 import guest from './middleware/guest.js';
+import notverify from './middleware/notverify.js';
 
 Vue.use(Router);
 
@@ -79,7 +80,14 @@ export default new Router({
         ]
       }
     },
-    { path: '/email/verify', component: emailVerify, name: 'emailVerify'},
+    { path: '/email/verify', component: emailVerify, name: 'emailVerify',
+      meta: {
+        middleware: [
+          auth,
+          notverify
+        ]
+      }
+    },
     { path: '/*', component: Not_found, name: 'not-found'}
   ]
 });

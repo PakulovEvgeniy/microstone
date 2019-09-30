@@ -5,7 +5,6 @@ import {createStore} from './store';
 import VTooltip from 'v-tooltip';
 import Subcategory from './components/product/subcategory.vue';
 import Vue2TouchEvents from 'vue2-touch-events';
-import middlewarePipeline from './middlewarePipeline';
 
 var store = createStore();
 
@@ -150,11 +149,17 @@ router.beforeEach((to, from, next) => {
         	from,
         	next,
         	store
-    	}
-    	const res = middleware[0]({
-    		...context, 
-    		next: middlewarePipeline(context, middleware, 1)
-    	});
+		}
+		
+		let res = false;
+		for (let i = 0; i < middleware.length; i++) {
+			let el = middleware[i];
+			res = el({...context});
+			if (res!==true) {
+				break;
+			}
+		}
+
     	if (res !== true) {
     		return;
     	}

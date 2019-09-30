@@ -48,6 +48,7 @@ class ResetPasswordController extends Controller
             return [
                 'email' => $request->user()->email,
                 'status' => 'success',
+                'isVerify' => $request->user()->hasVerifiedEmail(),
                 'redirectTo' => $this->redirectPath(),
                 'csrf' => csrf_token(),
                 'message' => trans($response)

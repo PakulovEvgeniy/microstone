@@ -10,6 +10,7 @@ export function createStore () {
     state: {
       name: '',
       auth: false,
+      isVerify: false,
       csrf: '',
       userEmail: '',
       settings: {},
@@ -98,6 +99,9 @@ export function createStore () {
             if (dat.email) {
                 commit('setAuth', true);
                 commit('setEmail', dat.email);  
+            }
+            if (dat.isVerify) {
+              commit('setVerify', dat.isVerify);
             }
         }
         if (dat.csrf) {
@@ -259,6 +263,9 @@ export function createStore () {
       },
       setEmail (state, payload) {
         state.userEmail = payload;
+      },
+      setVerify (state, payload) {
+        state.isVerify = payload;
       },
       setSettings (state, payload) {
         state.settings = payload;
@@ -433,6 +440,9 @@ export function createStore () {
       },
       auth (state) {
         return state.auth;
+      },
+      isVerify (state) {
+        return state.isVerify;
       },
       userEmail (state) {
         return state.userEmail;

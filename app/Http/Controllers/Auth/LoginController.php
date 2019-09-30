@@ -60,6 +60,7 @@ class LoginController extends Controller
             return [
                 'status' => 'success',
                 'email' => $user->email,
+                'isVerify' => $user->hasVerifiedEmail(),
                 'redirectTo' => $this->redirectPath(),
                 'csrf' => csrf_token(),
                 'message' => 'Вы успешно авторизовались'
