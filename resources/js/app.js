@@ -113,7 +113,7 @@ Vue.component('vs-notify',
 
 
 function inLoginInterface(name) {
-	let exPath = ['login','register','passwordLink', 'passwordReset'];
+	let exPath = ['login','register','passwordLink', 'passwordReset', 'emailVerify'];
 	let elem =  exPath.find((el) => {
 		return el == name; 
 	});

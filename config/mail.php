@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'microstone.ltd@gmail.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'info@microstone.ru'),
+        'name' => env('MAIL_FROM_NAME', 'Microstone'),
     ],
 
     /*

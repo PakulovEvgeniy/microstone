@@ -1411,7 +1411,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 var bind = __webpack_require__(/*! ./helpers/bind */ "./node_modules/axios/lib/helpers/bind.js");
 
-var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/is-buffer/index.js");
+var isBuffer = __webpack_require__(/*! is-buffer */ "./node_modules/axios/node_modules/is-buffer/index.js");
 /*global toString:true*/
 // utils is a library of generic helper functions non-specific to axios
 
@@ -1765,6 +1765,25 @@ module.exports = {
   deepMerge: deepMerge,
   extend: extend,
   trim: trim
+};
+
+/***/ }),
+
+/***/ "./node_modules/axios/node_modules/is-buffer/index.js":
+/*!************************************************************!*\
+  !*** ./node_modules/axios/node_modules/is-buffer/index.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/*!
+ * Determine if an object is a Buffer
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+module.exports = function isBuffer(obj) {
+  return obj != null && obj.constructor != null && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj);
 };
 
 /***/ }),
@@ -2496,6 +2515,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.isQuery = false;
         var dat = response.data;
 
+        _this.closeWait();
+
         if (dat.error) {
           _this.$notify("alert", dat.error, "error");
 
@@ -2503,17 +2524,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
 
         if (dat.success) {
-          _this.closeWait();
-
           _this.isSendEmail = true;
 
           _this.$notify("alert", dat.status, "success");
         }
       })["catch"](function (e) {
         _this.resetRecaptcha();
-
-        1;
-        console.log(e);
 
         _this.showError(e);
 
@@ -3992,6 +4008,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -4003,7 +4023,33 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     'microstone-logo': _layout_microstone_logo_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     'reglog-dialog': _layout_reglog_dialog_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])(['auth']))
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])(['auth', 'userEmail'])),
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapActions"])({
+    showError: 'showError',
+    showWait: 'showWait',
+    closeWait: 'closeWait'
+  }), {
+    onClick: function onClick() {
+      var _this = this;
+
+      this.showWait();
+      axios.get('/email/resend').then(function (response) {
+        var dat = response.data;
+
+        _this.closeWait();
+
+        if (dat.redirect) {
+          _this.$router.push(dat.redirect);
+        } else {
+          _this.$notify("alert", dat.message, "success");
+        }
+      })["catch"](function (e) {
+        console.dir(e);
+
+        _this.showError(e);
+      });
+    }
+  })
 });
 
 /***/ }),
@@ -7766,25 +7812,6 @@ if (!Array.prototype.find) {
     }
   });
 }
-
-/***/ }),
-
-/***/ "./node_modules/is-buffer/index.js":
-/*!*****************************************!*\
-  !*** ./node_modules/is-buffer/index.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/*!
- * Determine if an object is a Buffer
- *
- * @author   Feross Aboukhadijeh <https://feross.org>
- * @license  MIT
- */
-module.exports = function isBuffer(obj) {
-  return obj != null && obj.constructor != null && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj);
-};
 
 /***/ }),
 
@@ -19658,7 +19685,41 @@ var render = function() {
     [
       _c("microstone-logo"),
       _vm._v(" "),
-      _c("reglog-dialog", [_vm._v("\n    Подтверждение email\n  ")])
+      _c("reglog-dialog", [
+        _c("div", { staticClass: "r-topic" }, [_vm._v("Подтверждение email")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "registration" }, [
+          _c("p", [
+            _vm._v(
+              "Прежде чем продолжить, пожалуйста проверьте почтовый ящик "
+            ),
+            _c("b", [_vm._v(_vm._s(_vm.userEmail))]),
+            _vm._v(
+              " на наличие письма с сылкой для подтверждения. Пожалуйста перейдите по ссылке, указанной в письме, чтобы подтвердить Ваш email."
+            )
+          ]),
+          _c("p", [
+            _vm._v("Если письмо не получено, попробуйте "),
+            _c("a", { on: { click: _vm.onClick } }, [
+              _vm._v("отправить его повторно")
+            ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "p",
+            [
+              _vm._v("Либо перейдите на "),
+              _c("router-link", { attrs: { to: "/account/personal" } }, [
+                _vm._v("страницу личных данных")
+              ]),
+              _vm._v(
+                " для проверки правильности ввода email и его исправления в случае необходимости."
+              )
+            ],
+            1
+          )
+        ])
+      ])
     ],
     1
   )
@@ -40951,7 +41012,7 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('vs-notify', {
 });
 
 function inLoginInterface(name) {
-  var exPath = ['login', 'register', 'passwordLink', 'passwordReset'];
+  var exPath = ['login', 'register', 'passwordLink', 'passwordReset', 'emailVerify'];
   var elem = exPath.find(function (el) {
     return el == name;
   });
@@ -47101,7 +47162,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_pages_manufacturer_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/pages/manufacturer.vue */ "./resources/js/components/pages/manufacturer.vue");
 /* harmony import */ var _components_pages_not_found_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/pages/not_found.vue */ "./resources/js/components/pages/not_found.vue");
 /* harmony import */ var _components_pages_account_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/pages/account.vue */ "./resources/js/components/pages/account.vue");
-/* harmony import */ var _components_pages_email_verify_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/pages/email-verify.vue */ "./resources/js/components/pages/email-verify.vue");
+/* harmony import */ var _components_pages_email_verify_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/pages/email-verify.vue */ "./resources/js/components/pages/email-verify.vue");
 /* harmony import */ var _middleware_auth_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./middleware/auth.js */ "./resources/js/middleware/auth.js");
 /* harmony import */ var _middleware_guest_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./middleware/guest.js */ "./resources/js/middleware/guest.js");
 
@@ -47213,7 +47274,7 @@ function PageComponent(name) {
     }
   }, {
     path: '/email/verify',
-    component: _components_pages_email_verify_vue__WEBPACK_IMPORTED_MODULE_17__["default"],
+    component: _components_pages_email_verify_vue__WEBPACK_IMPORTED_MODULE_14__["default"],
     name: 'emailVerify'
   }, {
     path: '/*',

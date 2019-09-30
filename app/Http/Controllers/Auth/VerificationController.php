@@ -27,7 +27,7 @@ class VerificationController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/account';
+    protected $redirectTo = '/account/personal';
 
     /**
      * Create a new controller instance.
@@ -41,8 +41,38 @@ class VerificationController extends Controller
         $this->middleware('throttle:6,1')->only('verify', 'resend');
     }
 
+    public function resend(Request $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            if ($request->ajax()) {
+                return [
+                    'redirect' => $this->redirectPath()
+                ];
+            }
+            else {
+                return redirect($this->redirectPath());
+            }
+        }
+
+        $request->user()->sendEmailVerificationNotification();
+
+        return back()->with('resent', true);
+    }
+
     public function show(Request $request)
     {
+        if ($request->ajax()) {
+           if($request->user()->hasVerifiedEmail()) {
+            return [
+                'redirect' => $this->redirectPath()
+            ];
+           } else {
+                return [
+                    'message' => 'Письмо успешно отправлено!'
+                ];
+           } 
+        } 
+
         if($request->user()->hasVerifiedEmail()) {
             return redirect($this->redirectPath());
         } else {

@@ -96,19 +96,18 @@ import { mapGetters, mapActions} from 'vuex';
                 .then(response => {
                     this.isQuery = false;
                     let dat = response.data;
+                    this.closeWait();
                     if (dat.error) {
                         this.$notify("alert", dat.error, "error");
                         this.resetRecaptcha();
                     }
                     if (dat.success) {
-                        this.closeWait();
                         this.isSendEmail = true;
                         this.$notify("alert", dat.status, "success");
                     }
                 })
                 .catch(e => {
-                    this.resetRecaptcha();1
-                    console.log(e);
+                    this.resetRecaptcha();
                     this.showError(e);
                     this.isQuery = false;
 
