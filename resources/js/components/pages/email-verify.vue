@@ -51,7 +51,6 @@
                 }
             })
             .catch(e => {
-                console.dir(e);
                 this.showError(e);
             })
           }

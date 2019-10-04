@@ -13,6 +13,10 @@ export function createStore () {
       isVerify: false,
       csrf: '',
       userEmail: '',
+      userPersonal: {
+        date: undefined,
+        data: {}
+      },
       settings: {},
       scrolled: 0,
       screenWidth: 0,
@@ -249,6 +253,24 @@ export function createStore () {
         if (dat && dat.status == 'OK') {
           commit('setGroups', dat.data);
         }
+      },
+      async getUserPersonal({commit, state}, data) {
+        if (state.userPersonal.date || (state.userPersonal.date === '')) {
+          if (state.userPersonal.date === '') {
+            state.userPersonal.date = new Date();
+            return;
+          }
+          let nDat = new Date();
+          let dif = (nDat.getTime() - state.userPersonal.date.getTime())/1000;
+          if (dif<=3600) {
+            return;
+          }
+        }
+        let res = await axios.get('/account/personal');
+        let dat = res.data;
+        if (dat && dat.status == 'OK') {
+          commit('setUserPersonal', dat.data);
+        }
       }
     },
     mutations: {
@@ -311,6 +333,15 @@ export function createStore () {
       setBrands(state, payload) {
         state.brands.date = new Date();
         state.brands.items = payload;
+      },
+      setUserPersonal(state, payload) {
+        state.userPersonal.date = new Date();
+        state.userPersonal.data = payload;
+      },
+      setUserPersonalObj(state, payload) {
+        for(let key in payload) {
+          state.userPersonal.data[key] = payload[key];
+        }
       },
       setBanners(state, payload) {
         state.banners.date = new Date();
@@ -446,6 +477,9 @@ export function createStore () {
       },
       userEmail (state) {
         return state.userEmail;
+      },
+      userPersonal(state) {
+        return state.userPersonal.data;
       },
       resetEmail (state) {
         return state.resetEmail;

@@ -3,7 +3,7 @@
       <div class="input-row__container" 
         :class="{'input-row__container_active': inFocus, 'input-row__container_filled': isFilled, 'input-row__container_invalid': this.invalid}"
       >
-        <input @focus="inFocus=true" @blur="onBlur" class="input-row__input" 
+        <input @focus="onFocus" @blur="onBlur" class="input-row__input" 
           :type="inputType" 
           :name="inputName"
           :id="inputId"
@@ -46,6 +46,12 @@
           onBlur() {
             this.needValidate = true;
             this.inFocus=false
+          },
+          onFocus() {
+            this.inFocus=true;
+            if (this.isFilled) {
+              this.needValidate = true;
+            }
           }
         },
         computed: {
@@ -89,7 +95,7 @@
   .input-row {
     visibility: visible !important;
     max-width: 300px;
-    margin-bottom: 20px;
+    margin-bottom: 0;
     width: 100%;
     line-height: 1.42857;
     &__container {

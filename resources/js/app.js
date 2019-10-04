@@ -216,6 +216,12 @@ router.beforeEach((to, from, next) => {
 				arrProm.push(store.dispatch('getBrands'));
 				arrProm.push(store.dispatch('getCurBrand', to.params['id']));
 			}
+			if (to.name == 'account_id') {
+				let parId = to.params['id'];
+				if (parId == 'personal') {
+					arrProm.push(store.dispatch('getUserPersonal'));
+				}
+			}
 			return Promise.all(arrProm);
 	})
 	.then((res) => {

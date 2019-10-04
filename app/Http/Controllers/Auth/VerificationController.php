@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 use JSRender;
 
@@ -43,7 +44,8 @@ class VerificationController extends Controller
 
     public function resend(Request $request)
     {
-        if ($request->user()->hasVerifiedEmail()) {
+        $us = $request->user();
+        if ($us->hasVerifiedEmail() && !$request->code) {
             if ($request->ajax()) {
                 return [
                     'redirect' => $this->redirectPath()
@@ -54,9 +56,45 @@ class VerificationController extends Controller
             }
         }
 
-        $request->user()->sendEmailVerificationNotification();
-
-        return back()->with('resent', true);
+        if ($request->code == 1 && $request->email) {
+            if ($request->email != $us->email) {
+               $this->validate($request, ['email' => ['required', 'string', 'email', 'max:255', 'unique:users']]);
+            }
+            $cod = rand(0,9) . rand(0, 9) . rand(0,9) . rand(0,9) . rand(0, 9) . rand(0,9);
+            $request->session()->put('cod', $cod);
+            $request->session()->put('email_ext', $request->email);
+            $us->sendEmailVerificationNotificationCode($cod, $request->email);
+            return [
+              'status' => 'OK',
+              'message' => 'Письмо успешно отправлено!'
+            ];
+        } elseif ($request->code == 2) {
+            if (!$request->cod || $request->cod != $request->session()->get('cod')) {
+              $error = ValidationException::withMessages([
+                'code' => ['Неверный код подтверждения']
+              ]);
+              throw $error;
+            }
+            if (!$request->email || $request->email != $request->session()->get('email_ext')) {
+              $error = ValidationException::withMessages([
+                'email' => ['Неверный email']
+              ]);
+              throw $error;
+            }
+            if ($us->email != $request->email) {
+                $us->email = $request->email;
+                $us->save();   
+            }
+            $us->markEmailAsVerified();
+            return [
+              'status' => 'OK',
+              'email' => $request->email,
+              'message' => 'Email успешно подтвержден!'
+            ];
+        } else {
+            $us->sendEmailVerificationNotification();
+            return back()->with('resent', true);
+        }
     }
 
     public function show(Request $request)
