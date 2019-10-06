@@ -3,13 +3,17 @@
       <div class="input-row__container" 
         :class="{'input-row__container_active': inFocus, 'input-row__container_filled': isFilled, 'input-row__container_invalid': this.invalid}"
       >
+        <span v-if="maskText && (isFilled || inFocus)" class="input-row__holder">
+          <span>{{firstPart}}</span>{{lastPart}}
+        </span>
         <input @focus="onFocus" @blur="onBlur" class="input-row__input" 
           :type="inputType" 
           :name="inputName"
           :id="inputId"
           :required="inputRequired"
-          :value="inputValue"
+          :value="valueCalc"
           @input="onInput($event)"
+          @keypress="onKeypress($event)"
         >
         <label :for="inputId" class="input-row__label">{{label}}</label>
         <i v-show="showCheck" class="fa fa-check input-row__icon"></i>
@@ -37,11 +41,29 @@
           'inputRequired',
           'label',
           'inputValue',
-          'validate'
+          'validate',
+          'inputMask',
+          'maxInputLength',
+          'maskHolder',
+          'maskText'
         ],
         methods: {
           onInput(e) {
-            this.$emit('change', e.target.value);
+            let val = e.target.value;
+            if (this.maskText) {
+              let res = '';
+              val = val.replace('+7', '');
+              for (let i = 0; i < val.length; i++) {
+                if (this.inputMask.test(val[i])) {
+                  res+=val[i];
+                }
+              }
+              val = res;
+              if (!this.inputValue) {
+               e.target.value = this.valueCalc; 
+              }
+            }
+            this.$emit('change', val);
           },
           onBlur() {
             this.needValidate = true;
@@ -51,6 +73,23 @@
             this.inFocus=true;
             if (this.isFilled) {
               this.needValidate = true;
+            }
+          },
+          onKeypress(evt) {
+            if (!this.inputMask) {
+              return;
+            }
+            let key = !evt.charCode ? evt.which : evt.charCode;
+            if (key==0 || key==8) {
+              return;
+            }
+            let len = this.maxInputLength ? this.maxInputLength <= this.inputValue.length : false;
+            key = String.fromCharCode(key);
+            if (!this.inputMask.test(key) || len) {
+              if (evt.target.selectionStart == evt.target.selectionEnd) {
+                evt.preventDefault();
+                return false; 
+              }
             }
           }
         },
@@ -80,7 +119,43 @@
             return this.inputRequired || this.validate ? true : false;
           },
           showCheck() {
-            return this.isHaveValidate && this.valid;
+            return this.isHaveValidate && this.valid && this.isFilled;
+          },
+          firstPart() {
+            if(!this.maskText) return '';
+            let str = this.maskText;
+            let l = this.inputValue.length;
+            let res = '';
+            let count = 0;
+            for (let i = 0; i < str.length; i++) {
+              if (str[i]=='#') {
+                if (count>=l) {
+                  break;
+                }
+                res+=this.inputValue[count];
+                count++;
+                if (count>=l) {
+                  break;
+                }
+              } else {
+                res+=str[i]
+              }
+            }
+            return res;
+          },
+          lastPart() {
+            if(!this.maskText) return '';
+            let l = this.firstPart.length;
+            return this.maskHolder.substring(l);
+          },
+          valueCalc() {
+            if (!this.maskText) {
+              return this.inputValue
+            }
+            if (!this.isFilled && !this.inFocus) {
+              return this.inputValue;
+            }
+            return this.firstPart;
           }
         },
       watch: {
@@ -178,6 +253,14 @@
           display: none;
         }
       }
+    }
+    &__holder {
+      position: absolute;
+      top: 23px;
+      left: 20px;
+      font-weight: bold;
+      color: #d9d9d9;
+      z-index: 9;
     }
   }
 

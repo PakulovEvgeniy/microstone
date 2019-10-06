@@ -253,20 +253,21 @@
           top: 56px;
           left: 0;
           box-shadow: 0 4px 8px 0 rgba(0,0,0,0.16);
+          z-index: 100;
         }
       }
       &_menu {
         display: block;
-        position: absolute;
+        position: fixed;
         width: 30px;
         height: 30px;
         text-align: center;
         line-height: 30px;
         right: 10px;
-        top: -62px;
+        top: 68px;
         font-size: 21px;
         cursor: pointer;
-        z-index: 2;
+        z-index: 101;
         color: #8c8c8c;
       }
     }

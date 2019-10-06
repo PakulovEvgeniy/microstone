@@ -4276,6 +4276,14 @@ input[type="radio"]:checked+.ui-radio__content:before {
 .input-row__error-extra_hidden {
   display: none;
 }
+.input-row__holder {
+  position: absolute;
+  top: 23px;
+  left: 20px;
+  font-weight: bold;
+  color: #d9d9d9;
+  z-index: 9;
+}
 .input-row__input:focus ~ .input-row__label,
 .input-row__container_filled .input-row__label {
   font-size: 14px;
@@ -4284,7 +4292,12 @@ input[type="radio"]:checked+.ui-radio__content:before {
 
 .account-personal__confirm-container {
   position: relative;
+}
+.account-personal__confirm-container.verify {
   padding-top: 25px;
+}
+.account-personal__confirm-container .input-row {
+  display: inline-block;
 }
 .account-personal__verify {
   color: #6ba833;
@@ -4303,9 +4316,6 @@ input[type="radio"]:checked+.ui-radio__content:before {
   font-weight: bold;
   position: absolute;
   top: 0;
-}
-.account-personal .input-row {
-  display: inline-block;
 }
 .account-personal__btn-container {
   display: inline-block;
@@ -4538,19 +4548,20 @@ input[type="radio"]:checked+.ui-radio__content:before {
     top: 56px;
     left: 0;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.16);
+    z-index: 100;
 }
 .account__menu_menu {
     display: block;
-    position: absolute;
+    position: fixed;
     width: 30px;
     height: 30px;
     text-align: center;
     line-height: 30px;
     right: 10px;
-    top: -62px;
+    top: 68px;
     font-size: 21px;
     cursor: pointer;
-    z-index: 2;
+    z-index: 101;
     color: #8c8c8c;
 }
 .account__content {

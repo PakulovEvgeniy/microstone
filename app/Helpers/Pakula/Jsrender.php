@@ -228,7 +228,8 @@ class Jsrender {
         $js =
 <<<EOT
 var process = { env: { VUE_ENV: "server", NODE_ENV: "production" } }; 
-this.global = { process: process}; 
+this.global = { process: process};
+
 var url = "$path";
 var state = JSON.parse(decodeURIComponent('$data_str'.replace(/\+/g, ' ')));
 

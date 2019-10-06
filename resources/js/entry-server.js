@@ -1,6 +1,5 @@
 import app from './app'
 import router from './router';
-
 new Promise((resolve, reject) => {
   router.push(url);
   router.onReady(() => {

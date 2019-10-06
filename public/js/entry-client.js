@@ -3442,22 +3442,85 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
+ //import datepicker from 'vuejs-datepicker';
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       userPersonalLoc: {
-        email: ''
+        email: '',
+        phone: '',
+        name: '',
+        family: '',
+        otchestvo: '',
+        nickname: '',
+        pol: '',
+        bithday: ''
       },
       mount: false,
       validEmail: false,
-      confirmCode: ''
+      confirmCode: '',
+      key: 1
     };
   },
   props: [],
   components: {
-    inputRow: _system_input_row_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+    inputRow: _system_input_row_vue__WEBPACK_IMPORTED_MODULE_1__["default"] //datepicker
+
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['csrf', 'userPersonal', 'isVerify']), {
     isChangeEmail: function isChangeEmail() {
@@ -3477,9 +3540,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   }), {
     onChange: function onChange(key, e) {
       this.userPersonalLoc[key] = e;
-      this.$store.commit('setUserPersonalObj', {
-        sendConfirm: false
-      });
+
+      if (key == 'phone') {//this.key = this.key == 1 ? 2 : 1;
+      }
+
+      if (key == 'email') {
+        this.$store.commit('setUserPersonalObj', {
+          sendConfirm: false
+        });
+      }
     },
     onChangeValid: function onChangeValid(key, e) {
       if (key == 'email') {
@@ -6958,6 +7027,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -6965,10 +7038,29 @@ __webpack_require__.r(__webpack_exports__);
       needValidate: false
     };
   },
-  props: ['inputType', 'inputName', 'inputId', 'inputRequired', 'label', 'inputValue', 'validate'],
+  props: ['inputType', 'inputName', 'inputId', 'inputRequired', 'label', 'inputValue', 'validate', 'inputMask', 'maxInputLength', 'maskHolder', 'maskText'],
   methods: {
     onInput: function onInput(e) {
-      this.$emit('change', e.target.value);
+      var val = e.target.value;
+
+      if (this.maskText) {
+        var res = '';
+        val = val.replace('+7', '');
+
+        for (var i = 0; i < val.length; i++) {
+          if (this.inputMask.test(val[i])) {
+            res += val[i];
+          }
+        }
+
+        val = res;
+
+        if (!this.inputValue) {
+          e.target.value = this.valueCalc;
+        }
+      }
+
+      this.$emit('change', val);
     },
     onBlur: function onBlur() {
       this.needValidate = true;
@@ -6979,6 +7071,27 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.isFilled) {
         this.needValidate = true;
+      }
+    },
+    onKeypress: function onKeypress(evt) {
+      if (!this.inputMask) {
+        return;
+      }
+
+      var key = !evt.charCode ? evt.which : evt.charCode;
+
+      if (key == 0 || key == 8) {
+        return;
+      }
+
+      var len = this.maxInputLength ? this.maxInputLength <= this.inputValue.length : false;
+      key = String.fromCharCode(key);
+
+      if (!this.inputMask.test(key) || len) {
+        if (evt.target.selectionStart == evt.target.selectionEnd) {
+          evt.preventDefault();
+          return false;
+        }
       }
     }
   },
@@ -7010,7 +7123,49 @@ __webpack_require__.r(__webpack_exports__);
       return this.inputRequired || this.validate ? true : false;
     },
     showCheck: function showCheck() {
-      return this.isHaveValidate && this.valid;
+      return this.isHaveValidate && this.valid && this.isFilled;
+    },
+    firstPart: function firstPart() {
+      if (!this.maskText) return '';
+      var str = this.maskText;
+      var l = this.inputValue.length;
+      var res = '';
+      var count = 0;
+
+      for (var i = 0; i < str.length; i++) {
+        if (str[i] == '#') {
+          if (count >= l) {
+            break;
+          }
+
+          res += this.inputValue[count];
+          count++;
+
+          if (count >= l) {
+            break;
+          }
+        } else {
+          res += str[i];
+        }
+      }
+
+      return res;
+    },
+    lastPart: function lastPart() {
+      if (!this.maskText) return '';
+      var l = this.firstPart.length;
+      return this.maskHolder.substring(l);
+    },
+    valueCalc: function valueCalc() {
+      if (!this.maskText) {
+        return this.inputValue;
+      }
+
+      if (!this.isFilled && !this.inFocus) {
+        return this.inputValue;
+      }
+
+      return this.firstPart;
     }
   },
   watch: {
@@ -19316,150 +19471,260 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "account-personal" }, [
-    _c("form", { attrs: { action: "/account/personal", method: "post" } }, [
-      _c("input", {
-        attrs: { type: "hidden", name: "_token", id: "csrf-token" },
-        domProps: { value: _vm.csrf }
-      }),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "account-personal__confirm-container" },
-        [
-          _vm.isVer
-            ? _c("div", { staticClass: "account-personal__verify" }, [
-                _vm._v("Ваш e-mail подтвержден")
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.isNotVer
-            ? _c("div", { staticClass: "account-personal__notverify" }, [
-                _vm._v("Ваш e-mail еще не подтвержден")
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _c("input-row", {
-            attrs: {
-              label: "Email",
-              inputId: "Email",
-              inputRequired: true,
-              inputType: "email",
-              inputValue: _vm.userPersonalLoc.email,
-              validate: {
-                pattern: /^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$/,
-                message: "Неправильный email адрес."
-              }
-            },
-            on: {
-              change: function($event) {
-                return _vm.onChange("email", $event)
+    _c(
+      "form",
+      { attrs: { action: "/account/personal", method: "post" } },
+      [
+        _c("input", {
+          attrs: { type: "hidden", name: "_token", id: "csrf-token" },
+          domProps: { value: _vm.csrf }
+        }),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "account-personal__confirm-container verify" },
+          [
+            _vm.isVer
+              ? _c("div", { staticClass: "account-personal__verify" }, [
+                  _vm._v("Ваш e-mail подтвержден")
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.isNotVer
+              ? _c("div", { staticClass: "account-personal__notverify" }, [
+                  _vm._v("Ваш e-mail еще не подтвержден")
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("input-row", {
+              attrs: {
+                label: "Email",
+                inputId: "Email",
+                inputRequired: true,
+                inputType: "email",
+                inputValue: _vm.userPersonalLoc.email,
+                validate: {
+                  pattern: /^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$/,
+                  message: "Неправильный email адрес."
+                }
               },
-              changeValid: function($event) {
-                return _vm.onChangeValid("email", $event)
-              }
-            }
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "account-personal__btn-container" }, [
-            _c(
-              "button",
-              {
-                staticClass: "button-ui button-ui_brand",
-                class: {
-                  show:
-                    _vm.mount &&
-                    (_vm.isChangeEmail || !_vm.isVerify) &&
-                    _vm.validEmail &&
-                    !_vm.userPersonal.sendConfirm
+              on: {
+                change: function($event) {
+                  return _vm.onChange("email", $event)
                 },
-                attrs: { type: "button" },
-                on: { click: _vm.clickConfirm }
-              },
-              [_vm._v("Подтвердить")]
-            ),
+                changeValid: function($event) {
+                  return _vm.onChangeValid("email", $event)
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("div", { staticClass: "account-personal__btn-container" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "button-ui button-ui_brand",
+                  class: {
+                    show:
+                      _vm.mount &&
+                      (_vm.isChangeEmail || !_vm.isVerify) &&
+                      _vm.validEmail &&
+                      !_vm.userPersonal.sendConfirm
+                  },
+                  attrs: { type: "button" },
+                  on: { click: _vm.clickConfirm }
+                },
+                [_vm._v("Подтвердить")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "button-ui button-ui_white",
+                  class: {
+                    show:
+                      _vm.mount &&
+                      (_vm.isChangeEmail || _vm.userPersonal.sendConfirm)
+                  },
+                  attrs: { type: "button" },
+                  on: { click: _vm.clickCancel }
+                },
+                [_vm._v("Отменить")]
+              )
+            ]),
             _vm._v(" "),
             _c(
-              "button",
+              "div",
               {
-                staticClass: "button-ui button-ui_white",
-                class: {
-                  show:
-                    _vm.mount &&
-                    (_vm.isChangeEmail || _vm.userPersonal.sendConfirm)
-                },
-                attrs: { type: "button" },
-                on: { click: _vm.clickCancel }
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.userPersonal.sendConfirm,
+                    expression: "userPersonal.sendConfirm"
+                  }
+                ],
+                staticClass: "confirm-email-result"
               },
-              [_vm._v("Отменить")]
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.userPersonal.sendConfirm,
-                  expression: "userPersonal.sendConfirm"
-                }
-              ],
-              staticClass: "confirm-email-result"
-            },
-            [
-              _c("div", { staticClass: "confirm-email-title" }, [
-                _vm._v(
-                  "\n            Мы отправили письмо на указанный адрес.\n          "
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "confirm-email-body" }, [
-                _c("div", [
-                  _vm._v("Введите код подтверждения указанный в письме")
+              [
+                _c("div", { staticClass: "confirm-email-title" }, [
+                  _vm._v(
+                    "\n            Мы отправили письмо на указанный адрес.\n          "
+                  )
                 ]),
                 _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.confirmCode,
-                      expression: "confirmCode"
-                    }
-                  ],
-                  attrs: {
-                    type: "text",
-                    name: "confirm",
-                    placeholder: "Код подтверждения"
-                  },
-                  domProps: { value: _vm.confirmCode },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+                _c("div", { staticClass: "confirm-email-body" }, [
+                  _c("div", [
+                    _vm._v("Введите код подтверждения указанный в письме")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.confirmCode,
+                        expression: "confirmCode"
                       }
-                      _vm.confirmCode = $event.target.value
+                    ],
+                    attrs: {
+                      type: "text",
+                      name: "confirm",
+                      placeholder: "Код подтверждения"
+                    },
+                    domProps: { value: _vm.confirmCode },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.confirmCode = $event.target.value
+                      }
                     }
-                  }
-                }),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "button-ui button-ui_brand",
-                    attrs: { type: "button" },
-                    on: { click: _vm.clickConfCode }
-                  },
-                  [_vm._v("Подтвердить")]
-                )
-              ])
-            ]
-          )
-        ],
-        1
-      )
-    ])
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "button-ui button-ui_brand",
+                      attrs: { type: "button" },
+                      on: { click: _vm.clickConfCode }
+                    },
+                    [_vm._v("Подтвердить")]
+                  )
+                ])
+              ]
+            )
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "account-personal__confirm-container" },
+          [
+            _c("input-row", {
+              attrs: {
+                label: "Телефон",
+                inputId: "Phone",
+                inputRequired: false,
+                inputMask: /[0-9]/,
+                maxInputLength: 10,
+                maskText: "+7 ### ###-##-##",
+                maskHolder: "+7 000 000-00-00",
+                inputType: "tel",
+                inputValue: _vm.userPersonalLoc.phone,
+                validate: {
+                  pattern: /^[0-9]{10,10}$/,
+                  message: "Неправильный номер телефона."
+                }
+              },
+              on: {
+                change: function($event) {
+                  return _vm.onChange("phone", $event)
+                },
+                changeValid: function($event) {
+                  return _vm.onChangeValid("phone", $event)
+                }
+              }
+            })
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c("input-row", {
+          attrs: {
+            label: "Фамилия",
+            inputId: "Family",
+            inputRequired: false,
+            inputType: "text",
+            inputValue: _vm.userPersonalLoc.family
+          },
+          on: {
+            change: function($event) {
+              return _vm.onChange("family", $event)
+            },
+            changeValid: function($event) {
+              return _vm.onChangeValid("family", $event)
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("input-row", {
+          attrs: {
+            label: "Имя",
+            inputId: "Name",
+            inputRequired: false,
+            inputType: "text",
+            inputValue: _vm.userPersonalLoc.name
+          },
+          on: {
+            change: function($event) {
+              return _vm.onChange("name", $event)
+            },
+            changeValid: function($event) {
+              return _vm.onChangeValid("name", $event)
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("input-row", {
+          attrs: {
+            label: "Отчество",
+            inputId: "Otchestvo",
+            inputRequired: false,
+            inputType: "text",
+            inputValue: _vm.userPersonalLoc.otchestvo
+          },
+          on: {
+            change: function($event) {
+              return _vm.onChange("otchestvo", $event)
+            },
+            changeValid: function($event) {
+              return _vm.onChangeValid("otchestvo", $event)
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("input-row", {
+          attrs: {
+            label: "Никнейм",
+            inputId: "Nickname",
+            inputRequired: false,
+            inputType: "text",
+            inputValue: _vm.userPersonalLoc.nickname
+          },
+          on: {
+            change: function($event) {
+              return _vm.onChange("nickname", $event)
+            },
+            changeValid: function($event) {
+              return _vm.onChangeValid("nickname", $event)
+            }
+          }
+        })
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = []
@@ -23080,6 +23345,13 @@ var render = function() {
         }
       },
       [
+        _vm.maskText && (_vm.isFilled || _vm.inFocus)
+          ? _c("span", { staticClass: "input-row__holder" }, [
+              _c("span", [_vm._v(_vm._s(_vm.firstPart))]),
+              _vm._v(_vm._s(_vm.lastPart) + "\n    ")
+            ])
+          : _vm._e(),
+        _vm._v(" "),
         _c("input", {
           staticClass: "input-row__input",
           attrs: {
@@ -23088,12 +23360,15 @@ var render = function() {
             id: _vm.inputId,
             required: _vm.inputRequired
           },
-          domProps: { value: _vm.inputValue },
+          domProps: { value: _vm.valueCalc },
           on: {
             focus: _vm.onFocus,
             blur: _vm.onBlur,
             input: function($event) {
               return _vm.onInput($event)
+            },
+            keypress: function($event) {
+              return _vm.onKeypress($event)
             }
           }
         }),

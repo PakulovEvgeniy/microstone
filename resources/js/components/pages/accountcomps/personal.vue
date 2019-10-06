@@ -2,7 +2,7 @@
     <div class="account-personal">
       <form action="/account/personal" method="post">
           <input type="hidden" name="_token" id="csrf-token" :value="csrf">
-          <div class="account-personal__confirm-container">
+          <div class="account-personal__confirm-container verify">
             <div class="account-personal__verify" v-if="isVer">Ваш e-mail подтвержден</div>
             <div class="account-personal__notverify" v-if="isNotVer">Ваш e-mail еще не подтвержден</div>
             <input-row 
@@ -30,6 +30,59 @@
               </div>
             </div>            
           </div>
+          <div class="account-personal__confirm-container">
+            <input-row
+               
+              label='Телефон' 
+              inputId='Phone' 
+              :inputRequired="false" 
+              :inputMask="/[0-9]/"
+              :maxInputLength="10"
+              maskText="+7 ### ###-##-##"
+              maskHolder="+7 000 000-00-00"
+              inputType='tel'
+              :inputValue="userPersonalLoc.phone"
+              @change="onChange('phone',$event)"
+              @changeValid="onChangeValid('phone', $event)"
+              :validate="{'pattern': /^[0-9]{10,10}$/, 'message': 'Неправильный номер телефона.'}"
+            ></input-row>
+          </div>
+          <input-row
+              label='Фамилия' 
+              inputId='Family' 
+              :inputRequired="false" 
+              inputType='text'
+              :inputValue="userPersonalLoc.family"
+              @change="onChange('family',$event)"
+              @changeValid="onChangeValid('family', $event)"
+          ></input-row>
+          <input-row
+              label='Имя' 
+              inputId='Name' 
+              :inputRequired="false" 
+              inputType='text'
+              :inputValue="userPersonalLoc.name"
+              @change="onChange('name',$event)"
+              @changeValid="onChangeValid('name', $event)"
+          ></input-row>
+          <input-row
+              label='Отчество' 
+              inputId='Otchestvo' 
+              :inputRequired="false" 
+              inputType='text'
+              :inputValue="userPersonalLoc.otchestvo"
+              @change="onChange('otchestvo',$event)"
+              @changeValid="onChangeValid('otchestvo', $event)"
+          ></input-row>
+          <input-row
+              label='Никнейм' 
+              inputId='Nickname' 
+              :inputRequired="false" 
+              inputType='text'
+              :inputValue="userPersonalLoc.nickname"
+              @change="onChange('nickname',$event)"
+              @changeValid="onChangeValid('nickname', $event)"
+          ></input-row>
       </form>
     </div>
 </template>
@@ -37,21 +90,31 @@
 <script>
   import { mapGetters, mapActions } from 'vuex';
   import inputRow from '../../system/input-row.vue';
+  //import datepicker from 'vuejs-datepicker';
     export default {
         data() {
             return {
               userPersonalLoc: {
-                email: ''
+                email: '',
+                phone: '',
+                name: '',
+                family: '',
+                otchestvo: '',
+                nickname: '',
+                pol: '',
+                bithday: ''
               },
               mount: false,
               validEmail: false,
-              confirmCode: ''
+              confirmCode: '',
+              key: 1
             }
         }, 
         props: [
         ],
         components: {
-          inputRow
+          inputRow,
+          //datepicker
         },
         computed: {
           ...mapGetters([
@@ -77,7 +140,12 @@
           }),
           onChange(key,e) {
             this.userPersonalLoc[key] = e;
-            this.$store.commit('setUserPersonalObj', {sendConfirm: false});
+            if (key=='phone') {
+              //this.key = this.key == 1 ? 2 : 1;
+            }
+            if (key=='email') {
+              this.$store.commit('setUserPersonalObj', {sendConfirm: false});
+            }
           },
           onChangeValid(key, e) {
             if (key=='email') {
@@ -143,7 +211,12 @@
   .account-personal {
     &__confirm-container {
       position: relative;
-      padding-top: 25px;
+      &.verify {
+        padding-top: 25px;
+      }
+      .input-row {
+        display: inline-block;
+      }
     }
     &__verify {
       color: #6ba833;
@@ -162,9 +235,6 @@
       font-weight: bold;
       position: absolute;
       top: 0;
-    }
-    .input-row {
-      display: inline-block;
     }
     &__btn-container {
       display: inline-block;
