@@ -9,6 +9,10 @@ class UserPersonal extends Model
     protected $table = 'user_personal';
     public $timestamps = false;
 
+    protected $casts = [
+        'bithday' => 'datetime',
+    ];
+
     public function user()
     {
         return $this->belongsTo('App\User');
@@ -27,7 +31,8 @@ class UserPersonal extends Model
     			'nickname' => $row->nickname,
     			'pol' => $row->pol,
     			'bithday' => $row->bithday,
-                'sendConfirm' => false
+                'sendConfirm' => false,
+                'date_reg' => $user->created_at->format('d.m.Y')
     		];
     	} else {
     		return [
@@ -40,7 +45,8 @@ class UserPersonal extends Model
     			'nickname' => '',
     			'pol' => '',
     			'bithday' => '',
-                'sendConfirm' => false
+                'sendConfirm' => false,
+                'date_reg' => $user->created_at->format('d.m.Y')
     		];
     	}
     }

@@ -6,12 +6,13 @@
           <account-mobile-menu :open="open" :menu="menu" @click="open=false"></account-mobile-menu>
           <ul class="account__menu_ul">
             <li v-for="it in menu" :key="it.id">
-              <router-link :to="it.link" class="account__menu_link" :class="{'open': open}"><i class="fa" :class="it.icon"></i>{{it.name}}</router-link>
+              <router-link :to="it.link" class="account__menu_link" :class="{'open': open, 'second': it.id!=0}"><i class="fa" :class="it.icon"></i>{{it.name}}</router-link>
             </li>
           </ul>
         </div>
       </div>
       <div class="account__content">
+        <h1>{{title}}</h1>
         <div class="account__content_block">
           <component :is="curComponent"></component>
         </div>
@@ -24,6 +25,7 @@
     import profile from './accountcomps/profile.vue';
     import personal from './accountcomps/personal.vue';
     import contragents from './accountcomps/contragents.vue';
+    import contragentsAdd from './accountcomps/contragents-add.vue';
     import addresses from './accountcomps/addresses.vue';
     import orders from './accountcomps/orders.vue';
     import bonuses from './accountcomps/bonus.vue';
@@ -55,7 +57,14 @@
                    id: 'contragents',
                    icon: 'fa-address-book',
                    link: '/account/contragents',
-                   name: 'Контрагенты'
+                   name: 'Контрагенты',
+                   child: [
+                     {
+                         id: 'add',
+                         comp: 'contragents-add',
+                         name: 'Добавление контрагента'
+                     }
+                   ]
                  },
                  {
                    id: 'addresses',
@@ -130,10 +139,27 @@
             return this.menu[0]; 
           },
           title() {
+            if (this.$route.params.act) {
+              if (this.curMenu.child) {
+                let elem = this.curMenu.child.find((el) => {
+                  return el.id == this.$route.params.act
+                })
+                if (elem) {return elem.name}
+              }
+            }
             return this.curMenu.name;
           },
           curComponent() {
-            return this.curMenu.id === 0 ? 'profile' : this.curMenu.id;
+            let cur = this.curMenu.id;
+            if (this.$route.params.act) {
+              if (this.curMenu.child) {
+                let elem = this.curMenu.child.find((el) => {
+                  return el.id == this.$route.params.act
+                })
+                if (elem) {cur = elem.comp}
+              }
+            }
+            return this.curMenu.id === 0 ? 'profile' : cur;
           }
         },
         methods: {
@@ -148,6 +174,7 @@
           profile,
           personal,
           contragents,
+          contragentsAdd,
           addresses,
           orders,
           setup,
@@ -199,7 +226,7 @@
         font-size: 14px;
         color: #4e4e4e !important;
         text-decoration: none !important;
-        &.router-link-exact-active {
+        &.router-link-exact-active, &.router-link-active.second {
           background: #eaeaea;
           font-weight: bold;
           i {
@@ -235,6 +262,11 @@
         background-color: #fff;
         padding: 25px;
       }
+      h1 {
+        font-size: 28px;
+        font-weight: normal;
+        margin-top: 0;
+      }
     }
   }
 
@@ -245,7 +277,7 @@
       &_link {
         width: 100%;
         display: none;
-        &.router-link-exact-active {
+        &.router-link-exact-active, &.router-link-active.second {
           display: block;
           background: #fff;
           border-radius: 0;
@@ -275,6 +307,9 @@
       margin-left: 0;
       width: 100%;
       margin-top: 70px;
+      h1 {
+        display: none;
+      }
     }
   }
 </style>

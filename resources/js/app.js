@@ -221,6 +221,9 @@ router.beforeEach((to, from, next) => {
 				if (parId == 'personal') {
 					arrProm.push(store.dispatch('getUserPersonal'));
 				}
+				if (parId == 'contragents') {
+					arrProm.push(store.dispatch('getUserContragents'));
+				}
 			}
 			return Promise.all(arrProm);
 	})

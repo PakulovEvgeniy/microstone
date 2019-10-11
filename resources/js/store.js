@@ -17,6 +17,10 @@ export function createStore () {
         date: undefined,
         data: {}
       },
+      userContragents: {
+        date: undefined,
+        items: []
+      },
       settings: {},
       scrolled: 0,
       screenWidth: 0,
@@ -271,6 +275,24 @@ export function createStore () {
         if (dat && dat.status == 'OK') {
           commit('setUserPersonal', dat.data);
         }
+      },
+      async getUserContragents({commit, state}, data) {
+        if (state.userContragents.date || (state.userContragents.date === '')) {
+          if (state.userContragents.date === '') {
+            state.userContragents.date = new Date();
+            return;
+          }
+          let nDat = new Date();
+          let dif = (nDat.getTime() - state.userContragents.date.getTime())/1000;
+          if (dif<=3600) {
+            return;
+          }
+        }
+        let res = await axios.get('/account/contragents');
+        let dat = res.data;
+        if (dat && dat.status == 'OK') {
+          commit('setUserContragents', dat.data);
+        }
       }
     },
     mutations: {
@@ -337,6 +359,10 @@ export function createStore () {
       setUserPersonal(state, payload) {
         state.userPersonal.date = new Date();
         state.userPersonal.data = payload;
+      },
+      setUserContragents(state, payload) {
+        state.userContragents.date = new Date();
+        state.userContragents.items = payload;
       },
       setUserPersonalObj(state, payload) {
         for(let key in payload) {
@@ -480,6 +506,9 @@ export function createStore () {
       },
       userPersonal(state) {
         return state.userPersonal.data;
+      },
+      userContragents(state) {
+        return state.userContragents.items;
       },
       resetEmail (state) {
         return state.resetEmail;

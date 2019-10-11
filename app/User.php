@@ -55,6 +55,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne('App\UserPersonal');
     }
+    public function user_contragents()
+    {
+        return $this->hasMany('App\UserContragents');
+    }
 
     public function sendPasswordResetNotification($token)
     {

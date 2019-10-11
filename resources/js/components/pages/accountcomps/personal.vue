@@ -1,6 +1,6 @@
 <template>
     <div class="account-personal">
-      <form action="/account/personal" method="post">
+      <form action="/account/personal" method="post" @submit.prevent="onSubmit">
           <input type="hidden" name="_token" id="csrf-token" :value="csrf">
           <div class="account-personal__confirm-container verify">
             <div class="account-personal__verify" v-if="isVer">Ваш e-mail подтвержден</div>
@@ -83,6 +83,31 @@
               @change="onChange('nickname',$event)"
               @changeValid="onChangeValid('nickname', $event)"
           ></input-row>
+          <div class="account-personal__bithday" :class="{active: bithdayFocus,
+            filled: userPersonalLoc.bithday}">
+            <date-picker
+              lang="ru"
+              placeholder=""
+              :input-attr="{id: 'Bithday'}"
+              @focus="bithdayFocus=true"
+              @blur="bithdayFocus=false"
+              v-model="userPersonalLoc.bithday"
+              format="DD.MM.YYYY"
+            >
+              <template v-slot:label>
+                <label for="Bithday" class="input-row__label">Дата рождения</label>
+              </template>
+            </date-picker>
+          </div>
+          <div class="ui-radio ui-radio_list">
+            <radio-button v-if="!userPersonalLoc.pol || userPersonalLoc.pol=='n'" :checked="!userPersonalLoc.pol || userPersonalLoc.pol=='n'" :list="true" name="pol" value="n" caption="Не выбран" @input="onInput($event)"></radio-button>
+            <radio-button :checked="userPersonalLoc.pol=='m'" :list="true" name="pol" value="m" caption="Мужской" @input="onInput($event)"></radio-button>
+            <radio-button :checked="userPersonalLoc.pol=='f'" :list="true" name="pol" value="f" caption="Женский" @input="onInput($event)"></radio-button>
+          </div>
+          <button :disabled="!enableBtn" class="button-ui button-ui_brand account-personal__submit">Сохранить</button>
+          <div class="account-personal__register">
+            Дата регистрации: <span>{{userPersonalLoc.date_reg}}</span>
+          </div>
       </form>
     </div>
 </template>
@@ -90,7 +115,8 @@
 <script>
   import { mapGetters, mapActions } from 'vuex';
   import inputRow from '../../system/input-row.vue';
-  //import datepicker from 'vuejs-datepicker';
+  import datePicker from '../../date-picker/index.vue';
+  import radioButton from '../../system/radio-button.vue';
     export default {
         data() {
             return {
@@ -102,19 +128,22 @@
                 otchestvo: '',
                 nickname: '',
                 pol: '',
-                bithday: ''
+                bithday: '',
+                date_reg: ''
               },
               mount: false,
               validEmail: false,
+              validPhone: true,
               confirmCode: '',
-              key: 1
+              bithdayFocus: false
             }
         }, 
         props: [
         ],
         components: {
           inputRow,
-          //datepicker
+          datePicker,
+          radioButton
         },
         computed: {
           ...mapGetters([
@@ -130,6 +159,16 @@
           },
           isNotVer() {
             return !this.isVerify && !this.isChangeEmail;
+          },
+          enableBtn() {
+            return (this.userPersonalLoc.phone!=this.userPersonal.phone ||
+              this.userPersonalLoc.name!=this.userPersonal.name ||
+              this.userPersonalLoc.family!=this.userPersonal.family ||
+              this.userPersonalLoc.otchestvo!=this.userPersonal.otchestvo ||
+              this.userPersonalLoc.nickname!=this.userPersonal.nickname ||
+              this.userPersonalLoc.pol!=this.userPersonal.pol ||
+              this.userPersonalLoc.bithday!=this.userPersonal.bithday) && 
+              this.validPhone;
           }
         },
         methods: {
@@ -147,9 +186,36 @@
               this.$store.commit('setUserPersonalObj', {sendConfirm: false});
             }
           },
+          onInput(e) {
+            this.userPersonalLoc.pol = e.value;
+          },
+          onSubmit() {
+            this.showWait();
+            //axios.defaults.headers.common['X-CSRF-TOKEN'] = 'hjgjfdjgfje';
+            axios.post('/account/personal', {   
+                ...this.userPersonalLoc
+            })
+            .then(response => {
+                this.closeWait();
+                let dat = response.data;
+                if (dat.status == 'OK') {
+                  this.$notify("alert", dat.message, "success");
+                  this.$store.commit('setUserPersonalObj', dat.data);
+                  for(let key in this.userPersonal) {
+                    this.userPersonalLoc[key] = this.userPersonal[key];
+                  }
+                }
+            })
+            .catch(e => {
+                console.dir(e);
+                this.showError(e);
+            })
+          },
           onChangeValid(key, e) {
             if (key=='email') {
               this.validEmail = e;
+            } else if (key=='phone') {
+              this.validPhone = e;
             }
           },
           clickConfirm() {
@@ -251,6 +317,87 @@
         }
       }
     }
+    &__bithday {
+      &.active, &.filled {
+        .input-row__label {
+          font-size: 14px;
+          top: 5px;
+        }
+      }
+      &.active .mx-input-wrapper {
+        box-shadow: 0 9px 28px #d9d9d9;
+      }
+    }
+    .mx-datepicker {
+      max-width: 300px;
+      margin-bottom: 0;
+      width: 100%;
+      line-height: 1.42857;
+      .mx-input-append {
+        z-index: 10;
+      }
+    }
+    .mx-input-wrapper {
+      border-radius: 8px;
+      display: inline-block;
+      position: relative;
+      width: 100%;
+      height: 54px;
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      overflow: hidden;
+      box-sizing: border-box;
+      &:hover {
+        border-color: #d9d9d9;
+        label {
+          color: #333;
+        }
+      }
+      input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 18px 0 0 20px;
+        height: 100%;
+        width: 100%;
+        outline: none;
+        background: transparent;
+        color: #4e4e4e;
+        border: none;
+        font-weight: bold;
+        z-index: 9;
+        box-sizing: border-box;
+        font-size: 16px;
+        font-family: inherit;
+        line-height: inherit;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+    .ui-radio__item {
+      padding-left: 3px;
+      &:hover {
+        background: inherit;
+      }
+    }
+    .ui-radio_list {
+      margin-top: 15px;
+    }
+    &__register {
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      padding: 20px;
+      text-align: center;
+      margin-top: 20px;
+      span {
+        font-weight: bold;
+      }
+    }
+    &__submit {
+      padding: 20px 20px;
+      height: auto;
+      margin-top: 20px;
+    }
   }
   .confirm-email {
     &-result {
@@ -286,7 +433,7 @@
 
    @media (max-width: 991px) {
     .account-personal {
-      .input-row {
+      .input-row, .mx-datepicker {
         display: block;
         max-width: 460px;
         width: 100%;

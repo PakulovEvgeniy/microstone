@@ -34,7 +34,12 @@ let conf = {
       },
   		{
       	test: /\.js$/,
-      	loader: 'babel-loader'
+      	loader: 'babel-loader',
+        options: {
+          plugins: [
+            "@vue/babel-plugin-transform-vue-jsx"
+          ]
+        }
       },
       {
         test: /\.css$/,
@@ -111,7 +116,8 @@ let conf2 = {
             '@babel/preset-env'
           ],
           plugins: [
-            "@babel/plugin-transform-object-assign"
+            "@babel/plugin-transform-object-assign",
+            "@vue/babel-plugin-transform-vue-jsx"
           ]
         }
       },

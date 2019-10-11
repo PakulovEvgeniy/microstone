@@ -45,6 +45,13 @@ export default new Router({
           ]
       }
     },
+    { path: '/account/:id/:act', component: Account, name: 'account_id_act',
+      meta: {
+          middleware: [
+            auth
+          ]
+      }
+    },
     { path: '/account/:id', component: Account, name: 'account_id',
       meta: {
           middleware: [

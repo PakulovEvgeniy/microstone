@@ -16,13 +16,13 @@ class NewcreateTableUserPersonal extends Migration
         Schema::create('user_personal', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->index();
-            $table->string('phone',100);
-            $table->string('name',100);
-            $table->string('family',100);
-            $table->string('otchestvo',100);
-            $table->string('nickname',100);
-            $table->char('pol', 1);
-            $table->date('bithday');
+            $table->string('phone',100)->nullable();
+            $table->string('name',100)->nullable();
+            $table->string('family',100)->nullable();
+            $table->string('otchestvo',100)->nullable();
+            $table->string('nickname',100)->nullable();
+            $table->char('pol', 1)->nullable();
+            $table->timestamp('bithday')->nullable();
         });
     }
 

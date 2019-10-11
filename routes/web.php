@@ -18,7 +18,8 @@ Route::get('/product/{id}', 'Product_page@get');
 Route::get('/manufacturer/{id?}', 'Manufacturer@get');
 Route::get('/about', 'AppController@get');
 Route::get('/contact', 'AppController@get');
-Route::get('/account/{id?}', 'Account\Account@get');
+Route::get('/account/{id?}/{act?}', 'Account\Account@get');
+Route::post('/account/personal', 'Account\Account@post');
 
 Auth::routes(['verify' => true]);
 

@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Category;
 use App\UserPersonal;
+use App\UserContragents;
 use JSRender;
+use Carbon\Carbon;
 
 class Account extends Controller
 {
@@ -17,12 +19,47 @@ class Account extends Controller
         $this->middleware('auth');
     }
 
+    public function post(Request $request) {
+      if ($request->ajax()) {
+        $this->validate($request, [
+          'phone' => 'nullable|digits:10',
+          'pol' => 'nullable|in:n,m,f',
+          'bithday' => 'nullable|date'
+        ]);
+        $params = $request->all();
+        //return $params;
+        $user = $request->user();
+        $us = UserPersonal::where('user_id', $user->id)->first();
+        if (!$us) {
+          $us = new UserPersonal;
+        }
+        $us->user_id = $user->id;
+        $us->phone = $params['phone'];
+        $us->name = $params['name'];
+        $us->family = $params['family'];
+        $us->otchestvo = $params['otchestvo'];
+        $us->nickname = $params['nickname'];
+        $us->pol = $params['pol'];
+        $us->bithday = $params['bithday'] ? Carbon::parse($params['bithday']) : null;
+        $us->save();
+        $pers = UserPersonal::getPersonalData($user);
+        unset($pers['email']);
+        unset($pers['sendConfirm']);
+        return [
+          'status' => 'OK',
+          'data' => $pers,
+          'message' => 'Персональные данные успешно сохранены'
+        ];
+      }
+    }
+
     public function get(Request $request) {
         //phpinfo();
         //return;
       $title = 'Профиль';
       $id = $request->route('id');
       $userPersonal = [];
+      $contragents = [];
       if ($id) {
          if ($id == 'personal') {
            $title = 'Личные данные';
@@ -31,6 +68,15 @@ class Account extends Controller
              return [
                'status' => 'OK',
                'data' => $userPersonal
+             ];
+           }
+         } elseif ($id == 'contragents') {
+           $title = 'Контрагенты';
+           $contragents = UserContragents::getContragents($request->user());
+           if ($request->ajax()) {
+             return [
+               'status' => 'OK',
+               'data' => $contragents
              ];
            }
          }
@@ -47,6 +93,12 @@ class Account extends Controller
         $dat['userPersonal'] = [
           'date' => '',
           'data' => $userPersonal
+        ];
+      }
+      if (count($contragents)) {
+        $dat['userContragents'] = [
+          'date' => '',
+          'items' => $contragents
         ];
       }
 

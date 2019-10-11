@@ -83,7 +83,8 @@
             if (key==0 || key==8) {
               return;
             }
-            let len = this.maxInputLength ? this.maxInputLength <= this.inputValue.length : false;
+            let l = this.inputValue ? this.inputValue.length : 0;
+            let len = this.maxInputLength ? this.maxInputLength <= l : false;
             key = String.fromCharCode(key);
             if (!this.inputMask.test(key) || len) {
               if (evt.target.selectionStart == evt.target.selectionEnd) {
@@ -95,7 +96,7 @@
         },
         computed: {
           isFilled() {
-            return this.inputValue.length>0
+            return this.inputValue ? true : false
           },
           reqMessage() {
             if (this.needValidate && this.inputRequired && !this.isFilled) {
@@ -110,7 +111,7 @@
             return '';
           }, 
           valid() {
-            return !((this.inputRequired && !this.isFilled) || (this.validate && this.isFilled && !this.validate.pattern.test(this.inputValue)));
+            return !((this.inputRequired && !this.isFilled) || (this.validate && this.isFilled && !this.validate.pattern.test(this.inputValue))) || (!this.inputRequired && !this.isFilled);
           },
           invalid() {
             return this.needValidate && !this.valid;
@@ -124,7 +125,7 @@
           firstPart() {
             if(!this.maskText) return '';
             let str = this.maskText;
-            let l = this.inputValue.length;
+            let l = this.inputValue ? this.inputValue.length : 0;
             let res = '';
             let count = 0;
             for (let i = 0; i < str.length; i++) {
@@ -235,6 +236,7 @@
       z-index: 10;
     }
     &__error {
+      margin-bottom: 10px;
       &-message {
         margin: 8px 0;
         width: 100%;

@@ -36,6 +36,7 @@
         "webpack-cli": "^3.3.9"
     },
     "dependencies": {
+        "@vue/babel-plugin-transform-vue-jsx": "^1.0.0",
         "font-awesome": "^4.7.0",
         "ie-array-find-polyfill": "^1.1.0",
         "promise-polyfill": "^8.1.3",
