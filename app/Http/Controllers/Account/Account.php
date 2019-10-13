@@ -9,6 +9,8 @@ use App\UserPersonal;
 use App\UserContragents;
 use JSRender;
 use Carbon\Carbon;
+use Illuminate\Validation\ValidationException;
+use Validator;
 
 class Account extends Controller
 {
@@ -17,6 +19,50 @@ class Account extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    public function addContragent(Request $request) {
+      if ($request->ajax()) {
+        $this->validate($request, [
+          'type' => 'in:u,p,f'
+        ]);
+        $params = $request->all();
+        if ($params['type'] == 'f') {
+          $this->validate($request, [
+            'name' => 'required',
+            'family' => 'required'
+          ]);
+          $user = $request->user();
+          $otch = '';
+          if (isset($params['otchestvo']) && $params['otchestvo']) {
+            $otch = $params['otchestvo'];
+          }
+          $fullname = $params['family'] . '#-#' . $params['name'] . ($otch ? ('#-#' . $otch) : '');
+         
+          $validator = Validator::make(
+            array('fullname' => $fullname),
+            array('fullname' => 'unique:user_contragents,name,NULL,id,type,f,user_id,'.$user->id)
+          );
+          if ($validator->fails())
+          {
+            $error = ValidationException::withMessages([
+              'fullname' => ['Такой контрагент уже сущствует']
+            ]);
+            throw $error;
+          }
+
+          $contr = new UserContragents;
+          $contr->user_id = $user->id;
+          $contr->type = 'f';
+          $contr->name = $fullname;
+          $contr->save();
+        }
+        return [
+          'status' => 'OK',
+          'data' => UserContragents::getContragents($user),
+          'message' => 'Контрагент успешно добавлен!'
+        ];
+      }
     }
 
     public function post(Request $request) {
@@ -58,6 +104,7 @@ class Account extends Controller
         //return;
       $title = 'Профиль';
       $id = $request->route('id');
+      $act = $request->route('act');
       $userPersonal = [];
       $contragents = [];
       if ($id) {
@@ -74,11 +121,17 @@ class Account extends Controller
            $title = 'Контрагенты';
            $contragents = UserContragents::getContragents($request->user());
            if ($request->ajax()) {
-             return [
-               'status' => 'OK',
-               'data' => $contragents
-             ];
-           }
+            return [
+              'status' => 'OK',
+              'data' => $contragents
+            ];
+          }
+
+          if ($act && $act=='add') {
+            $userPersonal = UserPersonal::getPersonalData($request->user());
+            $title = 'Добавление контрагента';
+          }
+           
          }
       }
 

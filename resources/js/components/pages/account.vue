@@ -232,7 +232,6 @@
           i {
             color: #333;
           }
-          cursor: default;
           &.open {
             border-bottom: 1px solid rgba(0, 0, 0, 0.15);
           }

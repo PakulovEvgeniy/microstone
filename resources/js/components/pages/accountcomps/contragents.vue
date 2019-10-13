@@ -3,6 +3,15 @@
       <div v-if="userContragents.length==0" class="account-contragents__info">
         Контрагенты отсутствуют  
       </div>
+      <div v-else class="account-contragents__table">
+        <client-only>
+        <vue-good-table
+          :columns="columns"
+          :rows="userContragents"
+        >
+        </vue-good-table>
+        </client-only>
+      </div>
       <router-link to="/account/contragents/add" type="button" class="button-ui button-ui_brand account-contragents__add">Добавить контрагента</router-link>
       <div class="account-contragents__editinfo">
         <div @click="open=!open" class="account-contragents__editinfo-header" :class="{open: open}">
@@ -14,7 +23,7 @@
         <div class="account-contragents__editinfo-content" :class="{close: !open}">
           <div class="account-contragents__editinfo-panel">
             <ul>
-              <li>Можно добавить одного или нескольких контрагентов - предпренимателей, юридических или физических лиц, на которых будут выставляться счета для оплаты заказов</li>
+              <li>Можно добавить одного или нескольких контрагентов - предпринимателей, юридических или физических лиц, на которых будут выставляться счета для оплаты заказов</li>
               <li>Чтобы добавить контрагента, нажмите на кнопку "Добавить контрагента" и воспользуйтесь сервисом поиска по ИНН</li>
               <li><b>Важно!</b>  Если не будут заполнены все реквизиты, то при печати документов не будет видна информация о предприятии (строки будут пустыми) - такой документ недействителен.</li>
               <li>В случае несовпадения реквизитов, найденных сервисом, с действительными, отредактируйте их вручную.</li>
@@ -27,6 +36,7 @@
 
 <script>
     import { mapGetters, mapActions } from 'vuex';
+    import ClientOnly from 'vue-client-only';
     export default {
         data() {
             return {
@@ -37,8 +47,34 @@
         ],
         computed: {
           ...mapGetters([
-           'userContragents'
-          ])
+           'userContragents',
+           'getScreenState'
+          ]),
+          columns() {
+           return [
+                {
+                  label: 'Вид контрагента',
+                  field: 'type_text'
+                },
+                {
+                  label: 'Наименование',
+                  field: 'name'
+                },
+                {
+                  label: 'ИНН',
+                  field: 'inn',
+                  hidden: this.getScreenState == 1
+                },
+                {
+                  label: 'КПП',
+                  field: 'kpp',
+                  hidden: this.getScreenState == 1
+                }
+              ]
+          }
+        },
+        components: {
+          ClientOnly
         }
     }
 </script>
@@ -108,6 +144,9 @@
             }
           }
         }
+      }
+      &__table {
+        margin-bottom: 20px;
       }
     }
 

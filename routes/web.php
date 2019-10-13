@@ -20,6 +20,7 @@ Route::get('/about', 'AppController@get');
 Route::get('/contact', 'AppController@get');
 Route::get('/account/{id?}/{act?}', 'Account\Account@get');
 Route::post('/account/personal', 'Account\Account@post');
+Route::post('/account/contragents/add', 'Account\Account@addContragent');
 
 Auth::routes(['verify' => true]);
 

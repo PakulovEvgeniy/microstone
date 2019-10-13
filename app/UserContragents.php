@@ -19,13 +19,26 @@ class UserContragents extends Model
     	$row = UserContragents::where('user_id', $user->id)->get();
     	$res = [];
     	foreach ($row as $val) {
+			$t_n = '';
+			if ($val->type == 'u') {
+				$t_n = 'Юридическое лицо';
+			} elseif ($val->type == 'p') {
+				$t_n = 'Индивидуальный предприниматель';
+			} elseif ($val->type == 'f') {
+				$t_n = 'Физическое лицо';
+			}
+			$nam = $val->name;
+			if ($val->type == 'f') {
+				$nam = str_replace('#-#', ' ', $nam);
+			}
     		$res[] = [
     			'id' => $val->id,
     			'user_id' => $val->user_id,
-    			'type' => $val->type,
+				'type' => $val->type,
+				'type_text' => $t_n,
     			'inn' => $val->inn,
     			'kpp' => $val->kpp,
-    			'name' => $val->name,
+    			'name' => $nam,
     		];
     	}
     	return $res;

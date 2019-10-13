@@ -5,6 +5,8 @@ import {createStore} from './store';
 import VTooltip from 'v-tooltip';
 import Subcategory from './components/product/subcategory.vue';
 import Vue2TouchEvents from 'vue2-touch-events';
+import VueGoodTable from 'vue-good-table';
+import 'vue-good-table/dist/vue-good-table.css';
 
 var store = createStore();
 
@@ -28,6 +30,7 @@ Vue.directive('title', {
 Vue.use(VsNotify);
 Vue.use(VTooltip);
 Vue.use(Vue2TouchEvents);
+Vue.use(VueGoodTable);
 Vue.component('subcategory', Subcategory);
 Vue.component('vs-notify',
 {
@@ -223,6 +226,16 @@ router.beforeEach((to, from, next) => {
 				}
 				if (parId == 'contragents') {
 					arrProm.push(store.dispatch('getUserContragents'));
+				}
+			}
+			if (to.name == 'account_id_act') {
+				let parId = to.params['id'];
+				let parAct = to.params['act'];
+				if (parId == 'contragents') {
+					arrProm.push(store.dispatch('getUserContragents'));
+					if (parAct == 'add') {
+						arrProm.push(store.dispatch('getUserPersonal'));
+					}
 				}
 			}
 			return Promise.all(arrProm);
