@@ -97,33 +97,109 @@ export function createStore () {
         items: [
           {id: 0}
         ]
-      }
+      },
+      foundContragents: []
     },
     actions: {
-      setAuth ({ commit }, data) {
-        let dat = data.dat;
-        let vm = data.vm;
-        if (dat.status && dat.status == 'success') {
-            if (dat.email) {
-                commit('setAuth', true);
-                commit('setEmail', dat.email);  
+      queryForApp({commit, state, dispatch}, data) {
+        data.notwait = true;
+        data.notcatch = true;
+        if (!data.params) {
+          data.params = {};
+        }
+        return dispatch('queryGetToServer', data);
+      },
+      queryPostToServer({commit, state, dispatch}, data) {
+        dispatch('showWait');
+        axios.post(data.url, data.params)
+          .then(response => {
+            dispatch('closeWait');
+            if (response.data.status=='OK' && data.successAction) {
+              data.successAction();
             }
-            if (dat.isVerify) {
-              commit('setVerify', dat.isVerify);
+            if (response.data.status=='ER' && data.errorAction) {
+              data.errorAction();
             }
+            dispatch('setParams', response.data);
+          })
+          .catch(e => {
+            if (data.errorAction) {
+              data.errorAction();
+            }
+            dispatch('showError', e);
+          })
+      },
+      queryGetToServer({commit, state, dispatch}, data) {
+        if (data.cancash) {
+          if (state[data.key].items.length) {
+            if (!state[data.key].date) {
+              state[data.key].date = new Date();
+              return;
+            }
+            let nDat = new Date();
+            let dif = (nDat.getTime() - state[data.key].date.getTime())/1000;
+            if (dif<=3600) {
+              return;
+            }
+          }
+        }
+
+        if(!data.notwait) {
+          dispatch('showWait');
+        }
+
+        let gt = axios.get(data.url, {params: data.params})
+          .then(response => {
+            if(!data.notwait) {
+              dispatch('closeWait');
+            }
+            if (response.data.status=='OK' && data.successAction) {
+              data.successAction();
+            }
+            if (response.data.status=='ER' && data.errorAction) {
+              data.errorAction();
+            }
+            dispatch('setParams', response.data);
+          })
+        if (data.notcatch) {
+          return gt;
+        } else {
+          return gt.catch(e => {
+            if (data.errorAction) {
+              data.errorAction();
+            }
+            dispatch('showError', e);
+          })
+        }
+      },
+      setParams({ commit }, data) {
+        let dat = data;
+        if (dat.status && dat.status == 'OK') {
+          if (dat.email) {
+            commit('setAuth', true);
+            commit('setEmail', dat.email);  
+          }
+          if (dat.isVerify) {
+            commit('setVerify', dat.isVerify);
+          }
+          if (dat.data) {
+            for(let key in dat.data) {
+              commit(key, dat.data[key]);
+            }
+          }
         }
         if (dat.csrf) {
             commit('setCsrf', dat.csrf);
             axios.defaults.headers.common['X-CSRF-TOKEN'] = dat.csrf;
         }
         if (dat.redirectTo) {
-            vm.$router.push(dat.redirectTo);
+          $router.push(dat.redirectTo);
         }
         if (dat.error) {
-          vm.$notify("alert", dat.error, "error");
+          $notify("alert", dat.error, "error");
         }
         if (dat.message) {
-          vm.$notify("alert", dat.message, "success");
+          $notify("alert", dat.message, "success");
         }
       },
       showWait({commit}, data) {
@@ -138,6 +214,9 @@ export function createStore () {
       },
       showError({commit}, data) {
         let e = data;
+        clearTimeout(ta);
+        commit('setActiveWait', {'wait': false, 'block': false});
+        console.dir(e);
         if (e.response && e.response.data && e.response.data.errors) {
           let err = e.response.data.errors;
           if (err) {
@@ -146,152 +225,14 @@ export function createStore () {
                   break;
               }
           }
+        } else if (e.response && (e.response.status==419 || e.response.status==401)) {
+          if ($router.history && $router.history.pending && $router.history.pending.path) {
+            window.location.href=$router.history.pending.path;
+          } else {
+            window.location.href='/';
+          }
         } else {
-             $notify("alert", e.message, "error");
-        }
-        clearTimeout(ta);
-        commit('setActiveWait', {'wait': false, 'block': false});
-      },
-      async getCatalog({commit, state}, data) {
-        if (state.catalog.items.length) {
-          if (!state.catalog.date) {
-            state.catalog.date = new Date();
-            return;
-          }
-          let nDat = new Date();
-          let dif = (nDat.getTime() - state.catalog.date.getTime())/1000;
-          if (dif<=3600) {
-            return;
-          }
-        }
-        let res = await axios.get('/api/products/category');
-        let dat = res.data;
-
-        if (dat && dat.status == 'OK') {
-          commit('setCatalog', dat.data);
-        }
-      },
-      async getBrands({commit, state}, data) {
-        if (state.brands.items.length) {
-          if (!state.brands.date) {
-            state.brands.date = new Date();
-            return;
-          }
-          let nDat = new Date();
-          let dif = (nDat.getTime() - state.brands.date.getTime())/1000;
-          if (dif<=3600) {
-            return;
-          }
-        }
-        let res = await axios.get('/api/products/brands');
-        let dat = res.data;
-
-        if (dat && dat.status == 'OK') {
-          commit('setBrands', dat.data);
-        }
-      },
-      async getBanners({commit, state}, data) {
-        if (state.banners.items.length) {
-          if (!state.banners.date) {
-            state.banners.date = new Date();
-            return;
-          }
-          let nDat = new Date();
-          let dif = (nDat.getTime() - state.banners.date.getTime())/1000;
-          if (dif<=3600) {
-            return;
-          }
-        }
-        let res = await axios.get('/api/products/banners');
-        let dat = res.data;
-
-        if (dat && dat.status == 'OK') {
-          commit('setBanners', dat.data);
-        }
-      },
-      async getPopularProducts({commit, state}, data) {
-        let res = await axios.get('/api/products/popular');
-        let dat = res.data;
-        if (dat && dat.status == 'OK') {
-          commit('setPopularProducts', dat.data);
-        }
-      },
-      async getCurBrand({commit, state}, data) {
-        let res = await axios.get('/api/products/curbrand?chpu='+data);
-        let dat = res.data;
-        if (dat && dat.status == 'OK') {
-          commit('setCurBrand', dat.data);
-        }
-      },
-      async getOrders({commit, state}, data) {
-        let res = await axios.get('/api/products/orders?chpu='+data);
-        let dat = res.data;
-        if (dat && dat.status == 'OK') {
-          commit('setOrders', dat.data);
-        }
-      },
-      async getProduct({commit, state}, data) {
-        let res = await axios.get('/api/products/product?chpu='+data);
-        let dat = res.data;
-        if (dat && dat.status == 'OK') {
-          commit('setProduct', dat.data);
-        }
-      },
-      async getFilters({commit, state}, data) {
-        let res = await axios.get('/api/products/filters?chpu='+data);
-        let dat = res.data;
-        if (dat && dat.status == 'OK') {
-          commit('setFilters', dat.data);
-        }
-      },
-      async getProductPage({commit, state}, data) {
-        let res = await axios.get('/api/products/productpage', {params: data});
-        let dat = res.data;
-        if (dat && dat.status == 'OK') {
-          commit('setProductsOfCategoryPage', dat.data);
-        }
-      },
-      async getGroups({commit, state}, data) {
-        let res = await axios.get('/api/products/groups?chpu='+data);
-        let dat = res.data;
-        if (dat && dat.status == 'OK') {
-          commit('setGroups', dat.data);
-        }
-      },
-      async getUserPersonal({commit, state}, data) {
-        if (state.userPersonal.date || (state.userPersonal.date === '')) {
-          if (state.userPersonal.date === '') {
-            state.userPersonal.date = new Date();
-            return;
-          }
-          let nDat = new Date();
-          let dif = (nDat.getTime() - state.userPersonal.date.getTime())/1000;
-          if (dif<=3600) {
-            return;
-          }
-        }
-        let res = await axios.get('/account/personal');
-        let dat = res.data;
-        if (dat && dat.status == 'OK') {
-          commit('setUserPersonal', dat.data);
-        }
-      },
-      async getUserContragents({commit, state}, data) {
-        if (state.userContragents.date || (state.userContragents.date === '')) {
-          if (state.userContragents.date === '') {
-            state.userContragents.date = new Date();
-            return;
-          }
-          let nDat = new Date();
-          let dif = (nDat.getTime() - state.userContragents.date.getTime())/1000;
-          if (dif<=3600) {
-            return;
-          }
-        }
-        let res = await axios.get('/account/contragents');
-        let dat = res.data;
-        if (dat && dat.status == 'OK') {
-          commit('setUserContragents', dat.data);
+            $notify("alert", e.message, "error");
         }
       }
     },
@@ -465,6 +406,9 @@ export function createStore () {
       },
       setBodyBlocked(state, payload) {
         state.bodyBlocked = payload;
+      },
+      setFoundContragents(state, payload) {
+        state.foundContragents = payload;
       }
     },
     getters: {
@@ -584,6 +528,9 @@ export function createStore () {
       },
       bodyBlocked(state) {
         return state.bodyBlocked;
+      },
+      foundContragents(state) {
+        return state.foundContragents;
       }
     }
   })

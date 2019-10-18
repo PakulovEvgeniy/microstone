@@ -5,7 +5,7 @@
       </span>
       <span v-for="it in needFilters" :key="it.id" class="picked-filter">
           <button class="picked-filter__reset-btn" @click="clearFiltr(it.item)">
-              <i class="fas fa-times"></i>
+              <i class="fa fa-times"></i>
               {{it.name}}</button>
       </span>
     </div>

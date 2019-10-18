@@ -25,5 +25,8 @@ if (window.__INITIAL_STATE__) {
 if (app.$notify) {
 	window.$notify = app.$notify;
 }
+if (app.$router) {
+	window.$router = app.$router;
+}
 
 app.$mount('#app');

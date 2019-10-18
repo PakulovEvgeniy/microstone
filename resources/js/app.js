@@ -170,74 +170,135 @@ router.beforeEach((to, from, next) => {
 
 	store.dispatch('showWait');
 	
-	Promise.all([store.dispatch('getCatalog')])
+	Promise.all([store.dispatch('queryForApp', {
+					url: '/api/products/category',
+					cancash: true,
+					key: 'catalog'
+				})
+	])
 	.then((res) => {
 			let arrProm = [];
-			if (to.name == 'home') {
-				arrProm.push(store.dispatch('getBanners'));
-				arrProm.push(store.dispatch('getPopularProducts'));
-			}
-			if (to.name == 'category') {
-				if (to.params['id']) {
-					let item = findItem(store.state.catalog.items, to.params['id']);
-					if (item && item.childrens.length == 0) {
-						let para = {};
-						Object.assign(para, to.query);
-						para.chpu = to.params['id'];
-						arrProm.push(store.dispatch('getProductPage', para));
-						if (to.params['id'] != from.params['id']) {
-							arrProm.push(store.dispatch('getOrders', to.params['id']));
-							arrProm.push(store.dispatch('getGroups', to.params['id']));
-							arrProm.push(store.dispatch('getFilters', to.params['id']));
-							//arrProm.push(store.dispatch('getGrpDataOfCategory', to.params['id']));
+			let parId;
+			switch(to.name) {
+				case 'home':
+					arrProm.push(store.dispatch('queryForApp', {
+						url: '/api/products/banners',
+						cancash: true,
+						key: 'banners'
+					}));
+					arrProm.push(store.dispatch('queryForApp', {
+						url: '/api/products/popular'
+					}));
+					break;
+				case 'category':
+					if (to.params['id']) {
+						let item = findItem(store.state.catalog.items, to.params['id']);
+						if (item && item.childrens.length == 0) {
+							let para = {};
+							Object.assign(para, to.query);
+							para.chpu = to.params['id'];
+							arrProm.push(store.dispatch('queryForApp', {
+								url: '/api/products/productpage',
+								params: para
+							}));
+							if (to.params['id'] != from.params['id']) {
+								arrProm.push(store.dispatch('queryForApp', {
+									url: '/api/products/orders',
+									params: {
+										chpu: to.params['id']
+									}
+								}));
+								arrProm.push(store.dispatch('queryForApp', {
+									url: '/api/products/groups',
+									params: {
+										chpu: to.params['id']
+									}
+								}));
+								arrProm.push(store.dispatch('queryForApp', {
+									url: '/api/products/filters',
+									params: {
+										chpu: to.params['id']
+									}
+								}));
+								//arrProm.push(store.dispatch('getGrpDataOfCategory', to.params['id']));
+							}
 						}
 					}
-					//store.commit('setCategoryFiltersAll',to.query);
-				}
-			}
-			if (to.name == 'filtersCategory') {
-				 //store.commit('setNonVisibleAside', true);
-				 if (to.params['idF']) {
-					let item = findItem(store.state.catalog.items, to.params['idF']);
-					if (item && item.childrens.length == 0) {
-						if (to.params['idF'] != from.params['idF']) {
-							arrProm.push(store.dispatch('getFilters', to.params['idF']));
+					break;
+				case 'filtersCategory':
+					if (to.params['idF']) {
+						let item = findItem(store.state.catalog.items, to.params['idF']);
+						if (item && item.childrens.length == 0) {
+							if (to.params['idF'] != from.params['idF']) {
+								arrProm.push(store.dispatch('queryForApp', {
+									url: '/api/products/filters',
+									params: {
+										chpu: to.params['idF']
+									}
+								}));
+							}
+						}
+				  }
+				  break;
+				case 'product':
+				  if (to.params['id'] != from.params['id']) {
+						arrProm.push(store.dispatch('queryForApp', {
+							url: '/api/products/product',
+							params: {
+								chpu: to.params['id']
+							}
+						}));
+					}
+					break;  
+				case 'allManufacturer':
+				  arrProm.push(store.dispatch('queryForApp', {
+						url: '/api/products/brands',
+						cancash: true,
+						key: 'brands'
+					}));
+					break;
+				case 'manufacturer':
+				  arrProm.push(store.dispatch('queryForApp', {
+						url: '/api/products/brands',
+						cancash: true,
+						key: 'brands'
+					}));
+					arrProm.push(store.dispatch('queryForApp',{
+						url: '/api/products/curbrand',
+				        params: {
+				        	chpu: to.params['id']
+				        }
+					}));
+					break;
+				case 'account_id':
+				  parId = to.params['id'];
+					if (parId == 'personal') {
+						arrProm.push(store.dispatch('queryForApp',{
+							url: '/account/personal'
+						}));
+					}
+					if (parId == 'contragents') {
+						arrProm.push(store.dispatch('queryForApp', {
+							url: '/account/contragents'
+						}));
+					}
+					break;
+				case 'account_id_act':
+				  parId = to.params['id'];
+					let parAct = to.params['act'];
+					if (parId == 'contragents') {
+						arrProm.push(store.dispatch('queryForApp', {
+							url: '/account/contragents'
+						}));
+						if (parAct == 'add') {
+							arrProm.push(store.dispatch('queryForApp', {
+								url: '/account/personal'
+							}));
 						}
 					}
-				 }
+					break;	
 			}
-			if (to.name == 'product') {
-				//store.commit('setNonVisibleAside', true);
-				if (to.params['id'] != from.params['id']) {
-					arrProm.push(store.dispatch('getProduct', to.params['id']));
-				}
-			}
-			if (to.name == 'allManufacturer') {
-				arrProm.push(store.dispatch('getBrands'));
-			}
-			if (to.name == 'manufacturer') {
-				arrProm.push(store.dispatch('getBrands'));
-				arrProm.push(store.dispatch('getCurBrand', to.params['id']));
-			}
-			if (to.name == 'account_id') {
-				let parId = to.params['id'];
-				if (parId == 'personal') {
-					arrProm.push(store.dispatch('getUserPersonal'));
-				}
-				if (parId == 'contragents') {
-					arrProm.push(store.dispatch('getUserContragents'));
-				}
-			}
-			if (to.name == 'account_id_act') {
-				let parId = to.params['id'];
-				let parAct = to.params['act'];
-				if (parId == 'contragents') {
-					arrProm.push(store.dispatch('getUserContragents'));
-					if (parAct == 'add') {
-						arrProm.push(store.dispatch('getUserPersonal'));
-					}
-				}
-			}
+			
 			return Promise.all(arrProm);
 	})
 	.then((res) => {

@@ -37,8 +37,7 @@ import { mapGetters, mapActions } from 'vuex';
                     validate: /.{8}/,
                     edit: false,
                     errTxt: 'Слишком короткий пароль'
-                },
-                isQuery: false
+                }
             }
         },
         computed: {
@@ -46,7 +45,7 @@ import { mapGetters, mapActions } from 'vuex';
                 return this.showPassword ? 'text' : 'password';
             },
             isValid() {
-                return this.password.valid && !this.isQuery;
+                return this.password.valid;
             },
             ...mapGetters([
                 'csrf',
@@ -72,35 +71,21 @@ import { mapGetters, mapActions } from 'vuex';
             invalidClass(param) {
                 return this[param].edit && !this[param].valid
             },
-            ...mapActions({
-                setAuth: 'setAuth',
-                showError: 'showError',
-                showWait: 'showWait',
-                closeWait: 'closeWait'
-            }),
+            ...mapActions([
+                'queryPostToServer'
+            ]),
             onSubmit() {
                 this.error = '';
-                this.isQuery = true;
-                this.showWait();
-                axios.post('/password/reset', {   
-                    _token: this.csrf,
-                    password: this.password.value,
-                    password_confirmation: this.password.value,
-                    email: this.resetEmail.email,
-                    token: this.resetEmail.token
-                })
-                .then(response => {
-                    this.isQuery = false;
-                    this.closeWait();
-                    this.setAuth({
-                        dat: response.data,
-                        vm: this
-                    });
-                })
-                .catch(e => {
-                    this.showError(e);
-                    this.isQuery = false;
-                })
+                this.queryPostToServer({
+                    url: '/password/reset',
+                    params: {   
+                        _token: this.csrf,
+                        password: this.password.value,
+                        password_confirmation: this.password.value,
+                        email: this.resetEmail.email,
+                        token: this.resetEmail.token
+                    }
+                });
             }
         }
     }

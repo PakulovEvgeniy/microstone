@@ -172,11 +172,10 @@
           }
         },
         methods: {
-          ...mapActions({
-              showError: 'showError',
-              showWait: 'showWait',
-              closeWait: 'closeWait'
-          }),
+          ...mapActions([
+              'queryGetToServer',
+              'queryPostToServer',
+          ]),
           onChange(key,e) {
             this.userPersonalLoc[key] = e;
             if (key=='phone') {
@@ -190,25 +189,12 @@
             this.userPersonalLoc.pol = e.value;
           },
           onSubmit() {
-            this.showWait();
-            //axios.defaults.headers.common['X-CSRF-TOKEN'] = 'hjgjfdjgfje';
-            axios.post('/account/personal', {   
+            this.queryPostToServer({
+              url: '/account/personal',
+              params: {
                 ...this.userPersonalLoc
-            })
-            .then(response => {
-                this.closeWait();
-                let dat = response.data;
-                if (dat.status == 'OK') {
-                  this.$notify("alert", dat.message, "success");
-                  this.$store.commit('setUserPersonalObj', dat.data);
-                  for(let key in this.userPersonal) {
-                    this.userPersonalLoc[key] = this.userPersonal[key];
-                  }
-                }
-            })
-            .catch(e => {
-                this.showError(e);
-            })
+              }
+            });
           },
           onChangeValid(key, e) {
             if (key=='email') {
@@ -217,45 +203,32 @@
               this.validPhone = e;
             }
           },
+          setUsPers1() {
+            this.$store.commit('setUserPersonalObj', {sendConfirm: true});
+          },
+          setUsPers2() {
+            this.$store.commit('setUserPersonalObj', {sendConfirm: false});
+          },
           clickConfirm() {
-            this.showWait();
-            axios.get('/email/resend', {params: {code: 1, email: this.userPersonalLoc.email}})
-            .then(response => {
-                let dat = response.data;
-                this.closeWait();
-                if (dat.redirect) {
-                  this.$router.push(dat.redirect);
-                } else {
-                  if (dat.status == 'OK') {
-                    this.$store.commit('setUserPersonalObj', {sendConfirm: true});
-                    this.$notify("alert", dat.message, "success");
-                  }
-                }
-            })
-            .catch(e => {
-              this.showError(e);
-            })
+            this.queryGetToServer({
+              url: '/email/resend',
+              successAction: this.setUsPers1,
+              params: {
+                code: 1,
+                email: this.userPersonalLoc.email
+              }
+            });
           },
           clickConfCode() {
-            this.showWait();
-            axios.get('/email/resend', {params: {code: 2, cod: this.confirmCode, email: this.userPersonalLoc.email}})
-            .then(response => {
-                let dat = response.data;
-                this.closeWait();
-                if (dat.redirect) {
-                  this.$router.push(dat.redirect);
-                } else {
-                  if (dat.status == 'OK') {
-                    this.$store.commit('setUserPersonalObj', {sendConfirm: false, email: dat.email});
-                    this.$store.commit('setEmail', dat.email);
-                    this.$store.commit('setVerify', true);
-                    this.$notify("alert", dat.message, "success");
-                  }
-                }
-            })
-            .catch(e => {
-              this.showError(e);
-            })
+            this.queryGetToServer({
+              url: '/email/resend',
+              successAction: this.setUsPers2,
+              params: {
+                code: 2,
+                cod: this.confirmCode,
+                email: this.userPersonalLoc.email
+              }
+            });
           },
           clickCancel() {
             this.userPersonalLoc.email=this.userPersonal.email;
@@ -397,6 +370,7 @@
       height: auto;
       margin-top: 20px;
     }
+    
   }
   .confirm-email {
     &-result {

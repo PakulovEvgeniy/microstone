@@ -89,6 +89,7 @@ class VerificationController extends Controller
             return [
               'status' => 'OK',
               'email' => $request->email,
+              'isVerify' => $us->hasVerifiedEmail(),
               'message' => 'Email успешно подтвержден!'
             ];
         } else {

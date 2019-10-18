@@ -42,13 +42,12 @@ import { mapGetters, mapActions} from 'vuex';
                     errTxt: 'Некорректный e-mail'
                 },
                 captchaToken: '',
-                isQuery: false,
                 isSendEmail: false
             }
         },
         computed: {
             isValid() {
-                return this.captchaToken && this.login.valid  && !this.isQuery;
+                return this.captchaToken && this.login.valid;
             },
             ...mapGetters([
                 'csrf'
@@ -79,39 +78,23 @@ import { mapGetters, mapActions} from 'vuex';
             invalidClass(param) {
                 return this[param].edit && !this[param].valid
             },
-            ...mapActions({
-                showError: 'showError',
-                showWait: 'showWait',
-                closeWait: 'closeWait'
-            }),
+            ...mapActions([
+                'queryPostToServer'
+            ]),
             onSubmit() {
                 this.error = '';
-                this.showWait();
-                this.isQuery = true;
-                axios.post('/password/email', {   
-                    _token: this.csrf,
-                    email: this.login.value,
-                    captcha: this.captchaToken
-                })
-                .then(response => {
-                    this.isQuery = false;
-                    let dat = response.data;
-                    this.closeWait();
-                    if (dat.error) {
-                        this.$notify("alert", dat.error, "error");
-                        this.resetRecaptcha();
+                this.queryPostToServer({
+                    url: '/password/email',
+                    params: {   
+                        _token: this.csrf,
+                        email: this.login.value,
+                        captcha: this.captchaToken
+                    },
+                    errorAction: this.resetRecaptcha,
+                    successAction: () => {
+                       this.isSendEmail = true; 
                     }
-                    if (dat.success) {
-                        this.isSendEmail = true;
-                        this.$notify("alert", dat.status, "success");
-                    }
-                })
-                .catch(e => {
-                    this.resetRecaptcha();
-                    this.showError(e);
-                    this.isQuery = false;
-
-                })
+                });
             },
             resetRecaptcha () {
                 this.captchaToken = '';

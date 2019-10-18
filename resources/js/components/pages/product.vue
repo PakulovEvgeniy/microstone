@@ -28,7 +28,7 @@
                           <a @click="clickNext" class="button-right"><i class="fa fa-chevron-right"></i></a>
                           <div  :style="bigPictStyle" ref="big_pict" v-show="bigPicture" class="big-picture">
                               <a @click="bigPicture=false" class="close">
-                                  <i class="fas fa-times"></i>
+                                  <i class="fa fa-times"></i>
                               </a>
                               <div v-dragscroll :style="divStyle">
                                 <img :src="product.bigImages[curPicture]">

@@ -47,7 +47,7 @@ class ResetPasswordController extends Controller
         if ($request->ajax()) {
             return [
                 'email' => $request->user()->email,
-                'status' => 'success',
+                'status' => 'OK',
                 'isVerify' => $request->user()->hasVerifiedEmail(),
                 'redirectTo' => $this->redirectPath(),
                 'csrf' => csrf_token(),
@@ -64,9 +64,9 @@ class ResetPasswordController extends Controller
         if ($request->ajax()) {
             $errors = Session::get('errors');
             if ($errors && $errors->has('email')) {
-                return ['error' => $errors->first('email')];
+                return ['status' => 'ER','error' => $errors->first('email')];
             } else {
-                return ['success' => true];
+                return ['status' => 'OK'];
             }
         } else {
             $email = Session::get('reset_email');

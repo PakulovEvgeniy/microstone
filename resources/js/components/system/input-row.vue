@@ -201,7 +201,7 @@
       position: absolute;
       top: 0;
       left: 0;
-      padding: 18px 0 0 20px;
+      padding: 18px 20px 0 20px;
       height: 100%;
       width: 100%;
       outline: none;

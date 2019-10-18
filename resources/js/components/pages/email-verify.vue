@@ -34,25 +34,13 @@
         },
         methods: {
           ...mapActions({
-              showError: 'showError',
-              showWait: 'showWait',
-              closeWait: 'closeWait'
+              queryGetToServer: 'queryGetToServer'
           }),
           onClick() {
-            this.showWait();
-            axios.get('/email/resend')
-            .then(response => {
-                let dat = response.data;
-                this.closeWait();
-                if (dat.redirect) {
-                  this.$router.push(dat.redirect);
-                } else {
-                  this.$notify("alert", dat.message, "success");
-                }
-            })
-            .catch(e => {
-                this.showError(e);
-            })
+            this.queryGetToServer({
+              url: '/email/resend',
+              params: {}
+            });
           }
         }
     }

@@ -58,7 +58,7 @@ class LoginController extends Controller
     {
         if ($request->ajax()) {
             return [
-                'status' => 'success',
+                'status' => 'OK',
                 'email' => $user->email,
                 'isVerify' => $user->hasVerifiedEmail(),
                 'redirectTo' => $this->redirectPath(),
@@ -72,7 +72,7 @@ class LoginController extends Controller
     {
         if ($request->ajax()) {
             return [
-                'status' => 'success',
+                'status' => 'OK',
                 'csrf' => csrf_token(),
                 'redirectTo' => '/'
             ];   

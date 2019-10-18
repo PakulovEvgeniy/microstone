@@ -53,9 +53,9 @@ class ForgotPasswordController extends Controller
             $errors = Session::get('errors');
             $status = Session::get('status');
             if ($errors && $errors->has('email')) {
-                return ['error' => $errors->first('email')];
+                return ['status'=> 'ER', 'error' => $errors->first('email')];
             } else {
-                return ['success' => true, 'status' => $status];
+                return ['status' => 'OK', 'message' => $status];
             }
         }  else {
             $ssr = JSRender::render($request->path(), ['nonVisibleMain' => true]);

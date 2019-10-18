@@ -3191,7 +3191,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.showPassword ? 'text' : 'password';
     },
     isValid: function isValid() {
-      return this.login.valid && this.password.valid && !this.isQuery;
+      return this.login.valid && this.password.valid;
     }
   }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['csrf'])),
   methods: _objectSpread({
@@ -3214,35 +3214,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     invalidClass: function invalidClass(param) {
       return this[param].edit && !this[param].valid;
     }
-  }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
-    setAuth: 'setAuth',
-    showError: 'showError',
-    showWait: 'showWait',
-    closeWait: 'closeWait'
-  }), {
+  }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['queryPostToServer']), {
     onSubmit: function onSubmit() {
-      var _this = this;
-
       this.error = '';
-      this.isQuery = true;
-      this.showWait();
-      axios.post('/login', {
-        _token: this.csrf,
-        email: this.login.value,
-        password: this.password.value
-      }).then(function (response) {
-        _this.isQuery = false;
-
-        _this.closeWait();
-
-        _this.setAuth({
-          dat: response.data,
-          vm: _this
-        });
-      })["catch"](function (e) {
-        _this.showError(e);
-
-        _this.isQuery = false;
+      this.queryPostToServer({
+        url: '/login',
+        params: {
+          _token: this.csrf,
+          email: this.login.value,
+          password: this.password.value
+        }
       });
     }
   })
@@ -3366,8 +3347,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         errTxt: 'Слишком короткий пароль'
       },
       captchaToken: '',
-      isPolicy: true,
-      isQuery: false
+      isPolicy: true
     };
   },
   computed: _objectSpread({
@@ -3375,7 +3355,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.showPassword ? 'text' : 'password';
     },
     isValid: function isValid() {
-      return this.isPolicy && this.captchaToken && this.login.valid && this.password.valid && !this.isQuery;
+      return this.isPolicy && this.captchaToken && this.login.valid && this.password.valid;
     }
   }, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(['csrf'])),
   methods: _objectSpread({
@@ -3404,38 +3384,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     invalidClass: function invalidClass(param) {
       return this[param].edit && !this[param].valid;
     }
-  }, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])({
-    setAuth: 'setAuth',
-    showError: 'showError',
-    showWait: 'showWait',
-    closeWait: 'closeWait'
-  }), {
+  }, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(['queryPostToServer']), {
     onSubmit: function onSubmit() {
-      var _this = this;
-
       this.error = '';
-      this.isQuery = true;
-      this.showWait();
-      axios.post('/register', {
-        _token: this.csrf,
-        email: this.login.value,
-        password: this.password.value,
-        captcha: this.captchaToken
-      }).then(function (response) {
-        _this.isQuery = false;
-
-        _this.closeWait();
-
-        _this.setAuth({
-          dat: response.data,
-          vm: _this
-        });
-      })["catch"](function (e) {
-        _this.resetRecaptcha();
-
-        _this.showError(e);
-
-        _this.isQuery = false;
+      this.queryPostToServer({
+        url: '/register',
+        params: {
+          _token: this.csrf,
+          email: this.login.value,
+          password: this.password.value,
+          captcha: this.captchaToken
+        },
+        errorAction: this.resetRecaptcha
       });
     },
     resetRecaptcha: function resetRecaptcha() {
@@ -3504,8 +3464,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         validate: /.{8}/,
         edit: false,
         errTxt: 'Слишком короткий пароль'
-      },
-      isQuery: false
+      }
     };
   },
   computed: _objectSpread({
@@ -3513,7 +3472,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.showPassword ? 'text' : 'password';
     },
     isValid: function isValid() {
-      return this.password.valid && !this.isQuery;
+      return this.password.valid;
     }
   }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['csrf', 'resetEmail'])),
   methods: _objectSpread({
@@ -3536,37 +3495,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     invalidClass: function invalidClass(param) {
       return this[param].edit && !this[param].valid;
     }
-  }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
-    setAuth: 'setAuth',
-    showError: 'showError',
-    showWait: 'showWait',
-    closeWait: 'closeWait'
-  }), {
+  }, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['queryPostToServer']), {
     onSubmit: function onSubmit() {
-      var _this = this;
-
       this.error = '';
-      this.isQuery = true;
-      this.showWait();
-      axios.post('/password/reset', {
-        _token: this.csrf,
-        password: this.password.value,
-        password_confirmation: this.password.value,
-        email: this.resetEmail.email,
-        token: this.resetEmail.token
-      }).then(function (response) {
-        _this.isQuery = false;
-
-        _this.closeWait();
-
-        _this.setAuth({
-          dat: response.data,
-          vm: _this
-        });
-      })["catch"](function (e) {
-        _this.showError(e);
-
-        _this.isQuery = false;
+      this.queryPostToServer({
+        url: '/password/reset',
+        params: {
+          _token: this.csrf,
+          password: this.password.value,
+          password_confirmation: this.password.value,
+          email: this.resetEmail.email,
+          token: this.resetEmail.token
+        }
       });
     }
   })
@@ -3634,13 +3574,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         errTxt: 'Некорректный e-mail'
       },
       captchaToken: '',
-      isQuery: false,
       isSendEmail: false
     };
   },
   computed: _objectSpread({
     isValid: function isValid() {
-      return this.captchaToken && this.login.valid && !this.isQuery;
+      return this.captchaToken && this.login.valid;
     }
   }, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(['csrf'])),
   methods: _objectSpread({
@@ -3669,44 +3608,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     invalidClass: function invalidClass(param) {
       return this[param].edit && !this[param].valid;
     }
-  }, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])({
-    showError: 'showError',
-    showWait: 'showWait',
-    closeWait: 'closeWait'
-  }), {
+  }, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(['queryPostToServer']), {
     onSubmit: function onSubmit() {
       var _this = this;
 
       this.error = '';
-      this.showWait();
-      this.isQuery = true;
-      axios.post('/password/email', {
-        _token: this.csrf,
-        email: this.login.value,
-        captcha: this.captchaToken
-      }).then(function (response) {
-        _this.isQuery = false;
-        var dat = response.data;
-
-        _this.closeWait();
-
-        if (dat.error) {
-          _this.$notify("alert", dat.error, "error");
-
-          _this.resetRecaptcha();
-        }
-
-        if (dat.success) {
+      this.queryPostToServer({
+        url: '/password/email',
+        params: {
+          _token: this.csrf,
+          email: this.login.value,
+          captcha: this.captchaToken
+        },
+        errorAction: this.resetRecaptcha,
+        successAction: function successAction() {
           _this.isSendEmail = true;
-
-          _this.$notify("alert", dat.status, "success");
         }
-      })["catch"](function (e) {
-        _this.resetRecaptcha();
-
-        _this.showError(e);
-
-        _this.isQuery = false;
       });
     },
     resetRecaptcha: function resetRecaptcha() {
@@ -4190,6 +4107,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _accountcomps_feedback_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./accountcomps/feedback.vue */ "./resources/js/components/pages/accountcomps/feedback.vue");
 /* harmony import */ var _accountcomps_setup_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./accountcomps/setup.vue */ "./resources/js/components/pages/accountcomps/setup.vue");
 /* harmony import */ var _accountcomps_account_mobile_menu_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./accountcomps/account-mobile-menu.vue */ "./resources/js/components/pages/accountcomps/account-mobile-menu.vue");
+/* harmony import */ var _accountcomps_changepsw_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./accountcomps/changepsw.vue */ "./resources/js/components/pages/accountcomps/changepsw.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -4218,6 +4136,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+
 
 
 
@@ -4298,6 +4217,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         link: '/account/feedback',
         name: 'Обратная связь'
       }, {
+        id: 'changepsw',
+        icon: 'fa-home',
+        link: '/account/changepsw',
+        name: 'Сменить пароль'
+      }, {
         id: 'setup',
         icon: 'fa-cog',
         link: '/account/setup',
@@ -4355,7 +4279,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       }
 
-      return this.curMenu.id === 0 ? 'profile' : cur;
+      return cur === 0 ? 'profile' : cur;
     }
   }),
   methods: {
@@ -4381,7 +4305,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     waitlist: _accountcomps_waitlist_vue__WEBPACK_IMPORTED_MODULE_10__["default"],
     achievements: _accountcomps_achievements_vue__WEBPACK_IMPORTED_MODULE_11__["default"],
     feedback: _accountcomps_feedback_vue__WEBPACK_IMPORTED_MODULE_12__["default"],
-    accountMobileMenu: _accountcomps_account_mobile_menu_vue__WEBPACK_IMPORTED_MODULE_14__["default"]
+    accountMobileMenu: _accountcomps_account_mobile_menu_vue__WEBPACK_IMPORTED_MODULE_14__["default"],
+    changepsw: _accountcomps_changepsw_vue__WEBPACK_IMPORTED_MODULE_15__["default"]
   },
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
     next(function (vm) {
@@ -4505,6 +4430,99 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _system_input_row_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../system/input-row.vue */ "./resources/js/components/system/input-row.vue");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      oldPassword: '',
+      newPassword: '',
+      valids: {
+        oldPassword: false,
+        newPassword: false
+      }
+    };
+  },
+  props: [],
+  components: {
+    inputRow: _system_input_row_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['csrf']), {
+    validBtn: function validBtn() {
+      return this.valids.oldPassword && this.valids.newPassword;
+    }
+  }),
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['queryPostToServer']), {
+    onChange: function onChange(key, val) {
+      this[key] = val;
+    },
+    onChangeValid: function onChangeValid(key, val) {
+      this.valids[key] = val;
+    },
+    onSubmit: function onSubmit() {
+      this.queryPostToServer({
+        url: '/account/changepsw',
+        params: {
+          oldPassword: this.oldPassword,
+          newPassword: this.newPassword
+        }
+      });
+    }
+  })
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/contragents-add.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/accountcomps/contragents-add.vue?vue&type=script&lang=js& ***!
@@ -4564,6 +4582,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4575,7 +4609,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         family: '',
         otchestvo: '',
         name: '',
-        fullname: ''
+        fullname: '',
+        inn: ''
       },
       mount: false,
       valids: {
@@ -4593,13 +4628,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['csrf', 'userPersonal', 'userContragents']), {
     enableBtnFiz: function enableBtnFiz() {
       return this.mount && this.valids.family && this.valids.name;
+    },
+    dataType: function dataType() {
+      if (this.userContragent.type == 'u') {
+        return {
+          help1: 'Введите название в свободной форме, ИНН или ОГРН',
+          help2: 'Например: Рога и копыта'
+        };
+      } else {
+        return {
+          help1: 'Введите ИНН или фамилию, имя, отчество предпринимателя',
+          help2: 'Например: Петров Иван Семенович'
+        };
+      }
     }
   }),
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
-    showError: 'showError',
-    showWait: 'showWait',
-    closeWait: 'closeWait'
-  }), {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['queryPostToServer']), {
     onInput: function onInput(e) {
       this.userContragent.type = e.value;
     },
@@ -4610,30 +4654,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.valids[key] = value;
     },
     addFiz: function addFiz() {
-      var _this = this;
-
-      this.showWait();
-      axios.post('/account/contragents/add', {
-        'type': this.userContragent.type,
-        'name': this.userContragent.name,
-        'family': this.userContragent.family,
-        'otchestvo': this.userContragent.otchestvo
-      }).then(function (response) {
-        _this.closeWait();
-
-        var dat = response.data;
-
-        if (dat.status == 'OK') {
-          _this.$notify("alert", dat.message, "success");
-
-          _this.$store.commit('setUserContragents', dat.data);
-
-          _this.$router.push('/account/contragents');
+      this.queryPostToServer({
+        url: '/account/contragents/add',
+        params: {
+          'type': this.userContragent.type,
+          'name': this.userContragent.name,
+          'family': this.userContragent.family,
+          'otchestvo': this.userContragent.otchestvo
         }
-      })["catch"](function (e) {
-        console.dir(e);
-
-        _this.showError(e);
+      });
+    },
+    findContr: function findContr() {
+      this.queryPostToServer({
+        url: '/account/searchcontragent',
+        params: {
+          'type': this.userContragent.type,
+          'inn': this.userContragent.inn,
+          'fullname': this.userContragent.fullname
+        }
       });
     }
   }),
@@ -4986,11 +5024,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return (this.userPersonalLoc.phone != this.userPersonal.phone || this.userPersonalLoc.name != this.userPersonal.name || this.userPersonalLoc.family != this.userPersonal.family || this.userPersonalLoc.otchestvo != this.userPersonal.otchestvo || this.userPersonalLoc.nickname != this.userPersonal.nickname || this.userPersonalLoc.pol != this.userPersonal.pol || this.userPersonalLoc.bithday != this.userPersonal.bithday) && this.validPhone;
     }
   }),
-  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])({
-    showError: 'showError',
-    showWait: 'showWait',
-    closeWait: 'closeWait'
-  }), {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['queryGetToServer', 'queryPostToServer']), {
     onChange: function onChange(key, e) {
       this.userPersonalLoc[key] = e;
 
@@ -5007,26 +5041,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.userPersonalLoc.pol = e.value;
     },
     onSubmit: function onSubmit() {
-      var _this = this;
-
-      this.showWait(); //axios.defaults.headers.common['X-CSRF-TOKEN'] = 'hjgjfdjgfje';
-
-      axios.post('/account/personal', _objectSpread({}, this.userPersonalLoc)).then(function (response) {
-        _this.closeWait();
-
-        var dat = response.data;
-
-        if (dat.status == 'OK') {
-          _this.$notify("alert", dat.message, "success");
-
-          _this.$store.commit('setUserPersonalObj', dat.data);
-
-          for (var key in _this.userPersonal) {
-            _this.userPersonalLoc[key] = _this.userPersonal[key];
-          }
-        }
-      })["catch"](function (e) {
-        _this.showError(e);
+      this.queryPostToServer({
+        url: '/account/personal',
+        params: _objectSpread({}, this.userPersonalLoc)
       });
     },
     onChangeValid: function onChangeValid(key, e) {
@@ -5036,68 +5053,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         this.validPhone = e;
       }
     },
+    setUsPers1: function setUsPers1() {
+      this.$store.commit('setUserPersonalObj', {
+        sendConfirm: true
+      });
+    },
+    setUsPers2: function setUsPers2() {
+      this.$store.commit('setUserPersonalObj', {
+        sendConfirm: false
+      });
+    },
     clickConfirm: function clickConfirm() {
-      var _this2 = this;
-
-      this.showWait();
-      axios.get('/email/resend', {
+      this.queryGetToServer({
+        url: '/email/resend',
+        successAction: this.setUsPers1,
         params: {
           code: 1,
           email: this.userPersonalLoc.email
         }
-      }).then(function (response) {
-        var dat = response.data;
-
-        _this2.closeWait();
-
-        if (dat.redirect) {
-          _this2.$router.push(dat.redirect);
-        } else {
-          if (dat.status == 'OK') {
-            _this2.$store.commit('setUserPersonalObj', {
-              sendConfirm: true
-            });
-
-            _this2.$notify("alert", dat.message, "success");
-          }
-        }
-      })["catch"](function (e) {
-        _this2.showError(e);
       });
     },
     clickConfCode: function clickConfCode() {
-      var _this3 = this;
-
-      this.showWait();
-      axios.get('/email/resend', {
+      this.queryGetToServer({
+        url: '/email/resend',
+        successAction: this.setUsPers2,
         params: {
           code: 2,
           cod: this.confirmCode,
           email: this.userPersonalLoc.email
         }
-      }).then(function (response) {
-        var dat = response.data;
-
-        _this3.closeWait();
-
-        if (dat.redirect) {
-          _this3.$router.push(dat.redirect);
-        } else {
-          if (dat.status == 'OK') {
-            _this3.$store.commit('setUserPersonalObj', {
-              sendConfirm: false,
-              email: dat.email
-            });
-
-            _this3.$store.commit('setEmail', dat.email);
-
-            _this3.$store.commit('setVerify', true);
-
-            _this3.$notify("alert", dat.message, "success");
-          }
-        }
-      })["catch"](function (e) {
-        _this3.showError(e);
       });
     },
     clickCancel: function clickCancel() {
@@ -5692,26 +5676,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])(['auth', 'userEmail'])),
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapActions"])({
-    showError: 'showError',
-    showWait: 'showWait',
-    closeWait: 'closeWait'
+    queryGetToServer: 'queryGetToServer'
   }), {
     onClick: function onClick() {
-      var _this = this;
-
-      this.showWait();
-      axios.get('/email/resend').then(function (response) {
-        var dat = response.data;
-
-        _this.closeWait();
-
-        if (dat.redirect) {
-          _this.$router.push(dat.redirect);
-        } else {
-          _this.$notify("alert", dat.message, "success");
-        }
-      })["catch"](function (e) {
-        _this.showError(e);
+      this.queryGetToServer({
+        url: '/email/resend',
+        params: {}
       });
     }
   })
@@ -9992,6 +9962,17 @@ if (!Array.prototype.find) {
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??ref--4-0!./node_modules/css-loader/dist/cjs.js??ref--4-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/less-loader/dist/cjs.js??ref--4-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/accountcomps/account-mobile-menu.vue?vue&type=style&index=0&lang=less& ***!
   \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ "./node_modules/mini-css-extract-plugin/dist/loader.js?!./node_modules/css-loader/dist/cjs.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/less-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=style&index=0&lang=less&":
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??ref--4-0!./node_modules/css-loader/dist/cjs.js??ref--4-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/less-loader/dist/cjs.js??ref--4-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=style&index=0&lang=less& ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -35257,8 +35238,6 @@ var render = function() {
               invalid: _vm.invalidClass("password")
             },
             attrs: {
-              onfocus: "this.removeAttribute('readonly')",
-              readonly: "",
               type: _vm.typePassword,
               id: "password",
               name: "password",
@@ -36265,7 +36244,17 @@ var render = function() {
                               1
                             ),
                             _vm._v(" "),
-                            _c("li", [_c("a", [_vm._v("Контрагенты")])]),
+                            _c(
+                              "li",
+                              [
+                                _c(
+                                  "router-link",
+                                  { attrs: { to: "/account/contragents" } },
+                                  [_vm._v("Контрагенты")]
+                                )
+                              ],
+                              1
+                            ),
                             _vm._v(" "),
                             _c("li", [_c("a", [_vm._v("Бонусы")])]),
                             _vm._v(" "),
@@ -36304,11 +36293,7 @@ var render = function() {
                                 },
                                 [
                                   _c("input", {
-                                    attrs: {
-                                      type: "hidden",
-                                      name: "_token",
-                                      id: "csrf-token"
-                                    },
+                                    attrs: { type: "hidden", name: "_token" },
                                     domProps: { value: _vm.csrf }
                                   })
                                 ]
@@ -36840,7 +36825,7 @@ var render = function() {
                       {
                         staticClass: "account__menu_link",
                         class: { open: _vm.open, second: it.id != 0 },
-                        attrs: { to: it.link }
+                        attrs: { to: it.link, disable: true }
                       },
                       [
                         _c("i", { staticClass: "fa", class: it.icon }),
@@ -37010,6 +36995,116 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=template&id=77547742&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=template&id=77547742& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "account-changepsw" }, [
+    _c(
+      "form",
+      {
+        attrs: { action: "/account/changepsw", method: "post" },
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.onSubmit($event)
+          }
+        }
+      },
+      [
+        _c("input", {
+          attrs: { type: "hidden", name: "_token" },
+          domProps: { value: _vm.csrf }
+        }),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "account-changepsw_input-container" },
+          [
+            _c("input-row", {
+              attrs: {
+                label: "Старый пароль",
+                inputId: "oldPassword",
+                inputRequired: true,
+                inputType: "password",
+                inputValue: _vm.oldPassword,
+                validate: {
+                  pattern: /.{8}/,
+                  message: "Старый пароль должен содержать не менее 8 символов."
+                }
+              },
+              on: {
+                change: function($event) {
+                  return _vm.onChange("oldPassword", $event)
+                },
+                changeValid: function($event) {
+                  return _vm.onChangeValid("oldPassword", $event)
+                }
+              }
+            })
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "account-changepsw_input-container" },
+          [
+            _c("input-row", {
+              attrs: {
+                label: "Новый пароль",
+                inputId: "newPassword",
+                inputRequired: true,
+                inputType: "password",
+                inputValue: _vm.newPassword,
+                validate: {
+                  pattern: /.{8}/,
+                  message: "Новый пароль должен содержать не менее 8 символов."
+                }
+              },
+              on: {
+                change: function($event) {
+                  return _vm.onChange("newPassword", $event)
+                },
+                changeValid: function($event) {
+                  return _vm.onChangeValid("newPassword", $event)
+                }
+              }
+            })
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "button-ui button-ui_brand",
+            attrs: { disabled: !_vm.validBtn, type: "submit" }
+          },
+          [_vm._v("Изменить")]
+        )
+      ]
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/contragents-add.vue?vue&type=template&id=12739680&":
 /*!*************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/accountcomps/contragents-add.vue?vue&type=template&id=12739680& ***!
@@ -37157,6 +37252,46 @@ var render = function() {
           },
           [_vm._v("Добавить")]
         )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.mount && _vm.userContragent.type != "f",
+            expression: "mount && userContragent.type!='f'"
+          }
+        ],
+        staticClass: "account-contragents-add__search"
+      },
+      [
+        _c("div", { staticClass: "account-contragents-add__help first" }, [
+          _vm._v("\n      " + _vm._s(_vm.dataType.help1) + "\n    ")
+        ]),
+        _vm._v(" "),
+        _c("input-row", {
+          attrs: {
+            label: "Наименование",
+            inputId: "fullname",
+            inputRequired: false,
+            inputType: "text",
+            inputValue: _vm.userContragent.fullname
+          },
+          on: {
+            change: function($event) {
+              return _vm.onChange("fullname", $event)
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c("div", { staticClass: "account-contragents-add__help" }, [
+          _vm._v("\n      " + _vm._s(_vm.dataType.help2) + "\n    ")
+        ])
       ],
       1
     )
@@ -39399,7 +39534,7 @@ var render = function() {
                             }
                           }
                         },
-                        [_c("i", { staticClass: "fas fa-times" })]
+                        [_c("i", { staticClass: "fa fa-times" })]
                       ),
                       _vm._v(" "),
                       _c(
@@ -40739,7 +40874,7 @@ var render = function() {
               }
             },
             [
-              _c("i", { staticClass: "fas fa-times" }),
+              _c("i", { staticClass: "fa fa-times" }),
               _vm._v("\n          " + _vm._s(it.name))
             ]
           )
@@ -41493,7 +41628,7 @@ var render = function() {
       _c("a", { on: { click: _vm.onClick } }, [
         _vm._v("\n    " + _vm._s(_vm.name) + "\n    "),
         _vm.active
-          ? _c("i", { staticClass: "fas fa-times leave-category" })
+          ? _c("i", { staticClass: "fa fa-times leave-category" })
           : _vm._e()
       ])
     ]
@@ -59644,88 +59779,152 @@ _router__WEBPACK_IMPORTED_MODULE_2__["default"].beforeEach(function (to, from, n
   }
 
   store.dispatch('showWait');
-  Promise.all([store.dispatch('getCatalog')]).then(function (res) {
+  Promise.all([store.dispatch('queryForApp', {
+    url: '/api/products/category',
+    cancash: true,
+    key: 'catalog'
+  })]).then(function (res) {
     var arrProm = [];
+    var parId;
 
-    if (to.name == 'home') {
-      arrProm.push(store.dispatch('getBanners'));
-      arrProm.push(store.dispatch('getPopularProducts'));
-    }
+    switch (to.name) {
+      case 'home':
+        arrProm.push(store.dispatch('queryForApp', {
+          url: '/api/products/banners',
+          cancash: true,
+          key: 'banners'
+        }));
+        arrProm.push(store.dispatch('queryForApp', {
+          url: '/api/products/popular'
+        }));
+        break;
 
-    if (to.name == 'category') {
-      if (to.params['id']) {
-        var item = findItem(store.state.catalog.items, to.params['id']);
+      case 'category':
+        if (to.params['id']) {
+          var item = findItem(store.state.catalog.items, to.params['id']);
 
-        if (item && item.childrens.length == 0) {
-          var para = {};
+          if (item && item.childrens.length == 0) {
+            var para = {};
 
-          _extends(para, to.query);
+            _extends(para, to.query);
 
-          para.chpu = to.params['id'];
-          arrProm.push(store.dispatch('getProductPage', para));
+            para.chpu = to.params['id'];
+            arrProm.push(store.dispatch('queryForApp', {
+              url: '/api/products/productpage',
+              params: para
+            }));
 
-          if (to.params['id'] != from.params['id']) {
-            arrProm.push(store.dispatch('getOrders', to.params['id']));
-            arrProm.push(store.dispatch('getGroups', to.params['id']));
-            arrProm.push(store.dispatch('getFilters', to.params['id'])); //arrProm.push(store.dispatch('getGrpDataOfCategory', to.params['id']));
-          }
-        } //store.commit('setCategoryFiltersAll',to.query);
-
-      }
-    }
-
-    if (to.name == 'filtersCategory') {
-      //store.commit('setNonVisibleAside', true);
-      if (to.params['idF']) {
-        var _item = findItem(store.state.catalog.items, to.params['idF']);
-
-        if (_item && _item.childrens.length == 0) {
-          if (to.params['idF'] != from.params['idF']) {
-            arrProm.push(store.dispatch('getFilters', to.params['idF']));
+            if (to.params['id'] != from.params['id']) {
+              arrProm.push(store.dispatch('queryForApp', {
+                url: '/api/products/orders',
+                params: {
+                  chpu: to.params['id']
+                }
+              }));
+              arrProm.push(store.dispatch('queryForApp', {
+                url: '/api/products/groups',
+                params: {
+                  chpu: to.params['id']
+                }
+              }));
+              arrProm.push(store.dispatch('queryForApp', {
+                url: '/api/products/filters',
+                params: {
+                  chpu: to.params['id']
+                }
+              })); //arrProm.push(store.dispatch('getGrpDataOfCategory', to.params['id']));
+            }
           }
         }
-      }
-    }
 
-    if (to.name == 'product') {
-      //store.commit('setNonVisibleAside', true);
-      if (to.params['id'] != from.params['id']) {
-        arrProm.push(store.dispatch('getProduct', to.params['id']));
-      }
-    }
+        break;
 
-    if (to.name == 'allManufacturer') {
-      arrProm.push(store.dispatch('getBrands'));
-    }
+      case 'filtersCategory':
+        if (to.params['idF']) {
+          var _item = findItem(store.state.catalog.items, to.params['idF']);
 
-    if (to.name == 'manufacturer') {
-      arrProm.push(store.dispatch('getBrands'));
-      arrProm.push(store.dispatch('getCurBrand', to.params['id']));
-    }
-
-    if (to.name == 'account_id') {
-      var parId = to.params['id'];
-
-      if (parId == 'personal') {
-        arrProm.push(store.dispatch('getUserPersonal'));
-      }
-
-      if (parId == 'contragents') {
-        arrProm.push(store.dispatch('getUserContragents'));
-      }
-    }
-
-    if (to.name == 'account_id_act') {
-      var _parId = to.params['id'];
-      var parAct = to.params['act'];
-
-      if (_parId == 'contragents') {
-        arrProm.push(store.dispatch('getUserContragents'));
-
-        if (parAct == 'add') {
-          arrProm.push(store.dispatch('getUserPersonal'));
+          if (_item && _item.childrens.length == 0) {
+            if (to.params['idF'] != from.params['idF']) {
+              arrProm.push(store.dispatch('queryForApp', {
+                url: '/api/products/filters',
+                params: {
+                  chpu: to.params['idF']
+                }
+              }));
+            }
+          }
         }
-      }
+
+        break;
+
+      case 'product':
+        if (to.params['id'] != from.params['id']) {
+          arrProm.push(store.dispatch('queryForApp', {
+            url: '/api/products/product',
+            params: {
+              chpu: to.params['id']
+            }
+          }));
+        }
+
+        break;
+
+      case 'allManufacturer':
+        arrProm.push(store.dispatch('queryForApp', {
+          url: '/api/products/brands',
+          cancash: true,
+          key: 'brands'
+        }));
+        break;
+
+      case 'manufacturer':
+        arrProm.push(store.dispatch('queryForApp', {
+          url: '/api/products/brands',
+          cancash: true,
+          key: 'brands'
+        }));
+        arrProm.push(store.dispatch('queryForApp', {
+          url: '/api/products/curbrand',
+          params: {
+            chpu: to.params['id']
+          }
+        }));
+        break;
+
+      case 'account_id':
+        parId = to.params['id'];
+
+        if (parId == 'personal') {
+          arrProm.push(store.dispatch('queryForApp', {
+            url: '/account/personal'
+          }));
+        }
+
+        if (parId == 'contragents') {
+          arrProm.push(store.dispatch('queryForApp', {
+            url: '/account/contragents'
+          }));
+        }
+
+        break;
+
+      case 'account_id_act':
+        parId = to.params['id'];
+        var parAct = to.params['act'];
+
+        if (parId == 'contragents') {
+          arrProm.push(store.dispatch('queryForApp', {
+            url: '/account/contragents'
+          }));
+
+          if (parAct == 'add') {
+            arrProm.push(store.dispatch('queryForApp', {
+              url: '/account/personal'
+            }));
+          }
+        }
+
+        break;
     }
 
     return Promise.all(arrProm);
@@ -62465,6 +62664,93 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_bonus_vue_vue_type_template_id_0314d886___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_bonus_vue_vue_type_template_id_0314d886___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/accountcomps/changepsw.vue":
+/*!******************************************************************!*\
+  !*** ./resources/js/components/pages/accountcomps/changepsw.vue ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _changepsw_vue_vue_type_template_id_77547742___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./changepsw.vue?vue&type=template&id=77547742& */ "./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=template&id=77547742&");
+/* harmony import */ var _changepsw_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./changepsw.vue?vue&type=script&lang=js& */ "./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _changepsw_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./changepsw.vue?vue&type=style&index=0&lang=less& */ "./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=style&index=0&lang=less&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _changepsw_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _changepsw_vue_vue_type_template_id_77547742___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _changepsw_vue_vue_type_template_id_77547742___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/pages/accountcomps/changepsw.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_2_node_modules_vue_loader_lib_index_js_vue_loader_options_changepsw_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./changepsw.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_2_node_modules_vue_loader_lib_index_js_vue_loader_options_changepsw_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=style&index=0&lang=less&":
+/*!****************************************************************************************************!*\
+  !*** ./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=style&index=0&lang=less& ***!
+  \****************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_changepsw_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/mini-css-extract-plugin/dist/loader.js??ref--4-0!../../../../../node_modules/css-loader/dist/cjs.js??ref--4-1!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/less-loader/dist/cjs.js??ref--4-2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./changepsw.vue?vue&type=style&index=0&lang=less& */ "./node_modules/mini-css-extract-plugin/dist/loader.js?!./node_modules/css-loader/dist/cjs.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/less-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=style&index=0&lang=less&");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_changepsw_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_changepsw_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_changepsw_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_changepsw_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_changepsw_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=template&id=77547742&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=template&id=77547742& ***!
+  \*************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_changepsw_vue_vue_type_template_id_77547742___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./changepsw.vue?vue&type=template&id=77547742& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/changepsw.vue?vue&type=template&id=77547742&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_changepsw_vue_vue_type_template_id_77547742___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_changepsw_vue_vue_type_template_id_77547742___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -66898,6 +67184,10 @@ if (_app__WEBPACK_IMPORTED_MODULE_5__["default"].$notify) {
   window.$notify = _app__WEBPACK_IMPORTED_MODULE_5__["default"].$notify;
 }
 
+if (_app__WEBPACK_IMPORTED_MODULE_5__["default"].$router) {
+  window.$router = _app__WEBPACK_IMPORTED_MODULE_5__["default"].$router;
+}
+
 _app__WEBPACK_IMPORTED_MODULE_5__["default"].$mount('#app');
 
 /***/ }),
@@ -67149,10 +67439,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
@@ -67245,15 +67531,108 @@ function createStore() {
         items: [{
           id: 0
         }]
-      }
+      },
+      foundContragents: []
     },
     actions: {
-      setAuth: function setAuth(_ref, data) {
-        var commit = _ref.commit;
-        var dat = data.dat;
-        var vm = data.vm;
+      queryForApp: function queryForApp(_ref, data) {
+        var commit = _ref.commit,
+            state = _ref.state,
+            dispatch = _ref.dispatch;
+        data.notwait = true;
+        data.notcatch = true;
 
-        if (dat.status && dat.status == 'success') {
+        if (!data.params) {
+          data.params = {};
+        }
+
+        return dispatch('queryGetToServer', data);
+      },
+      queryPostToServer: function queryPostToServer(_ref2, data) {
+        var commit = _ref2.commit,
+            state = _ref2.state,
+            dispatch = _ref2.dispatch;
+        dispatch('showWait');
+        axios.post(data.url, data.params).then(function (response) {
+          dispatch('closeWait');
+
+          if (response.data.status == 'OK' && data.successAction) {
+            data.successAction();
+          }
+
+          if (response.data.status == 'ER' && data.errorAction) {
+            data.errorAction();
+          }
+
+          dispatch('setParams', response.data);
+        })["catch"](function (e) {
+          if (data.errorAction) {
+            data.errorAction();
+          }
+
+          dispatch('showError', e);
+        });
+      },
+      queryGetToServer: function queryGetToServer(_ref3, data) {
+        var commit = _ref3.commit,
+            state = _ref3.state,
+            dispatch = _ref3.dispatch;
+
+        if (data.cancash) {
+          if (state[data.key].items.length) {
+            if (!state[data.key].date) {
+              state[data.key].date = new Date();
+              return;
+            }
+
+            var nDat = new Date();
+            var dif = (nDat.getTime() - state[data.key].date.getTime()) / 1000;
+
+            if (dif <= 3600) {
+              return;
+            }
+          }
+        }
+
+        if (!data.notwait) {
+          dispatch('showWait');
+        }
+
+        var gt = axios.get(data.url, {
+          params: data.params
+        }).then(function (response) {
+          if (!data.notwait) {
+            dispatch('closeWait');
+          }
+
+          if (response.data.status == 'OK' && data.successAction) {
+            data.successAction();
+          }
+
+          if (response.data.status == 'ER' && data.errorAction) {
+            data.errorAction();
+          }
+
+          dispatch('setParams', response.data);
+        });
+
+        if (data.notcatch) {
+          return gt;
+        } else {
+          return gt["catch"](function (e) {
+            if (data.errorAction) {
+              data.errorAction();
+            }
+
+            dispatch('showError', e);
+          });
+        }
+      },
+      setParams: function setParams(_ref4, data) {
+        var commit = _ref4.commit;
+        var dat = data;
+
+        if (dat.status && dat.status == 'OK') {
           if (dat.email) {
             commit('setAuth', true);
             commit('setEmail', dat.email);
@@ -67261,6 +67640,12 @@ function createStore() {
 
           if (dat.isVerify) {
             commit('setVerify', dat.isVerify);
+          }
+
+          if (dat.data) {
+            for (var key in dat.data) {
+              commit(key, dat.data[key]);
+            }
           }
         }
 
@@ -67270,35 +67655,41 @@ function createStore() {
         }
 
         if (dat.redirectTo) {
-          vm.$router.push(dat.redirectTo);
+          $router.push(dat.redirectTo);
         }
 
         if (dat.error) {
-          vm.$notify("alert", dat.error, "error");
+          $notify("alert", dat.error, "error");
         }
 
         if (dat.message) {
-          vm.$notify("alert", dat.message, "success");
+          $notify("alert", dat.message, "success");
         }
       },
-      showWait: function showWait(_ref2, data) {
-        var commit = _ref2.commit;
+      showWait: function showWait(_ref5, data) {
+        var commit = _ref5.commit;
         commit('setActiveBlock', true);
         ta = setTimeout(function () {
           commit('setActiveWait', true);
         }, 200);
       },
-      closeWait: function closeWait(_ref3, data) {
-        var commit = _ref3.commit;
+      closeWait: function closeWait(_ref6, data) {
+        var commit = _ref6.commit;
         clearTimeout(ta);
         commit('setActiveWait', {
           'wait': false,
           'block': false
         });
       },
-      showError: function showError(_ref4, data) {
-        var commit = _ref4.commit;
+      showError: function showError(_ref7, data) {
+        var commit = _ref7.commit;
         var e = data;
+        clearTimeout(ta);
+        commit('setActiveWait', {
+          'wait': false,
+          'block': false
+        });
+        console.dir(e);
 
         if (e.response && e.response.data && e.response.data.errors) {
           var err = e.response.data.errors;
@@ -67309,568 +67700,16 @@ function createStore() {
               break;
             }
           }
+        } else if (e.response && (e.response.status == 419 || e.response.status == 401)) {
+          if ($router.history && $router.history.pending && $router.history.pending.path) {
+            window.location.href = $router.history.pending.path;
+          } else {
+            window.location.href = '/';
+          }
         } else {
           $notify("alert", e.message, "error");
         }
-
-        clearTimeout(ta);
-        commit('setActiveWait', {
-          'wait': false,
-          'block': false
-        });
-      },
-      getCatalog: function () {
-        var _getCatalog = _asyncToGenerator(
-        /*#__PURE__*/
-        regeneratorRuntime.mark(function _callee(_ref5, data) {
-          var commit, state, nDat, dif, res, dat;
-          return regeneratorRuntime.wrap(function _callee$(_context) {
-            while (1) {
-              switch (_context.prev = _context.next) {
-                case 0:
-                  commit = _ref5.commit, state = _ref5.state;
-
-                  if (!state.catalog.items.length) {
-                    _context.next = 9;
-                    break;
-                  }
-
-                  if (state.catalog.date) {
-                    _context.next = 5;
-                    break;
-                  }
-
-                  state.catalog.date = new Date();
-                  return _context.abrupt("return");
-
-                case 5:
-                  nDat = new Date();
-                  dif = (nDat.getTime() - state.catalog.date.getTime()) / 1000;
-
-                  if (!(dif <= 3600)) {
-                    _context.next = 9;
-                    break;
-                  }
-
-                  return _context.abrupt("return");
-
-                case 9:
-                  _context.next = 11;
-                  return axios.get('/api/products/category');
-
-                case 11:
-                  res = _context.sent;
-                  dat = res.data;
-
-                  if (dat && dat.status == 'OK') {
-                    commit('setCatalog', dat.data);
-                  }
-
-                case 14:
-                case "end":
-                  return _context.stop();
-              }
-            }
-          }, _callee);
-        }));
-
-        function getCatalog(_x, _x2) {
-          return _getCatalog.apply(this, arguments);
-        }
-
-        return getCatalog;
-      }(),
-      getBrands: function () {
-        var _getBrands = _asyncToGenerator(
-        /*#__PURE__*/
-        regeneratorRuntime.mark(function _callee2(_ref6, data) {
-          var commit, state, nDat, dif, res, dat;
-          return regeneratorRuntime.wrap(function _callee2$(_context2) {
-            while (1) {
-              switch (_context2.prev = _context2.next) {
-                case 0:
-                  commit = _ref6.commit, state = _ref6.state;
-
-                  if (!state.brands.items.length) {
-                    _context2.next = 9;
-                    break;
-                  }
-
-                  if (state.brands.date) {
-                    _context2.next = 5;
-                    break;
-                  }
-
-                  state.brands.date = new Date();
-                  return _context2.abrupt("return");
-
-                case 5:
-                  nDat = new Date();
-                  dif = (nDat.getTime() - state.brands.date.getTime()) / 1000;
-
-                  if (!(dif <= 3600)) {
-                    _context2.next = 9;
-                    break;
-                  }
-
-                  return _context2.abrupt("return");
-
-                case 9:
-                  _context2.next = 11;
-                  return axios.get('/api/products/brands');
-
-                case 11:
-                  res = _context2.sent;
-                  dat = res.data;
-
-                  if (dat && dat.status == 'OK') {
-                    commit('setBrands', dat.data);
-                  }
-
-                case 14:
-                case "end":
-                  return _context2.stop();
-              }
-            }
-          }, _callee2);
-        }));
-
-        function getBrands(_x3, _x4) {
-          return _getBrands.apply(this, arguments);
-        }
-
-        return getBrands;
-      }(),
-      getBanners: function () {
-        var _getBanners = _asyncToGenerator(
-        /*#__PURE__*/
-        regeneratorRuntime.mark(function _callee3(_ref7, data) {
-          var commit, state, nDat, dif, res, dat;
-          return regeneratorRuntime.wrap(function _callee3$(_context3) {
-            while (1) {
-              switch (_context3.prev = _context3.next) {
-                case 0:
-                  commit = _ref7.commit, state = _ref7.state;
-
-                  if (!state.banners.items.length) {
-                    _context3.next = 9;
-                    break;
-                  }
-
-                  if (state.banners.date) {
-                    _context3.next = 5;
-                    break;
-                  }
-
-                  state.banners.date = new Date();
-                  return _context3.abrupt("return");
-
-                case 5:
-                  nDat = new Date();
-                  dif = (nDat.getTime() - state.banners.date.getTime()) / 1000;
-
-                  if (!(dif <= 3600)) {
-                    _context3.next = 9;
-                    break;
-                  }
-
-                  return _context3.abrupt("return");
-
-                case 9:
-                  _context3.next = 11;
-                  return axios.get('/api/products/banners');
-
-                case 11:
-                  res = _context3.sent;
-                  dat = res.data;
-
-                  if (dat && dat.status == 'OK') {
-                    commit('setBanners', dat.data);
-                  }
-
-                case 14:
-                case "end":
-                  return _context3.stop();
-              }
-            }
-          }, _callee3);
-        }));
-
-        function getBanners(_x5, _x6) {
-          return _getBanners.apply(this, arguments);
-        }
-
-        return getBanners;
-      }(),
-      getPopularProducts: function () {
-        var _getPopularProducts = _asyncToGenerator(
-        /*#__PURE__*/
-        regeneratorRuntime.mark(function _callee4(_ref8, data) {
-          var commit, state, res, dat;
-          return regeneratorRuntime.wrap(function _callee4$(_context4) {
-            while (1) {
-              switch (_context4.prev = _context4.next) {
-                case 0:
-                  commit = _ref8.commit, state = _ref8.state;
-                  _context4.next = 3;
-                  return axios.get('/api/products/popular');
-
-                case 3:
-                  res = _context4.sent;
-                  dat = res.data;
-
-                  if (dat && dat.status == 'OK') {
-                    commit('setPopularProducts', dat.data);
-                  }
-
-                case 6:
-                case "end":
-                  return _context4.stop();
-              }
-            }
-          }, _callee4);
-        }));
-
-        function getPopularProducts(_x7, _x8) {
-          return _getPopularProducts.apply(this, arguments);
-        }
-
-        return getPopularProducts;
-      }(),
-      getCurBrand: function () {
-        var _getCurBrand = _asyncToGenerator(
-        /*#__PURE__*/
-        regeneratorRuntime.mark(function _callee5(_ref9, data) {
-          var commit, state, res, dat;
-          return regeneratorRuntime.wrap(function _callee5$(_context5) {
-            while (1) {
-              switch (_context5.prev = _context5.next) {
-                case 0:
-                  commit = _ref9.commit, state = _ref9.state;
-                  _context5.next = 3;
-                  return axios.get('/api/products/curbrand?chpu=' + data);
-
-                case 3:
-                  res = _context5.sent;
-                  dat = res.data;
-
-                  if (dat && dat.status == 'OK') {
-                    commit('setCurBrand', dat.data);
-                  }
-
-                case 6:
-                case "end":
-                  return _context5.stop();
-              }
-            }
-          }, _callee5);
-        }));
-
-        function getCurBrand(_x9, _x10) {
-          return _getCurBrand.apply(this, arguments);
-        }
-
-        return getCurBrand;
-      }(),
-      getOrders: function () {
-        var _getOrders = _asyncToGenerator(
-        /*#__PURE__*/
-        regeneratorRuntime.mark(function _callee6(_ref10, data) {
-          var commit, state, res, dat;
-          return regeneratorRuntime.wrap(function _callee6$(_context6) {
-            while (1) {
-              switch (_context6.prev = _context6.next) {
-                case 0:
-                  commit = _ref10.commit, state = _ref10.state;
-                  _context6.next = 3;
-                  return axios.get('/api/products/orders?chpu=' + data);
-
-                case 3:
-                  res = _context6.sent;
-                  dat = res.data;
-
-                  if (dat && dat.status == 'OK') {
-                    commit('setOrders', dat.data);
-                  }
-
-                case 6:
-                case "end":
-                  return _context6.stop();
-              }
-            }
-          }, _callee6);
-        }));
-
-        function getOrders(_x11, _x12) {
-          return _getOrders.apply(this, arguments);
-        }
-
-        return getOrders;
-      }(),
-      getProduct: function () {
-        var _getProduct = _asyncToGenerator(
-        /*#__PURE__*/
-        regeneratorRuntime.mark(function _callee7(_ref11, data) {
-          var commit, state, res, dat;
-          return regeneratorRuntime.wrap(function _callee7$(_context7) {
-            while (1) {
-              switch (_context7.prev = _context7.next) {
-                case 0:
-                  commit = _ref11.commit, state = _ref11.state;
-                  _context7.next = 3;
-                  return axios.get('/api/products/product?chpu=' + data);
-
-                case 3:
-                  res = _context7.sent;
-                  dat = res.data;
-
-                  if (dat && dat.status == 'OK') {
-                    commit('setProduct', dat.data);
-                  }
-
-                case 6:
-                case "end":
-                  return _context7.stop();
-              }
-            }
-          }, _callee7);
-        }));
-
-        function getProduct(_x13, _x14) {
-          return _getProduct.apply(this, arguments);
-        }
-
-        return getProduct;
-      }(),
-      getFilters: function () {
-        var _getFilters = _asyncToGenerator(
-        /*#__PURE__*/
-        regeneratorRuntime.mark(function _callee8(_ref12, data) {
-          var commit, state, res, dat;
-          return regeneratorRuntime.wrap(function _callee8$(_context8) {
-            while (1) {
-              switch (_context8.prev = _context8.next) {
-                case 0:
-                  commit = _ref12.commit, state = _ref12.state;
-                  _context8.next = 3;
-                  return axios.get('/api/products/filters?chpu=' + data);
-
-                case 3:
-                  res = _context8.sent;
-                  dat = res.data;
-
-                  if (dat && dat.status == 'OK') {
-                    commit('setFilters', dat.data);
-                  }
-
-                case 6:
-                case "end":
-                  return _context8.stop();
-              }
-            }
-          }, _callee8);
-        }));
-
-        function getFilters(_x15, _x16) {
-          return _getFilters.apply(this, arguments);
-        }
-
-        return getFilters;
-      }(),
-      getProductPage: function () {
-        var _getProductPage = _asyncToGenerator(
-        /*#__PURE__*/
-        regeneratorRuntime.mark(function _callee9(_ref13, data) {
-          var commit, state, res, dat;
-          return regeneratorRuntime.wrap(function _callee9$(_context9) {
-            while (1) {
-              switch (_context9.prev = _context9.next) {
-                case 0:
-                  commit = _ref13.commit, state = _ref13.state;
-                  _context9.next = 3;
-                  return axios.get('/api/products/productpage', {
-                    params: data
-                  });
-
-                case 3:
-                  res = _context9.sent;
-                  dat = res.data;
-
-                  if (dat && dat.status == 'OK') {
-                    commit('setProductsOfCategoryPage', dat.data);
-                  }
-
-                case 6:
-                case "end":
-                  return _context9.stop();
-              }
-            }
-          }, _callee9);
-        }));
-
-        function getProductPage(_x17, _x18) {
-          return _getProductPage.apply(this, arguments);
-        }
-
-        return getProductPage;
-      }(),
-      getGroups: function () {
-        var _getGroups = _asyncToGenerator(
-        /*#__PURE__*/
-        regeneratorRuntime.mark(function _callee10(_ref14, data) {
-          var commit, state, res, dat;
-          return regeneratorRuntime.wrap(function _callee10$(_context10) {
-            while (1) {
-              switch (_context10.prev = _context10.next) {
-                case 0:
-                  commit = _ref14.commit, state = _ref14.state;
-                  _context10.next = 3;
-                  return axios.get('/api/products/groups?chpu=' + data);
-
-                case 3:
-                  res = _context10.sent;
-                  dat = res.data;
-
-                  if (dat && dat.status == 'OK') {
-                    commit('setGroups', dat.data);
-                  }
-
-                case 6:
-                case "end":
-                  return _context10.stop();
-              }
-            }
-          }, _callee10);
-        }));
-
-        function getGroups(_x19, _x20) {
-          return _getGroups.apply(this, arguments);
-        }
-
-        return getGroups;
-      }(),
-      getUserPersonal: function () {
-        var _getUserPersonal = _asyncToGenerator(
-        /*#__PURE__*/
-        regeneratorRuntime.mark(function _callee11(_ref15, data) {
-          var commit, state, nDat, dif, res, dat;
-          return regeneratorRuntime.wrap(function _callee11$(_context11) {
-            while (1) {
-              switch (_context11.prev = _context11.next) {
-                case 0:
-                  commit = _ref15.commit, state = _ref15.state;
-
-                  if (!(state.userPersonal.date || state.userPersonal.date === '')) {
-                    _context11.next = 9;
-                    break;
-                  }
-
-                  if (!(state.userPersonal.date === '')) {
-                    _context11.next = 5;
-                    break;
-                  }
-
-                  state.userPersonal.date = new Date();
-                  return _context11.abrupt("return");
-
-                case 5:
-                  nDat = new Date();
-                  dif = (nDat.getTime() - state.userPersonal.date.getTime()) / 1000;
-
-                  if (!(dif <= 3600)) {
-                    _context11.next = 9;
-                    break;
-                  }
-
-                  return _context11.abrupt("return");
-
-                case 9:
-                  _context11.next = 11;
-                  return axios.get('/account/personal');
-
-                case 11:
-                  res = _context11.sent;
-                  dat = res.data;
-
-                  if (dat && dat.status == 'OK') {
-                    commit('setUserPersonal', dat.data);
-                  }
-
-                case 14:
-                case "end":
-                  return _context11.stop();
-              }
-            }
-          }, _callee11);
-        }));
-
-        function getUserPersonal(_x21, _x22) {
-          return _getUserPersonal.apply(this, arguments);
-        }
-
-        return getUserPersonal;
-      }(),
-      getUserContragents: function () {
-        var _getUserContragents = _asyncToGenerator(
-        /*#__PURE__*/
-        regeneratorRuntime.mark(function _callee12(_ref16, data) {
-          var commit, state, nDat, dif, res, dat;
-          return regeneratorRuntime.wrap(function _callee12$(_context12) {
-            while (1) {
-              switch (_context12.prev = _context12.next) {
-                case 0:
-                  commit = _ref16.commit, state = _ref16.state;
-
-                  if (!(state.userContragents.date || state.userContragents.date === '')) {
-                    _context12.next = 9;
-                    break;
-                  }
-
-                  if (!(state.userContragents.date === '')) {
-                    _context12.next = 5;
-                    break;
-                  }
-
-                  state.userContragents.date = new Date();
-                  return _context12.abrupt("return");
-
-                case 5:
-                  nDat = new Date();
-                  dif = (nDat.getTime() - state.userContragents.date.getTime()) / 1000;
-
-                  if (!(dif <= 3600)) {
-                    _context12.next = 9;
-                    break;
-                  }
-
-                  return _context12.abrupt("return");
-
-                case 9:
-                  _context12.next = 11;
-                  return axios.get('/account/contragents');
-
-                case 11:
-                  res = _context12.sent;
-                  dat = res.data;
-
-                  if (dat && dat.status == 'OK') {
-                    commit('setUserContragents', dat.data);
-                  }
-
-                case 14:
-                case "end":
-                  return _context12.stop();
-              }
-            }
-          }, _callee12);
-        }));
-
-        function getUserContragents(_x23, _x24) {
-          return _getUserContragents.apply(this, arguments);
-        }
-
-        return getUserContragents;
-      }()
+      }
     },
     mutations: {
       setName: function setName(state, payload) {
@@ -68056,6 +67895,9 @@ function createStore() {
       },
       setBodyBlocked: function setBodyBlocked(state, payload) {
         state.bodyBlocked = payload;
+      },
+      setFoundContragents: function setFoundContragents(state, payload) {
+        state.foundContragents = payload;
       }
     },
     getters: {
@@ -68175,6 +68017,9 @@ function createStore() {
       },
       bodyBlocked: function bodyBlocked(state) {
         return state.bodyBlocked;
+      },
+      foundContragents: function foundContragents(state) {
+        return state.foundContragents;
       }
     }
   });

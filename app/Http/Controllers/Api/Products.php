@@ -21,36 +21,44 @@ class Products extends Controller
     	$data = [];
     	if ($param == 'category') {
     		$stat = 'OK';
-    		$data = Category::getCatalog('');
+    		$data = [
+    			'setCatalog' => Category::getCatalog('')
+    		];
 		}
 		if ($param == 'orders') {
 			$qu = $request->all();
 			if (isset($qu['chpu'])) {
 				$stat = 'OK';
-				$data = Orders::getOrdersByChpu($qu['chpu']);
+				$data = [
+					'setOrders' => Orders::getOrdersByChpu($qu['chpu'])
+				];
 			}
 		}
 		if ($param == 'curbrand') {
 			$qu = $request->all();
 			if (isset($qu['chpu'])) {
 				$stat = 'OK';
-				$data = Brands::getBrandByChpu($qu['chpu']);
+				$data = [
+				 'setCurBrand' =>	Brands::getBrandByChpu($qu['chpu'])
+				];
 			}
 		}
-		if ($param == 'products_cat') {
-			$qu = $request->all();
-			if (isset($qu['chpu'])) {
-				$stat = 'OK';
-				$data = mod_Products::getProductsByChpu($qu['chpu']);
-			}
-		}
+		//if ($param == 'products_cat') {
+		//	$qu = $request->all();
+		//	if (isset($qu['chpu'])) {
+		//		$stat = 'OK';
+		//		$data = mod_Products::getProductsByChpu($qu['chpu']);
+		//	}
+		//}
 		if ($param == 'productpage') {
 			$qu = $request->all();
 			if (isset($qu['chpu'])) {
 				$id_1s = mod_Products::getProductByChpu($qu['chpu']);
 				if ($id_1s) {
 					$stat = 'OK';
-					$data = mod_Products::getProductsCategoryPage($id_1s, $qu);
+					$data = [
+						'setProductsOfCategoryPage' => mod_Products::getProductsCategoryPage($id_1s, $qu)
+					];
 				}
 			}
 		}
@@ -59,7 +67,9 @@ class Products extends Controller
 			$qu = $request->all();
 			if (isset($qu['chpu'])) {
 				$stat = 'OK';
-				$data = Groups::getGroupsByChpu($qu['chpu']);
+				$data = [
+					'setGroups' => Groups::getGroupsByChpu($qu['chpu'])
+				];
 			}
 		}
 		if ($param == 'popular') {
@@ -67,15 +77,19 @@ class Products extends Controller
 			//if (isset($qu['chpu'])) {
 			$stat = 'OK';
 			$data = [
+			  'setPopularProducts' =>	[
 				'category' => Category::getPopularCategory(),
 				'product' => mod_Products::getPopularProduct()
+			  ]
 			];
 			//}
 		}
 		if ($param == 'brands') {
 			
 			$stat = 'OK';
-			$data = Brands::getBrands();
+			$data = [
+				'setBrands' => Brands::getBrands()
+			];
 		}
 		if ($param == 'product') {
 			$qu = $request->all();
@@ -83,14 +97,18 @@ class Products extends Controller
 				$id_1s = mod_Products::getId_1sByChpu($qu['chpu']);
 				if ($id_1s) {
 					$stat = 'OK';
-					$data = mod_Products::getProduct($id_1s);
+					$data = [
+						'setProduct' => mod_Products::getProduct($id_1s)
+					];
 				}
 			}
 		}
 
 		if ($param == 'banners') {
 			$stat = 'OK';
-    		$data = Category::getBanners();
+    		$data = [
+    			'setBanners' => Category::getBanners()
+    		];
 		}
 
 		if ($param == 'filters') {
@@ -98,8 +116,10 @@ class Products extends Controller
 			if (isset($qu['chpu'])) {
 				$stat = 'OK';
 				$data = [
-					'filters' => Filters::getFiltersByChpu($qu['chpu']),
-					'filtersDef' => FiltersDef::getFiltersDefByChpu($qu['chpu'])
+					'setFilters' => [
+						'filters' => Filters::getFiltersByChpu($qu['chpu']),
+						'filtersDef' => FiltersDef::getFiltersDefByChpu($qu['chpu'])
+					]
 				];
 			}
 		}

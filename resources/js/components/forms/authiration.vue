@@ -7,7 +7,7 @@
             <input @blur="onBlur('login')" :class="{'valid': validClass('login'), 'invalid' : invalidClass('login')}" id="email" name="email" :value="login.value" @input="onInput($event,'login')" type="email">
             <label for="password">Пароль</label>
             <div class="password-area">
-                <input onfocus="this.removeAttribute('readonly')" readonly @blur="onBlur('password')" :type="typePassword" :class="{'valid': validClass('password'), 'invalid' : invalidClass('password')}" id="password" @input="onInput($event, 'password')" :value="password.value" name="password" placeholder="Не менее 8 символов">
+                <input  @blur="onBlur('password')" :type="typePassword" :class="{'valid': validClass('password'), 'invalid' : invalidClass('password')}" id="password" @input="onInput($event, 'password')" :value="password.value" name="password" placeholder="Не менее 8 символов">
                 <div class="show-password" title="Показать пароль">
                     <span @click="showPassword = !showPassword">Показать</span>
                     <input type="checkbox" id="cb-show-password" v-model="showPassword">
@@ -56,7 +56,7 @@ import { mapGetters, mapActions } from 'vuex';
                 return this.showPassword ? 'text' : 'password';
             },
             isValid() {
-                return this.login.valid && this.password.valid && !this.isQuery;
+                return this.login.valid && this.password.valid;
             },
             ...mapGetters([
                 'csrf'
@@ -81,34 +81,19 @@ import { mapGetters, mapActions } from 'vuex';
             invalidClass(param) {
                 return this[param].edit && !this[param].valid
             },
-            ...mapActions({
-                setAuth: 'setAuth',
-                showError: 'showError',
-                showWait: 'showWait',
-                closeWait: 'closeWait'
-            }),
+            ...mapActions([
+                'queryPostToServer'
+            ]),
             onSubmit() {
                 this.error = '';
-                this.isQuery = true;
-                this.showWait();
-                axios.post('/login', {   
-                    _token: this.csrf,
-                    email: this.login.value,
-                    password: this.password.value
-                })
-                .then(response => {
-                    this.isQuery = false;
-                    this.closeWait();
-                    this.setAuth({
-                        dat: response.data,
-                        vm: this
-                    });
-                })
-                .catch(e => {
-                    this.showError(e);
-                    this.isQuery = false;
-
-                })
+                this.queryPostToServer({
+                    url: '/login',
+                    params: {   
+                        _token: this.csrf,
+                        email: this.login.value,
+                        password: this.password.value
+                    }
+                });
             }
         }
     }

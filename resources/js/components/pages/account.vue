@@ -6,7 +6,7 @@
           <account-mobile-menu :open="open" :menu="menu" @click="open=false"></account-mobile-menu>
           <ul class="account__menu_ul">
             <li v-for="it in menu" :key="it.id">
-              <router-link :to="it.link" class="account__menu_link" :class="{'open': open, 'second': it.id!=0}"><i class="fa" :class="it.icon"></i>{{it.name}}</router-link>
+              <router-link :to="it.link" class="account__menu_link" :class="{'open': open, 'second': it.id!=0}" :disable="true"><i class="fa" :class="it.icon"></i>{{it.name}}</router-link>
             </li>
           </ul>
         </div>
@@ -36,6 +36,7 @@
     import feedback from './accountcomps/feedback.vue';
     import setup from './accountcomps/setup.vue';
     import accountMobileMenu from './accountcomps/account-mobile-menu.vue';
+    import changepsw from './accountcomps/changepsw.vue';
     export default {
         data() {
             return {
@@ -115,6 +116,12 @@
                    name: 'Обратная связь'
                  },
                  {
+                   id: 'changepsw',
+                   icon: 'fa-home',
+                   link: '/account/changepsw',
+                   name: 'Сменить пароль'
+                 },
+                 {
                    id: 'setup',
                    icon: 'fa-cog',
                    link: '/account/setup',
@@ -159,7 +166,7 @@
                 if (elem) {cur = elem.comp}
               }
             }
-            return this.curMenu.id === 0 ? 'profile' : cur;
+            return cur === 0 ? 'profile' : cur;
           }
         },
         methods: {
@@ -184,7 +191,8 @@
           waitlist,
           achievements,
           feedback,
-          accountMobileMenu
+          accountMobileMenu,
+          changepsw
         },
         beforeRouteEnter (to, from, next) {
           next(vm => {
@@ -285,6 +293,7 @@
           left: 0;
           box-shadow: 0 4px 8px 0 rgba(0,0,0,0.16);
           z-index: 100;
+          pointer-events: none;
         }
       }
       &_menu {

@@ -62,8 +62,7 @@ import { mapGetters, mapActions } from 'vuex';
                     errTxt: 'Слишком короткий пароль'
                 },
                 captchaToken: '',
-                isPolicy:true,
-                isQuery: false
+                isPolicy:true
             }
         },
         computed: {
@@ -71,7 +70,7 @@ import { mapGetters, mapActions } from 'vuex';
                 return this.showPassword ? 'text' : 'password';
             },
             isValid() {
-                return this.isPolicy && this.captchaToken && this.login.valid && this.password.valid && !this.isQuery;
+                return this.isPolicy && this.captchaToken && this.login.valid && this.password.valid;
             },
             ...mapGetters([
                 'csrf'
@@ -102,36 +101,21 @@ import { mapGetters, mapActions } from 'vuex';
             invalidClass(param) {
                 return this[param].edit && !this[param].valid
             },
-            ...mapActions({
-                setAuth: 'setAuth',
-                showError: 'showError',
-                showWait: 'showWait',
-                closeWait: 'closeWait'
-            }),
+            ...mapActions([
+                'queryPostToServer'
+            ]),
             onSubmit() {
                 this.error = '';
-                this.isQuery = true;
-                this.showWait();
-                axios.post('/register', {   
-                    _token: this.csrf,
-                    email: this.login.value,
-                    password: this.password.value,
-                    captcha: this.captchaToken
-                })
-                .then(response => {
-                    this.isQuery = false;
-                    this.closeWait();
-                    this.setAuth({
-                        dat: response.data,
-                        vm: this
-                    });
-                })
-                .catch(e => {
-                    this.resetRecaptcha();
-                    this.showError(e);
-                    this.isQuery = false;
-
-                })
+                this.queryPostToServer({
+                    url: '/register',
+                    params: {   
+                        _token: this.csrf,
+                        email: this.login.value,
+                        password: this.password.value,
+                        captcha: this.captchaToken
+                    },
+                    errorAction: this.resetRecaptcha
+                });
             },
             resetRecaptcha () {
                 this.captchaToken = '';

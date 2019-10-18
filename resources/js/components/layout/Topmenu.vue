@@ -37,7 +37,7 @@
                     {{ userEmail }}
                   </template>  
                   <li><router-link to="/account">Профиль</router-link></li>
-                  <li><a>Контрагенты</a></li>
+                  <li><router-link to="/account/contragents">Контрагенты</router-link></li>
                   <li><a>Бонусы</a></li>
                   <li><a>Заказы</a></li>
                   <li><a>Списки</a></li>
@@ -45,7 +45,7 @@
                   <li><a>Обратная связь</a></li>
                   <li><a @click.prevent="$refs['logoutform'].submit()">Выход</a>
                       <form ref='logoutform' id="logout-form" action="/logout" method="POST" style="display: none;">
-                       <input type="hidden" name="_token" id="csrf-token" :value="csrf">
+                       <input type="hidden" name="_token" :value="csrf">
                       </form>
                   </li>
                 </dropdown-menu>

@@ -76,7 +76,7 @@ class RegisterController extends Controller
     public function registered(Request $request, $user) {
         if ($request->ajax()) {
             return [
-                'status' => 'success',
+                'status' => 'OK',
                 'email' => $user->email,
                 'isVerify' => $user->hasVerifiedEmail(),
                 'redirectTo' => $this->redirectPath(),

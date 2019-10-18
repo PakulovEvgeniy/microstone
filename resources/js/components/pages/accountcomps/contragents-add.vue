@@ -36,6 +36,22 @@
         ></input-row>
         <button @click="addFiz" :disabled="!enableBtnFiz" class="button-ui button-ui_brand">Добавить</button>
       </div>
+      <div v-show="mount && userContragent.type!='f'" class="account-contragents-add__search">
+        <div class="account-contragents-add__help first">
+          {{dataType.help1}}
+        </div>
+        <input-row
+            label='Наименование' 
+            inputId='fullname' 
+            :inputRequired="false" 
+            inputType='text'
+            :inputValue="userContragent.fullname"
+            @change="onChange('fullname',$event)"
+        ></input-row>
+        <div class="account-contragents-add__help">
+          {{dataType.help2}}
+        </div>
+      </div>
     </div>
 </template>
 
@@ -51,7 +67,8 @@ import radioButton from '../../system/radio-button.vue';
                     family: '',
                     otchestvo: '',
                     name: '',
-                    fullname: ''
+                    fullname: '',
+                    inn: ''
                 },
                 mount: false,
                 valids: {
@@ -75,14 +92,25 @@ import radioButton from '../../system/radio-button.vue';
           ]),
           enableBtnFiz() {
             return this.mount && this.valids.family && this.valids.name;
+          },
+          dataType() {
+            if (this.userContragent.type == 'u') {
+              return {
+                help1: 'Введите название в свободной форме, ИНН или ОГРН',
+                help2: 'Например: Рога и копыта',
+              }
+            } else {
+              return {
+                help1: 'Введите ИНН или фамилию, имя, отчество предпринимателя',
+                help2: 'Например: Петров Иван Семенович',
+              }
+            }
           }
         },
         methods: {
-          ...mapActions({
-              showError: 'showError',
-              showWait: 'showWait',
-              closeWait: 'closeWait'
-          }),
+          ...mapActions([
+              'queryPostToServer',
+          ]),
           onInput(e) {
             this.userContragent.type = e.value;
           },
@@ -93,26 +121,25 @@ import radioButton from '../../system/radio-button.vue';
             this.valids[key] = value;
           },
           addFiz() {
-            this.showWait();
-            axios.post('/account/contragents/add', {   
+            this.queryPostToServer({
+              url: '/account/contragents/add',
+              params: {
                 'type': this.userContragent.type,
                 'name': this.userContragent.name,
                 'family': this.userContragent.family,
                 'otchestvo': this.userContragent.otchestvo
-            })
-            .then(response => {
-                this.closeWait();
-                let dat = response.data;
-                if (dat.status == 'OK') {
-                  this.$notify("alert", dat.message, "success");
-                  this.$store.commit('setUserContragents', dat.data);
-                  this.$router.push('/account/contragents');
-                }
-            })
-            .catch(e => {
-                console.dir(e);
-                this.showError(e);
-            })
+              }
+            });
+          },
+          findContr() {
+            this.queryPostToServer({
+              url: '/account/searchcontragent',
+              params: {
+                'type': this.userContragent.type,
+                'inn': this.userContragent.inn,
+                'fullname': this.userContragent.fullname
+              }
+            });
           }
         },
         mounted() {
@@ -138,6 +165,20 @@ import radioButton from '../../system/radio-button.vue';
         padding-right: 20px;
         padding-left: 20px;
       }
+    }
+    &__help {
+      font-size: 13px;
+      color: #afafaf;
+      margin-bottom: 10px;
+      margin-top: -10px;
+      &.first {
+        font-size: 14px;
+        color: #333;
+      }
+    }
+    .input-row {
+      display: block;
+      max-width: 460px;
     }
   }
 

@@ -10,6 +10,7 @@ use App\UserContragents;
 use JSRender;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Hash;
 use Validator;
 
 class Account extends Controller
@@ -20,6 +21,87 @@ class Account extends Controller
     {
         $this->middleware('auth');
     }
+
+    public function changePassword(Request $request) {
+      if ($request->ajax()) {
+        $this->validate($request, [
+          'oldPassword' => ['required', 'string', 'min:8'],
+          'newPassword' => ['required', 'string', 'min:8']
+        ]);
+        $us = $request->user();
+        if (!Hash::check($request->oldPassword, $us->password)) {
+           $error = ValidationException::withMessages([
+              'oldPassword' => ['Старый пароль введен неверно!']
+           ]);
+           throw $error;
+        }
+
+        $us->password = Hash::make($request->newPassword);
+        $us->save();
+
+        return [
+          'status' => 'OK',
+          'redirectTo' => '/account/personal',
+          'message' => 'Пароль успешно изменен!'
+        ];
+      }
+    }
+
+    public function searchContragent(Request $request) {
+      if ($request->ajax()) {
+        $this->validate($request, [
+          'type' => 'in:u,p',
+          'fullname' => 'nullable|string|min:5'
+        ]);
+        $params = $request->all();
+        if ($params['type'] == 'u') {
+          $this->validate($request, [
+            'inn' => 'nullable|digits:10'
+          ]);
+        } else {
+          $this->validate($request, [
+            'inn' => 'nullable|digits:12'
+          ]);
+        }
+        if (!$params['fullname'] && !$params['inn']) {
+          $error = ValidationException::withMessages([
+              'inn_fullname' => ['Неверные параметры!']
+          ]);
+          throw $error;
+        }
+        $qu = '';
+        if ($params['inn']) {
+          $qu = $params['inn'];
+        }
+        if ($params['fullname']) {
+          $qu = $qu ? ($qu . ' ' . $params['fullname']) : $params['fullname'];
+        }
+        $params = array(
+          'query' => $qu,
+          'type' => $params['type'] == 'u' ? 'LEGAL' : 'INDIVIDUAL'
+        );
+        $url = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/party';
+        $result = file_get_contents($url, false, stream_context_create(array(
+          'http' => array(
+            'method'  => 'POST',
+            'header'  => "Content-Type: application/json\r\n" .
+                         "Accept: application/json\r\n" . 
+                         "Authorization: Token 750d3bd09b2119cb598f59132a5ea57f30526fc5",
+            'content' => json_encode($params)
+          )
+        )));
+        $res = json_decode($result);
+        if ($res) {
+          $res = $res->suggestions;
+        }
+        return [
+          'status' => 'OK',
+          'data' => [
+            'setFoundContragents' => $res
+          ]
+        ];
+      }
+     }
 
     public function addContragent(Request $request) {
       if ($request->ajax()) {
@@ -46,7 +128,7 @@ class Account extends Controller
           if ($validator->fails())
           {
             $error = ValidationException::withMessages([
-              'fullname' => ['Такой контрагент уже сущствует']
+              'fullname' => ['Такой контрагент уже существует']
             ]);
             throw $error;
           }
@@ -59,8 +141,11 @@ class Account extends Controller
         }
         return [
           'status' => 'OK',
-          'data' => UserContragents::getContragents($user),
-          'message' => 'Контрагент успешно добавлен!'
+          'data' => [
+            'setUserContragents' => UserContragents::getContragents($user)
+          ],
+          'message' => 'Контрагент успешно добавлен!',
+          'redirectTo' => '/account/contragents'
         ];
       }
     }
@@ -93,7 +178,9 @@ class Account extends Controller
         unset($pers['sendConfirm']);
         return [
           'status' => 'OK',
-          'data' => $pers,
+          'data' => [
+            'setUserPersonalObj' => $pers,
+          ],
           'message' => 'Персональные данные успешно сохранены'
         ];
       }
@@ -114,7 +201,10 @@ class Account extends Controller
            if ($request->ajax()) {
              return [
                'status' => 'OK',
-               'data' => $userPersonal
+               'data' => [
+                  'setVerify' => $request->user()->hasVerifiedEmail(),
+                  'setUserPersonal' => $userPersonal
+                ]
              ];
            }
          } elseif ($id == 'contragents') {
@@ -123,7 +213,9 @@ class Account extends Controller
            if ($request->ajax()) {
             return [
               'status' => 'OK',
-              'data' => $contragents
+              'data' => [
+                'setUserContragents' => $contragents
+              ] 
             ];
           }
 
@@ -132,6 +224,8 @@ class Account extends Controller
             $title = 'Добавление контрагента';
           }
            
+         } elseif ($id == 'changepsw') {
+            $title = "Сменить пароль";
          }
       }
 

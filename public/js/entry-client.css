@@ -4535,7 +4535,7 @@ input[type="radio"]:checked+.ui-radio__content:before {
   position: absolute;
   top: 0;
   left: 0;
-  padding: 18px 0 0 20px;
+  padding: 18px 20px 0 20px;
   height: 100%;
   width: 100%;
   outline: none;
@@ -4845,6 +4845,20 @@ input[type="radio"]:checked+.ui-radio__content:before {
   padding-right: 20px;
   padding-left: 20px;
 }
+.account-contragents-add__help {
+  font-size: 13px;
+  color: #afafaf;
+  margin-bottom: 10px;
+  margin-top: -10px;
+}
+.account-contragents-add__help.first {
+  font-size: 14px;
+  color: #333;
+}
+.account-contragents-add .input-row {
+  display: block;
+  max-width: 460px;
+}
 @media (max-width: 991px) {
 .account-contragents-add .input-row {
     display: block;
@@ -4951,6 +4965,18 @@ input[type="radio"]:checked+.ui-radio__content:before {
 }
 }
 
+.account-changepsw button {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+@media (max-width: 991px) {
+.account-changepsw .input-row {
+    display: block;
+    max-width: 460px;
+    width: 100%;
+}
+}
+
 .account {
   margin-top: 20px;
 }
@@ -5038,6 +5064,7 @@ input[type="radio"]:checked+.ui-radio__content:before {
     left: 0;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.16);
     z-index: 100;
+    pointer-events: none;
 }
 .account__menu_menu {
     display: block;

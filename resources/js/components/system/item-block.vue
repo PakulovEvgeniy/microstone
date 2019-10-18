@@ -2,7 +2,7 @@
     <div class="item-block collapsible" :class="{'is-active' : active}">
       <a @click="onClick">
         {{name}}
-        <i v-if="active" class="fas fa-times leave-category"></i>
+        <i v-if="active" class="fa fa-times leave-category"></i>
       </a>
     </div>
 </template>
