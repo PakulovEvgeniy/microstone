@@ -3,6 +3,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import "regenerator-runtime/runtime";
 import "ie-array-find-polyfill";
 import 'promise-polyfill/src/polyfill';
+import './suggest.js';
 //import '@babel/polyfill';
 var keys = Object.keys;
 Object.keys = function (obj) {

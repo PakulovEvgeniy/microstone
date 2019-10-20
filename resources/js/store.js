@@ -114,6 +114,7 @@ export function createStore () {
         axios.post(data.url, data.params)
           .then(response => {
             dispatch('closeWait');
+            console.log(response.data);
             if (response.data.status=='OK' && data.successAction) {
               data.successAction();
             }
