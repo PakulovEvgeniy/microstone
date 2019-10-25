@@ -21,6 +21,7 @@ export function createStore () {
         date: undefined,
         items: []
       },
+      userAddresses: [],
       settings: {},
       scrolled: 0,
       screenWidth: 0,
@@ -97,8 +98,7 @@ export function createStore () {
         items: [
           {id: 0}
         ]
-      },
-      foundContragents: []
+      }
     },
     actions: {
       queryForApp({commit, state, dispatch}, data) {
@@ -114,7 +114,6 @@ export function createStore () {
         axios.post(data.url, data.params)
           .then(response => {
             dispatch('closeWait');
-            console.log(response.data);
             if (response.data.status=='OK' && data.successAction) {
               data.successAction();
             }
@@ -306,6 +305,9 @@ export function createStore () {
         state.userContragents.date = new Date();
         state.userContragents.items = payload;
       },
+      setUserAddresses(state, payload) {
+        state.userAddresses = payload;
+      },
       setUserPersonalObj(state, payload) {
         for(let key in payload) {
           state.userPersonal.data[key] = payload[key];
@@ -407,9 +409,6 @@ export function createStore () {
       },
       setBodyBlocked(state, payload) {
         state.bodyBlocked = payload;
-      },
-      setFoundContragents(state, payload) {
-        state.foundContragents = payload;
       }
     },
     getters: {
@@ -454,6 +453,9 @@ export function createStore () {
       },
       userContragents(state) {
         return state.userContragents.items;
+      },
+      userAddresses(state) {
+        return state.userAddresses;
       },
       resetEmail (state) {
         return state.resetEmail;
@@ -529,9 +531,6 @@ export function createStore () {
       },
       bodyBlocked(state) {
         return state.bodyBlocked;
-      },
-      foundContragents(state) {
-        return state.foundContragents;
       }
     }
   })

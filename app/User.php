@@ -59,6 +59,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany('App\UserContragents');
     }
+    public function user_addresses()
+    {
+        return $this->hasMany('App\UserAddresses');
+    }
 
     public function sendPasswordResetNotification($token)
     {

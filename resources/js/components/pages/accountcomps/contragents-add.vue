@@ -1,5 +1,7 @@
 <template>
     <div class="account-contragents-add">
+      <div v-if="modeEdit && !curContrEdit">Контрагент не найден</div>
+      <template v-else>
       <div class="ui-radio ui-radio_list account-contragents-add__type">
         <span>Вид контрагента</span>
         <radio-button :checked="!userContragent.type || userContragent.type=='u'" :list="true" name="type" value="u" caption="Юридическое лицо" @input="onInput($event)"></radio-button>
@@ -34,7 +36,7 @@
             @change="onChange('otchestvo',$event)"
             @changeValid="onChangeValid('otchestvo', $event)"
         ></input-row>
-        <button @click="addFiz" :disabled="!enableBtnFiz" class="button-ui button-ui_brand">Добавить</button>
+        <button @click="addFiz" :disabled="!enableBtnFiz" class="button-ui button-ui_brand">{{modeEdit ? 'Сохранить' : 'Добавить'}}</button>
       </div>
       <div v-show="mount && userContragent.type!='f'" class="account-contragents-add__search">
         <div class="account-contragents-add__help first">
@@ -186,9 +188,11 @@
               @changeValid="onChangeValid('rasch_sch', $event)"
               :validate="{'pattern': /^[0-9]{20,20}$/, 'message': 'Неверный расчетный счет.'}"
             ></input-row>
+            <button @click="addContr" :disabled="!enableBtnContr" class="button-ui button-ui_brand">{{modeEdit ? 'Сохранить' : 'Добавить'}}</button>
           </div>
         </div>
       </div>
+    </template>
     </div>
 </template>
 
@@ -232,6 +236,7 @@ import radioButton from '../../system/radio-button.vue';
                   uraddress: false,
                   bik: false,
                   bankname: false,
+                  bankcity: false,
                   korr_sch: false,
                   rasch_sch: false
                 }
@@ -273,6 +278,34 @@ import radioButton from '../../system/radio-button.vue';
           },
           patternOkpo() {
             return this.typeContr == 'u' ? /^[0-9]{8,8}$/ : /^[0-9]{10,10}$/
+          },
+          enableBtnContr() {
+            if (this.typeContr=='u') {
+              return (this.mount && this.valids.name && this.valids.inn &&
+                this.valids.kpp && this.valids.uraddress && this.valids.bik && 
+                this.valids.bankname && this.valids.bankcity && this.valids.korr_sch &&
+                this.valids.rasch_sch);
+            } else {
+              return (this.mount && this.valids.name && this.valids.inn && 
+                this.valids.uraddress && this.valids.bik && this.valids.bankname && 
+                this.valids.bankcity && this.valids.korr_sch && this.valids.rasch_sch);
+            }
+          },
+          modeEdit() {
+            if (this.$route.params.act && this.$route.params.act == 'edit') {
+              return true;
+            }
+            return false;
+          },
+          curContrEdit() {
+            if (this.modeEdit && this.$route.query && this.$route.query.id) {
+              let curContr = this.userContragents.find((el) => {
+                return el.id == this.$route.query.id;
+              });
+              if (curContr) {
+                return curContr
+              }
+            }
           }
         },
         methods: {
@@ -306,12 +339,31 @@ import radioButton from '../../system/radio-button.vue';
           },
           addFiz() {
             this.queryPostToServer({
-              url: '/account/contragents/add',
+              url: this.modeEdit ? '/account/contragents/edit' : '/account/contragents/add',
               params: {
+                'id': this.curContrEdit ? this.curContrEdit.id : '',
                 'type': this.userContragent.type,
                 'name': this.userContragent.name,
                 'family': this.userContragent.family,
                 'otchestvo': this.userContragent.otchestvo
+              }
+            });
+          },
+          addContr() {
+             this.queryPostToServer({
+              url: this.modeEdit ? '/account/contragents/edit' : '/account/contragents/add',
+              params: {
+                'id': this.curContrEdit ? this.curContrEdit.id : '',
+                'type': this.userContragent.type,
+                'name': this.userContragent.name,
+                'inn': this.userContragent.inn,
+                'kpp': this.typeContr=='u' ? this.userContragent.kpp : '',
+                'uraddress': this.userContragent.uraddress,
+                'bik': this.userContragent.bik,
+                'bankname': this.userContragent.bankname,
+                'bankcity': this.userContragent.bankcity,
+                'korr_sch': this.userContragent.korr_sch,
+                'rasch_sch': this.userContragent.rasch_sch
               }
             });
           },
@@ -342,15 +394,14 @@ import radioButton from '../../system/radio-button.vue';
                 type: this.userContragent.type == 'u' ? "LEGAL" : 'INDIVIDUAL'
               },
               onSelect: function(suggestion) {
-                console.log(suggestion);
                 self.setFields(suggestion);
               },
               onSelectNothing: function() {
                 self.notSelect = true;
               },
               onSearchError: function() {
-                self.notSelect = true;
-                self.notWork = true;
+                //self.notSelect = true;
+                //self.notWork = true;
               }
             });
           },
@@ -363,39 +414,101 @@ import radioButton from '../../system/radio-button.vue';
               addon: 'spinner',
               scrollOnFocus: false,
               onSelect: function(suggestion) {
-                console.log(suggestion);
                 self.setFieldsBank(suggestion);
               },
               onSelectNothing: function() {
                 self.notSelectBank = true;
               },
               onSearchError: function() {
-                self.notSelectBank = true;
-                self.notWork = true;
+                //self.notSelectBank = true;
+                //self.notWork = true;
               }
             });
           }
         },
         mounted() {
-          this.userContragent.name = this.userPersonal.name;
-          this.userContragent.family = this.userPersonal.family;
-          this.userContragent.otchestvo = this.userPersonal.otchestvo;
+          if (this.modeEdit) {
+            if (this.curContrEdit) {
+              if (this.curContrEdit.type=='f') {
+                this.userContragent.type = this.curContrEdit.type;
+                this.userContragent.name = this.curContrEdit.name1;
+                this.userContragent.family = this.curContrEdit.family;
+                this.userContragent.otchestvo = this.curContrEdit.otchestvo;
+              } else {
+                this.userContragent.type = this.curContrEdit.type;
+                this.userContragent.name = this.curContrEdit.name;
+                this.userContragent.inn = this.curContrEdit.inn;
+                this.userContragent.kpp = this.curContrEdit.kpp;
+                this.userContragent.okpo = this.curContrEdit.okpo;
+                this.userContragent.uraddress = this.curContrEdit.uraddress;
+                this.userContragent.bik = this.curContrEdit.bik;
+                this.userContragent.bankname = this.curContrEdit.bankname;
+                this.userContragent.bankcity = this.curContrEdit.bankcity;
+                this.userContragent.korr_sch = this.curContrEdit.korr_sch;
+                this.userContragent.rasch_sch = this.curContrEdit.rasch_sch;
+                this.conSelected = true;
+                this.conSelectedBank = true;
+              }
+            }
+          } else {
+            this.userContragent.name = this.userPersonal.name;
+            this.userContragent.family = this.userPersonal.family;
+            this.userContragent.otchestvo = this.userPersonal.otchestvo;
+          }
           this.mount = true;
           this.setSuggest(); 
-          this.setSuggestBank();         
+          this.setSuggestBank();
         },
         watch: {
           typeContr(val) {
-            if (val=='u' || val=='p') {
-              this.setSuggest();
-              this.notSelect = false;
-              this.notSelectBank = false;
-              this.notWork = false;
-              this.conSelected = false;
+            if (!this.modeEdit) {
+              if (val=='u' || val=='p') {
+                this.setSuggest();
+                this.notSelect = false;
+                this.notSelectBank = false;
+                this.notWork = false;
+                this.conSelected = false;
+                this.conSelectedBank = false;
+              } else {
+                this.userContragent.name = this.userPersonal.name;
+                this.userContragent.family = this.userPersonal.family;
+                this.userContragent.otchestvo = this.userPersonal.otchestvo;
+              }
             } else {
-              this.userContragent.name = this.userPersonal.name;
-              this.userContragent.family = this.userPersonal.family;
-              this.userContragent.otchestvo = this.userPersonal.otchestvo;
+              if (this.curContrEdit) {
+                if (val=='u' || val=='p') {
+                  this.setSuggest();
+                  this.notSelect = false;
+                  this.notSelectBank = false;
+                  this.notWork = false;
+                  this.conSelected = false;
+                  this.conSelectedBank = false;
+                  if (this.curContrEdit.type==val) {
+                    this.userContragent.name = this.curContrEdit.name;
+                    this.userContragent.inn = this.curContrEdit.inn;
+                    this.userContragent.kpp = this.curContrEdit.kpp;
+                    this.userContragent.okpo = this.curContrEdit.okpo;
+                    this.userContragent.uraddress = this.curContrEdit.uraddress;
+                    this.userContragent.bik = this.curContrEdit.bik;
+                    this.userContragent.bankname = this.curContrEdit.bankname;
+                    this.userContragent.bankcity = this.curContrEdit.bankcity;
+                    this.userContragent.korr_sch = this.curContrEdit.korr_sch;
+                    this.userContragent.rasch_sch = this.curContrEdit.rasch_sch;
+                    this.conSelected = true;
+                    this.conSelectedBank = true;
+                  }
+                } else {
+                  if (this.curContrEdit.type==val) {
+                    this.userContragent.name = this.curContrEdit.name1;
+                    this.userContragent.family = this.curContrEdit.family;
+                    this.userContragent.otchestvo = this.curContrEdit.otchestvo;
+                  } else {
+                    this.userContragent.name = this.userPersonal.name;
+                    this.userContragent.family = this.userPersonal.family;
+                    this.userContragent.otchestvo = this.userPersonal.otchestvo;
+                  }
+                }
+              }
             }
           }
         }
@@ -411,7 +524,7 @@ import radioButton from '../../system/radio-button.vue';
         padding-bottom: 10px;
       }
     }
-    &__fizblock {
+    &__fizblock, &__contragent-bank {
       button {
         padding-right: 20px;
         padding-left: 20px;

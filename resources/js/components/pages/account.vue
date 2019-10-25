@@ -26,6 +26,7 @@
     import personal from './accountcomps/personal.vue';
     import contragents from './accountcomps/contragents.vue';
     import contragentsAdd from './accountcomps/contragents-add.vue';
+    import addressesAdd from './accountcomps/addresses-add.vue';
     import addresses from './accountcomps/addresses.vue';
     import orders from './accountcomps/orders.vue';
     import bonuses from './accountcomps/bonus.vue';
@@ -64,6 +65,11 @@
                          id: 'add',
                          comp: 'contragents-add',
                          name: 'Добавление контрагента'
+                     },
+                     {
+                         id: 'edit',
+                         comp: 'contragents-add',
+                         name: 'Редактирование контрагента'
                      }
                    ]
                  },
@@ -71,7 +77,19 @@
                    id: 'addresses',
                    icon: 'fa-address-card-o',
                    link: '/account/addresses',
-                   name: 'Адреса доставки'
+                   name: 'Адреса доставки',
+                   child: [
+                     {
+                         id: 'add',
+                         comp: 'addresses-add',
+                         name: 'Добавление адреса'
+                     },
+                     {
+                         id: 'edit',
+                         comp: 'addresses-add',
+                         name: 'Редактирование адреса'
+                     }
+                   ]
                  },
                  {
                    id: 'orders',
@@ -117,7 +135,7 @@
                  },
                  {
                    id: 'changepsw',
-                   icon: 'fa-home',
+                   icon: 'fa-sign-in',
                    link: '/account/changepsw',
                    name: 'Сменить пароль'
                  },
@@ -183,6 +201,7 @@
           contragents,
           contragentsAdd,
           addresses,
+          addressesAdd,
           orders,
           setup,
           bonuses,

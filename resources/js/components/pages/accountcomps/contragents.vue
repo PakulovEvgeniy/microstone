@@ -9,6 +9,15 @@
           :columns="columns"
           :rows="userContragents"
         >
+          <template slot="table-row" slot-scope="props">
+              <div v-if="props.column.field == 'actions'" class="account-contragents__actions">
+                <button class="btn btn-success" @click="onClickEdit(props.row)"><i class="fa fa-edit"></i></button>
+                <button class="btn btn-danger" @click="onClickDel(props.row)"><i class="fa fa-trash"></i></button>
+              </div>
+              <span v-else>
+                {{props.formattedRow[props.column.field]}}
+              </span>
+          </template>
         </vue-good-table>
         </client-only>
       </div>
@@ -31,6 +40,7 @@
           </div>
         </div>
       </div>
+      <v-dialog/>
     </div>
 </template>
 
@@ -53,12 +63,17 @@
           columns() {
            return [
                 {
-                  label: 'Вид контрагента',
-                  field: 'type_text'
+                  label: '',
+                  field: 'actions',
+                  sortable: false
                 },
                 {
                   label: 'Наименование',
                   field: 'name'
+                },
+                {
+                  label: 'Вид контрагента',
+                  field: 'type_text'
                 },
                 {
                   label: 'ИНН',
@@ -75,6 +90,39 @@
         },
         components: {
           ClientOnly
+        },
+        methods: {
+          ...mapActions([
+              'queryPostToServer',
+          ]),
+          onClickEdit(e) {
+            this.$router.push('/account/contragents/edit?id='+e.id);
+          },
+          onClickDel(e) {
+            this.$modal.show('dialog', {
+              text: 'Вы действительно хотите удалить контрагента: <br><b>' + e.name + '</b>?',
+              buttons: [
+                {
+                  title: 'ОК',
+                  handler: () => { 
+                    this.delContragent(e) 
+                  }
+                },
+                {
+                  title: 'Отмена'
+                }
+             ]
+            })
+          },
+          delContragent(e) {
+            this.$modal.hide('dialog');
+            this.queryPostToServer({
+              url: '/account/contragents/delete',
+              params: {
+                'id': e.id
+              }
+            });
+          }
         }
     }
 </script>
@@ -147,6 +195,15 @@
       }
       &__table {
         margin-bottom: 20px;
+        .btn {
+          font-size: 13px;
+        }
+      }
+      &__actions {
+        display: flex;
+        button:first-child {
+          margin-right: 5px;
+        }
       }
     }
 

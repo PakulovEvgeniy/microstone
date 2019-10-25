@@ -145,6 +145,7 @@ class Category_prod extends Controller
     		$dat['filterItemsDef'] = $filtDef;
     	}
         $ssr = JSRender::render($request->path(), $dat);
+        //dd($request->getRequestUri());
         //$rend = $this->render($request->path()); 
         //$ssr = phpinfo();
         return view('app', ['ssr' => $ssr, 'title' => $title]);

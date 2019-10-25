@@ -27,8 +27,15 @@ class UserContragents extends Model
 			} elseif ($val->type == 'f') {
 				$t_n = 'Физическое лицо';
 			}
+            $fam = '';
+            $otch = '';
+            $nam1 = '';
 			$nam = $val->name;
 			if ($val->type == 'f') {
+                $arr = explode('#-#', $nam);
+                $fam = $arr[0];
+                $nam1 = $arr[1];
+                $otch = $arr[2];
 				$nam = str_replace('#-#', ' ', $nam);
 			}
     		$res[] = [
@@ -39,6 +46,16 @@ class UserContragents extends Model
     			'inn' => $val->inn,
     			'kpp' => $val->kpp,
     			'name' => $nam,
+                'name1' => $nam1,
+                'family' => $fam,
+                'otchestvo' => $otch,
+                'uraddress' => $val->uraddress,
+                'okpo' => $val->okpo,
+                'bik' => $val->bik,
+                'bankname' => $val->bankname,
+                'bankcity' => $val->bankcity,
+                'korr_sch' => $val->korr_sch,
+                'rasch_sch' => $val->rasch_sch
     		];
     	}
     	return $res;

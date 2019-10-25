@@ -22,7 +22,11 @@ Route::get('/account/{id?}/{act?}', 'Account\Account@get');
 Route::post('/account/personal', 'Account\Account@post');
 Route::post('/account/changepsw', 'Account\Account@changePassword');
 Route::post('/account/contragents/add', 'Account\Account@addContragent');
-Route::post('/account/searchcontragent/', 'Account\Account@searchContragent');
+Route::post('/account/contragents/edit', 'Account\Account@editContragent');
+Route::post('/account/contragents/delete', 'Account\Account@deleteContragent');
+Route::post('/account/addresses/add', 'Account\Account@addAddress');
+Route::post('/account/addresses/edit', 'Account\Account@editAddress');
+Route::post('/account/addresses/delete', 'Account\Account@deleteAddress');
 
 Auth::routes(['verify' => true]);
 

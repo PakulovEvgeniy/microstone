@@ -4097,17 +4097,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _accountcomps_personal_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./accountcomps/personal.vue */ "./resources/js/components/pages/accountcomps/personal.vue");
 /* harmony import */ var _accountcomps_contragents_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./accountcomps/contragents.vue */ "./resources/js/components/pages/accountcomps/contragents.vue");
 /* harmony import */ var _accountcomps_contragents_add_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./accountcomps/contragents-add.vue */ "./resources/js/components/pages/accountcomps/contragents-add.vue");
-/* harmony import */ var _accountcomps_addresses_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./accountcomps/addresses.vue */ "./resources/js/components/pages/accountcomps/addresses.vue");
-/* harmony import */ var _accountcomps_orders_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./accountcomps/orders.vue */ "./resources/js/components/pages/accountcomps/orders.vue");
-/* harmony import */ var _accountcomps_bonus_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./accountcomps/bonus.vue */ "./resources/js/components/pages/accountcomps/bonus.vue");
-/* harmony import */ var _accountcomps_notification_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./accountcomps/notification.vue */ "./resources/js/components/pages/accountcomps/notification.vue");
-/* harmony import */ var _accountcomps_wishlist_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./accountcomps/wishlist.vue */ "./resources/js/components/pages/accountcomps/wishlist.vue");
-/* harmony import */ var _accountcomps_waitlist_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./accountcomps/waitlist.vue */ "./resources/js/components/pages/accountcomps/waitlist.vue");
-/* harmony import */ var _accountcomps_achievements_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./accountcomps/achievements.vue */ "./resources/js/components/pages/accountcomps/achievements.vue");
-/* harmony import */ var _accountcomps_feedback_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./accountcomps/feedback.vue */ "./resources/js/components/pages/accountcomps/feedback.vue");
-/* harmony import */ var _accountcomps_setup_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./accountcomps/setup.vue */ "./resources/js/components/pages/accountcomps/setup.vue");
-/* harmony import */ var _accountcomps_account_mobile_menu_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./accountcomps/account-mobile-menu.vue */ "./resources/js/components/pages/accountcomps/account-mobile-menu.vue");
-/* harmony import */ var _accountcomps_changepsw_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./accountcomps/changepsw.vue */ "./resources/js/components/pages/accountcomps/changepsw.vue");
+/* harmony import */ var _accountcomps_addresses_add_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./accountcomps/addresses-add.vue */ "./resources/js/components/pages/accountcomps/addresses-add.vue");
+/* harmony import */ var _accountcomps_addresses_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./accountcomps/addresses.vue */ "./resources/js/components/pages/accountcomps/addresses.vue");
+/* harmony import */ var _accountcomps_orders_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./accountcomps/orders.vue */ "./resources/js/components/pages/accountcomps/orders.vue");
+/* harmony import */ var _accountcomps_bonus_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./accountcomps/bonus.vue */ "./resources/js/components/pages/accountcomps/bonus.vue");
+/* harmony import */ var _accountcomps_notification_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./accountcomps/notification.vue */ "./resources/js/components/pages/accountcomps/notification.vue");
+/* harmony import */ var _accountcomps_wishlist_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./accountcomps/wishlist.vue */ "./resources/js/components/pages/accountcomps/wishlist.vue");
+/* harmony import */ var _accountcomps_waitlist_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./accountcomps/waitlist.vue */ "./resources/js/components/pages/accountcomps/waitlist.vue");
+/* harmony import */ var _accountcomps_achievements_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./accountcomps/achievements.vue */ "./resources/js/components/pages/accountcomps/achievements.vue");
+/* harmony import */ var _accountcomps_feedback_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./accountcomps/feedback.vue */ "./resources/js/components/pages/accountcomps/feedback.vue");
+/* harmony import */ var _accountcomps_setup_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./accountcomps/setup.vue */ "./resources/js/components/pages/accountcomps/setup.vue");
+/* harmony import */ var _accountcomps_account_mobile_menu_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./accountcomps/account-mobile-menu.vue */ "./resources/js/components/pages/accountcomps/account-mobile-menu.vue");
+/* harmony import */ var _accountcomps_changepsw_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./accountcomps/changepsw.vue */ "./resources/js/components/pages/accountcomps/changepsw.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -4152,6 +4153,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4175,12 +4177,25 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           id: 'add',
           comp: 'contragents-add',
           name: 'Добавление контрагента'
+        }, {
+          id: 'edit',
+          comp: 'contragents-add',
+          name: 'Редактирование контрагента'
         }]
       }, {
         id: 'addresses',
         icon: 'fa-address-card-o',
         link: '/account/addresses',
-        name: 'Адреса доставки'
+        name: 'Адреса доставки',
+        child: [{
+          id: 'add',
+          comp: 'addresses-add',
+          name: 'Добавление адреса'
+        }, {
+          id: 'edit',
+          comp: 'addresses-add',
+          name: 'Редактирование адреса'
+        }]
       }, {
         id: 'orders',
         icon: 'fa-shopping-cart',
@@ -4218,7 +4233,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         name: 'Обратная связь'
       }, {
         id: 'changepsw',
-        icon: 'fa-home',
+        icon: 'fa-sign-in',
         link: '/account/changepsw',
         name: 'Сменить пароль'
       }, {
@@ -4296,17 +4311,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     personal: _accountcomps_personal_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     contragents: _accountcomps_contragents_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
     contragentsAdd: _accountcomps_contragents_add_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
-    addresses: _accountcomps_addresses_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
-    orders: _accountcomps_orders_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
-    setup: _accountcomps_setup_vue__WEBPACK_IMPORTED_MODULE_13__["default"],
-    bonuses: _accountcomps_bonus_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
-    notification: _accountcomps_notification_vue__WEBPACK_IMPORTED_MODULE_8__["default"],
-    wishlist: _accountcomps_wishlist_vue__WEBPACK_IMPORTED_MODULE_9__["default"],
-    waitlist: _accountcomps_waitlist_vue__WEBPACK_IMPORTED_MODULE_10__["default"],
-    achievements: _accountcomps_achievements_vue__WEBPACK_IMPORTED_MODULE_11__["default"],
-    feedback: _accountcomps_feedback_vue__WEBPACK_IMPORTED_MODULE_12__["default"],
-    accountMobileMenu: _accountcomps_account_mobile_menu_vue__WEBPACK_IMPORTED_MODULE_14__["default"],
-    changepsw: _accountcomps_changepsw_vue__WEBPACK_IMPORTED_MODULE_15__["default"]
+    addresses: _accountcomps_addresses_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
+    addressesAdd: _accountcomps_addresses_add_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+    orders: _accountcomps_orders_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
+    setup: _accountcomps_setup_vue__WEBPACK_IMPORTED_MODULE_14__["default"],
+    bonuses: _accountcomps_bonus_vue__WEBPACK_IMPORTED_MODULE_8__["default"],
+    notification: _accountcomps_notification_vue__WEBPACK_IMPORTED_MODULE_9__["default"],
+    wishlist: _accountcomps_wishlist_vue__WEBPACK_IMPORTED_MODULE_10__["default"],
+    waitlist: _accountcomps_waitlist_vue__WEBPACK_IMPORTED_MODULE_11__["default"],
+    achievements: _accountcomps_achievements_vue__WEBPACK_IMPORTED_MODULE_12__["default"],
+    feedback: _accountcomps_feedback_vue__WEBPACK_IMPORTED_MODULE_13__["default"],
+    accountMobileMenu: _accountcomps_account_mobile_menu_vue__WEBPACK_IMPORTED_MODULE_15__["default"],
+    changepsw: _accountcomps_changepsw_vue__WEBPACK_IMPORTED_MODULE_16__["default"]
   },
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
     next(function (vm) {
@@ -4382,6 +4398,269 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _system_input_row_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../system/input-row.vue */ "./resources/js/components/system/input-row.vue");
+/* harmony import */ var _system_radio_button_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../system/radio-button.vue */ "./resources/js/components/system/radio-button.vue");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      userAddress: {
+        region: '',
+        gorod: '',
+        street: '',
+        house: '',
+        dep: '',
+        postind: ''
+      },
+      mount: false,
+      valids: {
+        region: false,
+        gorod: false,
+        street: false,
+        house: false,
+        dep: false,
+        postind: false
+      }
+    };
+  },
+  props: [],
+  components: {
+    radioButton: _system_radio_button_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    inputRow: _system_input_row_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['csrf', 'userAddresses']), {
+    modeEdit: function modeEdit() {
+      if (this.$route.params.act && this.$route.params.act == 'edit') {
+        return true;
+      }
+
+      return false;
+    },
+    curAddressEdit: function curAddressEdit() {
+      var _this = this;
+
+      if (this.modeEdit && this.$route.query && this.$route.query.id) {
+        var curAddr = this.userAddresses.find(function (el) {
+          return el.id == _this.$route.query.id;
+        });
+
+        if (curAddr) {
+          return curAddr;
+        }
+      }
+    },
+    enableBtnAddr: function enableBtnAddr() {
+      return this.mount && this.valids.region && this.valids.gorod && this.valids.street && this.valids.house && this.valids.postind;
+    }
+  }),
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['queryPostToServer']), {
+    onChange: function onChange(key, value) {
+      this.userAddress[key] = value;
+    },
+    onChangeValid: function onChangeValid(key, value) {
+      this.valids[key] = value;
+    },
+    addAddr: function addAddr() {
+      this.queryPostToServer({
+        url: this.modeEdit ? '/account/addresses/edit' : '/account/addresses/add',
+        params: {
+          'id': this.curAddressEdit ? this.curAddressEdit.id : '',
+          'region': this.userAddress.region,
+          'city': this.userAddress.gorod,
+          'street': this.userAddress.street,
+          'house': this.userAddress.house,
+          'dep': this.userAddress.dep,
+          'postind': this.userAddress.postind
+        }
+      });
+    },
+    setSuggest: function setSuggest() {
+      var self = this;
+      var $region = $("#region");
+      var $city = $("#gorod");
+      var $street = $("#street");
+      var $house = $("#house");
+      var token = '750d3bd09b2119cb598f59132a5ea57f30526fc5';
+
+      function join(arr
+      /*, separator */
+      ) {
+        var separator = arguments.length > 1 ? arguments[1] : ", ";
+        return arr.filter(function (n) {
+          return n;
+        }).join(separator);
+      }
+
+      function formatCity(suggestion) {
+        var address = suggestion.data;
+
+        if (address.city_with_type === address.region_with_type) {
+          return address.settlement_with_type || "";
+        } else {
+          return join([address.city_with_type, address.settlement_with_type]);
+        }
+      }
+
+      $("#region").suggestions({
+        token: token,
+        type: "ADDRESS",
+        addon: 'spinner',
+        scrollOnFocus: false,
+        hint: false,
+        bounds: "region-area",
+        onSelect: function onSelect(suggestion) {
+          self.userAddress.region = suggestion.value;
+          self.userAddress.postind = suggestion.data.postal_code;
+        }
+      });
+      $city.suggestions({
+        token: token,
+        type: "ADDRESS",
+        addon: 'spinner',
+        scrollOnFocus: false,
+        hint: false,
+        bounds: "city-settlement",
+        constraints: $region,
+        formatSelected: formatCity,
+        onSelect: function onSelect(suggestion) {
+          self.userAddress.gorod = suggestion.value;
+          self.userAddress.postind = suggestion.data.postal_code;
+          self.userAddress.region = suggestion.data.region_with_type + (suggestion.data.area_with_type ? ', ' + suggestion.data.area_with_type : '');
+        }
+      });
+      $street.suggestions({
+        token: token,
+        type: "ADDRESS",
+        addon: 'spinner',
+        scrollOnFocus: false,
+        hint: false,
+        bounds: "street",
+        constraints: $city,
+        count: 15,
+        onSelect: function onSelect(suggestion) {
+          self.userAddress.street = suggestion.value;
+          self.userAddress.postind = suggestion.data.postal_code;
+        }
+      });
+      $house.suggestions({
+        token: token,
+        type: "ADDRESS",
+        addon: 'spinner',
+        scrollOnFocus: false,
+        hint: false,
+        noSuggestionsHint: false,
+        bounds: "house",
+        constraints: $street,
+        onSelect: function onSelect(suggestion) {
+          self.userAddress.house = suggestion.value;
+          self.userAddress.postind = suggestion.data.postal_code;
+        }
+      });
+    }
+  }),
+  mounted: function mounted() {
+    this.mount = true;
+    this.setSuggest();
+
+    if (this.modeEdit && this.curAddressEdit) {
+      this.userAddress.region = this.curAddressEdit.region;
+      this.userAddress.gorod = this.curAddressEdit.city;
+      this.userAddress.street = this.curAddressEdit.street;
+      this.userAddress.house = this.curAddressEdit.house;
+      this.userAddress.dep = this.curAddressEdit.dep;
+      this.userAddress.postind = this.curAddressEdit.postind;
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/addresses.vue?vue&type=script&lang=js&":
 /*!*************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/accountcomps/addresses.vue?vue&type=script&lang=js& ***!
@@ -4391,17 +4670,92 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vue_client_only__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-client-only */ "./node_modules/vue-client-only/dist/vue-client-only.common.js");
+/* harmony import */ var vue_client_only__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_client_only__WEBPACK_IMPORTED_MODULE_1__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      columns: [{
+        label: '',
+        field: 'actions',
+        sortable: false
+      }, {
+        label: 'Адрес',
+        field: 'address'
+      }]
+    };
   },
-  props: []
+  props: [],
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['userAddresses', 'getScreenState'])),
+  components: {
+    ClientOnly: vue_client_only__WEBPACK_IMPORTED_MODULE_1___default.a
+  },
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['queryPostToServer']), {
+    onClickEdit: function onClickEdit(e) {
+      this.$router.push('/account/addresses/edit?id=' + e.id);
+    },
+    onClickDel: function onClickDel(e) {
+      var _this = this;
+
+      this.$modal.show('dialog', {
+        text: 'Вы действительно хотите удалить адрес: <br><b>' + e.address + '</b>?',
+        buttons: [{
+          title: 'ОК',
+          handler: function handler() {
+            _this.delAddress(e);
+          }
+        }, {
+          title: 'Отмена'
+        }]
+      });
+    },
+    delAddress: function delAddress(e) {
+      this.$modal.hide('dialog');
+      this.queryPostToServer({
+        url: '/account/addresses/delete',
+        params: {
+          'id': e.id
+        }
+      });
+    }
+  })
 });
 
 /***/ }),
@@ -4735,6 +5089,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -4774,6 +5132,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         uraddress: false,
         bik: false,
         bankname: false,
+        bankcity: false,
         korr_sch: false,
         rasch_sch: false
       }
@@ -4809,6 +5168,33 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     patternOkpo: function patternOkpo() {
       return this.typeContr == 'u' ? /^[0-9]{8,8}$/ : /^[0-9]{10,10}$/;
+    },
+    enableBtnContr: function enableBtnContr() {
+      if (this.typeContr == 'u') {
+        return this.mount && this.valids.name && this.valids.inn && this.valids.kpp && this.valids.uraddress && this.valids.bik && this.valids.bankname && this.valids.bankcity && this.valids.korr_sch && this.valids.rasch_sch;
+      } else {
+        return this.mount && this.valids.name && this.valids.inn && this.valids.uraddress && this.valids.bik && this.valids.bankname && this.valids.bankcity && this.valids.korr_sch && this.valids.rasch_sch;
+      }
+    },
+    modeEdit: function modeEdit() {
+      if (this.$route.params.act && this.$route.params.act == 'edit') {
+        return true;
+      }
+
+      return false;
+    },
+    curContrEdit: function curContrEdit() {
+      var _this = this;
+
+      if (this.modeEdit && this.$route.query && this.$route.query.id) {
+        var curContr = this.userContragents.find(function (el) {
+          return el.id == _this.$route.query.id;
+        });
+
+        if (curContr) {
+          return curContr;
+        }
+      }
     }
   }),
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['queryPostToServer']), {
@@ -4839,12 +5225,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     addFiz: function addFiz() {
       this.queryPostToServer({
-        url: '/account/contragents/add',
+        url: this.modeEdit ? '/account/contragents/edit' : '/account/contragents/add',
         params: {
+          'id': this.curContrEdit ? this.curContrEdit.id : '',
           'type': this.userContragent.type,
           'name': this.userContragent.name,
           'family': this.userContragent.family,
           'otchestvo': this.userContragent.otchestvo
+        }
+      });
+    },
+    addContr: function addContr() {
+      this.queryPostToServer({
+        url: this.modeEdit ? '/account/contragents/edit' : '/account/contragents/add',
+        params: {
+          'id': this.curContrEdit ? this.curContrEdit.id : '',
+          'type': this.userContragent.type,
+          'name': this.userContragent.name,
+          'inn': this.userContragent.inn,
+          'kpp': this.typeContr == 'u' ? this.userContragent.kpp : '',
+          'uraddress': this.userContragent.uraddress,
+          'bik': this.userContragent.bik,
+          'bankname': this.userContragent.bankname,
+          'bankcity': this.userContragent.bankcity,
+          'korr_sch': this.userContragent.korr_sch,
+          'rasch_sch': this.userContragent.rasch_sch
         }
       });
     },
@@ -4875,15 +5280,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           type: this.userContragent.type == 'u' ? "LEGAL" : 'INDIVIDUAL'
         },
         onSelect: function onSelect(suggestion) {
-          console.log(suggestion);
           self.setFields(suggestion);
         },
         onSelectNothing: function onSelectNothing() {
           self.notSelect = true;
         },
-        onSearchError: function onSearchError() {
-          self.notSelect = true;
-          self.notWork = true;
+        onSearchError: function onSearchError() {//self.notSelect = true;
+          //self.notWork = true;
         }
       });
     },
@@ -4896,39 +5299,102 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         addon: 'spinner',
         scrollOnFocus: false,
         onSelect: function onSelect(suggestion) {
-          console.log(suggestion);
           self.setFieldsBank(suggestion);
         },
         onSelectNothing: function onSelectNothing() {
           self.notSelectBank = true;
         },
-        onSearchError: function onSearchError() {
-          self.notSelectBank = true;
-          self.notWork = true;
+        onSearchError: function onSearchError() {//self.notSelectBank = true;
+          //self.notWork = true;
         }
       });
     }
   }),
   mounted: function mounted() {
-    this.userContragent.name = this.userPersonal.name;
-    this.userContragent.family = this.userPersonal.family;
-    this.userContragent.otchestvo = this.userPersonal.otchestvo;
+    if (this.modeEdit) {
+      if (this.curContrEdit) {
+        if (this.curContrEdit.type == 'f') {
+          this.userContragent.type = this.curContrEdit.type;
+          this.userContragent.name = this.curContrEdit.name1;
+          this.userContragent.family = this.curContrEdit.family;
+          this.userContragent.otchestvo = this.curContrEdit.otchestvo;
+        } else {
+          this.userContragent.type = this.curContrEdit.type;
+          this.userContragent.name = this.curContrEdit.name;
+          this.userContragent.inn = this.curContrEdit.inn;
+          this.userContragent.kpp = this.curContrEdit.kpp;
+          this.userContragent.okpo = this.curContrEdit.okpo;
+          this.userContragent.uraddress = this.curContrEdit.uraddress;
+          this.userContragent.bik = this.curContrEdit.bik;
+          this.userContragent.bankname = this.curContrEdit.bankname;
+          this.userContragent.bankcity = this.curContrEdit.bankcity;
+          this.userContragent.korr_sch = this.curContrEdit.korr_sch;
+          this.userContragent.rasch_sch = this.curContrEdit.rasch_sch;
+          this.conSelected = true;
+          this.conSelectedBank = true;
+        }
+      }
+    } else {
+      this.userContragent.name = this.userPersonal.name;
+      this.userContragent.family = this.userPersonal.family;
+      this.userContragent.otchestvo = this.userPersonal.otchestvo;
+    }
+
     this.mount = true;
     this.setSuggest();
     this.setSuggestBank();
   },
   watch: {
     typeContr: function typeContr(val) {
-      if (val == 'u' || val == 'p') {
-        this.setSuggest();
-        this.notSelect = false;
-        this.notSelectBank = false;
-        this.notWork = false;
-        this.conSelected = false;
+      if (!this.modeEdit) {
+        if (val == 'u' || val == 'p') {
+          this.setSuggest();
+          this.notSelect = false;
+          this.notSelectBank = false;
+          this.notWork = false;
+          this.conSelected = false;
+          this.conSelectedBank = false;
+        } else {
+          this.userContragent.name = this.userPersonal.name;
+          this.userContragent.family = this.userPersonal.family;
+          this.userContragent.otchestvo = this.userPersonal.otchestvo;
+        }
       } else {
-        this.userContragent.name = this.userPersonal.name;
-        this.userContragent.family = this.userPersonal.family;
-        this.userContragent.otchestvo = this.userPersonal.otchestvo;
+        if (this.curContrEdit) {
+          if (val == 'u' || val == 'p') {
+            this.setSuggest();
+            this.notSelect = false;
+            this.notSelectBank = false;
+            this.notWork = false;
+            this.conSelected = false;
+            this.conSelectedBank = false;
+
+            if (this.curContrEdit.type == val) {
+              this.userContragent.name = this.curContrEdit.name;
+              this.userContragent.inn = this.curContrEdit.inn;
+              this.userContragent.kpp = this.curContrEdit.kpp;
+              this.userContragent.okpo = this.curContrEdit.okpo;
+              this.userContragent.uraddress = this.curContrEdit.uraddress;
+              this.userContragent.bik = this.curContrEdit.bik;
+              this.userContragent.bankname = this.curContrEdit.bankname;
+              this.userContragent.bankcity = this.curContrEdit.bankcity;
+              this.userContragent.korr_sch = this.curContrEdit.korr_sch;
+              this.userContragent.rasch_sch = this.curContrEdit.rasch_sch;
+              this.conSelected = true;
+              this.conSelectedBank = true;
+            }
+          } else {
+            if (this.curContrEdit.type == val) {
+              this.userContragent.name = this.curContrEdit.name1;
+              this.userContragent.family = this.curContrEdit.family;
+              this.userContragent.otchestvo = this.curContrEdit.otchestvo;
+            } else {
+              this.userContragent.name = this.userPersonal.name;
+              this.userContragent.family = this.userPersonal.family;
+              this.userContragent.otchestvo = this.userPersonal.otchestvo;
+            }
+          }
+        }
       }
     }
   }
@@ -4990,6 +5456,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -5002,11 +5478,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['userContragents', 'getScreenState']), {
     columns: function columns() {
       return [{
-        label: 'Вид контрагента',
-        field: 'type_text'
+        label: '',
+        field: 'actions',
+        sortable: false
       }, {
         label: 'Наименование',
         field: 'name'
+      }, {
+        label: 'Вид контрагента',
+        field: 'type_text'
       }, {
         label: 'ИНН',
         field: 'inn',
@@ -5020,7 +5500,36 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   }),
   components: {
     ClientOnly: vue_client_only__WEBPACK_IMPORTED_MODULE_1___default.a
-  }
+  },
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['queryPostToServer']), {
+    onClickEdit: function onClickEdit(e) {
+      this.$router.push('/account/contragents/edit?id=' + e.id);
+    },
+    onClickDel: function onClickDel(e) {
+      var _this = this;
+
+      this.$modal.show('dialog', {
+        text: 'Вы действительно хотите удалить контрагента: <br><b>' + e.name + '</b>?',
+        buttons: [{
+          title: 'ОК',
+          handler: function handler() {
+            _this.delContragent(e);
+          }
+        }, {
+          title: 'Отмена'
+        }]
+      });
+    },
+    delContragent: function delContragent(e) {
+      this.$modal.hide('dialog');
+      this.queryPostToServer({
+        url: '/account/contragents/delete',
+        params: {
+          'id': e.id
+        }
+      });
+    }
+  })
 });
 
 /***/ }),
@@ -19544,6 +20053,28 @@ if (!Array.prototype.find) {
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??ref--4-0!./node_modules/css-loader/dist/cjs.js??ref--4-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/less-loader/dist/cjs.js??ref--4-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/accountcomps/account-mobile-menu.vue?vue&type=style&index=0&lang=less& ***!
   \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ "./node_modules/mini-css-extract-plugin/dist/loader.js?!./node_modules/css-loader/dist/cjs.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/less-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=style&index=0&lang=less&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??ref--4-0!./node_modules/css-loader/dist/cjs.js??ref--4-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/less-loader/dist/cjs.js??ref--4-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=style&index=0&lang=less& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ "./node_modules/mini-css-extract-plugin/dist/loader.js?!./node_modules/css-loader/dist/cjs.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/less-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/addresses.vue?vue&type=style&index=0&lang=less&":
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??ref--4-0!./node_modules/css-loader/dist/cjs.js??ref--4-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/less-loader/dist/cjs.js??ref--4-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/accountcomps/addresses.vue?vue&type=style&index=0&lang=less& ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -44042,6 +44573,1210 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 /***/ }),
 
+/***/ "./node_modules/vue-js-modal/dist/ssr.index.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/vue-js-modal/dist/ssr.index.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+!function (t, e) {
+  "object" == ( false ? undefined : _typeof(exports)) && "object" == ( false ? undefined : _typeof(module)) ? module.exports = e() :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (e),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : undefined;
+}(global, function () {
+  return function (n) {
+    var i = {};
+
+    function o(t) {
+      if (i[t]) return i[t].exports;
+      var e = i[t] = {
+        i: t,
+        l: !1,
+        exports: {}
+      };
+      return n[t].call(e.exports, e, e.exports, o), e.l = !0, e.exports;
+    }
+
+    return o.m = n, o.c = i, o.d = function (t, e, n) {
+      o.o(t, e) || Object.defineProperty(t, e, {
+        enumerable: !0,
+        get: n
+      });
+    }, o.r = function (t) {
+      "undefined" != typeof Symbol && Symbol.toStringTag && Object.defineProperty(t, Symbol.toStringTag, {
+        value: "Module"
+      }), Object.defineProperty(t, "__esModule", {
+        value: !0
+      });
+    }, o.t = function (e, t) {
+      if (1 & t && (e = o(e)), 8 & t) return e;
+      if (4 & t && "object" == _typeof(e) && e && e.__esModule) return e;
+      var n = Object.create(null);
+      if (o.r(n), Object.defineProperty(n, "default", {
+        enumerable: !0,
+        value: e
+      }), 2 & t && "string" != typeof e) for (var i in e) {
+        o.d(n, i, function (t) {
+          return e[t];
+        }.bind(null, i));
+      }
+      return n;
+    }, o.n = function (t) {
+      var e = t && t.__esModule ? function () {
+        return t["default"];
+      } : function () {
+        return t;
+      };
+      return o.d(e, "a", e), e;
+    }, o.o = function (t, e) {
+      return Object.prototype.hasOwnProperty.call(t, e);
+    }, o.p = "/dist/", o(o.s = 11);
+  }([function (t, e, n) {
+    var i = n(6);
+    "string" == typeof i && (i = [[t.i, i, ""]]), i.locals && (t.exports = i.locals);
+    var o = n(4)["default"];
+
+    t.exports.__inject__ = function (t) {
+      o("27d83796", i, !1, t);
+    };
+  }, function (t, e, n) {
+    var i = n(8);
+    "string" == typeof i && (i = [[t.i, i, ""]]), i.locals && (t.exports = i.locals);
+    var o = n(4)["default"];
+
+    t.exports.__inject__ = function (t) {
+      o("0e783494", i, !1, t);
+    };
+  }, function (t, e, n) {
+    var i = n(10);
+    "string" == typeof i && (i = [[t.i, i, ""]]), i.locals && (t.exports = i.locals);
+    var o = n(4)["default"];
+
+    t.exports.__inject__ = function (t) {
+      o("17757f60", i, !1, t);
+    };
+  }, function (t, e) {
+    t.exports = function (n) {
+      var a = [];
+      return a.toString = function () {
+        return this.map(function (t) {
+          var e = function (t, e) {
+            var n = t[1] || "",
+                i = t[3];
+            if (!i) return n;
+
+            if (e && "function" == typeof btoa) {
+              var o = (a = i, "/*# sourceMappingURL=data:application/json;charset=utf-8;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(a)))) + " */"),
+                  r = i.sources.map(function (t) {
+                return "/*# sourceURL=" + i.sourceRoot + t + " */";
+              });
+              return [n].concat(r).concat([o]).join("\n");
+            }
+
+            var a;
+            return [n].join("\n");
+          }(t, n);
+
+          return t[2] ? "@media " + t[2] + "{" + e + "}" : e;
+        }).join("");
+      }, a.i = function (t, e) {
+        "string" == typeof t && (t = [[null, t, ""]]);
+
+        for (var n = {}, i = 0; i < this.length; i++) {
+          var o = this[i][0];
+          "number" == typeof o && (n[o] = !0);
+        }
+
+        for (i = 0; i < t.length; i++) {
+          var r = t[i];
+          "number" == typeof r[0] && n[r[0]] || (e && !r[2] ? r[2] = e : e && (r[2] = "(" + r[2] + ") and (" + e + ")"), a.push(r));
+        }
+      }, a;
+    };
+  }, function (t, e, n) {
+    "use strict";
+
+    function i(t, e, n, i) {
+      if (i || "undefined" == typeof __VUE_SSR_CONTEXT__ || (i = __VUE_SSR_CONTEXT__), i) {
+        i.hasOwnProperty("styles") || (Object.defineProperty(i, "styles", {
+          enumerable: !0,
+          get: function get() {
+            return r(i._styles);
+          }
+        }), i._renderStyles = r);
+        var o = i._styles || (i._styles = {});
+        e = function (t, e) {
+          for (var n = [], i = {}, o = 0; o < e.length; o++) {
+            var r = e[o],
+                a = r[0],
+                s = {
+              id: t + ":" + o,
+              css: r[1],
+              media: r[2],
+              sourceMap: r[3]
+            };
+            i[a] ? i[a].parts.push(s) : n.push(i[a] = {
+              id: a,
+              parts: [s]
+            });
+          }
+
+          return n;
+        }(t, e), n ? function (t, e) {
+          for (var n = 0; n < e.length; n++) {
+            for (var i = e[n].parts, o = 0; o < i.length; o++) {
+              var r = i[o],
+                  a = r.media || "default",
+                  s = t[a];
+              s ? s.ids.indexOf(r.id) < 0 && (s.ids.push(r.id), s.css += "\n" + r.css) : t[a] = {
+                ids: [r.id],
+                css: r.css,
+                media: r.media
+              };
+            }
+          }
+        }(o, e) : function (t, e) {
+          for (var n = 0; n < e.length; n++) {
+            for (var i = e[n].parts, o = 0; o < i.length; o++) {
+              var r = i[o];
+              t[r.id] = {
+                ids: [r.id],
+                css: r.css,
+                media: r.media
+              };
+            }
+          }
+        }(o, e);
+      }
+    }
+
+    function r(t) {
+      var e = "";
+
+      for (var n in t) {
+        var i = t[n];
+        e += '<style data-vue-ssr-id="' + i.ids.join(" ") + '"' + (i.media ? ' media="' + i.media + '"' : "") + ">" + i.css + "</style>";
+      }
+
+      return e;
+    }
+
+    n.r(e), n.d(e, "default", function () {
+      return i;
+    });
+  }, function (t, e, n) {
+    "use strict";
+
+    n.r(e);
+    var i = n(0),
+        o = n.n(i);
+
+    for (var r in i) {
+      "default" !== r && function (t) {
+        n.d(e, t, function () {
+          return i[t];
+        });
+      }(r);
+    }
+
+    e["default"] = o.a;
+  }, function (t, e, n) {
+    (t.exports = n(3)(!1)).push([t.i, "\n.vue-modal-resizer {\r\n  display: block;\r\n  overflow: hidden;\r\n  position: absolute;\r\n  width: 12px;\r\n  height: 12px;\r\n  right: 0;\r\n  bottom: 0;\r\n  z-index: 9999999;\r\n  background: transparent;\r\n  cursor: se-resize;\n}\n.vue-modal-resizer::after {\r\n  display: block;\r\n  position: absolute;\r\n  content: '';\r\n  background: transparent;\r\n  left: 0;\r\n  top: 0;\r\n  width: 0;\r\n  height: 0;\r\n  border-bottom: 10px solid #ddd;\r\n  border-left: 10px solid transparent;\n}\n.vue-modal-resizer.clicked::after {\r\n  border-bottom: 10px solid #369be9;\n}\r\n", ""]);
+  }, function (t, e, n) {
+    "use strict";
+
+    n.r(e);
+    var i = n(1),
+        o = n.n(i);
+
+    for (var r in i) {
+      "default" !== r && function (t) {
+        n.d(e, t, function () {
+          return i[t];
+        });
+      }(r);
+    }
+
+    e["default"] = o.a;
+  }, function (t, e, n) {
+    (t.exports = n(3)(!1)).push([t.i, "\n.v--modal-block-scroll {\r\n  overflow: hidden;\r\n  width: 100vw;\n}\n.v--modal-overlay {\r\n  position: fixed;\r\n  box-sizing: border-box;\r\n  left: 0;\r\n  top: 0;\r\n  width: 100%;\r\n  height: 100vh;\r\n  background: rgba(0, 0, 0, 0.2);\r\n  z-index: 999;\r\n  opacity: 1;\n}\n.v--modal-overlay.scrollable {\r\n  height: 100%;\r\n  min-height: 100vh;\r\n  overflow-y: auto;\r\n  -webkit-overflow-scrolling: touch;\n}\n.v--modal-overlay .v--modal-background-click {\r\n  width: 100%;\r\n  min-height: 100%;\r\n  height: auto;\n}\n.v--modal-overlay .v--modal-box {\r\n  position: relative;\r\n  overflow: hidden;\r\n  box-sizing: border-box;\n}\n.v--modal-overlay.scrollable .v--modal-box {\r\n  margin-bottom: 2px;\n}\n.v--modal {\r\n  background-color: white;\r\n  text-align: left;\r\n  border-radius: 3px;\r\n  box-shadow: 0 20px 60px -2px rgba(27, 33, 58, 0.4);\r\n  padding: 0;\n}\n.v--modal.v--modal-fullscreen {\r\n  width: 100vw;\r\n  height: 100vh;\r\n  margin: 0;\r\n  left: 0;\r\n  top: 0;\n}\n.v--modal-top-right {\r\n  display: block;\r\n  position: absolute;\r\n  right: 0;\r\n  top: 0;\n}\n.overlay-fade-enter-active,\r\n.overlay-fade-leave-active {\r\n  transition: all 0.2s;\n}\n.overlay-fade-enter,\r\n.overlay-fade-leave-active {\r\n  opacity: 0;\n}\n.nice-modal-fade-enter-active,\r\n.nice-modal-fade-leave-active {\r\n  transition: all 0.4s;\n}\n.nice-modal-fade-enter,\r\n.nice-modal-fade-leave-active {\r\n  opacity: 0;\r\n  transform: translateY(-20px);\n}\r\n", ""]);
+  }, function (t, e, n) {
+    "use strict";
+
+    n.r(e);
+    var i = n(2),
+        o = n.n(i);
+
+    for (var r in i) {
+      "default" !== r && function (t) {
+        n.d(e, t, function () {
+          return i[t];
+        });
+      }(r);
+    }
+
+    e["default"] = o.a;
+  }, function (t, e, n) {
+    (t.exports = n(3)(!1)).push([t.i, "\n.vue-dialog div {\r\n  box-sizing: border-box;\n}\n.vue-dialog .dialog-flex {\r\n  width: 100%;\r\n  height: 100%;\n}\n.vue-dialog .dialog-content {\r\n  flex: 1 0 auto;\r\n  width: 100%;\r\n  padding: 15px;\r\n  font-size: 14px;\n}\n.vue-dialog .dialog-c-title {\r\n  font-weight: 600;\r\n  padding-bottom: 15px;\n}\n.vue-dialog .dialog-c-text {\n}\n.vue-dialog .vue-dialog-buttons {\r\n  display: flex;\r\n  flex: 0 1 auto;\r\n  width: 100%;\r\n  border-top: 1px solid #eee;\n}\n.vue-dialog .vue-dialog-buttons-none {\r\n  width: 100%;\r\n  padding-bottom: 15px;\n}\n.vue-dialog-button {\r\n  font-size: 12px !important;\r\n  background: transparent;\r\n  padding: 0;\r\n  margin: 0;\r\n  border: 0;\r\n  cursor: pointer;\r\n  box-sizing: border-box;\r\n  line-height: 40px;\r\n  height: 40px;\r\n  color: inherit;\r\n  font: inherit;\r\n  outline: none;\n}\n.vue-dialog-button:hover {\r\n  background: rgba(0, 0, 0, 0.01);\n}\n.vue-dialog-button:active {\r\n  background: rgba(0, 0, 0, 0.025);\n}\n.vue-dialog-button:not(:first-of-type) {\r\n  border-left: 1px solid #eee;\n}\r\n", ""]);
+  }, function (t, e, n) {
+    "use strict";
+
+    n.r(e);
+
+    var i = function i() {
+      var e = this,
+          t = e.$createElement,
+          n = e._self._c || t;
+      return n("transition", {
+        attrs: {
+          name: e.overlayTransition
+        }
+      }, [e.visibility.overlay ? n("div", {
+        ref: "overlay",
+        "class": e.overlayClass,
+        attrs: {
+          "aria-expanded": e.visibility.overlay.toString(),
+          "data-modal": e.name
+        }
+      }, [n("div", {
+        staticClass: "v--modal-background-click",
+        on: {
+          mousedown: function mousedown(t) {
+            return t.target !== t.currentTarget ? null : e.handleBackgroundClick(t);
+          },
+          touchstart: function touchstart(t) {
+            return t.target !== t.currentTarget ? null : e.handleBackgroundClick(t);
+          }
+        }
+      }, [n("div", {
+        staticClass: "v--modal-top-right"
+      }, [e._t("top-right")], 2), e._v(" "), n("transition", {
+        attrs: {
+          name: e.transition
+        },
+        on: {
+          "before-enter": e.beforeTransitionEnter,
+          "after-enter": e.afterTransitionEnter,
+          "after-leave": e.afterTransitionLeave
+        }
+      }, [e.visibility.modal ? n("div", {
+        ref: "modal",
+        "class": e.modalClass,
+        style: e.modalStyle
+      }, [e._t("default"), e._v(" "), e.resizable && !e.isAutoHeight ? n("resizer", {
+        attrs: {
+          "min-width": e.minWidth,
+          "min-height": e.minHeight
+        },
+        on: {
+          resize: e.handleModalResize
+        }
+      }) : e._e()], 2) : e._e()])], 1)]) : e._e()]);
+    },
+        o = function o() {
+      var t = this.$createElement;
+      return (this._self._c || t)("div", {
+        "class": this.className
+      }, []);
+    };
+
+    o._withStripped = i._withStripped = !0;
+
+    var s = function () {
+      var t = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : 0;
+      return function () {
+        return (t++).toString();
+      };
+    }(),
+        u = function u(t, e, n) {
+      return n < t ? t : e < n ? e : n;
+    },
+        r = function r() {
+      var t = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : {};
+      return function (o) {
+        for (var t = 1; t < arguments.length; t++) {
+          var r = null != arguments[t] ? arguments[t] : {},
+              e = Object.keys(r);
+          "function" == typeof Object.getOwnPropertySymbols && (e = e.concat(Object.getOwnPropertySymbols(r).filter(function (t) {
+            return Object.getOwnPropertyDescriptor(r, t).enumerable;
+          }))), e.forEach(function (t) {
+            var e, n, i;
+            e = o, i = r[n = t], n in e ? Object.defineProperty(e, n, {
+              value: i,
+              enumerable: !0,
+              configurable: !0,
+              writable: !0
+            }) : e[n] = i;
+          });
+        }
+
+        return o;
+      }({
+        id: s(),
+        timestamp: Date.now(),
+        canceled: !1
+      }, t);
+    };
+
+    function a(t, e, n, i, o, r, a, s) {
+      var l,
+          d = "function" == typeof t ? t.options : t;
+      if (e && (d.render = e, d.staticRenderFns = n, d._compiled = !0), i && (d.functional = !0), r && (d._scopeId = "data-v-" + r), a ? (l = function l(t) {
+        (t = t || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) || "undefined" == typeof __VUE_SSR_CONTEXT__ || (t = __VUE_SSR_CONTEXT__), o && o.call(this, t), t && t._registeredComponents && t._registeredComponents.add(a);
+      }, d._ssrRegister = l) : o && (l = s ? function () {
+        o.call(this, this.$root.$options.shadowRoot);
+      } : o), l) if (d.functional) {
+        d._injectStyles = l;
+        var u = d.render;
+
+        d.render = function (t, e) {
+          return l.call(e), u(t, e);
+        };
+      } else {
+        var c = d.beforeCreate;
+        d.beforeCreate = c ? [].concat(c, l) : [l];
+      }
+      return {
+        exports: t,
+        options: d
+      };
+    }
+
+    var l = a({
+      name: "VueJsModalResizer",
+      props: {
+        minHeight: {
+          type: Number,
+          "default": 0
+        },
+        minWidth: {
+          type: Number,
+          "default": 0
+        }
+      },
+      data: function data() {
+        return {
+          clicked: !1,
+          size: {}
+        };
+      },
+      mounted: function mounted() {
+        this.$el.addEventListener("mousedown", this.start, !1);
+      },
+      computed: {
+        className: function className() {
+          return {
+            "vue-modal-resizer": !0,
+            clicked: this.clicked
+          };
+        }
+      },
+      methods: {
+        start: function start(t) {
+          this.clicked = !0, window.addEventListener("mousemove", this.mousemove, !1), window.addEventListener("mouseup", this.stop, !1), t.stopPropagation(), t.preventDefault();
+        },
+        stop: function stop() {
+          this.clicked = !1, window.removeEventListener("mousemove", this.mousemove, !1), window.removeEventListener("mouseup", this.stop, !1), this.$emit("resize-stop", {
+            element: this.$el.parentElement,
+            size: this.size
+          });
+        },
+        mousemove: function mousemove(t) {
+          this.resize(t);
+        },
+        resize: function resize(t) {
+          var e = this.$el.parentElement;
+
+          if (e) {
+            var n = t.clientX - e.offsetLeft,
+                i = t.clientY - e.offsetTop;
+            n = u(this.minWidth, window.innerWidth, n), i = u(this.minHeight, window.innerHeight, i), this.size = {
+              width: n,
+              height: i
+            }, e.style.width = n + "px", e.style.height = i + "px", this.$emit("resize", {
+              element: e,
+              size: this.size
+            });
+          }
+        }
+      }
+    }, o, [], !1, function (t) {
+      var e = n(5);
+      e.__inject__ && e.__inject__(t);
+    }, null, "31df7a6a");
+    l.options.__file = "src/Resizer.vue";
+    var d = l.exports;
+
+    function c(t) {
+      return (c = "function" == typeof Symbol && "symbol" == _typeof(Symbol.iterator) ? function (t) {
+        return _typeof(t);
+      } : function (t) {
+        return t && "function" == typeof Symbol && t.constructor === Symbol && t !== Symbol.prototype ? "symbol" : _typeof(t);
+      })(t);
+    }
+
+    var f = "[-+]?[0-9]*.?[0-9]+",
+        h = [{
+      name: "px",
+      regexp: new RegExp("^".concat(f, "px$"))
+    }, {
+      name: "%",
+      regexp: new RegExp("^".concat(f, "%$"))
+    }, {
+      name: "px",
+      regexp: new RegExp("^".concat(f, "$"))
+    }],
+        p = function p(t) {
+      switch (c(t)) {
+        case "number":
+          return {
+            type: "px",
+            value: t
+          };
+
+        case "string":
+          return function (t) {
+            if ("auto" === t) return {
+              type: t,
+              value: 0
+            };
+
+            for (var e = 0; e < h.length; e++) {
+              var n = h[e];
+              if (n.regexp.test(t)) return {
+                type: n.name,
+                value: parseFloat(t)
+              };
+            }
+
+            return {
+              type: "",
+              value: t
+            };
+          }(t);
+
+        default:
+          return {
+            type: "",
+            value: t
+          };
+      }
+    },
+        v = function v(t) {
+      if ("string" != typeof t) return 0 <= t;
+      var e = p(t);
+      return ("%" === e.type || "px" === e.type) && 0 < e.value;
+    };
+
+    var m = a({
+      name: "VueJsModal",
+      props: {
+        name: {
+          required: !0,
+          type: String
+        },
+        delay: {
+          type: Number,
+          "default": 0
+        },
+        resizable: {
+          type: Boolean,
+          "default": !1
+        },
+        adaptive: {
+          type: Boolean,
+          "default": !1
+        },
+        draggable: {
+          type: [Boolean, String],
+          "default": !1
+        },
+        scrollable: {
+          type: Boolean,
+          "default": !1
+        },
+        reset: {
+          type: Boolean,
+          "default": !1
+        },
+        overlayTransition: {
+          type: String,
+          "default": "overlay-fade"
+        },
+        transition: {
+          type: String
+        },
+        clickToClose: {
+          type: Boolean,
+          "default": !0
+        },
+        classes: {
+          type: [String, Array],
+          "default": "v--modal"
+        },
+        minWidth: {
+          type: Number,
+          "default": 0,
+          validator: function validator(t) {
+            return 0 <= t;
+          }
+        },
+        minHeight: {
+          type: Number,
+          "default": 0,
+          validator: function validator(t) {
+            return 0 <= t;
+          }
+        },
+        maxWidth: {
+          type: Number,
+          "default": 1 / 0
+        },
+        maxHeight: {
+          type: Number,
+          "default": 1 / 0
+        },
+        width: {
+          type: [Number, String],
+          "default": 600,
+          validator: v
+        },
+        height: {
+          type: [Number, String],
+          "default": 300,
+          validator: function validator(t) {
+            return "auto" === t || v(t);
+          }
+        },
+        pivotX: {
+          type: Number,
+          "default": .5,
+          validator: function validator(t) {
+            return 0 <= t && t <= 1;
+          }
+        },
+        pivotY: {
+          type: Number,
+          "default": .5,
+          validator: function validator(t) {
+            return 0 <= t && t <= 1;
+          }
+        }
+      },
+      components: {
+        Resizer: d
+      },
+      data: function data() {
+        return {
+          visible: !1,
+          visibility: {
+            modal: !1,
+            overlay: !1
+          },
+          shift: {
+            left: 0,
+            top: 0
+          },
+          modal: {
+            width: 0,
+            widthType: "px",
+            height: 0,
+            heightType: "px",
+            renderedHeight: 0
+          },
+          window: {
+            width: 0,
+            height: 0
+          },
+          mutationObserver: null
+        };
+      },
+      created: function created() {
+        this.setInitialSize();
+      },
+      beforeMount: function beforeMount() {
+        var e = this;
+
+        if (j.event.$on("toggle", this.handleToggleEvent), window.addEventListener("resize", this.handleWindowResize), this.handleWindowResize(), this.scrollable && !this.isAutoHeight && console.warn('Modal "'.concat(this.name, '" has scrollable flag set to true ') + 'but height is not "auto" ('.concat(this.height, ")")), this.isAutoHeight) {
+          var t = function () {
+            if ("undefined" != typeof window) for (var t = ["", "WebKit", "Moz", "O", "Ms"], e = 0; e < t.length; e++) {
+              var n = t[e] + "MutationObserver";
+              if (n in window) return window[n];
+            }
+            return !1;
+          }();
+
+          t && (this.mutationObserver = new t(function (t) {
+            e.updateRenderedHeight();
+          }));
+        }
+
+        this.clickToClose && window.addEventListener("keyup", this.handleEscapeKeyUp);
+      },
+      beforeDestroy: function beforeDestroy() {
+        j.event.$off("toggle", this.handleToggleEvent), window.removeEventListener("resize", this.handleWindowResize), this.clickToClose && window.removeEventListener("keyup", this.handleEscapeKeyUp), this.scrollable && document.body.classList.remove("v--modal-block-scroll");
+      },
+      computed: {
+        isAutoHeight: function isAutoHeight() {
+          return "auto" === this.modal.heightType;
+        },
+        position: function position() {
+          var t = this.window,
+              e = this.shift,
+              n = this.pivotX,
+              i = this.pivotY,
+              o = this.trueModalWidth,
+              r = this.trueModalHeight,
+              a = t.width - o,
+              s = t.height - r,
+              l = e.left + n * a,
+              d = e.top + i * s;
+          return {
+            left: parseInt(u(0, a, l)),
+            top: parseInt(u(0, s, d))
+          };
+        },
+        trueModalWidth: function trueModalWidth() {
+          var t = this.window,
+              e = this.modal,
+              n = this.adaptive,
+              i = this.minWidth,
+              o = this.maxWidth,
+              r = "%" === e.widthType ? t.width / 100 * e.width : e.width,
+              a = Math.min(t.width, o);
+          return n ? u(i, a, r) : r;
+        },
+        trueModalHeight: function trueModalHeight() {
+          var t = this.window,
+              e = this.modal,
+              n = this.isAutoHeight,
+              i = this.adaptive,
+              o = this.maxHeight,
+              r = "%" === e.heightType ? t.height / 100 * e.height : e.height;
+          if (n) return this.modal.renderedHeight;
+          var a = Math.min(t.height, o);
+          return i ? u(this.minHeight, a, r) : r;
+        },
+        overlayClass: function overlayClass() {
+          return {
+            "v--modal-overlay": !0,
+            scrollable: this.scrollable && this.isAutoHeight
+          };
+        },
+        modalClass: function modalClass() {
+          return ["v--modal-box", this.classes];
+        },
+        modalStyle: function modalStyle() {
+          return {
+            top: this.position.top + "px",
+            left: this.position.left + "px",
+            width: this.trueModalWidth + "px",
+            height: this.isAutoHeight ? "auto" : this.trueModalHeight + "px"
+          };
+        }
+      },
+      watch: {
+        visible: function visible(t) {
+          var e = this;
+          t ? (this.visibility.overlay = !0, setTimeout(function () {
+            e.visibility.modal = !0, e.$nextTick(function () {
+              e.addDraggableListeners(), e.callAfterEvent(!0);
+            });
+          }, this.delay)) : (this.visibility.modal = !1, setTimeout(function () {
+            e.visibility.overlay = !1, e.$nextTick(function () {
+              e.removeDraggableListeners(), e.callAfterEvent(!1);
+            });
+          }, this.delay));
+        }
+      },
+      methods: {
+        handleToggleEvent: function handleToggleEvent(t, e, n) {
+          if (this.name === t) {
+            var i = void 0 === e ? !this.visible : e;
+            this.toggle(i, n);
+          }
+        },
+        setInitialSize: function setInitialSize() {
+          var t = this.modal,
+              e = p(this.width),
+              n = p(this.height);
+          t.width = e.value, t.widthType = e.type, t.height = n.value, t.heightType = n.type;
+        },
+        handleEscapeKeyUp: function handleEscapeKeyUp(t) {
+          27 === t.which && this.visible && this.$modal.hide(this.name);
+        },
+        handleWindowResize: function handleWindowResize() {
+          this.window.width = window.innerWidth, this.window.height = window.innerHeight, this.ensureShiftInWindowBounds();
+        },
+        createModalEvent: function createModalEvent() {
+          var t = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : {};
+          return r(function (o) {
+            for (var t = 1; t < arguments.length; t++) {
+              var r = null != arguments[t] ? arguments[t] : {},
+                  e = Object.keys(r);
+              "function" == typeof Object.getOwnPropertySymbols && (e = e.concat(Object.getOwnPropertySymbols(r).filter(function (t) {
+                return Object.getOwnPropertyDescriptor(r, t).enumerable;
+              }))), e.forEach(function (t) {
+                var e, n, i;
+                e = o, i = r[n = t], n in e ? Object.defineProperty(e, n, {
+                  value: i,
+                  enumerable: !0,
+                  configurable: !0,
+                  writable: !0
+                }) : e[n] = i;
+              });
+            }
+
+            return o;
+          }({
+            name: this.name,
+            ref: this.$refs.modal
+          }, t));
+        },
+        handleModalResize: function handleModalResize(t) {
+          this.modal.widthType = "px", this.modal.width = t.size.width, this.modal.heightType = "px", this.modal.height = t.size.height;
+          var e = this.modal.size;
+          this.$emit("resize", this.createModalEvent({
+            size: e
+          }));
+        },
+        toggle: function toggle(t, e) {
+          var n = this.reset,
+              i = this.scrollable,
+              o = this.visible;
+
+          if (o !== t) {
+            var r = o ? "before-close" : "before-open";
+            "before-open" === r ? ("undefined" != typeof document && document.activeElement && "BODY" !== document.activeElement.tagName && document.activeElement.blur && document.activeElement.blur(), n && (this.setInitialSize(), this.shift.left = 0, this.shift.top = 0), i && document.body.classList.add("v--modal-block-scroll")) : i && document.body.classList.remove("v--modal-block-scroll");
+            var a = !1,
+                s = this.createModalEvent({
+              stop: function stop() {
+                a = !0;
+              },
+              state: t,
+              params: e
+            });
+            this.$emit(r, s), a || (this.visible = t);
+          }
+        },
+        getDraggableElement: function getDraggableElement() {
+          var t = "string" != typeof this.draggable ? ".v--modal-box" : this.draggable;
+          return t ? this.$refs.overlay.querySelector(t) : null;
+        },
+        handleBackgroundClick: function handleBackgroundClick() {
+          this.clickToClose && this.toggle(!1);
+        },
+        callAfterEvent: function callAfterEvent(t) {
+          t ? this.connectObserver() : this.disconnectObserver();
+          var e = t ? "opened" : "closed",
+              n = this.createModalEvent({
+            state: t
+          });
+          this.$emit(e, n);
+        },
+        addDraggableListeners: function addDraggableListeners() {
+          var r = this;
+
+          if (this.draggable) {
+            var t = this.getDraggableElement();
+
+            if (t) {
+              var a = 0,
+                  s = 0,
+                  l = 0,
+                  d = 0,
+                  u = function u(t) {
+                return t.touches && 0 < t.touches.length ? t.touches[0] : t;
+              },
+                  e = function e(t) {
+                var e = t.target;
+
+                if (!e || "INPUT" !== e.nodeName) {
+                  var n = u(t),
+                      i = n.clientX,
+                      o = n.clientY;
+                  document.addEventListener("mousemove", c), document.addEventListener("touchmove", c), document.addEventListener("mouseup", f), document.addEventListener("touchend", f), a = i, s = o, l = r.shift.left, d = r.shift.top;
+                }
+              },
+                  c = function c(t) {
+                var e = u(t),
+                    n = e.clientX,
+                    i = e.clientY;
+                r.shift.left = l + n - a, r.shift.top = d + i - s, t.preventDefault();
+              },
+                  f = function t(e) {
+                r.ensureShiftInWindowBounds(), document.removeEventListener("mousemove", c), document.removeEventListener("touchmove", c), document.removeEventListener("mouseup", t), document.removeEventListener("touchend", t), e.preventDefault();
+              };
+
+              t.addEventListener("mousedown", e), t.addEventListener("touchstart", e);
+            }
+          }
+        },
+        removeDraggableListeners: function removeDraggableListeners() {},
+        updateRenderedHeight: function updateRenderedHeight() {
+          this.$refs.modal && (this.modal.renderedHeight = this.$refs.modal.getBoundingClientRect().height);
+        },
+        connectObserver: function connectObserver() {
+          this.mutationObserver && this.mutationObserver.observe(this.$refs.overlay, {
+            childList: !0,
+            attributes: !0,
+            subtree: !0
+          });
+        },
+        disconnectObserver: function disconnectObserver() {
+          this.mutationObserver && this.mutationObserver.disconnect();
+        },
+        beforeTransitionEnter: function beforeTransitionEnter() {
+          this.connectObserver();
+        },
+        afterTransitionEnter: function afterTransitionEnter() {},
+        afterTransitionLeave: function afterTransitionLeave() {},
+        ensureShiftInWindowBounds: function ensureShiftInWindowBounds() {
+          var t = this.window,
+              e = this.shift,
+              n = this.pivotX,
+              i = this.pivotY,
+              o = this.trueModalWidth,
+              r = this.trueModalHeight,
+              a = t.width - o,
+              s = t.height - r,
+              l = e.left + n * a,
+              d = e.top + i * s;
+          this.shift.left -= l - u(0, a, l), this.shift.top -= d - u(0, s, d);
+        }
+      }
+    }, i, [], !1, function (t) {
+      var e = n(7);
+      e.__inject__ && e.__inject__(t);
+    }, null, "680fc059");
+    m.options.__file = "src/Modal.vue";
+
+    var g = m.exports,
+        b = function b() {
+      var n = this,
+          t = n.$createElement,
+          i = n._self._c || t;
+      return i("modal", {
+        attrs: {
+          name: "dialog",
+          height: "auto",
+          classes: ["v--modal", "vue-dialog", this.params["class"]],
+          width: n.width,
+          "pivot-y": .3,
+          adaptive: !0,
+          clickToClose: n.clickToClose,
+          transition: n.transition
+        },
+        on: {
+          "before-open": n.beforeOpened,
+          "before-close": n.beforeClosed,
+          opened: function opened(t) {
+            n.$emit("opened", t);
+          },
+          closed: function closed(t) {
+            n.$emit("closed", t);
+          }
+        }
+      }, [i("div", {
+        staticClass: "dialog-content"
+      }, [n.params.title ? i("div", {
+        staticClass: "dialog-c-title",
+        domProps: {
+          innerHTML: n._s(n.params.title || "")
+        }
+      }) : n._e(), n._v(" "), n.params.component ? i(n.params.component, n._b({
+        tag: "component"
+      }, "component", n.params.props, !1)) : i("div", {
+        staticClass: "dialog-c-text",
+        domProps: {
+          innerHTML: n._s(n.params.text || "")
+        }
+      })], 1), n._v(" "), n.buttons ? i("div", {
+        staticClass: "vue-dialog-buttons"
+      }, n._l(n.buttons, function (t, e) {
+        return i("button", {
+          key: e,
+          "class": t["class"] || "vue-dialog-button",
+          style: n.buttonStyle,
+          attrs: {
+            type: "button"
+          },
+          domProps: {
+            innerHTML: n._s(t.title)
+          },
+          on: {
+            click: function click(t) {
+              t.stopPropagation(), n.click(e, t);
+            }
+          }
+        }, [n._v("\n      " + n._s(t.title) + "\n    ")]);
+      })) : i("div", {
+        staticClass: "vue-dialog-buttons-none"
+      })]);
+    };
+
+    b._withStripped = !0;
+    var y = a({
+      name: "VueJsDialog",
+      props: {
+        width: {
+          type: [Number, String],
+          "default": 400
+        },
+        clickToClose: {
+          type: Boolean,
+          "default": !0
+        },
+        transition: {
+          type: String,
+          "default": "fade"
+        }
+      },
+      data: function data() {
+        return {
+          params: {},
+          defaultButtons: [{
+            title: "CLOSE"
+          }]
+        };
+      },
+      computed: {
+        buttons: function buttons() {
+          return this.params.buttons || this.defaultButtons;
+        },
+        buttonStyle: function buttonStyle() {
+          return {
+            flex: "1 1 ".concat(100 / this.buttons.length, "%")
+          };
+        }
+      },
+      methods: {
+        beforeOpened: function beforeOpened(t) {
+          window.addEventListener("keyup", this.onKeyUp), this.params = t.params || {}, this.$emit("before-opened", t);
+        },
+        beforeClosed: function beforeClosed(t) {
+          window.removeEventListener("keyup", this.onKeyUp), this.params = {}, this.$emit("before-closed", t);
+        },
+        click: function click(t, e) {
+          var n = 2 < arguments.length && void 0 !== arguments[2] ? arguments[2] : "click",
+              i = this.buttons[t];
+          i && "function" == typeof i.handler ? i.handler(t, e, {
+            source: n
+          }) : this.$modal.hide("dialog");
+        },
+        onKeyUp: function onKeyUp(t) {
+          if (13 === t.which && 0 < this.buttons.length) {
+            var e = 1 === this.buttons.length ? 0 : this.buttons.findIndex(function (t) {
+              return t["default"];
+            });
+            -1 !== e && this.click(e, t, "keypress");
+          }
+        }
+      }
+    }, b, [], !1, function (t) {
+      var e = n(9);
+      e.__inject__ && e.__inject__(t);
+    }, null, "bfca6668");
+    y.options.__file = "src/Dialog.vue";
+
+    var w = y.exports,
+        _ = function _() {
+      var n = this,
+          t = n.$createElement,
+          i = n._self._c || t;
+      return i("div", {
+        attrs: {
+          id: "modals-container"
+        }
+      }, n._l(n.modals, function (e) {
+        return i("modal", n._g(n._b({
+          key: e.id,
+          on: {
+            closed: function closed(t) {
+              n.remove(e.id);
+            }
+          }
+        }, "modal", e.modalAttrs, !1), e.modalListeners), [i(e.component, n._g(n._b({
+          tag: "component",
+          on: {
+            close: function close(t) {
+              n.$modal.hide(e.modalAttrs.name);
+            }
+          }
+        }, "component", e.componentAttrs, !1), n.$listeners))], 1);
+      }));
+    };
+
+    _._withStripped = !0;
+    var x = a({
+      data: function data() {
+        return {
+          modals: []
+        };
+      },
+      created: function created() {
+        this.$root._dynamicContainer = this;
+      },
+      methods: {
+        add: function add(t) {
+          var e = this,
+              n = 1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : {},
+              i = 2 < arguments.length && void 0 !== arguments[2] ? arguments[2] : {},
+              o = 3 < arguments.length && void 0 !== arguments[3] ? arguments[3] : {},
+              r = s(),
+              a = i.name || "_dynamic_modal_" + r;
+          this.modals.push({
+            id: r,
+            modalAttrs: function (o) {
+              for (var t = 1; t < arguments.length; t++) {
+                var r = null != arguments[t] ? arguments[t] : {},
+                    e = Object.keys(r);
+                "function" == typeof Object.getOwnPropertySymbols && (e = e.concat(Object.getOwnPropertySymbols(r).filter(function (t) {
+                  return Object.getOwnPropertyDescriptor(r, t).enumerable;
+                }))), e.forEach(function (t) {
+                  var e, n, i;
+                  e = o, i = r[n = t], n in e ? Object.defineProperty(e, n, {
+                    value: i,
+                    enumerable: !0,
+                    configurable: !0,
+                    writable: !0
+                  }) : e[n] = i;
+                });
+              }
+
+              return o;
+            }({}, i, {
+              name: a
+            }),
+            modalListeners: o,
+            component: t,
+            componentAttrs: n
+          }), this.$nextTick(function () {
+            e.$modal.show(a);
+          });
+        },
+        remove: function remove(e) {
+          var t = this.modals.findIndex(function (t) {
+            return t.id === e;
+          });
+          -1 !== t && this.modals.splice(t, 1);
+        }
+      }
+    }, _, [], !1, null, null, "7da42967");
+    x.options.__file = "src/ModalsContainer.vue";
+    var E = x.exports;
+
+    function O(t) {
+      return (O = "function" == typeof Symbol && "symbol" == _typeof(Symbol.iterator) ? function (t) {
+        return _typeof(t);
+      } : function (t) {
+        return t && "function" == typeof Symbol && t.constructor === Symbol && t !== Symbol.prototype ? "symbol" : _typeof(t);
+      })(t);
+    }
+
+    n.d(e, "getModalsContainer", function () {
+      return S;
+    });
+
+    var S = function S(t, e, n) {
+      if (!n._dynamicContainer && e.injectModalsContainer) {
+        var i = (o = document.createElement("div"), document.body.appendChild(o), o);
+        new t({
+          parent: n,
+          render: function render(t) {
+            return t(E);
+          }
+        }).$mount(i);
+      }
+
+      var o;
+      return n._dynamicContainer;
+    },
+        k = {
+      install: function install(a) {
+        var s = 1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : {};
+
+        if (!this.installed) {
+          this.installed = !0, this.event = new a(), this.rootInstance = null;
+
+          var t = s.componentName || "Modal",
+              l = s.dynamicDefaults || {},
+              o = function o(t, e, n, i) {
+            var o = n && n.root ? n.root : k.rootInstance,
+                r = S(a, s, o);
+            r ? r.add(t, function (o) {
+              for (var t = 1; t < arguments.length; t++) {
+                var r = null != arguments[t] ? arguments[t] : {},
+                    e = Object.keys(r);
+                "function" == typeof Object.getOwnPropertySymbols && (e = e.concat(Object.getOwnPropertySymbols(r).filter(function (t) {
+                  return Object.getOwnPropertyDescriptor(r, t).enumerable;
+                }))), e.forEach(function (t) {
+                  var e, n, i;
+                  e = o, i = r[n = t], n in e ? Object.defineProperty(e, n, {
+                    value: i,
+                    enumerable: !0,
+                    configurable: !0,
+                    writable: !0
+                  }) : e[n] = i;
+                });
+              }
+
+              return o;
+            }({}, l, e), n, i) : console.warn("[vue-js-modal] In order to render dynamic modals, a <modals-container> component must be present on the page.");
+          };
+
+          a.prototype.$modal = {
+            show: function show(t) {
+              for (var e = arguments.length, n = new Array(1 < e ? e - 1 : 0), i = 1; i < e; i++) {
+                n[i - 1] = arguments[i];
+              }
+
+              switch (O(t)) {
+                case "string":
+                  return function (t, e) {
+                    k.event.$emit("toggle", t, !0, e);
+                  }.apply(void 0, [t].concat(n));
+
+                case "object":
+                  return s.dynamic ? o.apply(void 0, [t].concat(n)) : console.warn("[vue-js-modal] $modal() received object as a first argument, but dynamic modals are switched off. https://github.com/euvl/vue-js-modal/#dynamic-modals");
+              }
+            },
+            hide: function hide(t, e) {
+              k.event.$emit("toggle", t, !1, e);
+            },
+            toggle: function toggle(t, e) {
+              k.event.$emit("toggle", t, void 0, e);
+            }
+          }, a.component(t, g), s.dialog && a.component("VDialog", w), s.dynamic && (a.component("ModalsContainer", E), a.mixin({
+            beforeMount: function beforeMount() {
+              null === k.rootInstance && (k.rootInstance = this.$root);
+            }
+          }));
+        }
+      }
+    },
+        j = e["default"] = k;
+  }]);
+});
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../../webpack/buildin/module.js */ "./node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "./node_modules/vue-js-modal/dist/styles.css":
+/*!***************************************************!*\
+  !*** ./node_modules/vue-js-modal/dist/styles.css ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/App.vue?vue&type=template&id=332fccf4&":
 /*!******************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/App.vue?vue&type=template&id=332fccf4& ***!
@@ -46525,6 +48260,170 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=template&id=6fdc9214&":
+/*!***********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=template&id=6fdc9214& ***!
+  \***********************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "account-addresses-add" },
+    [
+      _vm.modeEdit && !_vm.curAddressEdit
+        ? _c("div", [_vm._v("Адрес не найден")])
+        : [
+            _c(
+              "div",
+              { staticClass: "account-addresses-add__search" },
+              [
+                _c("input-row", {
+                  attrs: {
+                    label: "Регион / район",
+                    inputId: "region",
+                    inputRequired: true,
+                    inputType: "text",
+                    inputValue: _vm.userAddress.region
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.onChange("region", $event)
+                    },
+                    changeValid: function($event) {
+                      return _vm.onChangeValid("region", $event)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("input-row", {
+                  attrs: {
+                    label: "Город / н.п.",
+                    inputId: "gorod",
+                    inputRequired: true,
+                    inputType: "text",
+                    inputValue: _vm.userAddress.gorod
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.onChange("gorod", $event)
+                    },
+                    changeValid: function($event) {
+                      return _vm.onChangeValid("gorod", $event)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("input-row", {
+                  attrs: {
+                    label: "Улица",
+                    inputId: "street",
+                    inputRequired: true,
+                    inputType: "text",
+                    inputValue: _vm.userAddress.street
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.onChange("street", $event)
+                    },
+                    changeValid: function($event) {
+                      return _vm.onChangeValid("street", $event)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("input-row", {
+                  attrs: {
+                    label: "Дом",
+                    inputId: "house",
+                    inputRequired: true,
+                    inputType: "text",
+                    inputValue: _vm.userAddress.house
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.onChange("house", $event)
+                    },
+                    changeValid: function($event) {
+                      return _vm.onChangeValid("house", $event)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("input-row", {
+                  attrs: {
+                    label: "Квартира / офис",
+                    inputId: "dep",
+                    inputRequired: false,
+                    inputType: "text",
+                    inputValue: _vm.userAddress.dep
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.onChange("dep", $event)
+                    },
+                    changeValid: function($event) {
+                      return _vm.onChangeValid("dep", $event)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("input-row", {
+                  attrs: {
+                    label: "Индекс",
+                    inputId: "postind",
+                    inputRequired: true,
+                    inputMask: /[0-9]/,
+                    maxInputLength: 6,
+                    inputType: "text",
+                    inputValue: _vm.userAddress.postind,
+                    validate: {
+                      pattern: /^[0-9]{6,6}$/,
+                      message: "Неверный почтовый индекс."
+                    }
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.onChange("postind", $event)
+                    },
+                    changeValid: function($event) {
+                      return _vm.onChangeValid("postind", $event)
+                    }
+                  }
+                })
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "button-ui button-ui_brand",
+                attrs: { disabled: !_vm.enableBtnAddr },
+                on: { click: _vm.addAddr }
+              },
+              [_vm._v(_vm._s(_vm.modeEdit ? "Сохранить" : "Добавить"))]
+            )
+          ]
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/addresses.vue?vue&type=template&id=17b9c2c0&":
 /*!*******************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/pages/accountcomps/addresses.vue?vue&type=template&id=17b9c2c0& ***!
@@ -46540,9 +48439,94 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "account-addresses" }, [
-    _vm._v("\n  addresses\n")
-  ])
+  return _c(
+    "div",
+    { staticClass: "account-addresses" },
+    [
+      _vm.userAddresses.length == 0
+        ? _c("div", { staticClass: "account-contragents__info" }, [
+            _vm._v("\n    Адреса доставки отсутствуют  \n  ")
+          ])
+        : _c(
+            "div",
+            { staticClass: "account-addresses__table" },
+            [
+              _c(
+                "client-only",
+                [
+                  _c("vue-good-table", {
+                    attrs: { columns: _vm.columns, rows: _vm.userAddresses },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "table-row",
+                        fn: function(props) {
+                          return [
+                            props.column.field == "actions"
+                              ? _c(
+                                  "div",
+                                  { staticClass: "account-addresses__actions" },
+                                  [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-success",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.onClickEdit(props.row)
+                                          }
+                                        }
+                                      },
+                                      [_c("i", { staticClass: "fa fa-edit" })]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-danger",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.onClickDel(props.row)
+                                          }
+                                        }
+                                      },
+                                      [_c("i", { staticClass: "fa fa-trash" })]
+                                    )
+                                  ]
+                                )
+                              : _c("span", [
+                                  _vm._v(
+                                    "\n            " +
+                                      _vm._s(
+                                        props.formattedRow[props.column.field]
+                                      ) +
+                                      "\n          "
+                                  )
+                                ])
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          ),
+      _vm._v(" "),
+      _c(
+        "router-link",
+        {
+          staticClass: "button-ui button-ui_brand account-contragents__add",
+          attrs: { to: "/account/addresses/add", type: "button" }
+        },
+        [_vm._v("Добавить адрес")]
+      ),
+      _vm._v(" "),
+      _c("v-dialog")
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -46702,522 +48686,571 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "account-contragents-add" }, [
-    _c(
-      "div",
-      { staticClass: "ui-radio ui-radio_list account-contragents-add__type" },
-      [
-        _c("span", [_vm._v("Вид контрагента")]),
-        _vm._v(" "),
-        _c("radio-button", {
-          attrs: {
-            checked: !_vm.userContragent.type || _vm.userContragent.type == "u",
-            list: true,
-            name: "type",
-            value: "u",
-            caption: "Юридическое лицо"
-          },
-          on: {
-            input: function($event) {
-              return _vm.onInput($event)
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("radio-button", {
-          attrs: {
-            checked: _vm.userContragent.type == "p",
-            list: true,
-            name: "type",
-            value: "p",
-            caption: "Индивидуальный предприниматель"
-          },
-          on: {
-            input: function($event) {
-              return _vm.onInput($event)
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("radio-button", {
-          attrs: {
-            checked: _vm.userContragent.type == "f",
-            list: true,
-            name: "type",
-            value: "f",
-            caption: "Физическое лицо"
-          },
-          on: {
-            input: function($event) {
-              return _vm.onInput($event)
-            }
-          }
-        })
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.mount && _vm.userContragent.type == "f",
-            expression: "mount && userContragent.type=='f'"
-          }
-        ],
-        staticClass: "account-contragents-add__fizblock"
-      },
-      [
-        _c("input-row", {
-          attrs: {
-            label: "Фамилия",
-            inputId: "Family",
-            inputRequired: true,
-            inputType: "text",
-            inputValue: _vm.userContragent.family
-          },
-          on: {
-            change: function($event) {
-              return _vm.onChange("family", $event)
-            },
-            changeValid: function($event) {
-              return _vm.onChangeValid("family", $event)
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("input-row", {
-          attrs: {
-            label: "Имя",
-            inputId: "Name",
-            inputRequired: true,
-            inputType: "text",
-            inputValue: _vm.userContragent.name
-          },
-          on: {
-            change: function($event) {
-              return _vm.onChange("name", $event)
-            },
-            changeValid: function($event) {
-              return _vm.onChangeValid("name", $event)
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("input-row", {
-          attrs: {
-            label: "Отчество",
-            inputId: "Otchestvo",
-            inputRequired: false,
-            inputType: "text",
-            inputValue: _vm.userContragent.otchestvo
-          },
-          on: {
-            change: function($event) {
-              return _vm.onChange("otchestvo", $event)
-            },
-            changeValid: function($event) {
-              return _vm.onChangeValid("otchestvo", $event)
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "button-ui button-ui_brand",
-            attrs: { disabled: !_vm.enableBtnFiz },
-            on: { click: _vm.addFiz }
-          },
-          [_vm._v("Добавить")]
-        )
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.mount && _vm.userContragent.type != "f",
-            expression: "mount && userContragent.type!='f'"
-          }
-        ],
-        staticClass: "account-contragents-add__search"
-      },
-      [
-        _c("div", { staticClass: "account-contragents-add__help first" }, [
-          _vm._v("\n      " + _vm._s(_vm.dataType.help1) + "\n    ")
-        ]),
-        _vm._v(" "),
-        _c("input-row", {
-          attrs: {
-            label: "Наименование",
-            inputId: "fullname",
-            inputRequired: false,
-            inputType: "text",
-            inputValue: _vm.userContragent.fullname
-          },
-          on: {
-            change: function($event) {
-              return _vm.onChange("fullname", $event)
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("div", { staticClass: "account-contragents-add__help" }, [
-          _vm._v("\n      " + _vm._s(_vm.dataType.help2) + "\n    ")
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            directives: [
+  return _c(
+    "div",
+    { staticClass: "account-contragents-add" },
+    [
+      _vm.modeEdit && !_vm.curContrEdit
+        ? _c("div", [_vm._v("Контрагент не найден")])
+        : [
+            _c(
+              "div",
               {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.notSelect && !_vm.conSelected,
-                expression: "notSelect && !conSelected"
-              }
-            ],
-            staticClass: "account-contragents-add__notselect"
-          },
-          [
-            _vm._v(
-              _vm._s(
-                _vm.notWork ? "Сервис не доступен" : "Подсказка не выбрана"
-              ) + ", \n      "
+                staticClass:
+                  "ui-radio ui-radio_list account-contragents-add__type"
+              },
+              [
+                _c("span", [_vm._v("Вид контрагента")]),
+                _vm._v(" "),
+                _c("radio-button", {
+                  attrs: {
+                    checked:
+                      !_vm.userContragent.type ||
+                      _vm.userContragent.type == "u",
+                    list: true,
+                    name: "type",
+                    value: "u",
+                    caption: "Юридическое лицо"
+                  },
+                  on: {
+                    input: function($event) {
+                      return _vm.onInput($event)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("radio-button", {
+                  attrs: {
+                    checked: _vm.userContragent.type == "p",
+                    list: true,
+                    name: "type",
+                    value: "p",
+                    caption: "Индивидуальный предприниматель"
+                  },
+                  on: {
+                    input: function($event) {
+                      return _vm.onInput($event)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("radio-button", {
+                  attrs: {
+                    checked: _vm.userContragent.type == "f",
+                    list: true,
+                    name: "type",
+                    value: "f",
+                    caption: "Физическое лицо"
+                  },
+                  on: {
+                    input: function($event) {
+                      return _vm.onInput($event)
+                    }
+                  }
+                })
+              ],
+              1
             ),
-            _c("a", { on: { click: _vm.onClickHand } }, [
-              _vm._v("введите реквизиты вручную")
-            ]),
-            !_vm.notWork
-              ? _c("span", [_vm._v(", либо повторите поиск")])
-              : _vm._e()
-          ]
-        )
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value:
-              _vm.mount && _vm.userContragent.type != "f" && _vm.conSelected,
-            expression: "mount && userContragent.type!='f' && conSelected"
-          }
-        ],
-        staticClass: "account-contragents-add__contragent"
-      },
-      [
-        _c("div", { staticClass: "hr" }),
-        _vm._v(" "),
-        _c("input-row", {
-          attrs: {
-            label: "Наименование",
-            inputId: "Name",
-            inputRequired: true,
-            inputType: "text",
-            inputValue: _vm.userContragent.name
-          },
-          on: {
-            change: function($event) {
-              return _vm.onChange("name", $event)
-            },
-            changeValid: function($event) {
-              return _vm.onChangeValid("name", $event)
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "account-contragents-add__innblock" },
-          [
-            _c("input-row", {
-              attrs: {
-                label: "ИНН",
-                inputId: "Inn",
-                inputRequired: true,
-                inputMask: /[0-9]/,
-                maxInputLength: _vm.typeContr == "u" ? 10 : 12,
-                inputType: "text",
-                inputValue: _vm.userContragent.inn,
-                validate: { pattern: _vm.patternInn, message: "Неверный ИНН." }
-              },
-              on: {
-                change: function($event) {
-                  return _vm.onChange("inn", $event)
-                },
-                changeValid: function($event) {
-                  return _vm.onChangeValid("inn", $event)
-                }
-              }
-            }),
             _vm._v(" "),
-            _c("input-row", {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.typeContr == "u",
-                  expression: "typeContr=='u'"
-                }
-              ],
-              attrs: {
-                label: "КПП",
-                inputId: "Kpp",
-                inputRequired: true,
-                inputMask: /[0-9]/,
-                maxInputLength: 9,
-                inputType: "text",
-                inputValue: _vm.userContragent.kpp,
-                validate: { pattern: /^[0-9]{9,9}$/, message: "Неверный КПП." }
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.mount && _vm.userContragent.type == "f",
+                    expression: "mount && userContragent.type=='f'"
+                  }
+                ],
+                staticClass: "account-contragents-add__fizblock"
               },
-              on: {
-                change: function($event) {
-                  return _vm.onChange("kpp", $event)
-                },
-                changeValid: function($event) {
-                  return _vm.onChangeValid("kpp", $event)
-                }
-              }
-            })
-          ],
-          1
-        ),
-        _vm._v(" "),
-        false
-          ? undefined
-          : _vm._e(),
-        _vm._v(" "),
-        _c("input-row", {
-          attrs: {
-            label: "Юридический адрес",
-            inputId: "UrAddress",
-            inputRequired: true,
-            inputType: "text",
-            inputValue: _vm.userContragent.uraddress
-          },
-          on: {
-            change: function($event) {
-              return _vm.onChange("uraddress", $event)
-            },
-            changeValid: function($event) {
-              return _vm.onChangeValid("uraddress", $event)
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("div", { staticClass: "hr" }),
-        _vm._v(" "),
-        _c("div", { staticClass: "account-contragents-add__bank-header" }, [
-          _vm._v("Банковские реквизиты")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "account-contragents-add__bank" }, [
-          _c(
-            "div",
-            { staticClass: "account-contragents-add__searchbank" },
-            [
-              _c(
-                "div",
-                { staticClass: "account-contragents-add__help first" },
-                [_vm._v("\n          Введите название или БИК банка\n        ")]
-              ),
-              _vm._v(" "),
-              _c("input-row", {
-                attrs: {
-                  label: "Банк",
-                  inputId: "Bank_search",
-                  inputRequired: false,
-                  inputType: "text",
-                  inputValue: _vm.userContragent.bank
-                },
-                on: {
-                  change: function($event) {
-                    return _vm.onChange("bank", $event)
+              [
+                _c("input-row", {
+                  attrs: {
+                    label: "Фамилия",
+                    inputId: "Family",
+                    inputRequired: true,
+                    inputType: "text",
+                    inputValue: _vm.userContragent.family
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.onChange("family", $event)
+                    },
+                    changeValid: function($event) {
+                      return _vm.onChangeValid("family", $event)
+                    }
                   }
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.notSelectBank && !_vm.conSelectedBank,
-                  expression: "notSelectBank && !conSelectedBank"
-                }
+                }),
+                _vm._v(" "),
+                _c("input-row", {
+                  attrs: {
+                    label: "Имя",
+                    inputId: "Name",
+                    inputRequired: true,
+                    inputType: "text",
+                    inputValue: _vm.userContragent.name
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.onChange("name", $event)
+                    },
+                    changeValid: function($event) {
+                      return _vm.onChangeValid("name", $event)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("input-row", {
+                  attrs: {
+                    label: "Отчество",
+                    inputId: "Otchestvo",
+                    inputRequired: false,
+                    inputType: "text",
+                    inputValue: _vm.userContragent.otchestvo
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.onChange("otchestvo", $event)
+                    },
+                    changeValid: function($event) {
+                      return _vm.onChangeValid("otchestvo", $event)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "button-ui button-ui_brand",
+                    attrs: { disabled: !_vm.enableBtnFiz },
+                    on: { click: _vm.addFiz }
+                  },
+                  [_vm._v(_vm._s(_vm.modeEdit ? "Сохранить" : "Добавить"))]
+                )
               ],
-              staticClass: "account-contragents-add__notselect"
-            },
-            [
-              _vm._v(
-                _vm._s(
-                  _vm.notWork ? "Сервис не доступен" : "Подсказка не выбрана"
-                ) + ", \n      "
-              ),
-              _c("a", { on: { click: _vm.onClickHandBank } }, [
-                _vm._v("введите реквизиты банка вручную")
-              ]),
-              !_vm.notWork
-                ? _c("span", [_vm._v(", либо повторите поиск")])
-                : _vm._e()
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value:
-                    _vm.mount &&
-                    _vm.userContragent.type != "f" &&
-                    _vm.conSelectedBank,
-                  expression:
-                    "mount && userContragent.type!='f' && conSelectedBank"
-                }
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.mount && _vm.userContragent.type != "f",
+                    expression: "mount && userContragent.type!='f'"
+                  }
+                ],
+                staticClass: "account-contragents-add__search"
+              },
+              [
+                _c(
+                  "div",
+                  { staticClass: "account-contragents-add__help first" },
+                  [_vm._v("\n      " + _vm._s(_vm.dataType.help1) + "\n    ")]
+                ),
+                _vm._v(" "),
+                _c("input-row", {
+                  attrs: {
+                    label: "Наименование",
+                    inputId: "fullname",
+                    inputRequired: false,
+                    inputType: "text",
+                    inputValue: _vm.userContragent.fullname
+                  },
+                  on: {
+                    change: function($event) {
+                      return _vm.onChange("fullname", $event)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "account-contragents-add__help" }, [
+                  _vm._v("\n      " + _vm._s(_vm.dataType.help2) + "\n    ")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.notSelect && !_vm.conSelected,
+                        expression: "notSelect && !conSelected"
+                      }
+                    ],
+                    staticClass: "account-contragents-add__notselect"
+                  },
+                  [
+                    _vm._v(
+                      _vm._s(
+                        _vm.notWork
+                          ? "Сервис не доступен"
+                          : "Подсказка не выбрана"
+                      ) + ", \n      "
+                    ),
+                    _c("a", { on: { click: _vm.onClickHand } }, [
+                      _vm._v("введите реквизиты вручную")
+                    ]),
+                    !_vm.notWork
+                      ? _c("span", [_vm._v(", либо повторите поиск")])
+                      : _vm._e()
+                  ]
+                )
               ],
-              staticClass: "account-contragents-add__contragent-bank"
-            },
-            [
-              _c("div", { staticClass: "hr" }),
-              _vm._v(" "),
-              _c("input-row", {
-                attrs: {
-                  label: "БИК банка",
-                  inputId: "Bik",
-                  inputRequired: true,
-                  inputMask: /[0-9]/,
-                  maxInputLength: 9,
-                  inputType: "text",
-                  inputValue: _vm.userContragent.bik,
-                  validate: {
-                    pattern: /^[0-9]{9,9}$/,
-                    message: "Неверный БИК банка."
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value:
+                      _vm.mount &&
+                      _vm.userContragent.type != "f" &&
+                      _vm.conSelected,
+                    expression:
+                      "mount && userContragent.type!='f' && conSelected"
                   }
-                },
-                on: {
-                  change: function($event) {
-                    return _vm.onChange("bik", $event)
+                ],
+                staticClass: "account-contragents-add__contragent"
+              },
+              [
+                _c("div", { staticClass: "hr" }),
+                _vm._v(" "),
+                _c("input-row", {
+                  attrs: {
+                    label: "Наименование",
+                    inputId: "Name",
+                    inputRequired: true,
+                    inputType: "text",
+                    inputValue: _vm.userContragent.name
                   },
-                  changeValid: function($event) {
-                    return _vm.onChangeValid("bik", $event)
+                  on: {
+                    change: function($event) {
+                      return _vm.onChange("name", $event)
+                    },
+                    changeValid: function($event) {
+                      return _vm.onChangeValid("name", $event)
+                    }
                   }
-                }
-              }),
-              _vm._v(" "),
-              _c("input-row", {
-                attrs: {
-                  label: "Наименование банка",
-                  inputId: "BankName",
-                  inputRequired: true,
-                  inputType: "text",
-                  inputValue: _vm.userContragent.bankname
-                },
-                on: {
-                  change: function($event) {
-                    return _vm.onChange("bankname", $event)
+                }),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "account-contragents-add__innblock" },
+                  [
+                    _c("input-row", {
+                      attrs: {
+                        label: "ИНН",
+                        inputId: "Inn",
+                        inputRequired: true,
+                        inputMask: /[0-9]/,
+                        maxInputLength: _vm.typeContr == "u" ? 10 : 12,
+                        inputType: "text",
+                        inputValue: _vm.userContragent.inn,
+                        validate: {
+                          pattern: _vm.patternInn,
+                          message: "Неверный ИНН."
+                        }
+                      },
+                      on: {
+                        change: function($event) {
+                          return _vm.onChange("inn", $event)
+                        },
+                        changeValid: function($event) {
+                          return _vm.onChangeValid("inn", $event)
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("input-row", {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.typeContr == "u",
+                          expression: "typeContr=='u'"
+                        }
+                      ],
+                      attrs: {
+                        label: "КПП",
+                        inputId: "Kpp",
+                        inputRequired: true,
+                        inputMask: /[0-9]/,
+                        maxInputLength: 9,
+                        inputType: "text",
+                        inputValue: _vm.userContragent.kpp,
+                        validate: {
+                          pattern: /^[0-9]{9,9}$/,
+                          message: "Неверный КПП."
+                        }
+                      },
+                      on: {
+                        change: function($event) {
+                          return _vm.onChange("kpp", $event)
+                        },
+                        changeValid: function($event) {
+                          return _vm.onChangeValid("kpp", $event)
+                        }
+                      }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                false
+                  ? undefined
+                  : _vm._e(),
+                _vm._v(" "),
+                _c("input-row", {
+                  attrs: {
+                    label: "Юридический адрес",
+                    inputId: "UrAddress",
+                    inputRequired: true,
+                    inputType: "text",
+                    inputValue: _vm.userContragent.uraddress
                   },
-                  changeValid: function($event) {
-                    return _vm.onChangeValid("bankname", $event)
+                  on: {
+                    change: function($event) {
+                      return _vm.onChange("uraddress", $event)
+                    },
+                    changeValid: function($event) {
+                      return _vm.onChangeValid("uraddress", $event)
+                    }
                   }
-                }
-              }),
-              _vm._v(" "),
-              _c("input-row", {
-                attrs: {
-                  label: "Город банка",
-                  inputId: "BankCity",
-                  inputRequired: true,
-                  inputType: "text",
-                  inputValue: _vm.userContragent.bankcity
-                },
-                on: {
-                  change: function($event) {
-                    return _vm.onChange("bankcity", $event)
-                  },
-                  changeValid: function($event) {
-                    return _vm.onChangeValid("bankcity", $event)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("input-row", {
-                attrs: {
-                  label: "Корр. счет",
-                  inputId: "korr_sch",
-                  inputRequired: true,
-                  inputMask: /[0-9]/,
-                  maxInputLength: 20,
-                  inputType: "text",
-                  inputValue: _vm.userContragent.korr_sch,
-                  validate: {
-                    pattern: /^[0-9]{20,20}$/,
-                    message: "Неверный корр. счет банка."
-                  }
-                },
-                on: {
-                  change: function($event) {
-                    return _vm.onChange("korr_sch", $event)
-                  },
-                  changeValid: function($event) {
-                    return _vm.onChangeValid("korr_sch", $event)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("input-row", {
-                attrs: {
-                  label: "Расчетный счет",
-                  inputId: "rasch_sch",
-                  inputRequired: true,
-                  inputMask: /[0-9]/,
-                  maxInputLength: 20,
-                  inputType: "text",
-                  inputValue: _vm.userContragent.rasch_sch,
-                  validate: {
-                    pattern: /^[0-9]{20,20}$/,
-                    message: "Неверный расчетный счет."
-                  }
-                },
-                on: {
-                  change: function($event) {
-                    return _vm.onChange("rasch_sch", $event)
-                  },
-                  changeValid: function($event) {
-                    return _vm.onChangeValid("rasch_sch", $event)
-                  }
-                }
-              })
-            ],
-            1
-          )
-        ])
-      ],
-      1
-    )
-  ])
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "hr" }),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "account-contragents-add__bank-header" },
+                  [_vm._v("Банковские реквизиты")]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "account-contragents-add__bank" }, [
+                  _c(
+                    "div",
+                    { staticClass: "account-contragents-add__searchbank" },
+                    [
+                      _c(
+                        "div",
+                        { staticClass: "account-contragents-add__help first" },
+                        [
+                          _vm._v(
+                            "\n          Введите название или БИК банка\n        "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("input-row", {
+                        attrs: {
+                          label: "Банк",
+                          inputId: "Bank_search",
+                          inputRequired: false,
+                          inputType: "text",
+                          inputValue: _vm.userContragent.bank
+                        },
+                        on: {
+                          change: function($event) {
+                            return _vm.onChange("bank", $event)
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.notSelectBank && !_vm.conSelectedBank,
+                          expression: "notSelectBank && !conSelectedBank"
+                        }
+                      ],
+                      staticClass: "account-contragents-add__notselect"
+                    },
+                    [
+                      _vm._v(
+                        _vm._s(
+                          _vm.notWork
+                            ? "Сервис не доступен"
+                            : "Подсказка не выбрана"
+                        ) + ", \n      "
+                      ),
+                      _c("a", { on: { click: _vm.onClickHandBank } }, [
+                        _vm._v("введите реквизиты банка вручную")
+                      ]),
+                      !_vm.notWork
+                        ? _c("span", [_vm._v(", либо повторите поиск")])
+                        : _vm._e()
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value:
+                            _vm.mount &&
+                            _vm.userContragent.type != "f" &&
+                            _vm.conSelectedBank,
+                          expression:
+                            "mount && userContragent.type!='f' && conSelectedBank"
+                        }
+                      ],
+                      staticClass: "account-contragents-add__contragent-bank"
+                    },
+                    [
+                      _c("div", { staticClass: "hr" }),
+                      _vm._v(" "),
+                      _c("input-row", {
+                        attrs: {
+                          label: "БИК банка",
+                          inputId: "Bik",
+                          inputRequired: true,
+                          inputMask: /[0-9]/,
+                          maxInputLength: 9,
+                          inputType: "text",
+                          inputValue: _vm.userContragent.bik,
+                          validate: {
+                            pattern: /^[0-9]{9,9}$/,
+                            message: "Неверный БИК банка."
+                          }
+                        },
+                        on: {
+                          change: function($event) {
+                            return _vm.onChange("bik", $event)
+                          },
+                          changeValid: function($event) {
+                            return _vm.onChangeValid("bik", $event)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("input-row", {
+                        attrs: {
+                          label: "Наименование банка",
+                          inputId: "BankName",
+                          inputRequired: true,
+                          inputType: "text",
+                          inputValue: _vm.userContragent.bankname
+                        },
+                        on: {
+                          change: function($event) {
+                            return _vm.onChange("bankname", $event)
+                          },
+                          changeValid: function($event) {
+                            return _vm.onChangeValid("bankname", $event)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("input-row", {
+                        attrs: {
+                          label: "Город банка",
+                          inputId: "BankCity",
+                          inputRequired: true,
+                          inputType: "text",
+                          inputValue: _vm.userContragent.bankcity
+                        },
+                        on: {
+                          change: function($event) {
+                            return _vm.onChange("bankcity", $event)
+                          },
+                          changeValid: function($event) {
+                            return _vm.onChangeValid("bankcity", $event)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("input-row", {
+                        attrs: {
+                          label: "Корр. счет",
+                          inputId: "korr_sch",
+                          inputRequired: true,
+                          inputMask: /[0-9]/,
+                          maxInputLength: 20,
+                          inputType: "text",
+                          inputValue: _vm.userContragent.korr_sch,
+                          validate: {
+                            pattern: /^[0-9]{20,20}$/,
+                            message: "Неверный корр. счет банка."
+                          }
+                        },
+                        on: {
+                          change: function($event) {
+                            return _vm.onChange("korr_sch", $event)
+                          },
+                          changeValid: function($event) {
+                            return _vm.onChangeValid("korr_sch", $event)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("input-row", {
+                        attrs: {
+                          label: "Расчетный счет",
+                          inputId: "rasch_sch",
+                          inputRequired: true,
+                          inputMask: /[0-9]/,
+                          maxInputLength: 20,
+                          inputType: "text",
+                          inputValue: _vm.userContragent.rasch_sch,
+                          validate: {
+                            pattern: /^[0-9]{20,20}$/,
+                            message: "Неверный расчетный счет."
+                          }
+                        },
+                        on: {
+                          change: function($event) {
+                            return _vm.onChange("rasch_sch", $event)
+                          },
+                          changeValid: function($event) {
+                            return _vm.onChangeValid("rasch_sch", $event)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "button-ui button-ui_brand",
+                          attrs: { disabled: !_vm.enableBtnContr },
+                          on: { click: _vm.addContr }
+                        },
+                        [
+                          _vm._v(
+                            _vm._s(_vm.modeEdit ? "Сохранить" : "Добавить")
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                ])
+              ],
+              1
+            )
+          ]
+    ],
+    2
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -47257,7 +49290,59 @@ var render = function() {
                 "client-only",
                 [
                   _c("vue-good-table", {
-                    attrs: { columns: _vm.columns, rows: _vm.userContragents }
+                    attrs: { columns: _vm.columns, rows: _vm.userContragents },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "table-row",
+                        fn: function(props) {
+                          return [
+                            props.column.field == "actions"
+                              ? _c(
+                                  "div",
+                                  {
+                                    staticClass: "account-contragents__actions"
+                                  },
+                                  [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-success",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.onClickEdit(props.row)
+                                          }
+                                        }
+                                      },
+                                      [_c("i", { staticClass: "fa fa-edit" })]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-danger",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.onClickDel(props.row)
+                                          }
+                                        }
+                                      },
+                                      [_c("i", { staticClass: "fa fa-trash" })]
+                                    )
+                                  ]
+                                )
+                              : _c("span", [
+                                  _vm._v(
+                                    "\n            " +
+                                      _vm._s(
+                                        props.formattedRow[props.column.field]
+                                      ) +
+                                      "\n          "
+                                  )
+                                ])
+                          ]
+                        }
+                      }
+                    ])
                   })
                 ],
                 1
@@ -47309,7 +49394,9 @@ var render = function() {
           },
           [_vm._m(0)]
         )
-      ])
+      ]),
+      _vm._v(" "),
+      _c("v-dialog")
     ],
     1
   )
@@ -48646,7 +50733,7 @@ var render = function() {
                     return _c(
                       "anchor-router-link",
                       {
-                        key: ind,
+                        key: "L" + ind,
                         attrs: {
                           to: { hash: "#toc-L" + ind },
                           scrollOptions: {
@@ -48679,7 +50766,7 @@ var render = function() {
                       _c(
                         "h4",
                         {
-                          key: ind,
+                          key: "M" + ind,
                           staticClass: "toc-letter",
                           attrs: { id: "toc-L" + ind }
                         },
@@ -48690,7 +50777,7 @@ var render = function() {
                         return _c(
                           "router-link",
                           {
-                            key: it.id,
+                            key: "G" + it.id,
                             attrs: { to: "/manufacturer/" + it.chpu }
                           },
                           [
@@ -69490,6 +71577,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_good_table__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-good-table */ "./node_modules/vue-good-table/dist/vue-good-table.esm.js");
 /* harmony import */ var vue_good_table_dist_vue_good_table_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue-good-table/dist/vue-good-table.css */ "./node_modules/vue-good-table/dist/vue-good-table.css");
 /* harmony import */ var vue_good_table_dist_vue_good_table_css__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(vue_good_table_dist_vue_good_table_css__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var vue_js_modal_dist_ssr_index__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue-js-modal/dist/ssr.index */ "./node_modules/vue-js-modal/dist/ssr.index.js");
+/* harmony import */ var vue_js_modal_dist_ssr_index__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(vue_js_modal_dist_ssr_index__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var vue_js_modal_dist_styles_css__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vue-js-modal/dist/styles.css */ "./node_modules/vue-js-modal/dist/styles.css");
+/* harmony import */ var vue_js_modal_dist_styles_css__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(vue_js_modal_dist_styles_css__WEBPACK_IMPORTED_MODULE_10__);
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -69497,6 +71588,8 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
 
 
 
@@ -69536,6 +71629,9 @@ vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(VsNotify);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(v_tooltip__WEBPACK_IMPORTED_MODULE_4__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue2_touch_events__WEBPACK_IMPORTED_MODULE_6___default.a);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_good_table__WEBPACK_IMPORTED_MODULE_7__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_js_modal_dist_ssr_index__WEBPACK_IMPORTED_MODULE_9___default.a, {
+  dialog: true
+});
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('subcategory', _components_product_subcategory_vue__WEBPACK_IMPORTED_MODULE_5__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('vs-notify', {
   template: '<div :class="[\'vs-notify\', group]" :style="styles"><transition-group :name="trans" mode="out-in">' + '<div :class="it.type" v-for="it in list" :key="it.id">' + '<slot name="body" :class="it.type" :item="it" :close="function(){ end(it) }">' + '<div @click.stop="end(it)" v-html="it.text"></div>' + '</slot>' + '</div>' + '</transition-group></div>',
@@ -69828,6 +71924,12 @@ _router__WEBPACK_IMPORTED_MODULE_2__["default"].beforeEach(function (to, from, n
           }));
         }
 
+        if (parId == 'addresses') {
+          arrProm.push(store.dispatch('queryForApp', {
+            url: '/account/addresses'
+          }));
+        }
+
         break;
 
       case 'account_id_act':
@@ -69839,11 +71941,17 @@ _router__WEBPACK_IMPORTED_MODULE_2__["default"].beforeEach(function (to, from, n
             url: '/account/contragents'
           }));
 
-          if (parAct == 'add') {
+          if (parAct == 'add' || parAct == 'edit') {
             arrProm.push(store.dispatch('queryForApp', {
               url: '/account/personal'
             }));
           }
+        }
+
+        if (parId == 'addresses' && parAct == 'edit') {
+          arrProm.push(store.dispatch('queryForApp', {
+            url: '/account/addresses'
+          }));
         }
 
         break;
@@ -72453,6 +74561,93 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/pages/accountcomps/addresses-add.vue":
+/*!**********************************************************************!*\
+  !*** ./resources/js/components/pages/accountcomps/addresses-add.vue ***!
+  \**********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _addresses_add_vue_vue_type_template_id_6fdc9214___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./addresses-add.vue?vue&type=template&id=6fdc9214& */ "./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=template&id=6fdc9214&");
+/* harmony import */ var _addresses_add_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./addresses-add.vue?vue&type=script&lang=js& */ "./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _addresses_add_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./addresses-add.vue?vue&type=style&index=0&lang=less& */ "./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=style&index=0&lang=less&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _addresses_add_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _addresses_add_vue_vue_type_template_id_6fdc9214___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _addresses_add_vue_vue_type_template_id_6fdc9214___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/pages/accountcomps/addresses-add.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************!*\
+  !*** ./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_2_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_add_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./addresses-add.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_2_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_add_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=style&index=0&lang=less&":
+/*!********************************************************************************************************!*\
+  !*** ./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=style&index=0&lang=less& ***!
+  \********************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_add_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/mini-css-extract-plugin/dist/loader.js??ref--4-0!../../../../../node_modules/css-loader/dist/cjs.js??ref--4-1!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/less-loader/dist/cjs.js??ref--4-2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./addresses-add.vue?vue&type=style&index=0&lang=less& */ "./node_modules/mini-css-extract-plugin/dist/loader.js?!./node_modules/css-loader/dist/cjs.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/less-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=style&index=0&lang=less&");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_add_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_add_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_add_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_add_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_add_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=template&id=6fdc9214&":
+/*!*****************************************************************************************************!*\
+  !*** ./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=template&id=6fdc9214& ***!
+  \*****************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_add_vue_vue_type_template_id_6fdc9214___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./addresses-add.vue?vue&type=template&id=6fdc9214& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/addresses-add.vue?vue&type=template&id=6fdc9214&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_add_vue_vue_type_template_id_6fdc9214___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_add_vue_vue_type_template_id_6fdc9214___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/pages/accountcomps/addresses.vue":
 /*!******************************************************************!*\
   !*** ./resources/js/components/pages/accountcomps/addresses.vue ***!
@@ -72464,7 +74659,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _addresses_vue_vue_type_template_id_17b9c2c0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./addresses.vue?vue&type=template&id=17b9c2c0& */ "./resources/js/components/pages/accountcomps/addresses.vue?vue&type=template&id=17b9c2c0&");
 /* harmony import */ var _addresses_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./addresses.vue?vue&type=script&lang=js& */ "./resources/js/components/pages/accountcomps/addresses.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _addresses_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./addresses.vue?vue&type=style&index=0&lang=less& */ "./resources/js/components/pages/accountcomps/addresses.vue?vue&type=style&index=0&lang=less&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
 
 
 
@@ -72472,7 +74669,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _addresses_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _addresses_vue_vue_type_template_id_17b9c2c0___WEBPACK_IMPORTED_MODULE_0__["render"],
   _addresses_vue_vue_type_template_id_17b9c2c0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
@@ -72501,6 +74698,22 @@ component.options.__file = "resources/js/components/pages/accountcomps/addresses
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_2_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./addresses.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/addresses.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_2_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/pages/accountcomps/addresses.vue?vue&type=style&index=0&lang=less&":
+/*!****************************************************************************************************!*\
+  !*** ./resources/js/components/pages/accountcomps/addresses.vue?vue&type=style&index=0&lang=less& ***!
+  \****************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/mini-css-extract-plugin/dist/loader.js??ref--4-0!../../../../../node_modules/css-loader/dist/cjs.js??ref--4-1!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/less-loader/dist/cjs.js??ref--4-2!../../../../../node_modules/vue-loader/lib??vue-loader-options!./addresses.vue?vue&type=style&index=0&lang=less& */ "./node_modules/mini-css-extract-plugin/dist/loader.js?!./node_modules/css-loader/dist/cjs.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/less-loader/dist/cjs.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/pages/accountcomps/addresses.vue?vue&type=style&index=0&lang=less&");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_4_0_node_modules_css_loader_dist_cjs_js_ref_4_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_less_loader_dist_cjs_js_ref_4_2_node_modules_vue_loader_lib_index_js_vue_loader_options_addresses_vue_vue_type_style_index_0_lang_less___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -77384,6 +79597,7 @@ function createStore() {
         date: undefined,
         items: []
       },
+      userAddresses: [],
       settings: {},
       scrolled: 0,
       screenWidth: 0,
@@ -77456,8 +79670,7 @@ function createStore() {
         items: [{
           id: 0
         }]
-      },
-      foundContragents: []
+      }
     },
     actions: {
       queryForApp: function queryForApp(_ref, data) {
@@ -77480,7 +79693,6 @@ function createStore() {
         dispatch('showWait');
         axios.post(data.url, data.params).then(function (response) {
           dispatch('closeWait');
-          console.log(response.data);
 
           if (response.data.status == 'OK' && data.successAction) {
             data.successAction();
@@ -77706,6 +79918,9 @@ function createStore() {
         state.userContragents.date = new Date();
         state.userContragents.items = payload;
       },
+      setUserAddresses: function setUserAddresses(state, payload) {
+        state.userAddresses = payload;
+      },
       setUserPersonalObj: function setUserPersonalObj(state, payload) {
         for (var key in payload) {
           state.userPersonal.data[key] = payload[key];
@@ -77821,9 +80036,6 @@ function createStore() {
       },
       setBodyBlocked: function setBodyBlocked(state, payload) {
         state.bodyBlocked = payload;
-      },
-      setFoundContragents: function setFoundContragents(state, payload) {
-        state.foundContragents = payload;
       }
     },
     getters: {
@@ -77868,6 +80080,9 @@ function createStore() {
       },
       userContragents: function userContragents(state) {
         return state.userContragents.items;
+      },
+      userAddresses: function userAddresses(state) {
+        return state.userAddresses;
       },
       resetEmail: function resetEmail(state) {
         return state.resetEmail;
@@ -77943,9 +80158,6 @@ function createStore() {
       },
       bodyBlocked: function bodyBlocked(state) {
         return state.bodyBlocked;
-      },
-      foundContragents: function foundContragents(state) {
-        return state.foundContragents;
       }
     }
   });

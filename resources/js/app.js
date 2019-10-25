@@ -7,6 +7,9 @@ import Subcategory from './components/product/subcategory.vue';
 import Vue2TouchEvents from 'vue2-touch-events';
 import VueGoodTable from 'vue-good-table';
 import 'vue-good-table/dist/vue-good-table.css';
+import VModal from 'vue-js-modal/dist/ssr.index';
+import 'vue-js-modal/dist/styles.css';
+ 
 
 var store = createStore();
 
@@ -31,6 +34,7 @@ Vue.use(VsNotify);
 Vue.use(VTooltip);
 Vue.use(Vue2TouchEvents);
 Vue.use(VueGoodTable);
+Vue.use(VModal, { dialog: true });
 Vue.component('subcategory', Subcategory);
 Vue.component('vs-notify',
 {
@@ -282,6 +286,11 @@ router.beforeEach((to, from, next) => {
 							url: '/account/contragents'
 						}));
 					}
+					if (parId == 'addresses') {
+						arrProm.push(store.dispatch('queryForApp', {
+							url: '/account/addresses'
+						}));
+					}
 					break;
 				case 'account_id_act':
 				  parId = to.params['id'];
@@ -290,11 +299,16 @@ router.beforeEach((to, from, next) => {
 						arrProm.push(store.dispatch('queryForApp', {
 							url: '/account/contragents'
 						}));
-						if (parAct == 'add') {
+						if (parAct == 'add' || parAct == 'edit') {
 							arrProm.push(store.dispatch('queryForApp', {
 								url: '/account/personal'
 							}));
 						}
+					}
+					if (parId == 'addresses' && parAct=='edit') {
+						arrProm.push(store.dispatch('queryForApp', {
+							url: '/account/addresses'
+						}));
 					}
 					break;	
 			}

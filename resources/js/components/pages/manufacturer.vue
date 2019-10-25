@@ -19,7 +19,7 @@
                   <div class="toc-index">
                       <h4>Производители</h4>
                       <div class="toc-index-list">
-                        <anchor-router-link v-for="(el, ind) in brandsByLetter" :to="{hash: '#toc-L'+ind}" :key="ind"
+                        <anchor-router-link v-for="(el, ind) in brandsByLetter" :to="{hash: '#toc-L'+ind}" :key="'L'+ind"
                           :scrollOptions="{
                               container: 'body',
                               duration: 700,
@@ -33,8 +33,8 @@
                   </div>
                   <div class="toc-list">
                     <template v-for="(el, ind) in brandsByLetter">
-                      <h4 class="toc-letter" :key="ind" :id="'toc-L'+ind">{{ind}}</h4>
-                      <router-link v-for="it in el" :key="it.id" :to="'/manufacturer/' + it.chpu">
+                      <h4 class="toc-letter" :key="'M'+ind" :id="'toc-L'+ind">{{ind}}</h4>
+                      <router-link v-for="it in el" :key="'G'+it.id" :to="'/manufacturer/' + it.chpu">
                         {{it.name}}
                       </router-link>
                     </template>

@@ -83,7 +83,7 @@ class Brands extends Model
                  ->where('party_params.param_type_id', '=', $pt->id);
         })
         ->join('brands', 'party_params.value_id', '=', 'brands.id')
-        ->select('brands.id as id', 'brands.name as name', 'brands.full_name as full_name', 'brands.chpu as chpu', 'brands.kod_sort as kod_sort', 'brands.logo as logo', 'brands.comment as comment')
+        ->select('brands.id as idbrand', 'brands.name as name', 'brands.full_name as full_name', 'brands.chpu as chpu', 'brands.kod_sort as kod_sort', 'brands.logo as logo', 'brands.comment as comment')
         ->orderBy('brands.kod_sort')
         ->distinct()->get();
 
@@ -94,7 +94,7 @@ class Brands extends Model
         $res = [];
         foreach ($rows as $val) {
             $res[] = [
-                'id' => $val->id,
+                'id' => $val->idbrand,
                 'name' => $val->name,
                 'full_name' => $val->full_name,
                 'chpu' => $val->chpu,
