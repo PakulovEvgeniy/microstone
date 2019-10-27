@@ -4514,7 +4514,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     radioButton: _system_radio_button_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     inputRow: _system_input_row_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['csrf', 'userAddresses']), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['csrf', 'userAddresses', 'settings']), {
     modeEdit: function modeEdit() {
       if (this.$route.params.act && this.$route.params.act == 'edit') {
         return true;
@@ -4566,7 +4566,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var $city = $("#gorod");
       var $street = $("#street");
       var $house = $("#house");
-      var token = '750d3bd09b2119cb598f59132a5ea57f30526fc5';
+      var token = this.settings.api_dd;
 
       function join(arr
       /*, separator */
@@ -5143,7 +5143,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     radioButton: _system_radio_button_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     inputRow: _system_input_row_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['csrf', 'userPersonal', 'userContragents']), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['csrf', 'userPersonal', 'userContragents', 'settings']), {
     enableBtnFiz: function enableBtnFiz() {
       return this.mount && this.valids.family && this.valids.name;
     },
@@ -5271,7 +5271,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     setSuggest: function setSuggest() {
       var self = this;
       $("#fullname").suggestions({
-        token: "750d3bd09b2119cb598f59132a5ea57f30526fc5",
+        token: this.settings.api_dd,
         type: "PARTY",
         minChars: 3,
         addon: 'spinner',
@@ -5293,7 +5293,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     setSuggestBank: function setSuggestBank() {
       var self = this;
       $("#Bank_search").suggestions({
-        token: "750d3bd09b2119cb598f59132a5ea57f30526fc5",
+        token: this.settings.api_dd,
         type: "BANK",
         minChars: 3,
         addon: 'spinner',
@@ -6504,11 +6504,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
-      title: 'Интернет-магазин "Микростоун"'
-    };
+    return {};
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['banners', 'popularProducts']), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['banners', 'popularProducts', 'settings']), {
+    title: function title() {
+      return this.settings.company_name;
+    },
     goodCategory: function goodCategory() {
       return this.popularProducts.category.slice(0, 4);
     },
@@ -6914,11 +6915,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
-      title: 'Интернет-магазин "Микростоун"'
-    };
+    return {};
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['getScreenState']), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['getScreenState', 'settings']), {
+    title: function title() {
+      return this.settings.company_name;
+    },
     pathM: function pathM() {
       var pm = this.$route.path.split('/');
       return pm[pm.length - 1];

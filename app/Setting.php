@@ -8,4 +8,5 @@ class Setting extends Model
 {
     
     public $timestamps = false;
+    protected $fillable = ['setting_id'];
 }

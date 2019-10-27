@@ -101,7 +101,8 @@ import radioButton from '../../system/radio-button.vue';
         computed: {
           ...mapGetters([
               'csrf',
-              'userAddresses'
+              'userAddresses',
+              'settings'
           ]),
           modeEdit() {
             if (this.$route.params.act && this.$route.params.act == 'edit') {
@@ -155,7 +156,7 @@ import radioButton from '../../system/radio-button.vue';
             let $city   = $("#gorod");
             let $street = $("#street");
             let $house  = $("#house");
-            let token = '750d3bd09b2119cb598f59132a5ea57f30526fc5';
+            let token = this.settings.api_dd;
             function join(arr /*, separator */) {
               var separator = arguments.length > 1 ? arguments[1] : ", ";
               return arr.filter(function(n){return n}).join(separator);

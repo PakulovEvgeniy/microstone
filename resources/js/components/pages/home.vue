@@ -38,14 +38,17 @@
     export default {
         data() {
             return {
-                title: 'Интернет-магазин "Микростоун"'
             }
         },
         computed: {
           ...mapGetters([
             'banners',
-            'popularProducts'
+            'popularProducts',
+            'settings'
           ]),
+          title() {
+            return this.settings.company_name;
+          },
           goodCategory() {
             return this.popularProducts.category.slice(0,4);
           },

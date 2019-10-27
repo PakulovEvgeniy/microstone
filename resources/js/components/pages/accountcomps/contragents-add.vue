@@ -252,7 +252,8 @@ import radioButton from '../../system/radio-button.vue';
           ...mapGetters([
               'csrf',
               'userPersonal',
-              'userContragents'
+              'userContragents',
+              'settings'
           ]),
           enableBtnFiz() {
             return this.mount && this.valids.family && this.valids.name;
@@ -385,7 +386,7 @@ import radioButton from '../../system/radio-button.vue';
           setSuggest() {
             let self = this;
             $("#fullname").suggestions({
-              token: "750d3bd09b2119cb598f59132a5ea57f30526fc5",
+              token: this.settings.api_dd,
               type: "PARTY",
               minChars: 3,
               addon: 'spinner',
@@ -408,7 +409,7 @@ import radioButton from '../../system/radio-button.vue';
           setSuggestBank() {
             let self = this;
             $("#Bank_search").suggestions({
-              token: "750d3bd09b2119cb598f59132a5ea57f30526fc5",
+              token: this.settings.api_dd,
               type: "BANK",
               minChars: 3,
               addon: 'spinner',

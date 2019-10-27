@@ -33,13 +33,16 @@
     export default {
         data() {
             return {
-                title: 'Интернет-магазин "Микростоун"'
             }
         },
         computed: {
           ...mapGetters([
-            'getScreenState'
+            'getScreenState',
+            'settings'
           ]),
+          title() {
+            return this.settings.company_name;
+          },
           pathM() {
             let pm = this.$route.path.split('/');
             return pm[pm.length-1];

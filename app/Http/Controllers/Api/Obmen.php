@@ -26,6 +26,7 @@ use App\FiltersDef;
 use App\FiltersDefGroups;
 use App\FiltersDefParams;
 use App\ProductPictures;
+use App\Setting;
 
 class Obmen extends Controller
 {
@@ -48,7 +49,20 @@ class Obmen extends Controller
     		return 'OK';
     	}
 		$pr = $par['param'];
-		
+        
+        if ($pr == 'site') {
+            $arr = $par['site_cfg'];
+            foreach ($arr as $val) {
+                $str = explode('###', $val);
+                $st = Setting::firstOrNew(['setting_id' => $str[1]]);
+                $st->setting_id = $str[1];
+                $st->name = $str[2];
+                $st->category = $str[0];
+                $st->save();
+            }
+            return 'OK';
+        }
+
         if ($pr == 'param_type') {
            $id = $par['pt_id'];
            $name = $par['pt_name'];
