@@ -14,15 +14,14 @@ class CreateCategoryDescription extends Migration
     public function up()
     {
         Schema::create('category_description', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('category_id')->index();
+            $table->bigIncrements('id');
+            $table->bigInteger('category_id')->index();
             $table->string('name');
             $table->text('description');
             $table->string('chpu');
-            $table->string('meta_title');
-            $table->string('meta_description');
-            $table->string('meta_keyword');
-            $table->timestamps();
+            $table->string('meta_title')->nullable();
+            $table->string('meta_description')->nullable();
+            $table->string('meta_keyword')->nullable();
         });
     }
 

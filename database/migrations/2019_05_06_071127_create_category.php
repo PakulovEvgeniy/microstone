@@ -14,12 +14,13 @@ class CreateCategory extends Migration
     public function up()
     {
         Schema::create('category', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
+            $table->string('id_1s', 100)->unique();
             $table->string('parent_id', 100);
-            $table->string('id_1s', 100)->index();
             $table->string('image', 100);
             $table->boolean('status');
             $table->integer('sort_order')->unsigned();
+            $table->bigInteger('popul')->default(0);
             $table->timestamps();
         });
     }

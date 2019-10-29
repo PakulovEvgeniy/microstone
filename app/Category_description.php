@@ -8,6 +8,7 @@ class Category_description extends Model
 {
     protected $table = 'category_description';
     protected $fillable = ['category_id'];
+    public $timestamps = false;
 
     public function category()
     {
