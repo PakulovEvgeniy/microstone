@@ -8,6 +8,7 @@ class ProductsDescriptions extends Model
 {
     protected $table = 'products_descriptions';
     protected $fillable = ['products_id'];
+    public $timestamps = false;
 
     public function products()
     {

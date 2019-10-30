@@ -19,7 +19,7 @@ class CreateCategory extends Migration
             $table->string('parent_id', 100);
             $table->string('image', 100);
             $table->boolean('status');
-            $table->integer('sort_order')->unsigned();
+            $table->bigInteger('sort_order')->unsigned();
             $table->bigInteger('popul')->default(0);
             $table->timestamps();
         });

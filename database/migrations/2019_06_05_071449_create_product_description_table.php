@@ -14,8 +14,8 @@ class CreateProductDescriptionTable extends Migration
     public function up()
     {
         Schema::create('products_descriptions', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('products_id')->index();
+            $table->bigIncrements('id');
+            $table->bigInteger('products_id')->unique();
             $table->string('name');
             $table->text('description');
             $table->string('chpu');
@@ -23,7 +23,6 @@ class CreateProductDescriptionTable extends Migration
             $table->string('meta_description')->nullable();
             $table->string('meta_keyword')->nullable();
             $table->decimal('meta_weight', 5, 1)->default(0);
-            $table->timestamps();
         });
     }
 
