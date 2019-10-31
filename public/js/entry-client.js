@@ -79566,6 +79566,571 @@ function PageComponent(name) {
 
 /***/ }),
 
+/***/ "./resources/js/store-modules/brands.js":
+/*!**********************************************!*\
+  !*** ./resources/js/store-modules/brands.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mutations: {
+    setPageManuf: function setPageManuf(state, payload) {
+      this.state.pageManuf = payload;
+    },
+    setCurBrand: function setCurBrand(state, payload) {
+      this.state.curBrand = payload;
+    },
+    setBrands: function setBrands(state, payload) {
+      this.state.brands.date = new Date();
+      this.state.brands.items = payload;
+    }
+  },
+  getters: {
+    brands: function brands(state, getters, rootState) {
+      return rootState.brands.items;
+    },
+    pageManuf: function pageManuf(state, getters, rootState) {
+      return rootState.pageManuf;
+    },
+    curBrand: function curBrand(state, getters, rootState) {
+      return rootState.curBrand;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/store-modules/catalog-filters.js":
+/*!*******************************************************!*\
+  !*** ./resources/js/store-modules/catalog-filters.js ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mutations: {
+    setFilters: function setFilters(state, payload) {
+      this.state.filterItems = payload.filters;
+      this.state.filterItemsDef = payload.filtersDef;
+    },
+    setCategoryFilters: function setCategoryFilters(state, payload) {
+      if (this.state.categoryFilters[payload.name] === undefined) {
+        vue__WEBPACK_IMPORTED_MODULE_0___default.a.set(this.state.categoryFilters, payload.name, payload.value);
+      } else {
+        this.state.categoryFilters[payload.name] = payload.value;
+      }
+
+      if (payload.name == 'stock' && this.state.categoryFilters['page'] !== undefined) {
+        this.state.categoryFilters['page'] = 1;
+      }
+    },
+    setCategoryFiltersAll: function setCategoryFiltersAll(state, payload) {
+      var _this = this;
+
+      var ob = {};
+      var pat = /f\[(\d+)\]/;
+      this.state.filterItems.forEach(function (el) {
+        if (el.filter_type == 'Число') {
+          el.grp_data.minValue = '';
+          el.grp_data.maxValue = '';
+        } else {
+          el.grp_data.fChecked = [];
+        }
+      });
+
+      var _loop = function _loop(key) {
+        ob[key] = payload[key];
+        var mat = key.match(pat);
+
+        if (mat) {
+          var el = _this.state.filterItems.find(function (it) {
+            return it.id_1s == mat[1];
+          });
+
+          if (el) {
+            if (el.filter_type == 'Число') {
+              var ar = payload[key].split('-');
+
+              if (ar.length == 2) {
+                el.grp_data.minValue = ar[0];
+                el.grp_data.maxValue = ar[1];
+              }
+            } else {
+              var _ar = payload[key].split('-');
+
+              _ar.forEach(function (it) {
+                el.grp_data.fChecked.push(it);
+              });
+            }
+          }
+        }
+      };
+
+      for (var key in payload) {
+        _loop(key);
+      }
+
+      this.state.categoryFilters = ob;
+    },
+    setOrders: function setOrders(state, payload) {
+      var _this2 = this;
+
+      this.state.topFilters['order'] = payload;
+
+      if (this.state.categoryFilters['order']) {
+        var it = this.state.topFilters['order'].items.find(function (el) {
+          return el.id == _this2.state.categoryFilters['order'];
+        });
+
+        if (!it) {
+          this.state.categoryFilters['order'] = this.state.topFilters['order'].items[0].id;
+        }
+      }
+    },
+    setGroups: function setGroups(state, payload) {
+      var _this3 = this;
+
+      this.state.topFilters['group'] = payload;
+
+      if (this.state.categoryFilters['group']) {
+        var it = this.state.topFilters['group'].items.find(function (el) {
+          return el.id == _this3.state.categoryFilters['group'];
+        });
+
+        if (!it) {
+          this.state.categoryFilters['group'] = this.state.topFilters['group'].items[0].id;
+        }
+      }
+    }
+  },
+  getters: {
+    topFilters: function topFilters(state, getters, rootState) {
+      return rootState.topFilters;
+    },
+    filterItems: function filterItems(state, getters, rootState) {
+      return rootState.filterItems;
+    },
+    filterItemsDef: function filterItemsDef(state, getters, rootState) {
+      return rootState.filterItemsDef;
+    },
+    categoryFilters: function categoryFilters(state, getters, rootState) {
+      return rootState.categoryFilters;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/store-modules/catalog.js":
+/*!***********************************************!*\
+  !*** ./resources/js/store-modules/catalog.js ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mutations: {
+    setCatalog: function setCatalog(state, payload) {
+      this.state.catalog.date = new Date();
+      this.state.catalog.items = payload;
+    },
+    setProductsOfCategoryPage: function setProductsOfCategoryPage(state, payload) {
+      this.state.productsOfCategoryPage = payload;
+    }
+  },
+  getters: {
+    getCatalog: function getCatalog(state, getters, rootState) {
+      return rootState.catalog;
+    },
+    productsOfCategoryPage: function productsOfCategoryPage(state, getters, rootState) {
+      return rootState.productsOfCategoryPage.items;
+    },
+    totalQty: function totalQty(state, getters, rootState) {
+      return rootState.productsOfCategoryPage.totalQty;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/store-modules/system.js":
+/*!**********************************************!*\
+  !*** ./resources/js/store-modules/system.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var ta = undefined;
+/* harmony default export */ __webpack_exports__["default"] = ({
+  getters: {
+    settings: function settings(state, getters, rootState) {
+      return rootState.settings;
+    },
+    visBacdrop: function visBacdrop(state, getters, rootState) {
+      return rootState.visBacdrop;
+    },
+    scrolled: function scrolled(state, getters, rootState) {
+      return rootState.scrolled;
+    },
+    idTimeStartBack: function idTimeStartBack(state, getters, rootState) {
+      return rootState.idTimeStartBack;
+    },
+    idTimeStopBack: function idTimeStopBack(state, getters, rootState) {
+      return rootState.idTimeStopBack;
+    },
+    nonVisibleMain: function nonVisibleMain(state, getters, rootState) {
+      return rootState.nonVisibleMain;
+    },
+    nonVisibleAside: function nonVisibleAside(state, getters, rootState) {
+      return rootState.nonVisibleAside;
+    },
+    isBottomMenuFixed: function isBottomMenuFixed(state, getters, rootState) {
+      return rootState.scrolled > 40;
+    },
+    getScreenState: function getScreenState(state, getters, rootState) {
+      if (rootState.screenWidth == 0 || rootState.screenWidth > 1199) {
+        return 3;
+      } else if (rootState.screenWidth < 992) {
+        return 1;
+      } else {
+        return 2;
+      }
+    },
+    screenWidth: function screenWidth(state, getters, rootState) {
+      return rootState.screenWidth;
+    },
+    screenHeight: function screenHeight(state, getters, rootState) {
+      return rootState.screenHeight;
+    },
+    activeWait: function activeWait(state, getters, rootState) {
+      return rootState.activeWait;
+    },
+    bodyBlocked: function bodyBlocked(state, getters, rootState) {
+      return rootState.bodyBlocked;
+    }
+  },
+  mutations: {
+    setSettings: function setSettings(state, payload) {
+      this.state.settings = payload;
+    },
+    setScrolled: function setScrolled(state, payload) {
+      this.state.scrolled = payload;
+    },
+    setScreenWidth: function setScreenWidth(state, payload) {
+      this.state.screenWidth = payload;
+    },
+    setScreenHeight: function setScreenHeight(state, payload) {
+      this.state.screenHeight = payload;
+    },
+    setVisBacdrop: function setVisBacdrop(state, payload) {
+      this.state.visBacdrop = payload;
+    },
+    setIdTimeStartBack: function setIdTimeStartBack(state, payload) {
+      this.state.idTimeStartBack = payload;
+    },
+    setIdTimeStopBack: function setIdTimeStopBack(state, payload) {
+      this.state.idTimeStopBack = payload;
+    },
+    setNonVisibleMain: function setNonVisibleMain(state, payload) {
+      this.state.nonVisibleMain = payload;
+    },
+    setNonVisibleAside: function setNonVisibleAside(state, payload) {
+      this.state.nonVisibleAside = payload;
+    },
+    setActiveWait: function setActiveWait(state, payload) {
+      if (typeof payload == 'boolean') {
+        this.state.activeWait.wait = payload;
+      } else {
+        this.state.activeWait.wait = payload.wait;
+        this.state.activeWait.block = payload.block;
+      }
+    },
+    setActiveBlock: function setActiveBlock(state, payload) {
+      this.state.activeWait.block = payload;
+    },
+    setBodyBlocked: function setBodyBlocked(state, payload) {
+      this.state.bodyBlocked = payload;
+    }
+  },
+  actions: {
+    queryForApp: function queryForApp(_ref, data) {
+      var commit = _ref.commit,
+          dispatch = _ref.dispatch;
+      data.notwait = true;
+      data.notcatch = true;
+
+      if (!data.params) {
+        data.params = {};
+      }
+
+      return dispatch('queryGetToServer', data);
+    },
+    queryPostToServer: function queryPostToServer(_ref2, data) {
+      var commit = _ref2.commit,
+          dispatch = _ref2.dispatch;
+      dispatch('showWait');
+      axios.post(data.url, data.params).then(function (response) {
+        dispatch('closeWait');
+
+        if (response.data.status == 'OK' && data.successAction) {
+          data.successAction();
+        }
+
+        if (response.data.status == 'ER' && data.errorAction) {
+          data.errorAction();
+        }
+
+        dispatch('setParams', response.data);
+      })["catch"](function (e) {
+        if (data.errorAction) {
+          data.errorAction();
+        }
+
+        dispatch('showError', e);
+      });
+    },
+    queryGetToServer: function queryGetToServer(_ref3, data) {
+      var commit = _ref3.commit,
+          rootState = _ref3.rootState,
+          dispatch = _ref3.dispatch;
+
+      if (data.cancash) {
+        if (rootState[data.key].items.length) {
+          if (!rootState[data.key].date) {
+            rootState[data.key].date = new Date();
+            return;
+          }
+
+          var nDat = new Date();
+          var dif = (nDat.getTime() - rootState[data.key].date.getTime()) / 1000;
+
+          if (dif <= 3600) {
+            return;
+          }
+        }
+      }
+
+      if (!data.notwait) {
+        dispatch('showWait');
+      }
+
+      var gt = axios.get(data.url, {
+        params: data.params
+      }).then(function (response) {
+        if (!data.notwait) {
+          dispatch('closeWait');
+        }
+
+        if (response.data.status == 'OK' && data.successAction) {
+          data.successAction();
+        }
+
+        if (response.data.status == 'ER' && data.errorAction) {
+          data.errorAction();
+        }
+
+        dispatch('setParams', response.data);
+      });
+
+      if (data.notcatch) {
+        return gt;
+      } else {
+        return gt["catch"](function (e) {
+          if (data.errorAction) {
+            data.errorAction();
+          }
+
+          dispatch('showError', e);
+        });
+      }
+    },
+    setParams: function setParams(_ref4, data) {
+      var commit = _ref4.commit;
+      var dat = data;
+
+      if (dat.status && dat.status == 'OK') {
+        if (dat.email) {
+          commit('setAuth', true);
+          commit('setEmail', dat.email);
+        }
+
+        if (dat.isVerify) {
+          commit('setVerify', dat.isVerify);
+        }
+
+        if (dat.data) {
+          for (var key in dat.data) {
+            commit(key, dat.data[key]);
+          }
+        }
+      }
+
+      if (dat.csrf) {
+        commit('setCsrf', dat.csrf);
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = dat.csrf;
+      }
+
+      if (dat.redirectTo) {
+        $router.push(dat.redirectTo);
+      }
+
+      if (dat.error) {
+        $notify("alert", dat.error, "error");
+      }
+
+      if (dat.message) {
+        $notify("alert", dat.message, "success");
+      }
+    },
+    showWait: function showWait(_ref5, data) {
+      var commit = _ref5.commit;
+      commit('setActiveBlock', true);
+      ta = setTimeout(function () {
+        commit('setActiveWait', true);
+      }, 200);
+    },
+    closeWait: function closeWait(_ref6, data) {
+      var commit = _ref6.commit;
+      clearTimeout(ta);
+      commit('setActiveWait', {
+        'wait': false,
+        'block': false
+      });
+    },
+    showError: function showError(_ref7, data) {
+      var commit = _ref7.commit;
+      var e = data;
+      clearTimeout(ta);
+      commit('setActiveWait', {
+        'wait': false,
+        'block': false
+      });
+      console.dir(e);
+
+      if (e.response && e.response.data && e.response.data.errors) {
+        var err = e.response.data.errors;
+
+        if (err) {
+          for (var el in err) {
+            $notify("alert", err[el][0], "error");
+            break;
+          }
+        }
+      } else if (e.response && (e.response.status == 419 || e.response.status == 401)) {
+        if ($router.history && $router.history.pending && $router.history.pending.path) {
+          window.location.href = $router.history.pending.path;
+        } else {
+          window.location.href = '/';
+        }
+      } else {
+        $notify("alert", e.message, "error");
+      }
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/store-modules/user-account.js":
+/*!****************************************************!*\
+  !*** ./resources/js/store-modules/user-account.js ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mutations: {
+    setUserPersonal: function setUserPersonal(state, payload) {
+      this.state.userPersonal.date = new Date();
+      this.state.userPersonal.data = payload;
+    },
+    setUserContragents: function setUserContragents(state, payload) {
+      this.state.userContragents.date = new Date();
+      this.state.userContragents.items = payload;
+    },
+    setUserAddresses: function setUserAddresses(state, payload) {
+      this.state.userAddresses = payload;
+    },
+    setUserPersonalObj: function setUserPersonalObj(state, payload) {
+      for (var key in payload) {
+        this.state.userPersonal.data[key] = payload[key];
+      }
+    }
+  },
+  getters: {
+    userPersonal: function userPersonal(state, getters, rootState) {
+      return rootState.userPersonal.data;
+    },
+    userContragents: function userContragents(state, getters, rootState) {
+      return rootState.userContragents.items;
+    },
+    userAddresses: function userAddresses(state, getters, rootState) {
+      return rootState.userAddresses;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/store-modules/user.js":
+/*!********************************************!*\
+  !*** ./resources/js/store-modules/user.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mutations: {
+    setAuth: function setAuth(state, payload) {
+      this.state.auth = payload;
+    },
+    setCsrf: function setCsrf(state, payload) {
+      this.state.csrf = payload;
+    },
+    setEmail: function setEmail(state, payload) {
+      this.state.userEmail = payload;
+    },
+    setVerify: function setVerify(state, payload) {
+      this.state.isVerify = payload;
+    }
+  },
+  getters: {
+    csrf: function csrf(state, getters, rootState) {
+      return rootState.csrf;
+    },
+    auth: function auth(state, getters, rootState) {
+      return rootState.auth;
+    },
+    isVerify: function isVerify(state, getters, rootState) {
+      return rootState.isVerify;
+    },
+    userEmail: function userEmail(state, getters, rootState) {
+      return rootState.userEmail;
+    },
+    resetEmail: function resetEmail(state, getters, rootState) {
+      return rootState.resetEmail;
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/store.js":
 /*!*******************************!*\
   !*** ./resources/js/store.js ***!
@@ -79579,14 +80144,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _store_modules_system_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./store-modules/system.js */ "./resources/js/store-modules/system.js");
+/* harmony import */ var _store_modules_user_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./store-modules/user.js */ "./resources/js/store-modules/user.js");
+/* harmony import */ var _store_modules_brands_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./store-modules/brands.js */ "./resources/js/store-modules/brands.js");
+/* harmony import */ var _store_modules_user_account_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./store-modules/user-account.js */ "./resources/js/store-modules/user-account.js");
+/* harmony import */ var _store_modules_catalog_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./store-modules/catalog.js */ "./resources/js/store-modules/catalog.js");
+/* harmony import */ var _store_modules_catalog_filters_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./store-modules/catalog-filters.js */ "./resources/js/store-modules/catalog-filters.js");
+
+
+
+
+
+
 
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 function createStore() {
-  var ta = undefined;
   return new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
+    modules: {
+      system: _store_modules_system_js__WEBPACK_IMPORTED_MODULE_2__["default"],
+      user: _store_modules_user_js__WEBPACK_IMPORTED_MODULE_3__["default"],
+      brands: _store_modules_brands_js__WEBPACK_IMPORTED_MODULE_4__["default"],
+      account: _store_modules_user_account_js__WEBPACK_IMPORTED_MODULE_5__["default"],
+      catalog: _store_modules_catalog_js__WEBPACK_IMPORTED_MODULE_6__["default"],
+      catalogFilters: _store_modules_catalog_filters_js__WEBPACK_IMPORTED_MODULE_7__["default"]
+    },
     state: {
-      name: '',
       auth: false,
       isVerify: false,
       csrf: '',
@@ -79674,349 +80257,10 @@ function createStore() {
         }]
       }
     },
-    actions: {
-      queryForApp: function queryForApp(_ref, data) {
-        var commit = _ref.commit,
-            state = _ref.state,
-            dispatch = _ref.dispatch;
-        data.notwait = true;
-        data.notcatch = true;
-
-        if (!data.params) {
-          data.params = {};
-        }
-
-        return dispatch('queryGetToServer', data);
-      },
-      queryPostToServer: function queryPostToServer(_ref2, data) {
-        var commit = _ref2.commit,
-            state = _ref2.state,
-            dispatch = _ref2.dispatch;
-        dispatch('showWait');
-        axios.post(data.url, data.params).then(function (response) {
-          dispatch('closeWait');
-
-          if (response.data.status == 'OK' && data.successAction) {
-            data.successAction();
-          }
-
-          if (response.data.status == 'ER' && data.errorAction) {
-            data.errorAction();
-          }
-
-          dispatch('setParams', response.data);
-        })["catch"](function (e) {
-          if (data.errorAction) {
-            data.errorAction();
-          }
-
-          dispatch('showError', e);
-        });
-      },
-      queryGetToServer: function queryGetToServer(_ref3, data) {
-        var commit = _ref3.commit,
-            state = _ref3.state,
-            dispatch = _ref3.dispatch;
-
-        if (data.cancash) {
-          if (state[data.key].items.length) {
-            if (!state[data.key].date) {
-              state[data.key].date = new Date();
-              return;
-            }
-
-            var nDat = new Date();
-            var dif = (nDat.getTime() - state[data.key].date.getTime()) / 1000;
-
-            if (dif <= 3600) {
-              return;
-            }
-          }
-        }
-
-        if (!data.notwait) {
-          dispatch('showWait');
-        }
-
-        var gt = axios.get(data.url, {
-          params: data.params
-        }).then(function (response) {
-          if (!data.notwait) {
-            dispatch('closeWait');
-          }
-
-          if (response.data.status == 'OK' && data.successAction) {
-            data.successAction();
-          }
-
-          if (response.data.status == 'ER' && data.errorAction) {
-            data.errorAction();
-          }
-
-          dispatch('setParams', response.data);
-        });
-
-        if (data.notcatch) {
-          return gt;
-        } else {
-          return gt["catch"](function (e) {
-            if (data.errorAction) {
-              data.errorAction();
-            }
-
-            dispatch('showError', e);
-          });
-        }
-      },
-      setParams: function setParams(_ref4, data) {
-        var commit = _ref4.commit;
-        var dat = data;
-
-        if (dat.status && dat.status == 'OK') {
-          if (dat.email) {
-            commit('setAuth', true);
-            commit('setEmail', dat.email);
-          }
-
-          if (dat.isVerify) {
-            commit('setVerify', dat.isVerify);
-          }
-
-          if (dat.data) {
-            for (var key in dat.data) {
-              commit(key, dat.data[key]);
-            }
-          }
-        }
-
-        if (dat.csrf) {
-          commit('setCsrf', dat.csrf);
-          axios.defaults.headers.common['X-CSRF-TOKEN'] = dat.csrf;
-        }
-
-        if (dat.redirectTo) {
-          $router.push(dat.redirectTo);
-        }
-
-        if (dat.error) {
-          $notify("alert", dat.error, "error");
-        }
-
-        if (dat.message) {
-          $notify("alert", dat.message, "success");
-        }
-      },
-      showWait: function showWait(_ref5, data) {
-        var commit = _ref5.commit;
-        commit('setActiveBlock', true);
-        ta = setTimeout(function () {
-          commit('setActiveWait', true);
-        }, 200);
-      },
-      closeWait: function closeWait(_ref6, data) {
-        var commit = _ref6.commit;
-        clearTimeout(ta);
-        commit('setActiveWait', {
-          'wait': false,
-          'block': false
-        });
-      },
-      showError: function showError(_ref7, data) {
-        var commit = _ref7.commit;
-        var e = data;
-        clearTimeout(ta);
-        commit('setActiveWait', {
-          'wait': false,
-          'block': false
-        });
-        console.dir(e);
-
-        if (e.response && e.response.data && e.response.data.errors) {
-          var err = e.response.data.errors;
-
-          if (err) {
-            for (var el in err) {
-              $notify("alert", err[el][0], "error");
-              break;
-            }
-          }
-        } else if (e.response && (e.response.status == 419 || e.response.status == 401)) {
-          if ($router.history && $router.history.pending && $router.history.pending.path) {
-            window.location.href = $router.history.pending.path;
-          } else {
-            window.location.href = '/';
-          }
-        } else {
-          $notify("alert", e.message, "error");
-        }
-      }
-    },
     mutations: {
-      setName: function setName(state, payload) {
-        state.name = payload;
-      },
-      setAuth: function setAuth(state, payload) {
-        state.auth = payload;
-      },
-      setCsrf: function setCsrf(state, payload) {
-        state.csrf = payload;
-      },
-      setEmail: function setEmail(state, payload) {
-        state.userEmail = payload;
-      },
-      setVerify: function setVerify(state, payload) {
-        state.isVerify = payload;
-      },
-      setSettings: function setSettings(state, payload) {
-        state.settings = payload;
-      },
-      setScrolled: function setScrolled(state, payload) {
-        state.scrolled = payload;
-      },
-      setScreenWidth: function setScreenWidth(state, payload) {
-        state.screenWidth = payload;
-      },
-      setScreenHeight: function setScreenHeight(state, payload) {
-        state.screenHeight = payload;
-      },
-      setVisBacdrop: function setVisBacdrop(state, payload) {
-        state.visBacdrop = payload;
-      },
-      setIdTimeStartBack: function setIdTimeStartBack(state, payload) {
-        state.idTimeStartBack = payload;
-      },
-      setIdTimeStopBack: function setIdTimeStopBack(state, payload) {
-        state.idTimeStopBack = payload;
-      },
-      setNonVisibleMain: function setNonVisibleMain(state, payload) {
-        state.nonVisibleMain = payload;
-      },
-      setNonVisibleAside: function setNonVisibleAside(state, payload) {
-        state.nonVisibleAside = payload;
-      },
-      setPageManuf: function setPageManuf(state, payload) {
-        state.pageManuf = payload;
-      },
-      setCurBrand: function setCurBrand(state, payload) {
-        state.curBrand = payload;
-      },
-      setFilters: function setFilters(state, payload) {
-        state.filterItems = payload.filters;
-        state.filterItemsDef = payload.filtersDef;
-      },
-      setCatalog: function setCatalog(state, payload) {
-        state.catalog.date = new Date();
-        state.catalog.items = payload;
-      },
-      setBrands: function setBrands(state, payload) {
-        state.brands.date = new Date();
-        state.brands.items = payload;
-      },
-      setUserPersonal: function setUserPersonal(state, payload) {
-        state.userPersonal.date = new Date();
-        state.userPersonal.data = payload;
-      },
-      setUserContragents: function setUserContragents(state, payload) {
-        state.userContragents.date = new Date();
-        state.userContragents.items = payload;
-      },
-      setUserAddresses: function setUserAddresses(state, payload) {
-        state.userAddresses = payload;
-      },
-      setUserPersonalObj: function setUserPersonalObj(state, payload) {
-        for (var key in payload) {
-          state.userPersonal.data[key] = payload[key];
-        }
-      },
       setBanners: function setBanners(state, payload) {
         state.banners.date = new Date();
         state.banners.items = payload;
-      },
-      setCategoryFilters: function setCategoryFilters(state, payload) {
-        if (state.categoryFilters[payload.name] === undefined) {
-          vue__WEBPACK_IMPORTED_MODULE_0___default.a.set(state.categoryFilters, payload.name, payload.value);
-        } else {
-          state.categoryFilters[payload.name] = payload.value;
-        }
-
-        if (payload.name == 'stock' && state.categoryFilters['page'] !== undefined) {
-          state.categoryFilters['page'] = 1;
-        }
-      },
-      setCategoryFiltersAll: function setCategoryFiltersAll(state, payload) {
-        var ob = {};
-        var pat = /f\[(\d+)\]/;
-        state.filterItems.forEach(function (el) {
-          if (el.filter_type == 'Число') {
-            el.grp_data.minValue = '';
-            el.grp_data.maxValue = '';
-          } else {
-            el.grp_data.fChecked = [];
-          }
-        });
-
-        var _loop = function _loop(key) {
-          ob[key] = payload[key];
-          var mat = key.match(pat);
-
-          if (mat) {
-            var el = state.filterItems.find(function (it) {
-              return it.id_1s == mat[1];
-            });
-
-            if (el) {
-              if (el.filter_type == 'Число') {
-                var ar = payload[key].split('-');
-
-                if (ar.length == 2) {
-                  el.grp_data.minValue = ar[0];
-                  el.grp_data.maxValue = ar[1];
-                }
-              } else {
-                var _ar = payload[key].split('-');
-
-                _ar.forEach(function (it) {
-                  el.grp_data.fChecked.push(it);
-                });
-              }
-            }
-          }
-        };
-
-        for (var key in payload) {
-          _loop(key);
-        }
-
-        state.categoryFilters = ob;
-      },
-      setOrders: function setOrders(state, payload) {
-        state.topFilters['order'] = payload;
-
-        if (state.categoryFilters['order']) {
-          var it = state.topFilters['order'].items.find(function (el) {
-            return el.id == state.categoryFilters['order'];
-          });
-
-          if (!it) {
-            state.categoryFilters['order'] = state.topFilters['order'].items[0].id;
-          }
-        }
-      },
-      setGroups: function setGroups(state, payload) {
-        state.topFilters['group'] = payload;
-
-        if (state.categoryFilters['group']) {
-          var it = state.topFilters['group'].items.find(function (el) {
-            return el.id == state.categoryFilters['group'];
-          });
-
-          if (!it) {
-            state.categoryFilters['group'] = state.topFilters['group'].items[0].id;
-          }
-        }
-      },
-      setProductsOfCategoryPage: function setProductsOfCategoryPage(state, payload) {
-        state.productsOfCategoryPage = payload;
       },
       setProduct: function setProduct(state, payload) {
         state.product = payload;
@@ -80024,127 +80268,17 @@ function createStore() {
       setPopularProducts: function setPopularProducts(state, payload) {
         state.popularProducts.category = payload.category;
         state.popularProducts.product = payload.product;
-      },
-      setActiveWait: function setActiveWait(state, payload) {
-        if (typeof payload == 'boolean') {
-          state.activeWait.wait = payload;
-        } else {
-          state.activeWait.wait = payload.wait;
-          state.activeWait.block = payload.block;
-        }
-      },
-      setActiveBlock: function setActiveBlock(state, payload) {
-        state.activeWait.block = payload;
-      },
-      setBodyBlocked: function setBodyBlocked(state, payload) {
-        state.bodyBlocked = payload;
       }
     },
     getters: {
-      csrf: function csrf(state) {
-        return state.csrf;
-      },
-      settings: function settings(state) {
-        return state.settings;
-      },
-      visBacdrop: function visBacdrop(state) {
-        return state.visBacdrop;
-      },
-      scrolled: function scrolled(state) {
-        return state.scrolled;
-      },
-      idTimeStartBack: function idTimeStartBack(state) {
-        return state.idTimeStartBack;
-      },
-      idTimeStopBack: function idTimeStopBack(state) {
-        return state.idTimeStopBack;
-      },
-      getCatalog: function getCatalog(state) {
-        return state.catalog;
-      },
       banners: function banners(state) {
         return state.banners.items;
-      },
-      brands: function brands(state) {
-        return state.brands.items;
-      },
-      auth: function auth(state) {
-        return state.auth;
-      },
-      isVerify: function isVerify(state) {
-        return state.isVerify;
-      },
-      userEmail: function userEmail(state) {
-        return state.userEmail;
-      },
-      userPersonal: function userPersonal(state) {
-        return state.userPersonal.data;
-      },
-      userContragents: function userContragents(state) {
-        return state.userContragents.items;
-      },
-      userAddresses: function userAddresses(state) {
-        return state.userAddresses;
-      },
-      resetEmail: function resetEmail(state) {
-        return state.resetEmail;
-      },
-      nonVisibleMain: function nonVisibleMain(state) {
-        return state.nonVisibleMain;
-      },
-      nonVisibleAside: function nonVisibleAside(state) {
-        return state.nonVisibleAside;
-      },
-      isBottomMenuFixed: function isBottomMenuFixed(state) {
-        return state.scrolled > 40;
-      },
-      getScreenState: function getScreenState(state) {
-        if (state.screenWidth == 0 || state.screenWidth > 1199) {
-          return 3;
-        } else if (state.screenWidth < 992) {
-          return 1;
-        } else {
-          return 2;
-        }
-      },
-      topFilters: function topFilters(state) {
-        return state.topFilters;
-      },
-      filterItems: function filterItems(state) {
-        return state.filterItems;
-      },
-      filterItemsDef: function filterItemsDef(state) {
-        return state.filterItemsDef;
-      },
-      screenWidth: function screenWidth(state) {
-        return state.screenWidth;
-      },
-      screenHeight: function screenHeight(state) {
-        return state.screenHeight;
-      },
-      categoryFilters: function categoryFilters(state) {
-        return state.categoryFilters;
-      },
-      totalQty: function totalQty(state) {
-        return state.productsOfCategoryPage.totalQty;
-      },
-      productsOfCategoryPage: function productsOfCategoryPage(state) {
-        return state.productsOfCategoryPage.items;
       },
       product: function product(state) {
         return state.product;
       },
       popularProducts: function popularProducts(state) {
         return state.popularProducts;
-      },
-      pageManuf: function pageManuf(state) {
-        return state.pageManuf;
-      },
-      curBrand: function curBrand(state) {
-        return state.curBrand;
-      },
-      activeWait: function activeWait(state) {
-        return state.activeWait;
       },
       cartQty: function cartQty(state) {
         return state.cart.cart_items.length;
@@ -80157,9 +80291,6 @@ function createStore() {
       },
       waitlist: function waitlist(state) {
         return state.waitlist;
-      },
-      bodyBlocked: function bodyBlocked(state) {
-        return state.bodyBlocked;
       }
     }
   });
