@@ -30,7 +30,8 @@
     }
 </script>
 
-<style>
+<style lang="less">
+@import '../../../less/vars.less';
   .ui-radio__item {
       display: block;
       margin: 0;
@@ -57,7 +58,7 @@
     left: 0;
   }
   input[type="radio"]:checked+.ui-radio__content:before {
-    border: 5px solid rgb(29, 113, 184);
+    border: 5px solid @main-color;
   }
   .ui-radio__item:hover {
     background-color: #E8F2FB;

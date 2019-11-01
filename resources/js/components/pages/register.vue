@@ -12,8 +12,8 @@
 </template>
 
 <script>
-  import MicrostoneLogo from '../layout/microstone_logo.vue';
-  import ReglogDialog from '../layout/reglog_dialog.vue';
+  import MicrostoneLogo from '../layout/microstone-logo.vue';
+  import ReglogDialog from '../layout/reglog-dialog.vue';
   import Registration from '../forms/registartion.vue';
   import { mapGetters } from 'vuex';
     export default {

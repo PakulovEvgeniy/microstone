@@ -26,8 +26,8 @@
 <script>
 import { mapGetters } from 'vuex';
 import filterComp from './filter-comp.vue'; 
-import leftFilterPicked from '../product/leftfilters_picked.vue';
-import productOffers from '../product/product-offers.vue';
+import leftFilterPicked from '../pages/product/leftfilters_picked.vue';
+import productOffers from '../pages/product/product-offers.vue';
     export default {
         data() {
             return {

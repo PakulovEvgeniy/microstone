@@ -31,7 +31,8 @@
     }
 </script>
 
-<style>
+<style lang="less">
+@import '../../../less/vars';
   .ui-checkbox {
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -77,8 +78,8 @@
     border-color: #8c8c8c;
   }
   .ui-checkbox__input:checked+.ui-checkbox__box {
-    border: 6px solid rgb(29, 113, 184);
-    background-color: rgb(29, 113, 184);
+    border: 6px solid @main-color;
+    background-color: @main-color;
     animation: shrink-bounce 200ms cubic-bezier(0.4, 0, 0.23, 1);
   }
   .ui-checkbox__input:checked+.ui-checkbox__box:after {

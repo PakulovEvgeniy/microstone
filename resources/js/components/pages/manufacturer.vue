@@ -61,7 +61,7 @@
                   </p>
                 </div>
               </article>
-              <paginator v-if="itemQty>0" :itemQty="itemQty" :numPage="pageM" @changePage="onChangePage($event)"></paginator>
+              <paginator v-if="itemQty>0" :qtyOnPage="18" :itemQty="itemQty" :numPage="pageM" @changePage="onChangePage($event)"></paginator>
             </template>
             <template v-else>
               <div class="post-item">
@@ -113,7 +113,7 @@
     import itemTabs from '../system/item-tabs.vue';
     import Breadcrump from '../system/breadcrump.vue';
     import pageTopBack from '../system/page-top-back.vue';
-    import categoryItemPhone from '../product/category-item-phone.vue';
+    import categoryItemPhone from './product/category-item-phone.vue';
 
     export default {
         data() {

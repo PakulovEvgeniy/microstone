@@ -56,14 +56,15 @@
         },
         props: [
           'itemQty',
-          'numPage'
+          'numPage',
+          'qtyOnPage'
         ],
         computed: {
           ...mapGetters([
             'categoryFilters'
           ]),
           lastPage() {
-            return Math.ceil(this.itemQty/18);
+            return Math.ceil(this.itemQty/this.qtyOnPage);
           },
           prevPage() {
             let pr = this.curPage - 1;

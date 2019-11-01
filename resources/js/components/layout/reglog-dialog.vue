@@ -13,7 +13,9 @@
     }
 </script>
 
-<style>
+<style lang="less">
+@import '../../../less/vars.less';
+
   .rl-dialog {
     border: 2px solid #ccc;
     border-radius: 15px;
@@ -62,28 +64,21 @@
   }
   .rl-dialog .active-btn {
       border: none;
-      background-color: #ff6801;
       color: #fff;
       height: 50px;
       width: 180px;
       font-size: 17px;
       font-weight: bold;
-      box-shadow: inset 0 1px 0 0 #fff;
-      -moz-box-shadow: 0 1px 3px rgba(0,0,0,.5);
-      -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.5);
-      border-bottom: 1px solid rgba(0,0,0,.25);
-      text-shadow: 0 -1px 1px rgba(0,0,0,.25);
-      background: -moz-linear-gradient(0% 100% 90deg,#e1630e,#ff6801);
-      background: -webkit-gradient(linear,0% 0%,0% 100%,from(#ff6801),to(#e1630e));
+      background-image: linear-gradient(to top, @main-color, @light-color);
+      font-weight: bold;
       cursor: pointer;
   }
   .rl-dialog .medium-btn {
     width: 210px;
   }
   .rl-dialog .active-btn:hover {
-    background: #ff6801;
-    background: -moz-linear-gradient(0% 100% 90deg,#e1630e,#e25d02);
-    background: -webkit-gradient(linear,0% 0%,0% 100%,from(#e25d02),to(#ff6801));
+    background-image: linear-gradient(to bottom, @hover-color, @dark-color);
+    box-shadow: inset 0 -2px 0 0 rgba(0,0,0,0.2);
     cursor: pointer;
   }
   .rl-dialog .hr {

@@ -27,9 +27,9 @@
 <script>
     import { mapGetters } from 'vuex';
     import Breadcrump from '../system/breadcrump.vue';
-    import PageProducts from '../product/pageproducts.vue';
+    import PageProducts from './product/pageproducts.vue';
     import pageTopBack from '../system/page-top-back.vue';
-    import categoryItemPhone from '../product/category-item-phone.vue';
+    import categoryItemPhone from './product/category-item-phone.vue';
     export default {
         data() {
             return {

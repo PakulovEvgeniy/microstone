@@ -31,6 +31,7 @@
 </template>
 
 <script>
+
 import mainSeachForm from '../forms/main-seach-form.vue';
   import { mapGetters } from 'vuex';
     export default {
@@ -74,8 +75,9 @@ import mainSeachForm from '../forms/main-seach-form.vue';
 </script>
 
 <style lang="less">
+@import '../../../less/vars';
   .header-bottom {
-    background: rgba(29, 113, 184,0.9) !important;
+    background: rgba(@main-color,0.9) !important;
     z-index: 1030;
     height: 60px;
     box-sizing: content-box;

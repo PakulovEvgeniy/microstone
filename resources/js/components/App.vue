@@ -34,8 +34,8 @@
 </template>
 
 <script>
-  import HeaderComponent from './layout/Header.vue';
-  import CategoryMenu from './product/categorymenu.vue';
+  import HeaderComponent from './layout/header.vue';
+  import CategoryMenu from './pages/product/category-menu.vue';
   import { mapGetters } from 'vuex';
   import waitLoad from './system/wait-load.vue';
 

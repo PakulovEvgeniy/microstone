@@ -18,5 +18,8 @@ export default {
     totalQty(state, getters, rootState) {
       return rootState.productsOfCategoryPage.totalQty;
     },
+    qtyOnPage(state, getters, rootState) {
+      return +rootState.settings.prod_count;
+    }
 	}
 }

@@ -14,6 +14,7 @@ use App\PriceParty;
 use App\ProductsDescriptions;
 use App\ProductPictures;
 use App\ParamTypes;
+use App\Setting;
 
 class Products extends Model
 {
@@ -164,7 +165,8 @@ class Products extends Model
             }
         }
 
-        
+        $rowSet = Setting::where('setting_id', '=', 'prod_count')->first();
+        $pgCount = intval($rowSet->name);
 
         $prd = Products::where(['products.status' => 1, 'parent_id' => $id_1s])
             ->leftJoin('products_descriptions','products.id','=','products_descriptions.products_id')
@@ -278,11 +280,11 @@ class Products extends Model
         $page = 1;
         if (isset($filtr['page'])) {
             $page = intval($filtr['page']);
-            if (!$page || $page>ceil($qty/18)) {
+            if (!$page || $page>ceil($qty/$pgCount)) {
                 $page = 1;
             }
         }
-        $prd = $prd->offset(($page-1)*18)->limit(18)->get(); 
+        $prd = $prd->offset(($page-1)*$pgCount)->limit($pgCount)->get(); 
 
     	$dat = [];
 

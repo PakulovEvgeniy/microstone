@@ -6,8 +6,8 @@
 </template>
 
 <script>
-  import TopMenu from './Topmenu.vue';
-  import BottomMenu from './Bottommenu.vue';
+  import TopMenu from './top-menu.vue';
+  import BottomMenu from './bottom-menu.vue';
   import { mapGetters } from 'vuex';
     export default {
         data() {

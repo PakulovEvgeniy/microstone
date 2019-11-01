@@ -14,7 +14,7 @@
 </template>
 
 <script>
-  import Dropdown from './Dropdown.vue';
+  import Dropdown from './drop-down.vue';
   import radioButton from './radio-button.vue';
 
     export default {

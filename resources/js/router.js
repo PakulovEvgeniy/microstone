@@ -3,14 +3,14 @@ import Router from 'vue-router'
 import PageComp from './components/Page.vue';
 import loginComp from './components/pages/login.vue';
 import registerComp from './components/pages/register.vue';
-import passwordLink from './components/pages/passwordlink.vue';
-import passwordReset from './components/pages/passwordreset.vue';
+import passwordLink from './components/pages/password-link.vue';
+import passwordReset from './components/pages/password-reset.vue';
 import Category from './components/pages/category.vue';
-import CategoryF from './components/pages/categoryfilters.vue';
+import CategoryF from './components/pages/category-filters.vue';
 import Home from './components/pages/home.vue';
 import Product from './components/pages/product.vue';
 import Manufacturer from './components/pages/manufacturer.vue';
-import Not_found from './components/pages/not_found.vue';
+import Not_found from './components/pages/not-found.vue';
 import Account from './components/pages/account.vue';
 import emailVerify from './components/pages/email-verify.vue';
 

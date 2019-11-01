@@ -33,7 +33,7 @@
                   <catalog-item v-for="it in el" :key="it.id" :item="it"></catalog-item>
                 </div>
               </div>
-              <paginator v-if="itemQty>0" :itemQty="itemQty" :numPage="numPage" @changePage="onChangePage($event)"></paginator>
+              <paginator v-if="itemQty>0" :itemQty="itemQty" :qtyOnPage="qtyOnPage" :numPage="numPage" @changePage="onChangePage($event)"></paginator>
             </div>
           </div>
           <div class="products-list__loader">
@@ -49,9 +49,9 @@ import productOffers from './product-offers.vue';
 import { mapGetters } from 'vuex'; 
 import topFilters from './top-filters.vue';
 import catalogItem from './catalog-item.vue';
-import paginator from '../system/paginator.vue';
-import leftfilters from '../system/leftfilters.vue';
-import quickSeach from '../system/quick-seach-input.vue';
+import paginator from '../../system/paginator.vue';
+import leftfilters from '../../system/left-filters.vue';
+import quickSeach from '../../system/quick-seach-input.vue';
 import productsMobileButtons from './products-mb.vue';
     export default {
         data() {
@@ -77,7 +77,8 @@ import productsMobileButtons from './products-mb.vue';
             'totalQty',
             'productsOfCategoryPage',
             'getScreenState',
-            'filterItemsDef'
+            'filterItemsDef',
+            'qtyOnPage'
           ]),
           curMode() {
             return this.categoryFilters.mode == 'tile' ? 'tile' : 'simple';

@@ -55,7 +55,7 @@
 <script>
     import { mapGetters } from 'vuex';
     import Breadcrump from '../system/breadcrump.vue';
-    import voblers from '../product/voblers.vue';
+    import voblers from './product/voblers.vue';
     import OwlCarousel from '../system/owl-carousel.vue';
     import overBlock from '../system/overblock.vue';
     import { dragscroll } from 'vue-dragscroll';

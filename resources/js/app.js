@@ -3,7 +3,7 @@ import Vue from 'vue';
 import router from './router';
 import {createStore} from './store';
 import VTooltip from 'v-tooltip';
-import Subcategory from './components/product/subcategory.vue';
+import Subcategory from './components/pages/product/subcategory.vue';
 import Vue2TouchEvents from 'vue2-touch-events';
 import VueGoodTable from 'vue-good-table';
 import 'vue-good-table/dist/vue-good-table.css';

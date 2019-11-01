@@ -31,8 +31,8 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import showSwitch from '../system/show-switch.vue';
-  import itemBlock from '../system/item-block.vue';
+  import showSwitch from '../../system/show-switch.vue';
+  import itemBlock from '../../system/item-block.vue';
     export default {
         data() {
             return {

@@ -105,7 +105,7 @@ import { mapGetters } from 'vuex';
 </script>
 
 <style lang="less">
-  @import '../../../less/vars';
+  @import '../../../../less/vars';
 
   .catalog {
     position: relative;

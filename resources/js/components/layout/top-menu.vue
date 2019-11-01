@@ -74,8 +74,8 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import UvedomlComp from './UvedomlComponent.vue';
-  import Dropdown from '../system/Dropdown.vue';
+  import UvedomlComp from './uvedoml-component.vue';
+  import Dropdown from '../system/drop-down.vue';
   import headerMenu from './header-menu.vue';
   import mainSeachForm from '../forms/main-seach-form.vue';
     export default {

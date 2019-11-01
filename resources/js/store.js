@@ -13,12 +13,12 @@ Vue.use(Vuex);
 export function createStore () {
   return new Vuex.Store({
     modules: {
-      system: mSystem,
-      user: mUser,
-      brands: mBrands,
-      account: mAccount,
-      catalog: mCatalog,
-      catalogFilters: mCatalogFilters
+      mSystem: mSystem,
+      mUser: mUser,
+      mBrands: mBrands,
+      mAccount: mAccount,
+      mCatalog: mCatalog,
+      mCatalogFilters: mCatalogFilters
     },
     state: {
       auth: false,

@@ -14,9 +14,9 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import topFilter from '../system/topfilter.vue';
-import catalogMode from '../system/catalog-mode.vue';
-import topfiltersPicked from './topfilters_picked.vue';
+import topFilter from '../../system/top-filter.vue';
+import catalogMode from '../../system/catalog-mode.vue';
+import topfiltersPicked from './top-filters-picked.vue';
     export default {
         data() {
             return {
