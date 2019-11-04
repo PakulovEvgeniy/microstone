@@ -14,8 +14,8 @@ class CreateGroupsGroupsTable extends Migration
     public function up()
     {
         Schema::create('groups_groups', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('groups_id');
+            $table->bigIncrements('id');
+            $table->bigInteger('groups_id');
             $table->string('category_id', 100);
         });
     }

@@ -20,6 +20,13 @@ class Createusercontragents extends Migration
             $table->string('inn',20)->nullable();
             $table->string('kpp',20)->nullable();
             $table->string('name',150)->nullable();
+            $table->string('okpo',20)->nullable();
+            $table->string('uraddress')->nullable();
+            $table->string('bik',20)->nullable();
+            $table->string('bankname')->nullable();
+            $table->string('bankcity',50)->nullable();
+            $table->string('korr_sch',20)->nullable();
+            $table->string('rasch_sch',20)->nullable();
         });
     }
 

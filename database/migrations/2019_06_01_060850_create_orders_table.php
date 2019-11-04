@@ -14,11 +14,14 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->integer('id_1s')->unsigned();
             $table->string('name');
             $table->integer('sort_order')->unsigned();
             $table->boolean('status');
+            $table->string('sort_ord', 10)->nullable();
+            $table->string('sort_type', 10)->nullable();
+            $table->string('param_type_id', 11)->nullable();
         });
     }
 

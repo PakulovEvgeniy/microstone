@@ -16,9 +16,22 @@ class Groups extends Model
         return $this->hasMany('App\GroupsGroups');
     }
 
+    public static function getDefaultGroupId($id_1s) {
+        $row = Groups::where('status', '=', '1')
+            ->has('groups_groups', '=', 0)
+            ->orHas('groups_groups', '>', 0)
+            ->whereHas('groups_groups', function ($q) use ($id_1s)
+            {
+                $q->where('category_id', '=', $id_1s);
+            })
+            ->orderBy('sort_order')
+            ->first();
+        return $row->id;
+    }
     public static function getGroups($id_1s)
     {
-        $rows = Groups::has('groups_groups', '=', 0)
+        $rows = Groups::where('status', '=', '1')
+            ->has('groups_groups', '=', 0)
             ->orHas('groups_groups', '>', 0)
             ->whereHas('groups_groups', function ($q) use ($id_1s)
             {

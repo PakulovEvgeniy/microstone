@@ -19,7 +19,8 @@ class Orders extends Model
 
     public static function getOrders($id_1s)
     {
-        $rows = Orders::has('orders_group', '=', 0)
+        $rows = Orders::where('status', '=', '1')
+            ->has('orders_group', '=', 0)
             ->orHas('orders_group', '>', 0)
             ->whereHas('orders_group', function ($q) use ($id_1s)
             {
@@ -27,18 +28,16 @@ class Orders extends Model
             })
             ->orderBy('sort_order')
             ->get();
-        //dd($rows);
+        
         $res = [];
         foreach ($rows as $val) {
             $res[] = [
                 'id' => $val->id,
                 'name' => $val->name,
-                'sort_field' => $val->sort_field,
                 'sort_ord' => $val->sort_ord,
                 'sort_type' => $val->sort_type
             ];
         }
-
         $cat = Category::where('id_1s', $id_1s)->first();
         if ($cat) {
             $cat->popul = $cat->popul + 1;
@@ -47,9 +46,22 @@ class Orders extends Model
 
     	return $res;
     }
+    public static function getDefaultOrderId($id_1s) {
+        $row = Orders::where('status', '=', '1')
+            ->has('orders_group', '=', 0)
+            ->orHas('orders_group', '>', 0)
+            ->whereHas('orders_group', function ($q) use ($id_1s)
+            {
+                $q->where('category_id', '=', $id_1s);
+            })
+            ->orderBy('sort_order')
+            ->first();
+        return $row->id;
+    }
+
     public static function getParamsOrders($id_1s)
     {
-        $rows = Orders::where('param_type_id', '<>', '')
+        $rows = Orders::where([['param_type_id', '<>', ''], ['status', '=', '1']])
             ->has('orders_group', '=', 0)
             ->orHas('orders_group', '>', 0)
             ->whereHas('orders_group', function ($q) use ($id_1s)
@@ -64,7 +76,6 @@ class Orders extends Model
             $res[] = [
                 'id' => $val->id,
                 'name' => $val->name,
-                'sort_field' => $val->sort_field,
                 'sort_ord' => $val->sort_ord,
                 'sort_type' => $val->sort_type,
                 'param_type_id' => $val->param_type_id

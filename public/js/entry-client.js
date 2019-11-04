@@ -8500,6 +8500,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -54338,27 +54343,30 @@ var render = function() {
         },
         [
           _vm._v(" "),
-          _c(
-            "li",
-            _vm._l(_vm.item.items, function(it) {
-              return _c("radio-button", {
-                key: it.id,
-                attrs: {
-                  caption: it.name,
-                  name: _vm.item.name,
-                  value: it.id,
-                  checked: _vm.curId == it.id
-                },
-                on: {
-                  input: function($event) {
-                    return _vm.onInput($event)
+          _vm._l(_vm.item.items, function(it) {
+            return _c(
+              "li",
+              { key: it.id },
+              [
+                _c("radio-button", {
+                  attrs: {
+                    caption: it.name,
+                    name: _vm.item.name,
+                    value: it.id,
+                    checked: _vm.curId == it.id
+                  },
+                  on: {
+                    input: function($event) {
+                      return _vm.onInput($event)
+                    }
                   }
-                }
-              })
-            }),
-            1
-          )
-        ]
+                })
+              ],
+              1
+            )
+          })
+        ],
+        2
       )
     ],
     1

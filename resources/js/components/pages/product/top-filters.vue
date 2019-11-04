@@ -1,7 +1,12 @@
 <template>
     <div class="top-filters">
       <div class="top-filters__wrap" :class="{'showed': tf_showed}">
-        <top-filter  :item="topFilters['order']" @input="onInput($event, topFilters['order'].name)" :curValue="categoryFilters[topFilters['order'].name]"></top-filter>
+        <top-filter  
+          :item="topFilters['order']" 
+          @input="onInput($event, topFilters['order'].name)" 
+          :curValue="categoryFilters[topFilters['order'].name]"
+        >
+        </top-filter>
         <top-filter  :item="topFilters['group']" @input="onInput($event, topFilters['group'].name)" :curValue="categoryFilters[topFilters['group'].name]"></top-filter>
         <top-filter  :item="topFilters['stock']" @input="onInput($event, topFilters['stock'].name)" :curValue="categoryFilters[topFilters['stock'].name]"></top-filter>
       </div>

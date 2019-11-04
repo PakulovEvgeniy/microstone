@@ -8,7 +8,7 @@
           </span>
           <i class="fa" :class="actClass"></i>
         </template>
-          <li><radio-button v-for="it in item.items" :key="it.id" :caption = "it.name" :name="item.name" :value="it.id" @input="onInput($event)" :checked="curId==it.id"></radio-button></li>
+          <li v-for="it in item.items" :key="it.id"><radio-button  :caption = "it.name" :name="item.name" :value="it.id" @input="onInput($event)" :checked="curId==it.id"></radio-button></li>
       </dropdown-menu>
     </div>
 </template>

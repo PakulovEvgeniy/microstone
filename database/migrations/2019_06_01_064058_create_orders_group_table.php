@@ -14,8 +14,8 @@ class CreateOrdersGroupTable extends Migration
     public function up()
     {
         Schema::create('orders_group', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('orders_id');
+            $table->bigIncrements('id');
+            $table->bigInteger('orders_id');
             $table->string('category_id', 100);
 
         });

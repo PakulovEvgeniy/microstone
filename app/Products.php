@@ -26,14 +26,14 @@ class Products extends Model
         return $this->hasOne('App\ProductsDescriptions');
     }
 
-    public static function getProductsByChpu($chpu)
+    /*public static function getProductsByChpu($chpu)
     {
     	$cat = Category_description::where('chpu', $chpu)->first();
     	if ($cat) {
     		return Products::getProductsCategory($cat->category->id_1s);
     	}
     	return [];
-    }
+    }*/
     public static function getProductByChpu($chpu)
     {
     	$cat = Category_description::where('chpu', $chpu)->first();
@@ -157,11 +157,12 @@ class Products extends Model
         $fld = [];
         $fld_type = [];
 
-        $group = 1;
+        $group_def = Groups::getDefaultGroupId($id_1s);
+        $group = $group_def;
         if (isset($filtr['group'])) {
             $group = intval($filtr['group']);
             if (!$group) {
-                $group = 1;
+                $group = $group_def;
             }
         }
 
@@ -193,12 +194,13 @@ class Products extends Model
 
         if (count($param_ord)) {
             foreach ($param_ord as $val) {
-                if (in_array($val['sort_field'], $fld)) {
+                $sort_field = 'f' . $val['param_type_id'];
+                if (in_array($sort_field, $fld)) {
                     continue;
                 }
-                $fld[] = $val['sort_field'];
+                $fld[] = $sort_field;
                 $fld_type[] = $val['sort_type'];
-                $alias = 'party_params' . $val['sort_field'];
+                $alias = 'party_params' . $sort_field;
                 $prd = $prd->leftJoin('party_params as ' . $alias, function ($join) use ($val, $alias)
                 {
                     $join->on('products.id_1s','=',$alias . '.product_id1s')
@@ -220,39 +222,57 @@ class Products extends Model
                 $prd = $prd->addSelect(DB::raw('MAX(' . $str . $val));
             }
         }
-        $grp = '';
-        if ($group == 3) {
-            $prd = $prd->addSelect(DB::raw("MIN(CASE WHEN stock>0 THEN 'В наличии' ELSE 'Под заказ' END) as grp"));
-        } elseif ($group>1) {
-            $grp = Groups::find($group);
-            if ($grp && $grp->param_type_id) {
-                $prd = $prd->leftJoin('party_params as party_paramsGroup', function ($join) use ($grp)
-                {
-                    $join->on('products.id_1s','=','party_paramsGroup.product_id1s')
-                    ->where('party_paramsGroup.param_type_id','=',$grp->param_type_id);
-                })->addSelect(DB::raw("CASE WHEN party_paramsGroup.value is null THEN 'я' ELSE party_paramsGroup.value END as grp"))
-                ->groupBy('party_paramsGroup.value');
-            }
+        $grp = Groups::find($group);
+        if ($grp) {
+            if ($grp->name == 'По наличию') {
+                $prd = $prd->addSelect(DB::raw("MIN(CASE WHEN stock>0 THEN 'В наличии' ELSE 'Под заказ' END) as grp"));
+            } elseif ($grp->name != 'Без группировки') {
+                if ($grp->param_type_id) {
+                    $prd = $prd->leftJoin('party_params as party_paramsGroup', function ($join) use ($grp)
+                    {
+                        $join->on('products.id_1s','=','party_paramsGroup.product_id1s')
+                        ->where('party_paramsGroup.param_type_id','=',$grp->param_type_id);
+                    })->addSelect(DB::raw("CASE WHEN party_paramsGroup.value is null THEN 'я' ELSE party_paramsGroup.value END as grp"))
+                    ->groupBy('party_paramsGroup.value');
+                }
+            }    
         }
+        
         
         $prd = $prd->groupBy('id_1s', 'id', 'name', 'description', 'chpu', 'parent_id', 'sku', 'image', 'popul');
 
-        $order = 3;
+        $order_def = Orders::getDefaultOrderId($id_1s);
+        $order = $order_def;
         if (isset($filtr['order'])) {
             $order = intval($filtr['order']);
             if (!$order) {
-                $order = 3;
+                $order = $order_def;
             }
         }
 
-        if ($group ==3 || ($grp && $grp->param_type_id)) {
+        if ($grp && ($grp->name == 'По наличию' || $grp->param_type_id)) {
             $prd = $prd->orderBy('grp'); 
         }
 
         $ord = Orders::find($order);
-        if ($ord && $ord->sort_field) {
-            //if (!$ord->param_type_id || $ord->sort_type=='Строка') {
-                $prd = $prd->orderBy($ord->sort_field, $ord->sort_ord);
+        if ($ord) {
+            $sort_field = '';
+            if ($ord->param_type_id) {
+                $sort_field = 'f' . $ord->param_type_id;
+            } else {
+                if ($ord->name == 'По возрастанию цены' || $ord->name == 'По убыванию цены') {
+                    $sort_field = 'min_price';
+                } elseif ($ord->name == 'По наименованию') {
+                    $sort_field = 'name';
+                } elseif ($ord->name == 'По продажам') {
+                    $sort_field = 'sold';
+                } elseif ($ord->name == 'По популярности') {
+                    $sort_field = 'popul';
+                }
+            }
+            if ($sort_field) {
+                $prd = $prd->orderBy($sort_field, $ord->sort_ord);   
+            }
             //} else {
             //    $prd = $prd->orderByRaw('CAST(' . $ord->sort_field . ' AS DECIMAL(15,5)) ' . $ord->sort_ord);
             //}
@@ -304,7 +324,7 @@ class Products extends Model
 				'stock' => $val->stock,
 				'sold' => $val->sold
             ];
-            if ($group == 3  || ($grp && $grp->param_type_id)) {
+            if ($grp && ($grp->name == 'По наличию' || $grp->param_type_id)) {
                 $d['group'] = $val->grp=='я' ? 'Неопределено' : $val->grp; 
             }
             $dat[] = $d;
@@ -312,7 +332,7 @@ class Products extends Model
         return ['totalQty' => $qty, 'items' => $dat];
     }
 
-    public static function getProductsCategory($id_1s)
+    /*public static function getProductsCategory($id_1s)
     {
 		$param_ord = Orders::getParamsOrders($id_1s);
         $fld = [];
@@ -324,11 +344,12 @@ class Products extends Model
 			->leftJoin('sold_product','products.id_1s','=','sold_product.product_id1s');
         if (count($param_ord)) {
             foreach ($param_ord as $val) {
-                if (in_array($val['sort_field'], $fld)) {
+                $sort_field = 'f' . $val['param_type_id'];
+                if (in_array($sort_field, $fld)) {
                     continue;
                 }
-                $fld[] = $val['sort_field'];
-                $alias = 'party_params' . $val['sort_field'];
+                $fld[] = $sort_field;
+                $alias = 'party_params' . $sort_field;
                 $prd = $prd->leftJoin('party_params as ' . $alias, function ($join) use ($val, $alias)
                 {
                     $join->on('products.id_1s','=',$alias . '.product_id1s')
@@ -374,5 +395,5 @@ class Products extends Model
             $dat[] = $d;
     	}
         return $dat;
-    }
+    }*/
 }
