@@ -14,8 +14,8 @@ class CreateFiltersGroupsTable extends Migration
     public function up()
     {
         Schema::create('filters_groups', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('filters_id');
+            $table->bigIncrements('id');
+            $table->bigInteger('filters_id');
             $table->string('category_id', 100);
         });
     }

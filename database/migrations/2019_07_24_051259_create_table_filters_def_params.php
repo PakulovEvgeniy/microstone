@@ -14,8 +14,8 @@ class CreateTableFiltersDefParams extends Migration
     public function up()
     {
         Schema::create('filters_def_params', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('filters_def_id');
+            $table->bigIncrements('id');
+            $table->bigInteger('filters_def_id');
             $table->integer('filters_id_1s')->unsigned();
             $table->text('value');
         });

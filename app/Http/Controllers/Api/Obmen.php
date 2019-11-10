@@ -306,10 +306,7 @@ class Obmen extends Controller
       $name = $par['f_name'];
       $kod_sort = $par['f_kod_sort'];
       $status = $par['f_status'];
-      $field = $par['f_field'];
-      if (!$field) {
-        $field = '';
-      }
+
       $ord_type = $par['f_type'];
       $ord_param = $par['f_param'];
       if (!$ord_param) {
@@ -325,7 +322,6 @@ class Obmen extends Controller
       $ord->name = $name;
       $ord->sort_order = $kod_sort;
       $ord->status = $status;
-      $ord->filter_field = $field;
       $ord->filter_type = $ord_type;
       $ord->param_type_id = $ord_param;   
       $ord->mark = $mark;

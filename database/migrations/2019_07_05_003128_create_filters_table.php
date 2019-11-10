@@ -14,14 +14,14 @@ class CreateFiltersTable extends Migration
     public function up()
     {
         Schema::create('filters', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->integer('id_1s')->unsigned();
             $table->string('name');
             $table->integer('sort_order')->unsigned();
             $table->boolean('status')->default(0);
-            $table->string('filter_field', 30)->default('');
-            $table->string('filter_type', 10)->default('');
-            $table->string('param_type_id', 11)->default('');
+            $table->string('filter_type', 10)->nullable();
+            $table->string('param_type_id', 11)->nullable();
+            $table->string('mark', 10)->nullable();
         });
     }
 

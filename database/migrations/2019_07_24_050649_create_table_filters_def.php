@@ -14,7 +14,7 @@ class CreateTableFiltersDef extends Migration
     public function up()
     {
         Schema::create('filters_def', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->integer('id_1s')->unsigned();
             $table->string('name');
             $table->integer('sort_order')->unsigned();

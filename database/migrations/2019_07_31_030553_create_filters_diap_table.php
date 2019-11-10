@@ -14,8 +14,8 @@ class CreateFiltersDiapTable extends Migration
     public function up()
     {
         Schema::create('filters_diap', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('filters_id');
+            $table->bigIncrements('id');
+            $table->bigInteger('filters_id');
             $table->decimal('value1', 15, 3);
             $table->string('descr1', 50);
             $table->decimal('value2', 15, 3);
