@@ -14,10 +14,10 @@
             <i class="fa fa-clock-o"></i>
             <span>Лист ожидания</span>
           </a>
-          <a class="btn-info">
+          <router-link to="/account/wishlist" class="btn-info">
             <i class="fa fa-heart"></i>
             <span>Мои списки</span>
-          </a>
+          </router-link>
           <a class="btn-cart">
             <i class="fa fa-shopping-cart"></i>
             <span class="price">

@@ -20,7 +20,7 @@ class Account extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('wishlist');
     }
 
     public function changePassword(Request $request) {
@@ -460,6 +460,23 @@ class Account extends Controller
           'message' => 'Персональные данные успешно сохранены'
         ];
       }
+    }
+
+    public function wishlist(Request $request) {
+      
+      $title = 'Мои списки';
+      $data = ['date' => '', 'items' => Category::getCatalog('')];
+
+      $dat = [
+        'catalog' => $data,
+        'nonVisibleAside' => true
+      ];
+      $ssr = JSRender::render($request->getRequestUri(), $dat);
+
+       //dd($request->path());
+       //$rend = $this->render($request->path()); 
+       //$ssr = phpinfo();
+       return view('app', ['ssr' => $ssr, 'title' => $title]);
     }
 
     public function get(Request $request) {
