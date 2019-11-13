@@ -1,7 +1,7 @@
 <template>
     <div v-title="title" class="account">
       <div class="account__menu">
-        <div class="account__menu_content">
+        <div v-if="auth" class="account__menu_content">
           <i class="fa account__menu_menu" :class="{'fa-bars': !open, 'fa-times': open}" @click="onClickOpen()"></i>
           <account-mobile-menu :open="open" :menu="menu" @click="open=false"></account-mobile-menu>
           <ul class="account__menu_ul">
@@ -150,7 +150,8 @@
         },
         computed: {
           ...mapGetters([
-            'bodyBlocked'
+            'bodyBlocked',
+            'auth'
           ]),
           curMenu() {
             if (this.$route.params.id) {

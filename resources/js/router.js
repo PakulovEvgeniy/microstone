@@ -56,6 +56,9 @@ export default new Router({
       meta: {
           middleware: [
             auth
+          ],
+          excludePath: [
+            '/account/wishlist'
           ]
       }
     },

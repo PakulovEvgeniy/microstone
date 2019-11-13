@@ -4244,7 +4244,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }]
     };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['bodyBlocked']), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['bodyBlocked', 'auth']), {
     curMenu: function curMenu() {
       var _this = this;
 
@@ -47341,7 +47341,29 @@ var render = function() {
                 _vm._v(" "),
                 _c("main-seach-form"),
                 _vm._v(" "),
-                _vm._m(0)
+                _c(
+                  "div",
+                  { staticClass: "header-buttons" },
+                  [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "btn-info",
+                        attrs: { to: "/account/wishlist" }
+                      },
+                      [
+                        _c("i", { staticClass: "fa fa-heart" }),
+                        _vm._v(" "),
+                        _c("span", [_vm._v("Мои списки")])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm._m(1)
+                  ],
+                  1
+                )
               ],
               1
             )
@@ -47355,24 +47377,20 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "header-buttons" }, [
-      _c("a", { staticClass: "btn-info" }, [
-        _c("i", { staticClass: "fa fa-clock-o" }),
-        _vm._v(" "),
-        _c("span", [_vm._v("Лист ожидания")])
-      ]),
+    return _c("a", { staticClass: "btn-info" }, [
+      _c("i", { staticClass: "fa fa-clock-o" }),
       _vm._v(" "),
-      _c("a", { staticClass: "btn-info" }, [
-        _c("i", { staticClass: "fa fa-heart" }),
-        _vm._v(" "),
-        _c("span", [_vm._v("Мои списки")])
-      ]),
+      _c("span", [_vm._v("Лист ожидания")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("a", { staticClass: "btn-cart" }, [
+      _c("i", { staticClass: "fa fa-shopping-cart" }),
       _vm._v(" "),
-      _c("a", { staticClass: "btn-cart" }, [
-        _c("i", { staticClass: "fa fa-shopping-cart" }),
-        _vm._v(" "),
-        _c("span", { staticClass: "price" }, [_c("span", [_vm._v("Корзина")])])
-      ])
+      _c("span", { staticClass: "price" }, [_c("span", [_vm._v("Корзина")])])
     ])
   }
 ]
@@ -48113,58 +48131,60 @@ var render = function() {
     },
     [
       _c("div", { staticClass: "account__menu" }, [
-        _c(
-          "div",
-          { staticClass: "account__menu_content" },
-          [
-            _c("i", {
-              staticClass: "fa account__menu_menu",
-              class: { "fa-bars": !_vm.open, "fa-times": _vm.open },
-              on: {
-                click: function($event) {
-                  return _vm.onClickOpen()
-                }
-              }
-            }),
-            _vm._v(" "),
-            _c("account-mobile-menu", {
-              attrs: { open: _vm.open, menu: _vm.menu },
-              on: {
-                click: function($event) {
-                  _vm.open = false
-                }
-              }
-            }),
-            _vm._v(" "),
-            _c(
-              "ul",
-              { staticClass: "account__menu_ul" },
-              _vm._l(_vm.menu, function(it) {
-                return _c(
-                  "li",
-                  { key: it.id },
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "account__menu_link",
-                        class: { open: _vm.open, second: it.id != 0 },
-                        attrs: { to: it.link, disable: true }
-                      },
+        _vm.auth
+          ? _c(
+              "div",
+              { staticClass: "account__menu_content" },
+              [
+                _c("i", {
+                  staticClass: "fa account__menu_menu",
+                  class: { "fa-bars": !_vm.open, "fa-times": _vm.open },
+                  on: {
+                    click: function($event) {
+                      return _vm.onClickOpen()
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("account-mobile-menu", {
+                  attrs: { open: _vm.open, menu: _vm.menu },
+                  on: {
+                    click: function($event) {
+                      _vm.open = false
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "ul",
+                  { staticClass: "account__menu_ul" },
+                  _vm._l(_vm.menu, function(it) {
+                    return _c(
+                      "li",
+                      { key: it.id },
                       [
-                        _c("i", { staticClass: "fa", class: it.icon }),
-                        _vm._v(_vm._s(it.name))
-                      ]
+                        _c(
+                          "router-link",
+                          {
+                            staticClass: "account__menu_link",
+                            class: { open: _vm.open, second: it.id != 0 },
+                            attrs: { to: it.link, disable: true }
+                          },
+                          [
+                            _c("i", { staticClass: "fa", class: it.icon }),
+                            _vm._v(_vm._s(it.name))
+                          ]
+                        )
+                      ],
+                      1
                     )
-                  ],
-                  1
+                  }),
+                  0
                 )
-              }),
-              0
+              ],
+              1
             )
-          ],
-          1
-        )
+          : _vm._e()
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "account__content" }, [
@@ -71796,7 +71816,8 @@ _router__WEBPACK_IMPORTED_MODULE_2__["default"].beforeEach(function (to, from, n
       to: to,
       from: from,
       next: next,
-      store: store
+      store: store,
+      'exclude': to.meta.excludePath
     };
     var res = false;
 
@@ -79360,7 +79381,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return auth; });
 function auth(_ref) {
   var next = _ref.next,
-      store = _ref.store;
+      store = _ref.store,
+      exclude = _ref.exclude,
+      to = _ref.to;
+
+  if (exclude) {
+    if (exclude.includes(to.path)) {
+      return true;
+    }
+  }
 
   if (!store.getters.auth) {
     return next({
@@ -79536,7 +79565,8 @@ function PageComponent(name) {
     component: _components_pages_account_vue__WEBPACK_IMPORTED_MODULE_13__["default"],
     name: 'account_id',
     meta: {
-      middleware: [_middleware_auth_js__WEBPACK_IMPORTED_MODULE_15__["default"]]
+      middleware: [_middleware_auth_js__WEBPACK_IMPORTED_MODULE_15__["default"]],
+      excludePath: ['/account/wishlist']
     }
   }, {
     path: '/login',

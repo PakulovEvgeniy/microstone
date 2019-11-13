@@ -150,12 +150,13 @@ router.beforeEach((to, from, next) => {
 	}
 
 	if (to.meta.middleware) {
-        const middleware = to.meta.middleware
-    	const context = {
+		const middleware = to.meta.middleware;
+		const context = {
         	to,
         	from,
         	next,
-        	store
+			store,
+			'exclude': to.meta.excludePath
 		}
 		
 		let res = false;
