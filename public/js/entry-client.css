@@ -5235,6 +5235,40 @@ input[type="radio"]:checked + .ui-radio__content:before {
   margin-right: 5px;
 }
 
+.account-wishlist__info {
+  border: 1px solid #ddd;
+  padding: 20px;
+}
+.account-wishlist__info .main-block {
+  position: relative;
+}
+.account-wishlist__info .main-block .name {
+  font-size: 18px;
+  margin-bottom: 5px;
+  word-wrap: break-word;
+}
+.account-wishlist__info .main-block .products-count {
+  color: gray;
+  font-size: 13px;
+}
+.account-wishlist__body {
+  border: 1px solid #ddd;
+  border-top: none;
+}
+.account-wishlist__body .add-product-to-wish {
+  padding: 30px;
+}
+@media (min-width: 992px) {
+.account-wishlist__info {
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+}
+.account-wishlist__body {
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+}
+
 .account-mobile__menu {
   transition: right 0.3s ease-out 200ms;
   opacity: 1;

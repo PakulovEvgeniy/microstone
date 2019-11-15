@@ -5,6 +5,7 @@ import mUser from './store-modules/user.js';
 import mBrands from './store-modules/brands.js';
 import mAccount from './store-modules/user-account.js';
 import mCatalog from './store-modules/catalog.js';
+import mWishlist from './store-modules/wishlist.js';
 import mCatalogFilters from './store-modules/catalog-filters.js';
 
 Vue.use(Vuex);
@@ -13,12 +14,13 @@ Vue.use(Vuex);
 export function createStore () {
   return new Vuex.Store({
     modules: {
-      mSystem: mSystem,
-      mUser: mUser,
-      mBrands: mBrands,
-      mAccount: mAccount,
-      mCatalog: mCatalog,
-      mCatalogFilters: mCatalogFilters
+      mSystem,
+      mUser,
+      mBrands,
+      mAccount,
+      mCatalog,
+      mCatalogFilters,
+      mWishlist
     },
     state: {
       auth: false,
@@ -103,7 +105,6 @@ export function createStore () {
       },
       wishlist: {
         items: [
-          {id: 0}
         ]
       },
       waitlist: {
@@ -141,9 +142,6 @@ export function createStore () {
       },
       hasNotifies(state) {
         return true
-      },
-      wishlist(state) {
-        return state.wishlist;
       },
       waitlist(state) {
         return state.waitlist;
