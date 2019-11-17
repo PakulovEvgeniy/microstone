@@ -9,7 +9,25 @@
       <div class="account-wishlist__body">
         <div v-if="countWishlist==0">
           <div class="add-product-to-wish">
-            
+            <div class="b-icon">
+              <i class="fa fa-heart-o"></i>
+            </div>
+            <div class="b-text">
+              <h4>Добавьте товар в избранное</h4>
+              <p>В этом списке будут храниться товары, которые Вас заинтересовали.<br>
+                Можете добавить сюда недавно просмотренные товары.
+              </p><br>
+              <p>
+                <b>Внимание!</b><br>
+                Чтобы сохранить список и иметь доступ к нему с различных устройств,<br>
+                необходимо
+                <router-link to="/login">авторизоваться</router-link> или 
+                <router-link to="/register">зарегистрироваться</router-link>
+              </p><br>
+              <p>Кроме того, зарегистрированные пользователи,<br>получают возможность загружать <b>произвольные спецификации</b><br>
+                и осуществлять поиск оптимальных предложений.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -77,6 +95,33 @@
       border-top: none;
       .add-product-to-wish {
         padding: 30px;
+        .b-icon {
+          color: #d8d8d8;
+          display: inline-block;
+          font-size: 60px;
+          margin-right: 20px;
+          vertical-align: top;
+        }
+        .b-text {
+          color: gray;
+          display: inline-block;
+          h4 {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 0 20px;
+          }
+          p {
+            margin: 0;
+          }
+          a {
+            color: #0094d9;
+            text-decoration: none;
+            &:hover {
+              color: #00608d;
+              text-decoration: underline;
+            }
+          }
+        }
       }
     }
   }

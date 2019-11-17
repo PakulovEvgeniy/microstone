@@ -53,7 +53,7 @@
             </div>
           </div>
           <div class="n-catalog-product__buttons">
-            <button v-tooltip.top="'Добавить в избранное'" class="button-ui button-ui_white button-ui_icon wishlist-btn">
+            <button @click="addToWish(item.id)" v-tooltip.top="'Добавить в избранное'" class="button-ui button-ui_white button-ui_icon wishlist-btn">
               <i class="fa fa-heart-o"></i>
             </button>
             <button v-tooltip.top="'Добавить в лист ожидания'" class="button-ui button-ui_white button-ui_icon waitlist-btn">
@@ -81,6 +81,7 @@
 
 <script>
   import voblers from './voblers.vue';
+  import { mapGetters, mapActions } from 'vuex';
     export default {
         data() {
             return {
@@ -91,6 +92,9 @@
           'item'
         ],
         computed: {
+          ...mapGetters([
+           'auth'
+          ]),
           price() {
             if (this.item.min_price && this.item.max_price) {
               let pr1 = parseFloat(this.item.min_price);
@@ -108,8 +112,16 @@
           voblers
         },
         methods: {
+          ...mapActions([
+            'addToLocalWishlist'
+          ]),
           clickBuy() {
             this.$router.push('/product/'+this.item.chpu);
+          },
+          addToWish(id) {
+            if (!this.auth) {
+              this.addToLocalWishlist(id);
+            }
           }
         }
     }

@@ -5258,6 +5258,33 @@ input[type="radio"]:checked + .ui-radio__content:before {
 .account-wishlist__body .add-product-to-wish {
   padding: 30px;
 }
+.account-wishlist__body .add-product-to-wish .b-icon {
+  color: #d8d8d8;
+  display: inline-block;
+  font-size: 60px;
+  margin-right: 20px;
+  vertical-align: top;
+}
+.account-wishlist__body .add-product-to-wish .b-text {
+  color: gray;
+  display: inline-block;
+}
+.account-wishlist__body .add-product-to-wish .b-text h4 {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 0 20px;
+}
+.account-wishlist__body .add-product-to-wish .b-text p {
+  margin: 0;
+}
+.account-wishlist__body .add-product-to-wish .b-text a {
+  color: #0094d9;
+  text-decoration: none;
+}
+.account-wishlist__body .add-product-to-wish .b-text a:hover {
+  color: #00608d;
+  text-decoration: underline;
+}
 @media (min-width: 992px) {
 .account-wishlist__info {
     border-top-right-radius: 8px;
@@ -5489,6 +5516,12 @@ input[type="radio"]:checked + .ui-radio__content:before {
 }
 .account__content h1 {
     display: none;
+}
+.account__content h1.show {
+    display: block;
+}
+.account__content.not-auth {
+    margin-top: 0;
 }
 }
 

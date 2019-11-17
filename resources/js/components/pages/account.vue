@@ -11,8 +11,8 @@
           </ul>
         </div>
       </div>
-      <div class="account__content">
-        <h1>{{title}}</h1>
+      <div class="account__content" :class="{'not-auth': !auth}">
+        <h1 :class="{show: !auth}">{{title}}</h1>
         <div class="account__content_block">
           <component :is="curComponent"></component>
         </div>
@@ -337,6 +337,12 @@
       margin-top: 70px;
       h1 {
         display: none;
+      }
+      h1.show {
+        display: block;
+      }
+      &.not-auth {
+        margin-top: 0;
       }
     }
   }

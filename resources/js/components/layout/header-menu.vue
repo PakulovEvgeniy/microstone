@@ -31,14 +31,14 @@
          </router-link>
        </li>
        <li class="menu-item-wishlist">
-         <router-link class="btn-wishlist-link" to="/wishlist">
+         <router-link class="btn-wishlist-link" to="/account/wishlist">
            <i class="fa fa-heart-o icon"></i>
            Избранное
            <span v-show="wishlist.items.length" class="btn-wishlist-link__badge">{{wishlist.items.length}}</span>
          </router-link>
        </li>
        <li class="menu-item-waitlist">
-         <router-link class="btn-waitlist-link" to="/waitlist">
+         <router-link class="btn-waitlist-link" to="/account/waitlist">
            <i class="fa fa-clock-o icon"></i>
            Ожидаемое
            <span v-show="waitlist.items.length" class="btn-waitlist-link__badge">{{waitlist.items.length}}</span>

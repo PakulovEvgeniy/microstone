@@ -5968,6 +5968,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -7325,6 +7343,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _voblers_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./voblers.vue */ "./resources/js/components/pages/product/voblers.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -7407,6 +7432,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -7414,7 +7440,7 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   props: ['item'],
-  computed: {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])(['auth']), {
     price: function price() {
       if (this.item.min_price && this.item.max_price) {
         var pr1 = parseFloat(this.item.min_price);
@@ -7429,15 +7455,20 @@ __webpack_require__.r(__webpack_exports__);
         return '0';
       }
     }
-  },
+  }),
   components: {
     voblers: _voblers_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  methods: {
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])(['addToLocalWishlist']), {
     clickBuy: function clickBuy() {
       this.$router.push('/product/' + this.item.chpu);
+    },
+    addToWish: function addToWish(id) {
+      if (!this.auth) {
+        this.addToLocalWishlist(id);
+      }
     }
-  }
+  })
 });
 
 /***/ }),
@@ -47585,7 +47616,10 @@ var render = function() {
           [
             _c(
               "router-link",
-              { staticClass: "btn-wishlist-link", attrs: { to: "/wishlist" } },
+              {
+                staticClass: "btn-wishlist-link",
+                attrs: { to: "/account/wishlist" }
+              },
               [
                 _c("i", { staticClass: "fa fa-heart-o icon" }),
                 _vm._v("\n       Избранное\n       "),
@@ -47616,7 +47650,10 @@ var render = function() {
           [
             _c(
               "router-link",
-              { staticClass: "btn-waitlist-link", attrs: { to: "/waitlist" } },
+              {
+                staticClass: "btn-waitlist-link",
+                attrs: { to: "/account/waitlist" }
+              },
               [
                 _c("i", { staticClass: "fa fa-clock-o icon" }),
                 _vm._v("\n       Ожидаемое\n       "),
@@ -48244,16 +48281,20 @@ var render = function() {
           : _vm._e()
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "account__content" }, [
-        _c("h1", [_vm._v(_vm._s(_vm.title))]),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "account__content_block" },
-          [_c(_vm.curComponent, { tag: "component" })],
-          1
-        )
-      ])
+      _c(
+        "div",
+        { staticClass: "account__content", class: { "not-auth": !_vm.auth } },
+        [
+          _c("h1", { class: { show: !_vm.auth } }, [_vm._v(_vm._s(_vm.title))]),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "account__content_block" },
+            [_c(_vm.curComponent, { tag: "component" })],
+            1
+          )
+        ]
+      )
     ]
   )
 }
@@ -50120,12 +50161,85 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "account-wishlist__body" }, [
       _vm.countWishlist == 0
-        ? _c("div", [_c("div", { staticClass: "add-product-to-wish" })])
+        ? _c("div", [
+            _c("div", { staticClass: "add-product-to-wish" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "b-text" }, [
+                _c("h4", [_vm._v("Добавьте товар в избранное")]),
+                _vm._v(" "),
+                _vm._m(1),
+                _c("br"),
+                _vm._v(" "),
+                _c(
+                  "p",
+                  [
+                    _c("b", [_vm._v("Внимание!")]),
+                    _c("br"),
+                    _vm._v(
+                      "\n            Чтобы сохранить список и иметь доступ к нему с различных устройств,"
+                    ),
+                    _c("br"),
+                    _vm._v("\n            необходимо\n            "),
+                    _c("router-link", { attrs: { to: "/login" } }, [
+                      _vm._v("авторизоваться")
+                    ]),
+                    _vm._v(" или \n            "),
+                    _c("router-link", { attrs: { to: "/register" } }, [
+                      _vm._v("зарегистрироваться")
+                    ])
+                  ],
+                  1
+                ),
+                _c("br"),
+                _vm._v(" "),
+                _vm._m(2)
+              ])
+            ])
+          ])
         : _vm._e()
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "b-icon" }, [
+      _c("i", { staticClass: "fa fa-heart-o" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v(
+        "В этом списке будут храниться товары, которые Вас заинтересовали."
+      ),
+      _c("br"),
+      _vm._v(
+        "\n            Можете добавить сюда недавно просмотренные товары.\n          "
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("Кроме того, зарегистрированные пользователи,"),
+      _c("br"),
+      _vm._v("получают возможность загружать "),
+      _c("b", [_vm._v("произвольные спецификации")]),
+      _c("br"),
+      _vm._v(
+        "\n            и осуществлять поиск оптимальных предложений.\n          "
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -51869,7 +51983,12 @@ var render = function() {
                   }
                 ],
                 staticClass:
-                  "button-ui button-ui_white button-ui_icon wishlist-btn"
+                  "button-ui button-ui_white button-ui_icon wishlist-btn",
+                on: {
+                  click: function($event) {
+                    return _vm.addToWish(_vm.item.id)
+                  }
+                }
               },
               [_c("i", { staticClass: "fa fa-heart-o" })]
             ),
@@ -80281,13 +80400,37 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mutations: {},
+  mutations: {
+    setWishlist: function setWishlist(state, payload) {
+      this.state.wishlist.items = payload;
+    }
+  },
   getters: {
     wishlist: function wishlist(state, getters, rootState) {
       return rootState.wishlist;
     },
     countWishlist: function countWishlist(state, getters, rootState) {
       return getters.wishlist.items.length;
+    }
+  },
+  actions: {
+    addToLocalWishlist: function addToLocalWishlist(_ref, data) {
+      var commit = _ref.commit,
+          dispatch = _ref.dispatch;
+      var wish = localStorage.getItem('wishlist');
+
+      if (!wish) {
+        wish = [];
+      } else {
+        wish = JSON.parse(wish);
+      }
+
+      if (wish.indexOf(data) == -1) {
+        wish.push(data);
+      }
+
+      localStorage.setItem('wishlist', JSON.stringify(wish));
+      commit('setWishlist', wish);
     }
   }
 });
@@ -80416,9 +80559,7 @@ function createStore() {
         items: []
       },
       waitlist: {
-        items: [{
-          id: 0
-        }]
+        items: []
       }
     },
     mutations: {

@@ -109,7 +109,6 @@ export function createStore () {
       },
       waitlist: {
         items: [
-          {id: 0}
         ]
       }
     },
