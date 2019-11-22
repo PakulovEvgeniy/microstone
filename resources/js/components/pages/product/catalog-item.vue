@@ -53,8 +53,23 @@
             </div>
           </div>
           <div class="n-catalog-product__buttons">
-            <button @click="addToWish(item.id)" v-tooltip.top="'Добавить в избранное'" class="button-ui button-ui_white button-ui_icon wishlist-btn">
-              <i class="fa fa-heart-o"></i>
+            <button :disabled="disWish" 
+              @click="addToWish(item.id)" 
+              v-tooltip.top="toolWishStr" 
+              class="button-ui button-ui_white button-ui_icon wishlist-btn" 
+              :class="{
+                'button-ui_done': isInWish, 
+                'button-ui_action-icon-on': disWish && !isInWish, 
+                'button-ui_action-icon-off': disWish && isInWish
+              }">
+              <i class="fa"
+                :class="{
+                  'fa-heart-o': !disWish,
+                  'fa-check': disWish && !isInWish,
+                  'slideDown': disWish,
+                  'fa-trash-o': disWish && isInWish
+                }"
+              ></i>
             </button>
             <button v-tooltip.top="'Добавить в лист ожидания'" class="button-ui button-ui_white button-ui_icon waitlist-btn">
               <i class="fa fa-clock-o"></i>
@@ -85,7 +100,8 @@
     export default {
         data() {
             return {
-              inItem: false
+              inItem: false,
+              disWish: false
             }
         },
         props: [
@@ -93,8 +109,15 @@
         ],
         computed: {
           ...mapGetters([
-           'auth'
+           'auth',
+           'wishlist'
           ]),
+          isInWish() {
+            return this.wishlist.items.indexOf(this.item.id) != -1;
+          },
+          toolWishStr() {
+            return this.isInWish ? 'Удалить из избранного' : 'Добавить в избранное';
+          },
           price() {
             if (this.item.min_price && this.item.max_price) {
               let pr1 = parseFloat(this.item.min_price);
@@ -113,21 +136,30 @@
         },
         methods: {
           ...mapActions([
-            'addToLocalWishlist'
+            'addToLocalWishlist',
+            'delFromLocalWishlist'
           ]),
           clickBuy() {
             this.$router.push('/product/'+this.item.chpu);
           },
           addToWish(id) {
             if (!this.auth) {
-              this.addToLocalWishlist(id);
+              this.disWish = true;
+              setTimeout(() => {
+                if (this.isInWish) {
+                  this.delFromLocalWishlist(id);
+                } else {
+                  this.addToLocalWishlist(id);
+                }
+                this.disWish = false;
+              } , 1000);
             }
           }
         }
     }
 </script>
-
-<style>
+<style lang="less">
+@import '../../../../less/vars.less';
   .product-price__current {
     font-size: 20px;
     font-weight: bold;
@@ -166,4 +198,79 @@
     font-weight: bold;
     color: rgb(29, 113, 184);
   }
+  .button-ui.button-ui_action-icon-on {
+    border: 1px solid @main-color;
+    color: @main-color;
+    i {
+      font-size: 18px;
+    }
+    &:hover {
+      color: #fff;
+    }
+  }
+  .button-ui.button-ui_action-icon-off {
+      border: 1px solid #cc2e12 !important;
+      color: #cc2e12;
+    i {
+      font-size: 18px;
+    }
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  .slideDown{
+    animation-name: slideDown;
+    -webkit-animation-name: slideDown;  
+ 
+    animation-duration: 1s; 
+    -webkit-animation-duration: 1s;
+ 
+    animation-timing-function: ease;    
+    -webkit-animation-timing-function: ease;    
+ 
+    visibility: visible !important;                     
+}
+ 
+@keyframes slideDown {
+    0% {
+        transform: translateY(-100%);
+    }
+    50%{
+        transform: translateY(8%);
+    }
+    65%{
+        transform: translateY(-4%);
+    }
+    80%{
+        transform: translateY(4%);
+    }
+    95%{
+        transform: translateY(-2%);
+    }           
+    100% {
+        transform: translateY(0%);
+    }       
+}
+ 
+@-webkit-keyframes slideDown {
+    0% {
+        -webkit-transform: translateY(-100%);
+    }
+    50%{
+        -webkit-transform: translateY(8%);
+    }
+    65%{
+        -webkit-transform: translateY(-4%);
+    }
+    80%{
+        -webkit-transform: translateY(4%);
+    }
+    95%{
+        -webkit-transform: translateY(-2%);
+    }           
+    100% {
+        -webkit-transform: translateY(0%);
+    }   
+}
 </style>

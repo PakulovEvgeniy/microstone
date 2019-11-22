@@ -23,16 +23,12 @@
         display: inline-block;
     }
     .notification-container .title.inactive i {
-        border: solid 1px #d8d8d8;
-        border-radius: 10px;
         padding: 4px;
-        color: #7e7e7e;
         font-size: 10px;
         line-height: 10px;
     }
     .notification-container .title.inactive:hover i {
         color: #fff;
-        background: gray;
-        border-color: gray;
+        opacity: 0.7;
     }
 </style>

@@ -170,6 +170,21 @@ header {
           }
         }
     }
+    &_done {
+      border: 1px solid @main-color;
+      color: @main-color;
+      background: #fff;
+      box-shadow: none;
+      @media (min-width: 992px) {
+        &:hover {
+          background-image: linear-gradient(to bottom, #ff4c23, #c02206);
+          box-shadow: inset 0 -2px 0 0 rgba(0,0,0,0.2);
+          color: #fff;
+          border: none;
+          font-weight: bold;
+        }
+      }
+    }
     @media (max-width: 991px) and (min-width: 768px) {
         height: 48px;
     }

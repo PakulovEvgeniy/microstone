@@ -25,6 +25,21 @@ export default {
       }
       localStorage.setItem('wishlist', JSON.stringify(wish));
       commit('setWishlist', wish);
+    },
+    delFromLocalWishlist({commit, dispatch}, data) {
+      let wish = localStorage.getItem('wishlist');
+      if (!wish) {
+        return;
+      } else {
+        wish = JSON.parse(wish);
+      }
+      let ind = wish.indexOf(data);
+      if (ind == -1) {
+        return;
+      }
+      wish.splice(ind, 1); 
+      localStorage.setItem('wishlist', JSON.stringify(wish));
+      commit('setWishlist', wish);
     }
   }
 }

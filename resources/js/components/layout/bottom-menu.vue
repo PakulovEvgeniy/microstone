@@ -10,20 +10,9 @@
         </div>
         <main-seach-form></main-seach-form>
         <div class="header-buttons">
-          <a class="btn-info">
-            <i class="fa fa-clock-o"></i>
-            <span>Лист ожидания</span>
-          </a>
-          <router-link to="/account/wishlist" class="btn-info">
-            <i class="fa fa-heart"></i>
-            <span>Мои списки</span>
-          </router-link>
-          <a class="btn-cart">
-            <i class="fa fa-shopping-cart"></i>
-            <span class="price">
-              <span>Корзина</span>
-            </span>
-          </a>
+          <header-buttons link="/account/waitlist" name="Лист ожидания" icon="fa-clock-o"></header-buttons>
+          <header-buttons link="/account/wishlist" name="Мои списки" icon="fa-heart"></header-buttons>
+          <header-buttons link="/account/cart" name="Корзина" icon="fa-shopping-cart"></header-buttons>
         </div>
       </div>
     </div>
@@ -33,6 +22,7 @@
 <script>
 
 import mainSeachForm from '../forms/main-seach-form.vue';
+import headerButtons from '../system/header-buttons.vue';
   import { mapGetters } from 'vuex';
     export default {
         data() {
@@ -53,7 +43,8 @@ import mainSeachForm from '../forms/main-seach-form.vue';
           ])
         },
         components: {
-          mainSeachForm
+          mainSeachForm,
+          headerButtons
         },
         methods: {
           onScroll(e) {
@@ -77,11 +68,12 @@ import mainSeachForm from '../forms/main-seach-form.vue';
 <style lang="less">
 @import '../../../less/vars';
   .header-bottom {
-    background: rgba(@main-color,0.9) !important;
+    background: #fff;
     z-index: 1030;
     height: 60px;
     box-sizing: content-box;
     top: -64px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
     &-container {
       display: flex;
       padding: 0;
@@ -99,54 +91,13 @@ import mainSeachForm from '../forms/main-seach-form.vue';
   }
 
 .header-buttons {
-  display: block;
+  display: flex;
   min-width: 418px;
+  justify-content: space-between;
+  align-items: center;
   a {
-    text-decoration: none;   
-  }
-  .btn-cart {
-    box-shadow: 0 2px 0 0 #e3e3e3;
-    background: #fff;
-    border-color: #e3e3e3;
-    min-width: 120px;
-    margin-left: 20px;
-    height: 39px;
-    padding: 8px 12px 4px 12px;
-    border-radius: 4px;
-    text-align: center;
-    line-height: 24px;  
-    &:hover {
-      background: #ededed;
-      border-color: #e3e3e3;
-    }
-    i {
-      color: #989696;
-      font-size: .9em;
-      margin-right: 10px;
-      margin-top: 6px;
-    }
-    .price {
-      color: #333;
-      font-weight: 700;
-      font-size: 15px;
-      line-height: 24px;    
-    }
-  }
-  .btn-info {
-    color: #fff;
-    font-size: 15px;
-    line-height: 20px;
-    font-weight: 400;
-    padding: 20px 10px;
-    &:hover {
-      background: rgba(255,255,255,0.2);
-    }
-  }
-  
-  i {
-    color: #fff;
-    font-size: .9em;
-    margin-right: 5px;
+    text-decoration: none;
+    margin-left: 20px;   
   }
 }
 
@@ -157,21 +108,21 @@ import mainSeachForm from '../forms/main-seach-form.vue';
     align-items: center;
     .logo-chevron {
       display: inline-block;
-      width: 30px;
-      height: 30px;
+      width: 29px;
+      height: 29px;
       text-align: center;
       padding-top: 7px;
       border-radius: 50%;
       cursor: pointer;
       i {
-        color: #fff;
+        color: @main-color;
         display: inline-block;
       }
       &:hover {
-        background: #fff;
-        opacity: 0.5;   
+        background-color: gray;
+        opacity: 0.2;   
         i {
-          color: rgb(122, 122, 122);
+          color: #fff;
         }
       }
     }
@@ -180,7 +131,7 @@ import mainSeachForm from '../forms/main-seach-form.vue';
       font-weight: normal;
       font-style: normal;
       font-size: 40px;
-      color: #fff;
+      color: @main-color;
       text-decoration: none;
       line-height: 40px;
     } 

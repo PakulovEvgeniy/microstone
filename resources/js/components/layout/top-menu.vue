@@ -27,8 +27,8 @@
             </li>
             <uvedoml-component></uvedoml-component>
             <template v-if='!auth'>
-              <li><router-link to="/login">Войти</router-link></li>
-              <li><router-link to="/register">Регистрация</router-link></li>
+              <li><router-link to="/login" class="white-link">Войти</router-link></li>
+              <li><router-link to="/register" class="white-link">Регистрация</router-link></li>
             </template>
             <template v-else>
               <li>
@@ -121,6 +121,7 @@
 </script>
 
 <style lang="less">
+@import '../../../less/vars.less';
   .header-top-menu-list {
     > li {
       display: inline-block;
@@ -138,8 +139,27 @@
     padding-left: 10px;
   }
   .navbar-menu [class*="fa-"] {
-    color: #7e7e7e;
     font-size: .8em;
+  }
+  .navbar-menu {
+    background: rgba(29, 113, 184, 0.9);
+    border: none;
+    color: #fff;
+    a.menu-dropdown-target, a.white-link {
+      color: #fff;
+      &:hover {
+        text-decoration: none;
+        opacity: 0.7;
+        ~ i {
+          opacity: 0.7;
+        }
+      }
+    }
+    .menu-dropdown-items {
+      a:hover {
+        text-decoration: none;
+      }
+    }
   }
   .header-top .container {
     padding-right: 0;

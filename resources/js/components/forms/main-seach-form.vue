@@ -44,6 +44,8 @@ import { mapGetters, mapActions} from 'vuex';
       border-radius: 8px;
       height: 40px;
       font-size: 14px;
+      border: 1px solid #d9d9d9;
+      border-radius: 8px;
     }
     &-input {
       border-radius: 8px;
@@ -72,7 +74,7 @@ import { mapGetters, mapActions} from 'vuex';
         color: #8c8c8c;
         position: absolute;
         right: 8px;
-        top: 0;
+        top: -2px;
         width: 40px;
         text-align: center;
         cursor: pointer;
