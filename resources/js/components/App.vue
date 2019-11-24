@@ -54,6 +54,9 @@
           this.$store.commit('setScreenWidth',window.innerWidth);
           this.$store.commit('setScreenHeight',window.innerHeight);
           window.addEventListener('resize', this.onResize);
+          if (!this.auth) {
+            this.$store.dispatch('restoreWishList');  
+          }
         },
         beforeDestroy () {
           window.removeEventListener('resize', this.onResize);
@@ -89,7 +92,8 @@
             'scrolled',
             'screenWidth',
             'bodyBlocked',
-            'getScreenState'
+            'getScreenState',
+            'auth'
           ]),
           leftTopBtn() {
             let res;

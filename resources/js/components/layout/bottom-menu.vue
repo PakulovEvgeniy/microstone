@@ -11,7 +11,13 @@
         <main-seach-form></main-seach-form>
         <div class="header-buttons">
           <header-buttons link="/account/waitlist" name="Лист ожидания" icon="fa-clock-o"></header-buttons>
-          <header-buttons link="/account/wishlist" name="Мои списки" icon="fa-heart"></header-buttons>
+          <header-buttons 
+            link="/account/wishlist" 
+            name="Мои списки" 
+            icon="fa-heart"
+            :qty = "countWishlist"
+            >
+          </header-buttons>
           <header-buttons link="/account/cart" name="Корзина" icon="fa-shopping-cart"></header-buttons>
         </div>
       </div>
@@ -39,7 +45,8 @@ import headerButtons from '../system/header-buttons.vue';
             'nonVisibleAside',
             'idTimeStartBack',
             'idTimeStopBack',
-            'visBacdrop'
+            'visBacdrop',
+            'countWishlist'
           ])
         },
         components: {

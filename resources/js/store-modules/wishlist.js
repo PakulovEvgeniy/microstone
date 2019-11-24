@@ -40,6 +40,15 @@ export default {
       wish.splice(ind, 1); 
       localStorage.setItem('wishlist', JSON.stringify(wish));
       commit('setWishlist', wish);
+    },
+    restoreWishList({commit, dispatch}, data) {
+      let wish = localStorage.getItem('wishlist');
+      if (!wish) {
+        wish = [];
+      } else {
+        wish = JSON.parse(wish);
+      }
+      commit('setWishlist', wish);
     }
   }
 }

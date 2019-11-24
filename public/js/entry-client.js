@@ -1917,6 +1917,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.$store.commit('setScreenWidth', window.innerWidth);
     this.$store.commit('setScreenHeight', window.innerHeight);
     window.addEventListener('resize', this.onResize);
+
+    if (!this.auth) {
+      this.$store.dispatch('restoreWishList');
+    }
   },
   beforeDestroy: function beforeDestroy() {
     window.removeEventListener('resize', this.onResize);
@@ -1948,7 +1952,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     }
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])(['settings', 'nonVisibleMain', 'nonVisibleAside', 'scrolled', 'screenWidth', 'bodyBlocked', 'getScreenState']), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])(['settings', 'nonVisibleMain', 'nonVisibleAside', 'scrolled', 'screenWidth', 'bodyBlocked', 'getScreenState', 'auth']), {
     leftTopBtn: function leftTopBtn() {
       var res;
       res = Math.max(this.screenWidth / 2 - 670, 30);
@@ -3677,6 +3681,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3687,7 +3697,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       idTime2: null
     };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])(['isBottomMenuFixed', 'getScreenState', 'visBacdrop', 'nonVisibleAside', 'idTimeStartBack', 'idTimeStopBack', 'visBacdrop'])),
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapGetters"])(['isBottomMenuFixed', 'getScreenState', 'visBacdrop', 'nonVisibleAside', 'idTimeStartBack', 'idTimeStopBack', 'visBacdrop', 'countWishlist'])),
   components: {
     mainSeachForm: _forms_main_seach_form_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     headerButtons: _system_header_buttons_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
@@ -9329,12 +9339,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {};
   },
-  props: ['link', 'name', 'icon'],
+  props: ['link', 'name', 'icon', 'qty'],
   computed: {},
   components: {},
   methods: {}
@@ -47508,7 +47524,8 @@ var render = function() {
                       attrs: {
                         link: "/account/wishlist",
                         name: "Мои списки",
-                        icon: "fa-heart"
+                        icon: "fa-heart",
+                        qty: _vm.countWishlist
                       }
                     }),
                     _vm._v(" "),
@@ -53834,7 +53851,27 @@ var render = function() {
   return _c(
     "router-link",
     { staticClass: "header-button", attrs: { to: _vm.link } },
-    [_c("i", { staticClass: "fa", class: _vm.icon }), _vm._v(_vm._s(_vm.name))]
+    [
+      _c("i", { staticClass: "fa", class: _vm.icon }),
+      _vm._v(" "),
+      _c("span", [_vm._v(_vm._s(_vm.name))]),
+      _vm._v(" "),
+      _c(
+        "span",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.qty,
+              expression: "qty"
+            }
+          ],
+          staticClass: "btn-badge"
+        },
+        [_vm._v(_vm._s(_vm.qty))]
+      )
+    ]
   )
 }
 var staticRenderFns = []
@@ -80641,6 +80678,19 @@ __webpack_require__.r(__webpack_exports__);
 
       wish.splice(ind, 1);
       localStorage.setItem('wishlist', JSON.stringify(wish));
+      commit('setWishlist', wish);
+    },
+    restoreWishList: function restoreWishList(_ref3, data) {
+      var commit = _ref3.commit,
+          dispatch = _ref3.dispatch;
+      var wish = localStorage.getItem('wishlist');
+
+      if (!wish) {
+        wish = [];
+      } else {
+        wish = JSON.parse(wish);
+      }
+
       commit('setWishlist', wish);
     }
   }
