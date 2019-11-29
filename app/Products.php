@@ -76,6 +76,36 @@ class Products extends Model
         }
         return $res;
     }
+    public static function getProductsList($list)
+    {
+        $res = [];
+        $row = Products::whereIn('products.id', $list)
+            ->select('id_1s', 'products.id as id', 'chpu' , 'name', 'sku', 'image', DB::raw('SUM(stock) as stock, MIN(price) as min_price'))
+            ->leftJoin('products_descriptions','products.id','=','products_descriptions.products_id')
+            ->leftJoin('price_party','products.id_1s','=','price_party.product_id1s')
+            ->leftJoin('stock_party', 'products.id_1s','=','stock_party.product_id1s')
+            ->groupBy('id_1s', 'id', 'name', 'chpu', 'sku', 'image')
+            ->get();
+
+        //$price_g = $min_price - (10/100*$min_price);
+
+        foreach ($row as $val) {
+            $min_price = $val->min_price ? $val->min_price : 0;
+            $res[] = [
+                'id' => $val->id,
+                'id_1s' => $val->id_1s,
+                'name' => $val->name,
+                'chpu' => $val->chpu,
+                'sku' => $val->sku,
+                'stock' => $val->stock,
+                'price' => $min_price,
+                'percent' => 10,
+                'image' => JSRender::resizeImage($val->image,68,55)
+            ];
+        }
+
+        return $res;
+    }
 
     public static function getProduct($id_1s)
     {

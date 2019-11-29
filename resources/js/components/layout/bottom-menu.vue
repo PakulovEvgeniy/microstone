@@ -10,7 +10,11 @@
         </div>
         <main-seach-form></main-seach-form>
         <div class="header-buttons">
-          <header-buttons link="/account/waitlist" name="Лист ожидания" icon="fa-clock-o"></header-buttons>
+          <header-buttons 
+            link="/compare" 
+            name="Сравнение" 
+            icon="fa-bar-chart">
+            </header-buttons>
           <header-buttons 
             link="/account/wishlist" 
             name="Мои списки" 

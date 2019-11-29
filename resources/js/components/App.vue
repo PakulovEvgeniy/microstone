@@ -42,7 +42,6 @@
     export default {
         data() {
             return {
-                
             }
         }, 
         components: {
@@ -57,6 +56,7 @@
           if (!this.auth) {
             this.$store.dispatch('restoreWishList');  
           }
+          this.$store.commit('setMounted', true);
         },
         beforeDestroy () {
           window.removeEventListener('resize', this.onResize);
@@ -99,16 +99,7 @@
             let res;
             res = Math.max(this.screenWidth/2 - 670, 30);
             return res;
-          },
-           statename() {
-            return this.$store.state.name
-           },
-           str() {
-              if (global && global.process && global.process.env.VUE_ENV == 'server') {
-                return 'server'
-              } 
-              return this.$store.state;
-           } 
+          }
         },
         watch: {
           bodyBlocked(val) {

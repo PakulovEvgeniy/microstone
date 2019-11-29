@@ -26,6 +26,7 @@ export function createStore () {
       auth: false,
       isVerify: false,
       csrf: '',
+      mounted: false,
       userEmail: '',
       userPersonal: {
         date: undefined,
@@ -105,6 +106,8 @@ export function createStore () {
       },
       wishlist: {
         items: [
+        ],
+        products:[
         ]
       },
       waitlist: {
@@ -119,6 +122,9 @@ export function createStore () {
       },
       setProduct(state, payload) {
         state.product = payload;
+      },
+      setMounted(state, payload) {
+        state.mounted = payload;
       },
       setPopularProducts(state, payload) {
         state.popularProducts.category = payload.category;
@@ -144,6 +150,9 @@ export function createStore () {
       },
       waitlist(state) {
         return state.waitlist;
+      },
+      mounted(state) {
+        return state.mounted;
       }
     }
   })

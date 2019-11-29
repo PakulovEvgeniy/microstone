@@ -80,15 +80,7 @@
           </div>
         </div>
         <div class="n-catalog-product__footer">
-          <div class="n-catalog-product__avails">
-            <div class="order-avail-wrap">
-              <span class="avail-text">
-                <span class="available">Доступно:</span>
-                <a v-show="item.stock>0" class="avail-text__link ui-link ui-link_blue ui-link_pseudolink">В наличии</a>
-                <a class="avail-text__link ui-link ui-link_blue ui-link_pseudolink">Под заказ</a>
-              </span>
-            </div>
-          </div>
+          <avail-links :stock="item.stock"></avail-links>
         </div>
       </div>
     </div>
@@ -96,6 +88,7 @@
 
 <script>
   import voblers from './voblers.vue';
+  import availLinks from './avail-links.vue';
   import { mapGetters, mapActions } from 'vuex';
     export default {
         data() {
@@ -132,7 +125,8 @@
           }
         },
         components: {
-          voblers
+          voblers,
+          availLinks
         },
         methods: {
           ...mapActions([
@@ -168,27 +162,7 @@
     color: #afafaf;
     font-size: 18px;
   }
-  .order-avail-wrap {
-    font-size: 13px;
-    line-height: 13px;
-  }
-  .order-avail-wrap .avail-text .available {
-    display: inline-block;
-    margin-right: 5px;
-    line-height: 15px;
-    overflow: hidden;
-  }
-  .order-avail-wrap .avail-text__link {
-    display: inline-block;
-    line-height: 13px;
-    overflow: hidden;
-    position: relative;
-    text-transform: lowercase;
-    margin-right: 5px;
-  }
-  .avail-text a:last-child {
-    margin-right: 0;
-  }
+  
   .product-info__rating i {
     color: #feb909;
     font-size: 12px;

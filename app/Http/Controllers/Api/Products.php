@@ -104,6 +104,16 @@ class Products extends Controller
 			}
 		}
 
+		if ($param == 'wishlist') {
+			$qu = $request->all();
+			if (isset($qu['pr']) && is_array($qu['pr'])) {
+				$stat = 'OK';
+				$data = [
+					'setWishlistProducts' => mod_Products::getProductsList($qu['pr'])
+				];
+			}
+		}
+
 		if ($param == 'banners') {
 			$stat = 'OK';
     		$data = [
