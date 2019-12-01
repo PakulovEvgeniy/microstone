@@ -25,6 +25,7 @@ class Category_prod extends Controller
 		$filt = [];
 		$filtDef = [];
 		$itPage = [];
+		$code = 200;
      	if ($id) {
      		$cat = Category::getCategoryByChpu($id);
      		if ($cat) {
@@ -120,7 +121,8 @@ class Category_prod extends Controller
 					$filtDef = $fltItemsDef;
      			} 
      		} else {
-     			$title = "Каталог товаров";	
+				 $title = "Каталог товаров";
+				 $code = 404;	
      		}
      	} else {
      		$title = "Каталог товаров";
@@ -148,6 +150,6 @@ class Category_prod extends Controller
         //dd($request->getRequestUri());
         //$rend = $this->render($request->path()); 
         //$ssr = phpinfo();
-        return view('app', ['ssr' => $ssr, 'title' => $title]);
+        return response()->view('app', ['ssr' => $ssr, 'title' => $title], $code);
     }
 }

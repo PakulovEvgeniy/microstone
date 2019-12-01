@@ -136,14 +136,7 @@ header {
             }
         }   
     }
-    &_passive {
-        @media (min-width: 992px) {
-            background: #fff;
-            color: @block-color;
-            border: 1px solid #d9d9d9;
-            font-weight: normal;
-        }
-    }
+    
     &_icon {
         min-width: 40px;
         padding: 0;
@@ -185,11 +178,19 @@ header {
         }
       }
     }
+    &_passive {
+        @media (min-width: 992px) {
+            background: #fff;
+            color: @block-color;
+            border: 1px solid #d9d9d9;
+            font-weight: normal;
+        }
+    }
     @media (max-width: 991px) and (min-width: 768px) {
-        height: 48px;
+        height: 40px;
     }
     @media (max-width: 767px) {
-        height: 48px;
+        height: 40px;
     }
 }
 

@@ -5,6 +5,24 @@
             <div class="name">Список товаров {{curDate}}</div>
             <div class="products-count">{{qtyWishlistText}}</div>
           </div>
+          <div class="right-block">
+            <div class="price-line">
+              <div class="price">
+                <span>{{totalPrice}}</span>
+                <i class="fa fa-rub"></i>
+              </div>
+              <button 
+                @click="addAllToCart" 
+                class="buy button-ui button-ui_brand"
+                :class="{'active': allInCart}"
+              >
+                {{allBtnText}}
+              </button>
+            </div>
+            <div class="order-avail-wrap">
+              <avail-links :stock="haveStock" :icon="true"></avail-links>
+            </div>
+          </div>
       </div>
       <div class="account-wishlist__body">
         <div v-if="countWishlist==0">
@@ -75,10 +93,20 @@
                 </div>
               </div>
               <div class="wishlist-product__buttons">
-                <button v-tooltip.bottom="'Добавить в корзину'" class="buy button-ui button-ui_brand button-ui_passive">Купить</button>
-                <button v-tooltip.bottom="'Добавить в сравнение'" class="button-ui button-ui_white button-ui_icon">
-                  <i class="fa fa-bar-chart"></i>
-                </button>
+                <buy-button
+                  :item="el"
+                  :list="cart.items"
+                ></buy-button>
+                <add-in-list-button
+                  :item="el"
+                  :list="compare.items"
+                  :authOnly="false"
+                  delLocalAction="delFromLocalCompare"
+                  addLocalAction="addToLocalCompare"
+                  toolStrAdd="Добавить в сравнение"
+                  toolStrDel="Удалить из сравнения"
+                  icon="fa-bar-chart"
+                ></add-in-list-button>
               </div>
               <a @click="delFromWish(el.id)" class="wishlist-product__remove"><span>Удалить</span></a>
             </div>
@@ -93,6 +121,8 @@
     import { mapGetters, mapActions } from 'vuex';
     import voblers from '../product/voblers.vue';
     import availLinks from '../product/avail-links.vue';
+    import addInListButton from '../../system/add-in-list-button.vue';
+    import buyButton from '../../system/buy-button.vue';
     export default {
         data() {
             return {
@@ -102,7 +132,9 @@
         ],
         components: {
           voblers,
-          availLinks
+          availLinks,
+          addInListButton,
+          buyButton
         },
         computed: {
           ...mapGetters([
@@ -110,7 +142,9 @@
            'countWishlist',
            'wishlist',
            'wishProducts',
-           'mounted'
+           'compare',
+           'mounted',
+           'cart'
           ]),
           curDate() {
             let today = new Date();
@@ -130,12 +164,37 @@
               return 'Нет товаров';
             }
             return this.countWishlist + ' ' + this.goodsEnd(this.countWishlist) + ' (' + this.curDate + ')';
+          },
+          totalPrice() {
+            if (this.auth) return 0;
+            let total = this.wishProducts.reduce((acc, el) => {
+              return acc + ((+el.percent) ? (Math.round((+el.price-(+el.percent/100*el.price))*100)/100) : Math.round(el.price*100)/100);
+            }, 0);
+            return 'от ' + total;
+          }, 
+          allInCart() {
+            if (this.auth) return false;
+            let res = this.wishProducts.every((el) => {
+              return this.cart.items.indexOf(el.id) != -1;
+            });
+            return res;
+          },
+          haveStock() {
+            if (this.auth) return false;
+            let res = this.wishProducts.some((el) => {
+              return el.stock;
+            });
+            return res;
+          },
+          allBtnText() {
+            return this.allInCart ? 'Всё в корзине' : 'Купить все';
           }
         },
         methods: {
           ...mapActions([
             'clearLocalWishlist',
-            'delFromLocalWishlist'
+            'delFromLocalWishlist',
+            'addArrayToLocalCart'
           ]),
           delFromWish(id) {
             if (!this.auth) {
@@ -152,6 +211,18 @@
               return 'товара';
             } else {
               return 'товаров';
+            }
+          },
+          addAllToCart() {
+            if (!this.auth) {
+              if (!this.allInCart) {
+                let arr = this.wishProducts.map((el) => {
+                  return el.id;
+                });
+                this.addArrayToLocalCart(arr); 
+              } else {
+                this.$router.push('/account/cart');
+              }
             }
           },
           clearWish() {
@@ -195,10 +266,12 @@
 <style lang="less">
   .account-wishlist {
     &__info {
+      display: flex;
       border: 1px solid #ddd;
       padding: 20px;
       .main-block {
         position: relative;
+        width: calc(100% - 300px);
         .name {
           font-size: 18px;
           margin-bottom: 5px;
@@ -207,6 +280,35 @@
         .products-count {
           color: gray;
           font-size: 13px;
+        }
+      }
+      .right-block {
+        width: 300px;
+        .price-line {
+          display: flex;
+          align-items: center;
+          button {
+            padding-left: 20px;
+            padding-right: 20px;
+            margin-left: 20px;
+            width: auto;
+          }
+        }
+        .price {
+          text-align: right;
+          color: #333;
+          font-size: 20px;
+          font-weight: bold;
+          flex-grow: 1;
+          i {
+            margin-left: 5px;
+            color: #b2b2b2;
+            font-weight: normal;
+          }
+        }
+        .order-avail-wrap {
+          text-align: right;
+          margin-top: 10px;
         }
       }
     }
@@ -352,10 +454,6 @@
       }
       &__buttons {
         margin-left: 13px;
-        button.buy {
-          padding-left: 15px;
-          padding-right: 15px;
-        }
       }
       &__remove {
         transition: opacity .6s ease 0s;

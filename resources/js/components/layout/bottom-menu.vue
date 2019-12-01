@@ -13,7 +13,9 @@
           <header-buttons 
             link="/compare" 
             name="Сравнение" 
-            icon="fa-bar-chart">
+            icon="fa-bar-chart"
+            :qty="countCompare"
+            >
             </header-buttons>
           <header-buttons 
             link="/account/wishlist" 
@@ -22,7 +24,12 @@
             :qty = "countWishlist"
             >
           </header-buttons>
-          <header-buttons link="/account/cart" name="Корзина" icon="fa-shopping-cart"></header-buttons>
+          <header-buttons 
+            link="/account/cart" 
+            name="Корзина" 
+            icon="fa-shopping-cart"
+            :qty="cartQty"
+            ></header-buttons>
         </div>
       </div>
     </div>
@@ -50,7 +57,9 @@ import headerButtons from '../system/header-buttons.vue';
             'idTimeStartBack',
             'idTimeStopBack',
             'visBacdrop',
-            'countWishlist'
+            'countWishlist',
+            'countCompare',
+            'cartQty'
           ])
         },
         components: {

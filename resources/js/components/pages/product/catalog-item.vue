@@ -53,29 +53,33 @@
             </div>
           </div>
           <div class="n-catalog-product__buttons">
-            <button :disabled="disWish" 
-              @click="addToWish(item.id)" 
-              v-tooltip.top="toolWishStr" 
-              class="button-ui button-ui_white button-ui_icon wishlist-btn" 
-              :class="{
-                'button-ui_done': isInWish, 
-                'button-ui_action-icon-on': disWish && !isInWish, 
-                'button-ui_action-icon-off': disWish && isInWish
-              }">
-              <i class="fa"
-                :class="{
-                  'fa-heart-o': !disWish,
-                  'fa-check': disWish && !isInWish,
-                  'slideDown': disWish,
-                  'fa-trash-o': disWish && isInWish
-                }"
-              ></i>
-            </button>
-            <button v-tooltip.top="'Добавить в лист ожидания'" class="button-ui button-ui_white button-ui_icon waitlist-btn">
-              <i class="fa fa-clock-o"></i>
-            </button>
+            <add-in-list-button
+              :item="item"
+              :list="wishlist.items"
+              :authOnly="true"
+              delLocalAction="delFromLocalWishlist"
+              addLocalAction="addToLocalWishlist"
+              toolStrAdd="Добавить в избранное"
+              toolStrDel="Удалить из избранного"
+              icon="fa-heart-o"
+            ></add-in-list-button>
+            <add-in-list-button
+              :item="item"
+              :list="compare.items"
+              :authOnly="false"
+              delLocalAction="delFromLocalCompare"
+              addLocalAction="addToLocalCompare"
+              toolStrAdd="Добавить в сравнение"
+              toolStrDel="Удалить из сравнения"
+              icon="fa-bar-chart"
+            ></add-in-list-button>
+
             <div class="primary-btn">
-              <button @click="clickBuy" class="button-ui button-ui_brand" :class="{'button-ui_passive' : !inItem}">Купить</button>
+              <buy-button
+                :item="item"
+                :list="cart.items"
+                :passive="inItem ? false : true"
+              ></buy-button>
             </div>
           </div>
         </div>
@@ -89,12 +93,15 @@
 <script>
   import voblers from './voblers.vue';
   import availLinks from './avail-links.vue';
+  import addInListButton from '../../system/add-in-list-button.vue';
+  import buyButton from '../../system/buy-button.vue';
   import { mapGetters, mapActions } from 'vuex';
     export default {
         data() {
             return {
               inItem: false,
-              disWish: false
+              disWish: false,
+              disCompare: false
             }
         },
         props: [
@@ -103,14 +110,12 @@
         computed: {
           ...mapGetters([
            'auth',
-           'wishlist'
+           'wishlist',
+           'compare',
+           'cart'
           ]),
-          isInWish() {
-            return this.wishlist.items.indexOf(this.item.id) != -1;
-          },
-          toolWishStr() {
-            return this.isInWish ? 'Удалить из избранного' : 'Добавить в избранное';
-          },
+     
+
           price() {
             if (this.item.min_price && this.item.max_price) {
               let pr1 = parseFloat(this.item.min_price);
@@ -126,7 +131,9 @@
         },
         components: {
           voblers,
-          availLinks
+          availLinks,
+          addInListButton,
+          buyButton
         },
         methods: {
           ...mapActions([
@@ -135,19 +142,6 @@
           ]),
           clickBuy() {
             this.$router.push('/product/'+this.item.chpu);
-          },
-          addToWish(id) {
-            if (!this.auth) {
-              this.disWish = true;
-              setTimeout(() => {
-                if (this.isInWish) {
-                  this.delFromLocalWishlist(id);
-                } else {
-                  this.addToLocalWishlist(id);
-                }
-                this.disWish = false;
-              } , 1000);
-            }
           }
         }
     }
@@ -172,79 +166,12 @@
     font-weight: bold;
     color: rgb(29, 113, 184);
   }
-  .button-ui.button-ui_action-icon-on {
-    border: 1px solid @main-color;
-    color: @main-color;
-    i {
-      font-size: 18px;
-    }
-    &:hover {
-      color: #fff;
-    }
-  }
-  .button-ui.button-ui_action-icon-off {
-      border: 1px solid #cc2e12 !important;
-      color: #cc2e12;
-    i {
-      font-size: 18px;
-    }
-    &:hover {
-      color: #fff;
-    }
-  }
 
-  .slideDown{
-    animation-name: slideDown;
-    -webkit-animation-name: slideDown;  
- 
-    animation-duration: 1s; 
-    -webkit-animation-duration: 1s;
- 
-    animation-timing-function: ease;    
-    -webkit-animation-timing-function: ease;    
- 
-    visibility: visible !important;                     
-}
- 
-@keyframes slideDown {
-    0% {
-        transform: translateY(-100%);
-    }
-    50%{
-        transform: translateY(8%);
-    }
-    65%{
-        transform: translateY(-4%);
-    }
-    80%{
-        transform: translateY(4%);
-    }
-    95%{
-        transform: translateY(-2%);
-    }           
-    100% {
-        transform: translateY(0%);
-    }       
-}
- 
-@-webkit-keyframes slideDown {
-    0% {
-        -webkit-transform: translateY(-100%);
-    }
-    50%{
-        -webkit-transform: translateY(8%);
-    }
-    65%{
-        -webkit-transform: translateY(-4%);
-    }
-    80%{
-        -webkit-transform: translateY(4%);
-    }
-    95%{
-        -webkit-transform: translateY(-2%);
-    }           
-    100% {
-        -webkit-transform: translateY(0%);
-    }   
-}
+  .n-catalog-product__buttons button{
+    margin-right: 12px;
+  }
+  .n-catalog-product__buttons button:first-child {
+   margin: 0 12px 0 auto;
+  }
+  
 </style>

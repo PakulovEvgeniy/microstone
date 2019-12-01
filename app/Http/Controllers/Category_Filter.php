@@ -16,6 +16,7 @@ class Category_Filter extends Controller
 		$title = 'Подобрать по параметрам';
 		$categoryFilters = [];
 		$filt = [];
+		$code = 200;
      	if ($id) {
      		$cat = Category::getCategoryByChpu($id);
      		if ($cat) {
@@ -65,7 +66,9 @@ class Category_Filter extends Controller
 						}
 					}
 				  }
-     		}
+     		} else {
+				$code = 404;
+			}
      	}
 
      	$dat = [
@@ -83,6 +86,6 @@ class Category_Filter extends Controller
     	$ssr = JSRender::render($request->path(), $dat);
         //$rend = $this->render($request->path()); 
         //$ssr = phpinfo();
-        return view('app', ['ssr' => $ssr, 'title' => $title]);    	
+        return response()->view('app', ['ssr' => $ssr, 'title' => $title], $code);    	
     }
 }

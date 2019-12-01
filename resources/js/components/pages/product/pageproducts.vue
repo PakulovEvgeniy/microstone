@@ -364,13 +364,7 @@ import productsMobileButtons from './products-mb.vue';
   .catalog-items-list.view-simple .product-price {
     text-align: right;
   }
-  .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__buttons .wishlist-btn {
-    margin: 0 12px 0 auto;
-  }
-  .catalog-items-list.view-simple .n-catalog-product .n-catalog-product__buttons .waitlist-btn {
-    margin-right: 12px;
-  }
-  .catalog-items-list .catalog-item .n-catalog-product .n-catalog-product__info .product-info__voblers {
+   .catalog-items-list .catalog-item .n-catalog-product .n-catalog-product__info .product-info__voblers {
     min-height: 35px;
     margin-top: 10px;
   }

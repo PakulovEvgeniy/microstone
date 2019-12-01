@@ -14,6 +14,7 @@ class Manufacturer extends Controller
         //return;
         $data = ['date' => '', 'items' => Category::getCatalog('')];
         $brands = ['date' => '', 'items' => Brands::getBrands()];
+        $code = 200;
 
         $filters = $request->all();
         $page = 1;
@@ -24,7 +25,10 @@ class Manufacturer extends Controller
         $id = $request->route('id');
         $curBrand = [];
         if ($id) {
-           $curBrand = Brands::getBrandByChpu($id); 
+           $curBrand = Brands::getBrandByChpu($id);
+           if (count($curBrand)==0) { 
+               $code = 404;
+           }
         }
 
         $title = 'Производители';
@@ -43,6 +47,6 @@ class Manufacturer extends Controller
         $ssr = JSRender::render($request->path(), $dat);
         //$rend = $this->render($request->path()); 
         //$ssr = phpinfo();
-        return view('app', ['ssr' => $ssr, 'title' => $title]);
+        return response()->view('app', ['ssr' => $ssr, 'title' => $title], $code);
     }
 }

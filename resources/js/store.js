@@ -6,6 +6,8 @@ import mBrands from './store-modules/brands.js';
 import mAccount from './store-modules/user-account.js';
 import mCatalog from './store-modules/catalog.js';
 import mWishlist from './store-modules/wishlist.js';
+import mCompare from './store-modules/compare.js';
+import mCart from './store-modules/cart.js';
 import mCatalogFilters from './store-modules/catalog-filters.js';
 
 Vue.use(Vuex);
@@ -20,7 +22,9 @@ export function createStore () {
       mAccount,
       mCatalog,
       mCatalogFilters,
-      mWishlist
+      mWishlist,
+      mCompare,
+      mCart
     },
     state: {
       auth: false,
@@ -100,8 +104,9 @@ export function createStore () {
         'wait': false
       },
       cart: {
-        cart_items: [
-          {id: 0}
+        items: [
+        ],
+        products: [
         ]
       },
       wishlist: {
@@ -112,6 +117,12 @@ export function createStore () {
       },
       waitlist: {
         items: [
+        ]
+      },
+      compare: {
+        items: [
+        ],
+        products:[
         ]
       }
     },
@@ -141,9 +152,6 @@ export function createStore () {
       },
       popularProducts(state) {
         return state.popularProducts
-      },
-      cartQty(state) {
-        return state.cart.cart_items.length;
       },
       hasNotifies(state) {
         return true

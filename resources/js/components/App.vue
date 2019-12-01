@@ -55,7 +55,9 @@
           window.addEventListener('resize', this.onResize);
           if (!this.auth) {
             this.$store.dispatch('restoreWishList');  
+            this.$store.dispatch('restoreCart');
           }
+          this.$store.dispatch('restoreCompare');
           this.$store.commit('setMounted', true);
         },
         beforeDestroy () {

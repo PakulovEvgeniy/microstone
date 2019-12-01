@@ -25,6 +25,6 @@ class Not_found extends Controller
        ]);
        //$rend = $this->render($request->path()); 
        //$ssr = phpinfo();
-       return view('app', ['ssr' => $ssr, 'title' => $title]);
+       return response()->view('app', ['ssr' => $ssr, 'title' => $title], 404);
    }
 }
