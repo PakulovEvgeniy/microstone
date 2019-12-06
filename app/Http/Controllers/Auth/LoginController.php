@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use App\Wishlist;
+use App\Products;
 use JSRender;
 
 class LoginController extends Controller
@@ -57,13 +59,26 @@ class LoginController extends Controller
     public function authenticated(Request $request, $user)
     {
         if ($request->ajax()) {
+
+            $par = $request->all();
+            $new_list = [];
+            $prod = [];
+            if (isset($par['wishlist']) && is_array($par['wishlist'])) {
+                $new_list = Wishlist::AddToWishListFromLocal($user->id, $par['wishlist']);
+                $prod = Products::getProductsList($new_list);
+            }
+
             return [
                 'status' => 'OK',
                 'email' => $user->email,
                 'isVerify' => $user->hasVerifiedEmail(),
                 'redirectTo' => $this->redirectPath(),
                 'csrf' => csrf_token(),
-                'message' => 'Вы успешно авторизовались'
+                'message' => 'Вы успешно авторизовались',
+                'data' => [
+                    'setWishlist' => $new_list,
+                    'setWishlistProducts' => $prod
+                ]
             ];   
         }
     }

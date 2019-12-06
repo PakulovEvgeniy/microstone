@@ -1,54 +1,57 @@
 <template>
     <div class="product-page" v-title="title">
-      <bread-crump v-show="getScreenState>1" :links="breadItems"></bread-crump>
-      <div v-show="getScreenState<2" class="category-up">
-          <router-link :to="breadItems[breadItems.length-2].link">
-              <i class="fa fa-chevron-left"></i>
-              <div class="caption" v-html="breadItems[breadItems.length-2].name"></div>
-          </router-link>
-      </div>
-      <h1 class="price-item-title" v-html="product.name"></h1>
-      <div class="price-item-code">
-          Код товара:
-          <span>{{product.sku}}</span>
-      </div>
-      <voblers></voblers>
-      <div class="price-item">
-          <div class="node-block">
-              <div class="item-header">
-                  <div ref="carus" class="col-header col-photo">
-                      <div class="main-image-slider-wrap">
-                          <owl-carousel :pictQty="1" :images="product.images" 
-                            :width="width" type="img" 
-                            :curPicture="curPicture"
-                            @clickPicture="clickPict"
-                            @changePict="curPicture=$event"
-                          ></owl-carousel>
-                          <a @click="clickPrev" class="button-left"><i class="fa fa-chevron-left"></i></a>
-                          <a @click="clickNext" class="button-right"><i class="fa fa-chevron-right"></i></a>
-                          <div  :style="bigPictStyle" ref="big_pict" v-show="bigPicture" class="big-picture">
-                              <a @click="bigPicture=false" class="close">
-                                  <i class="fa fa-times"></i>
-                              </a>
-                              <div v-dragscroll :style="divStyle">
-                                <img :src="product.bigImages[curPicture]">
+      <not-found-comp v-if="!product.id"></not-found-comp>
+      <template v-else>
+          <bread-crump v-show="getScreenState>1" :links="breadItems"></bread-crump>
+          <div v-show="getScreenState<2" class="category-up">
+              <router-link :to="breadItems[breadItems.length-2].link">
+                  <i class="fa fa-chevron-left"></i>
+                  <div class="caption" v-html="breadItems[breadItems.length-2].name"></div>
+              </router-link>
+          </div>
+          <h1 class="price-item-title" v-html="product.name"></h1>
+          <div class="price-item-code">
+              Код товара:
+              <span>{{product.sku}}</span>
+          </div>
+          <voblers></voblers>
+          <div class="price-item">
+              <div class="node-block">
+                  <div class="item-header">
+                      <div ref="carus" class="col-header col-photo">
+                          <div class="main-image-slider-wrap">
+                              <owl-carousel :pictQty="1" :images="product.images" 
+                                :width="width" type="img" 
+                                :curPicture="curPicture"
+                                @clickPicture="clickPict"
+                                @changePict="curPicture=$event"
+                              ></owl-carousel>
+                              <a @click="clickPrev" class="button-left"><i class="fa fa-chevron-left"></i></a>
+                              <a @click="clickNext" class="button-right"><i class="fa fa-chevron-right"></i></a>
+                              <div  :style="bigPictStyle" ref="big_pict" v-show="bigPicture" class="big-picture">
+                                  <a @click="bigPicture=false" class="close">
+                                      <i class="fa fa-times"></i>
+                                  </a>
+                                  <div v-dragscroll :style="divStyle">
+                                    <img :src="product.bigImages[curPicture]">
+                                  </div>
                               </div>
                           </div>
-                      </div>
-                      <div v-show="product.images.length>1" class="thumb-slider-wrap">
-                          <owl-carousel :pictQty="4" :images="product.images2" 
-                            :width="81" type="thumb" :curPicture="curPicture"
-                            @changePict="curPicture=$event"
-                            @clickPicture="clickPict"
-                          ></owl-carousel>
-                          <a @click="clickPrev" class="button-left"><i class="fa fa-chevron-left"></i></a>
-                          <a @click="clickNext" class="button-right"><i class="fa fa-chevron-right"></i></a>
+                          <div v-show="product.images.length>1" class="thumb-slider-wrap">
+                              <owl-carousel :pictQty="4" :images="product.images2" 
+                                :width="81" type="thumb" :curPicture="curPicture"
+                                @changePict="curPicture=$event"
+                                @clickPicture="clickPict"
+                              ></owl-carousel>
+                              <a @click="clickPrev" class="button-left"><i class="fa fa-chevron-left"></i></a>
+                              <a @click="clickNext" class="button-right"><i class="fa fa-chevron-right"></i></a>
+                          </div>
                       </div>
                   </div>
               </div>
           </div>
-      </div>
-      <over-block :active="bigPicture" @clickOver="bigPicture=false"></over-block>
+          <over-block :active="bigPicture" @clickOver="bigPicture=false"></over-block>
+        </template>
     </div>
 </template>
 
@@ -59,6 +62,7 @@
     import OwlCarousel from '../system/owl-carousel.vue';
     import overBlock from '../system/overblock.vue';
     import { dragscroll } from 'vue-dragscroll';
+    import notFoundComp from './general/not-found-comp.vue';
     export default {
         data() {
             return {
@@ -89,7 +93,7 @@
             'screenHeight'
           ]),
           title() {
-              return this.product.name;
+              return this.product.name || 'Страница не найдена';
           },
           breadItems() {
             let arr = [];
@@ -164,7 +168,8 @@
             'bread-crump': Breadcrump,
             voblers,
             'owl-carousel': OwlCarousel,
-            'over-block': overBlock
+            'over-block': overBlock,
+            notFoundComp
         },
         beforeRouteEnter (to, from, next) {
           next(vm => {

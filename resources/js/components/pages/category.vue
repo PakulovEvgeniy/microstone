@@ -1,26 +1,29 @@
 <template>
     <div class="category-item"  v-title="itemHeader">
-      <page-top-back v-if="!itemChilds.length" :link="parLink" :name="parName"></page-top-back>
-      <bread-crump v-show="getScreenState>1" :links="breadItems"></bread-crump>
-      <h1 v-html="itemHeader"></h1>
-      <div class="item-descr" v-html="itemDescr"></div>
-      <div class="cat-items" v-if="itemChilds.length">
-          <div v-show="getScreenState>1" class="category-items-desktop">
-              <router-link :to="'/category/'+it.chpu" v-for="it in itemChilds" :key="it.id">
-                  <div class="image">
-                      <picture><img width="80px" height="80px" :src="it.image2"></picture>
-                  </div>
-                  <div class="caption" v-html="it.name"></div>
-              </router-link>
-          </div>
-          <div v-show="getScreenState<2" class="category-items-phone">
-              <category-item-phone :link="parLink" :back="true" :name="parName">
-              </category-item-phone>
-              <category-item-phone v-for="it in itemChilds" :key="it.id" :link="'/category/'+it.chpu" :image="it.image2" :name="it.name" :right="true">
-              </category-item-phone>
-          </div>
-      </div>
-      <page-products v-else></page-products>
+      <not-found-comp v-if="!itemCur"></not-found-comp>
+      <template v-else>
+        <page-top-back v-if="!itemChilds.length" :link="parLink" :name="parName"></page-top-back>
+        <bread-crump v-show="getScreenState>1" :links="breadItems"></bread-crump>
+        <h1 v-html="itemHeader"></h1>
+        <div class="item-descr" v-html="itemDescr"></div>
+        <div class="cat-items" v-if="itemChilds.length">
+            <div v-show="getScreenState>1" class="category-items-desktop">
+                <router-link :to="'/category/'+it.chpu" v-for="it in itemChilds" :key="it.id">
+                    <div class="image">
+                        <picture><img width="80px" height="80px" :src="it.image2"></picture>
+                    </div>
+                    <div class="caption" v-html="it.name"></div>
+                </router-link>
+            </div>
+            <div v-show="getScreenState<2" class="category-items-phone">
+                <category-item-phone :link="parLink" :back="true" :name="parName">
+                </category-item-phone>
+                <category-item-phone v-for="it in itemChilds" :key="it.id" :link="'/category/'+it.chpu" :image="it.image2" :name="it.name" :right="true">
+                </category-item-phone>
+            </div>
+        </div>
+        <page-products v-else></page-products>
+      </template>
     </div>
 </template>
 
@@ -30,6 +33,7 @@
     import PageProducts from './product/pageproducts.vue';
     import pageTopBack from '../system/page-top-back.vue';
     import categoryItemPhone from './product/category-item-phone.vue';
+    import notFoundComp from './general/not-found-comp.vue';
     export default {
         data() {
             return {
@@ -43,7 +47,7 @@
           itemCur() {
             if (this.$route.params.id) {
                 let it = this.findItem(this.getCatalog.items, this.$route.params.id);
-                return it || this.getCatalog.items; 
+                return it; 
              } else {
                return this.getCatalog.items;
             }
@@ -72,13 +76,13 @@
             }
           },
           itemHeader() {
-            return this.itemCur.name || 'Каталог товаров';
+            return this.itemCur ? this.itemCur.name || 'Каталог товаров' : 'Страница не найдена';
           },
           itemDescr() {
-            return this.itemCur.description || '';
+            return this.itemCur ? this.itemCur.description || '' : '';
           },
           itemChilds() {
-            return this.itemCur.childrens || this.itemCur;
+            return this.itemCur ? this.itemCur.childrens || this.itemCur : undefined;
           },
           breadItems() {
             let arr = [];
@@ -147,7 +151,8 @@
             'bread-crump': Breadcrump,
             'page-products': PageProducts,
             'page-top-back': pageTopBack,
-            categoryItemPhone
+            categoryItemPhone,
+            notFoundComp
         },
         beforeRouteEnter (to, from, next) {
           next(vm => {

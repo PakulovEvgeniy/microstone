@@ -42,8 +42,9 @@
               </div>
           </div>
           <div v-show="getScreenState>1 || isPodr || curManufacture" class="manuf-page__list">
-            <h1 v-if="getScreenState>1">{{calcTitle}}</h1>
-            <template v-if="!curManufacture">
+            <h1 v-if="getScreenState>1 && !notFound">{{calcTitle}}</h1>
+            <not-found-comp v-if="notFound"></not-found-comp>
+            <template v-else-if="!curManufacture">
               <article class="post-item" v-for="it in brandsPagyPage" :key="it.id">
                 <div class="post-item-image">
                   <router-link class="producer-logo" :to="'/manufacturer/'+it.chpu" :title="'Перейти к карточке производителя ' + it.full_name">
@@ -114,6 +115,7 @@
     import Breadcrump from '../system/breadcrump.vue';
     import pageTopBack from '../system/page-top-back.vue';
     import categoryItemPhone from './product/category-item-phone.vue';
+    import notFoundComp from './general/not-found-comp.vue';
 
     export default {
         data() {
@@ -189,6 +191,9 @@
                 }
             }
           },
+          notFound() {
+            return !this.curManufacture && this.$route.params.id;
+          },
           breadItems() {
             let res = [
               {
@@ -250,7 +255,8 @@
           itemTabs,
           'bread-crump': Breadcrump,
           'page-top-back': pageTopBack,
-          categoryItemPhone
+          categoryItemPhone,
+          notFoundComp
         },
         beforeRouteEnter (to, from, next) {
           next(vm => {

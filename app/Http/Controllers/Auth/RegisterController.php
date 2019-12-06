@@ -75,13 +75,26 @@ class RegisterController extends Controller
 
     public function registered(Request $request, $user) {
         if ($request->ajax()) {
+
+            $par = $request->all();
+            $new_list = [];
+            $prod = [];
+            if (isset($par['wishlist']) && is_array($par['wishlist'])) {
+                $new_list = Wishlist::AddToWishListFromLocal($user->id, $par['wishlist']);
+                $prod = $Products::getProductsList($new_list);
+            }
+
             return [
                 'status' => 'OK',
                 'email' => $user->email,
                 'isVerify' => $user->hasVerifiedEmail(),
                 'redirectTo' => $this->redirectPath(),
                 'csrf' => csrf_token(),
-                'message' => 'Регистрация прошла успешно!'
+                'message' => 'Регистрация прошла успешно!',
+                'data' => [
+                    'setWishlist' => $new_list,
+                    'setWishlistProducts' => $prod
+                ]
             ];   
         }
     }

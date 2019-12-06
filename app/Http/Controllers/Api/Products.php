@@ -11,6 +11,8 @@ use App\Products as mod_Products;
 use App\Filters;
 use App\FiltersDef;
 use App\Brands;
+use App\Wishlist;
+use Auth;
 
 
 class Products extends Controller
@@ -109,11 +111,13 @@ class Products extends Controller
 			if (isset($qu['pr']) && is_array($qu['pr'])) {
 				$stat = 'OK';
 				$data = [
-					'setWishlistProducts' => mod_Products::getProductsList($qu['pr'])
+					'setWishlistProducts' => mod_Products::getProductsList($qu['pr']),
+					'setWishGroup' => null
 				];
 			}
 		}
 
+		
 		if ($param == 'banners') {
 			$stat = 'OK';
     		$data = [

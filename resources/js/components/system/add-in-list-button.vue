@@ -47,6 +47,8 @@ export default {
     'authOnly',
     'delLocalAction',
     'addLocalAction',
+    'delAuthAction',
+    'addAuthAction',
     'toolStrAdd',
     'toolStrDel',
     'icon'
@@ -63,6 +65,16 @@ export default {
           }
           this.disable = false;
         } , 1000);
+      } else {
+        this.disable = true;
+        setTimeout(() => {
+          this.disable = false;    
+        }, 1000);
+        if (this.isInList) {
+          this.$store.dispatch(this.delAuthAction, id);
+        } else {
+          this.$store.dispatch(this.addAuthAction, id);
+        }
       }
     }
   }

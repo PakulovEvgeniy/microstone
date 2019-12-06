@@ -12,6 +12,7 @@ class Product_page extends Controller
     public function get(Request $request) {
         //phpinfo();
         //return;
+        $code = 200;
         $id = $request->route('id');
         $title = 'Интернет-магазин "Микростоун"';
         $data = ['date' => '', 'items' => Category::getCatalog('')];
@@ -21,6 +22,8 @@ class Product_page extends Controller
            if ($id_1s) {
                $prod = Products::getProduct($id_1s);
                $title = $prod['name'];
+           } else {
+              $code = 404;
            } 
         }
         $dat = [
@@ -34,6 +37,6 @@ class Product_page extends Controller
         $ssr = JSRender::render($request->path(), $dat);
         //$rend = $this->render($request->path()); 
         //$ssr = phpinfo();
-        return view('app', ['ssr' => $ssr, 'title' => $title]);
+        return response()->view('app', ['ssr' => $ssr, 'title' => $title], $code);
     }
 }

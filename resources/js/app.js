@@ -34,7 +34,7 @@ Vue.use(VsNotify);
 Vue.use(VTooltip);
 Vue.use(Vue2TouchEvents);
 Vue.use(VueGoodTable);
-Vue.use(VModal, { dialog: true });
+Vue.use(VModal, { dialog: true, dynamic: true, dynamicDefaults: { clickToClose: false } });
 Vue.component('subcategory', Subcategory);
 Vue.component('vs-notify',
 {
@@ -292,6 +292,13 @@ router.beforeEach((to, from, next) => {
 							url: '/account/addresses'
 						}));
 					}
+					if (parId == 'wishlist') {
+						if (store.state.auth) {
+							arrProm.push(store.dispatch('queryForApp', {
+								url: '/account/wishlist'
+							}));
+						}
+					}
 					break;
 				case 'account_id_act':
 				  parId = to.params['id'];
@@ -309,6 +316,11 @@ router.beforeEach((to, from, next) => {
 					if (parId == 'addresses' && parAct=='edit') {
 						arrProm.push(store.dispatch('queryForApp', {
 							url: '/account/addresses'
+						}));
+					}
+					if (parId == 'wishlist' && store.state.auth) {
+						arrProm.push(store.dispatch('queryForApp', {
+							url: '/account/wishlist/' + parAct
 						}));
 					}
 					break;	

@@ -2,10 +2,10 @@
     <div v-show="mounted" class="account-wishlist">
       <div class="account-wishlist__info">
           <div class="main-block">
-            <div class="name">Список товаров {{curDate}}</div>
+            <div class="name">{{auth ? 'Общий список' : 'Список товаров'}} {{curDate}}</div>
             <div class="products-count">{{qtyWishlistText}}</div>
           </div>
-          <div class="right-block">
+          <div v-if="countWishlist" class="right-block">
             <div class="price-line">
               <div class="price">
                 <span>{{totalPrice}}</span>
@@ -34,22 +34,25 @@
               <h4>Добавьте товар в избранное</h4>
               <p>В этом списке будут храниться товары, которые Вас заинтересовали.<br>
                 Можете добавить сюда недавно просмотренные товары.
-              </p><br>
-              <p>
-                <b>Внимание!</b><br>
-                Чтобы сохранить список и иметь доступ к нему с различных устройств,<br>
-                необходимо
-                <router-link to="/login">авторизоваться</router-link> или 
-                <router-link to="/register">зарегистрироваться</router-link>
-              </p><br>
-              <p>Кроме того, зарегистрированные пользователи,<br>получают возможность загружать <b>произвольные спецификации</b><br>
-                и осуществлять поиск оптимальных предложений.
               </p>
+              <template v-if="!auth">
+                <br>
+                <p>
+                  <b>Внимание!</b><br>
+                  Чтобы сохранить список и иметь доступ к нему с различных устройств,<br>
+                  необходимо
+                  <router-link to="/login">авторизоваться</router-link> или 
+                  <router-link to="/register">зарегистрироваться</router-link>
+                </p><br>
+                <p>Кроме того, зарегистрированные пользователи,<br>получают возможность загружать <b>произвольные спецификации</b><br>
+                  и осуществлять поиск оптимальных предложений.
+                </p>
+              </template>
             </div>
           </div>
         </div>
         <template v-if="countWishlist!=0">
-          <div class="action-buttons">
+          <div v-if="!auth" class="action-buttons">
             <div class="guest-info">
               <b>Если вы не авторизуетесь, список может быть удален.</b>
               Чтобы сохранить список и иметь к нему доступ с различных устройств,
@@ -61,57 +64,16 @@
               <i class="fa fa-trash-o"></i>Очистить список
             </a>
           </div>
-          <div class="wishlist-products">
-            <div 
-              class="wishlist-product" 
-              v-for="(el, ind) in wishProducts"
-              :class="{'last': ind == wishProducts.length-1}"
-              :key="el.id">
-              <div class="image">
-                <router-link :to="'/product/'+el.chpu"><img :src="el.image"></router-link>
-              </div>
-              <div class="wishlist-product__caption">
-                <div class="name"><router-link :to="'/product/'+el.chpu">{{el.name}}</router-link></div>
-                <div class="product-info__voblers">
-                  <voblers></voblers>
-                </div>
-                <div class="wishlist-product__avail">
-                  <avail-links :stock="el.stock" :icon="true"></avail-links>
-                </div>
-              </div>
-              <div class="wishlist-product__price">
-                <div class="price">
-                  <div v-show="+el.percent" class="previous">
-                    <span class="total">{{'от ' + Math.round(el.price*100)/100}}</span>
-                    <i class="fa fa-rub"></i>
-                    <span class="percent">{{'- '+el.percent+'%'}}</span>
-                  </div>
-                  <div class="price_g">
-                    <span>{{+el.percent ? ('от '+Math.round((+el.price-(+el.percent/100*el.price))*100)/100) : 'от ' +Math.round(el.price*100)/100}}</span>
-                    <i class="fa fa-rub"></i>
-                  </div>
-                </div>
-              </div>
-              <div class="wishlist-product__buttons">
-                <buy-button
-                  :item="el"
-                  :list="cart.items"
-                ></buy-button>
-                <add-in-list-button
-                  :item="el"
-                  :list="compare.items"
-                  :authOnly="false"
-                  delLocalAction="delFromLocalCompare"
-                  addLocalAction="addToLocalCompare"
-                  toolStrAdd="Добавить в сравнение"
-                  toolStrDel="Удалить из сравнения"
-                  icon="fa-bar-chart"
-                ></add-in-list-button>
-              </div>
-              <a @click="delFromWish(el.id)" class="wishlist-product__remove"><span>Удалить</span></a>
-            </div>
-          </div>
+          <wishlist-products v-if="!auth || wishCurGroup || wishCurGroup === 0" :wishProducts="wishProducts"></wishlist-products>
+          <wishlist-products-small v-else :wishProducts="wishProducts"></wishlist-products-small>
         </template>
+      </div>
+      <div v-if="auth && wishCurGroup===null" 
+        class="account-wishlist__newlist"
+        @click="newList"
+      >
+        <i class="fa fa-plus"></i>
+        Создать новый список
       </div>
       <v-dialog/>
     </div>
@@ -119,10 +81,10 @@
 
 <script>
     import { mapGetters, mapActions } from 'vuex';
-    import voblers from '../product/voblers.vue';
     import availLinks from '../product/avail-links.vue';
-    import addInListButton from '../../system/add-in-list-button.vue';
-    import buyButton from '../../system/buy-button.vue';
+    import wishlistProducts from './wishlist/wishlist-products.vue';
+    import wishlistProductsSmall from './wishlist/wishlist-products-small.vue';
+    import addListDialog from './wishlist/add-list-dialog.vue';
     export default {
         data() {
             return {
@@ -131,10 +93,9 @@
         props: [
         ],
         components: {
-          voblers,
           availLinks,
-          addInListButton,
-          buyButton
+          wishlistProducts,
+          wishlistProductsSmall
         },
         computed: {
           ...mapGetters([
@@ -144,7 +105,8 @@
            'wishProducts',
            'compare',
            'mounted',
-           'cart'
+           'cart',
+           'wishCurGroup'
           ]),
           curDate() {
             let today = new Date();
@@ -166,21 +128,21 @@
             return this.countWishlist + ' ' + this.goodsEnd(this.countWishlist) + ' (' + this.curDate + ')';
           },
           totalPrice() {
-            if (this.auth) return 0;
+            //if (this.auth) return 0;
             let total = this.wishProducts.reduce((acc, el) => {
               return acc + ((+el.percent) ? (Math.round((+el.price-(+el.percent/100*el.price))*100)/100) : Math.round(el.price*100)/100);
             }, 0);
             return 'от ' + total;
           }, 
           allInCart() {
-            if (this.auth) return false;
+            //if (this.auth) return false;
             let res = this.wishProducts.every((el) => {
               return this.cart.items.indexOf(el.id) != -1;
             });
             return res;
           },
           haveStock() {
-            if (this.auth) return false;
+            //if (this.auth) return false;
             let res = this.wishProducts.some((el) => {
               return el.stock;
             });
@@ -196,10 +158,22 @@
             'delFromLocalWishlist',
             'addArrayToLocalCart'
           ]),
-          delFromWish(id) {
-            if (!this.auth) {
-              this.delFromLocalWishlist(id);
-            }
+          newList() {
+            this.$modal.show(addListDialog, {
+              holder: 'Мой список ' + this.curDate,
+              actFunc: this.addList
+            }, {
+              width: 350,
+              height: 'auto'
+            });
+          },
+          addList(val) {
+            this.$store.dispatch('queryPostToServer', {
+                url: '/account/wishlist/addgroup',
+                params: {
+                  name: val ? val : 'Мой список ' + this.curDate
+                }
+            });
           },
           goodsEnd(qty) {
             let c = qty % 100;
@@ -264,6 +238,7 @@
 </script>
 
 <style lang="less">
+@import '../../../../less/vars.less';
   .account-wishlist {
     &__info {
       display: flex;
@@ -377,100 +352,30 @@
         }
       }
     }
-  }
-
-  .wishlist-products {
-    .wishlist-product {
-      transition: padding-left .3s ease 0s;
-      border-bottom: 1px solid #ddd;
-      padding: 30px 20px;
+    &__newlist {
+      border: 2px dashed #ddd;
+      cursor: pointer;
+      font-size: 18px;
+      margin-bottom: 30px;
+      margin-top: 30px;
+      padding: 30px 20px 30px 50px;
       position: relative;
-      display: flex;
-      align-items: center;
-      white-space: nowrap;
-      &.last {
-        border-bottom-left-radius: 8px;
-        border-bottom-right-radius: 8px;
-        border-bottom: none;
+      i {
+        color: #ddd;
+        display: inline-block;
+        font-size: 25px;
+        vertical-align: middle;
+        margin-left: -20px;
+        margin-right: 20px;
       }
-      .image {
-        img, a {
-          display: block;
-        }
-      }
-      &__caption {
-        flex-grow: 1;
-        margin-left: 13px;
-        .name {
-          padding-bottom: 10px;
-          a {
-            color: #333;
-          }
-        }
-      }
-      &__price {
-        transition: width .3s ease 0s;
-        text-align: right;
-        .price {
-          font-size: 24px;
-        }
-        .previous {
-          font-style: normal;
-          font-size: 13px;
-          .total {
-            text-decoration: line-through;
-          }
-          i {
-            margin-left: 5px;
-            color: #b2b2b2;
-          }
-          .percent {
-            font-size: 12px;
-            color: #fff;
-            padding: 1px 5px 1px 2px;
-            background-color: rgba(29, 113, 184,0.9);
-            position: relative;
-            margin-left: 8px;
-            &:before {
-              content: '';
-              border: 8px solid transparent;
-              border-right-color: rgba(29, 113, 184,0.9);
-              position: absolute;
-              left: -16px;
-              top: 0;
-            }
-          }
-        }
-        .price_g {
-          font-size: 20px;
-          color: #333;
-          font-weight: bold;
-          i {
-            margin-left: 5px;
-            color: #b2b2b2;
-            font-weight: normal;
-          }
-        }
-      }
-      &__buttons {
-        margin-left: 13px;
-      }
-      &__remove {
-        transition: opacity .6s ease 0s;
-        border-bottom: 1px dotted gray;
-        color: gray;
-        display: block;
-        font-size: 12px;
-        opacity: 1;
-        position: absolute;
-        right: 20px;
-        top: 10px;
-        &:hover {
-          text-decoration: none;
-        }
+      &:hover {
+        border-color: @main-color;
+        border-style: solid;
       }
     }
   }
+
+  
 
   @media (min-width: 992px) {
     .account-wishlist {
@@ -481,6 +386,9 @@
       &__body {
         border-bottom-right-radius: 8px;
         border-bottom-left-radius: 8px;
+      }
+      &__newlist {
+        border-radius: 8px;
       }
     }
   }

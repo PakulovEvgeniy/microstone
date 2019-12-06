@@ -1,45 +1,48 @@
 <template>
     <div class="all-filters" v-title="itemHeader">
-      <bread-crump v-show="getScreenState>1" :links="breadItems"></bread-crump>
-      <h1>
-        <router-link class="extended-filters-to-category" :to="filtrPath">
-            <i class="fa fa-reply"></i>
-            Вернуться в каталог
-        </router-link>
-        Все фильтры
-      </h1>
-      <div class="extended-filters-wrap">
-          <div class="catalog-filters">
-              <div class="filter-list">
-                  <div class="col">
-                      <filter-component v-for="el in filterItems1" :key="el.id"
-                        :item="el" ></filter-component>
-                  </div>
-                  <div class="col" v-show="getScreenState > 1">
-                      <filter-component v-for="el in filterItems2" :key="el.id"
-                        :item="el" ></filter-component>
-                  </div>
-                  <div class="col" v-show="getScreenState > 1">
-                      <filter-component v-for="el in filterItems3" :key="el.id"
-                        :item="el" ></filter-component>
-                  </div>
-                  <div class="col" v-show="getScreenState > 1">
-                      <filter-component v-for="el in filterItems4" :key="el.id"
-                        :item="el" ></filter-component>
-                  </div>
-              </div>
-              <div class="desktop-filter-buttons">
-                <div class="description">
-                    Выберите интересующие параметры и нажмите "Показать"
+      <not-found-comp v-if="!itemCur"></not-found-comp>
+      <template v-else>
+        <bread-crump v-show="getScreenState>1" :links="breadItems"></bread-crump>
+        <h1>
+          <router-link class="extended-filters-to-category" :to="filtrPath">
+              <i class="fa fa-reply"></i>
+              Вернуться в каталог
+          </router-link>
+          Все фильтры
+        </h1>
+        <div class="extended-filters-wrap">
+            <div class="catalog-filters">
+                <div class="filter-list">
+                    <div class="col">
+                        <filter-component v-for="el in filterItems1" :key="el.id"
+                          :item="el" ></filter-component>
+                    </div>
+                    <div class="col" v-show="getScreenState > 1">
+                        <filter-component v-for="el in filterItems2" :key="el.id"
+                          :item="el" ></filter-component>
+                    </div>
+                    <div class="col" v-show="getScreenState > 1">
+                        <filter-component v-for="el in filterItems3" :key="el.id"
+                          :item="el" ></filter-component>
+                    </div>
+                    <div class="col" v-show="getScreenState > 1">
+                        <filter-component v-for="el in filterItems4" :key="el.id"
+                          :item="el" ></filter-component>
+                    </div>
                 </div>
-                <button class="button-ui button-ui_brand" @click="clickUse">Показать</button>
-                <button class="button-ui button-ui_white" @click="clickRem">Сбросить фильтры</button>
-              </div>
-          </div>
-      </div>
-      <div class="filters-seo-text-no-spoiler">
-          {{textFilters}}
-      </div>
+                <div class="desktop-filter-buttons">
+                  <div class="description">
+                      Выберите интересующие параметры и нажмите "Показать"
+                  </div>
+                  <button class="button-ui button-ui_brand" @click="clickUse">Показать</button>
+                  <button class="button-ui button-ui_white" @click="clickRem">Сбросить фильтры</button>
+                </div>
+            </div>
+        </div>
+        <div class="filters-seo-text-no-spoiler">
+            {{textFilters}}
+        </div>
+      </template>
     </div>
 </template>
 
@@ -47,6 +50,7 @@
     import { mapGetters } from 'vuex';
     import Breadcrump from '../system/breadcrump.vue';
     import filterComp from '../system/filter-comp.vue';
+    import notFoundComp from './general/not-found-comp.vue';
     
     export default {
         data() {
@@ -95,13 +99,13 @@
           itemCur() {
             if (this.$route.params.idF) {
                 let it = this.findItem(this.getCatalog.items, this.$route.params.idF);
-                return it || this.getCatalog.items; 
+                return it; 
              } else {
                return this.getCatalog.items;
             }
           },
           itemHeader() {
-            return  this.itemCur.name ? 'Подобрать ' + this.itemCur.name + ' по параметрам' : 'Подобрать по параметрам';
+            return  this.itemCur ? (this.itemCur.name ? 'Подобрать ' + this.itemCur.name + ' по параметрам' : 'Подобрать по параметрам') : 'Страница не найдена';
           },
           textFilters() {
             return  this.itemCur.name ? 'Подобрать ' + this.itemCur.name + ' по параметрам. Каталог с условиями подбора по цене, цвету и другим характеристикам' : '';
@@ -199,7 +203,8 @@
         }, 
         components: {
             'bread-crump': Breadcrump,
-            'filter-component': filterComp
+            'filter-component': filterComp,
+            notFoundComp
         },
         beforeRouteEnter (to, from, next) {
           next(vm => {

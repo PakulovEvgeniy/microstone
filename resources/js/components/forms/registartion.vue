@@ -73,7 +73,8 @@ import { mapGetters, mapActions } from 'vuex';
                 return this.isPolicy && this.captchaToken && this.login.valid && this.password.valid;
             },
             ...mapGetters([
-                'csrf'
+                'csrf',
+                'wishlist'
             ])
         },
         methods: {
@@ -112,7 +113,8 @@ import { mapGetters, mapActions } from 'vuex';
                         _token: this.csrf,
                         email: this.login.value,
                         password: this.password.value,
-                        captcha: this.captchaToken
+                        captcha: this.captchaToken,
+                        wishlist: this.wishlist.items
                     },
                     errorAction: this.resetRecaptcha
                 });

@@ -6,6 +6,12 @@ export default {
     setWishlistProducts(state, payload) {
       this.state.wishlist.products = payload;
     },
+    setWishGroup(state, payload) {
+      this.state.wishlist.curGroup = payload;
+    },
+    setWishGroups(state, payload) {
+      this.state.wishlist.groups = payload;
+    },
     delFromWishListProducts(state, payload) {
       let prod = this.state.wishlist.products;
       if (!prod.length) {return;}
@@ -14,6 +20,18 @@ export default {
       });
       if (fl != -1) {
         prod.splice(fl, 1);
+      }
+    },
+    addToItemWish(state, payload) {
+      this.state.wishlist.items.push(+payload);
+    },
+    delFromItemWish(state, payload) {
+      let ind = this.state.wishlist.items.findIndex((el) => {
+        return el == payload;
+      });
+      if (ind != -1) {
+        this.commit('delFromWishListProducts', this.state.wishlist.items[ind]);
+        this.state.wishlist.items.splice(ind, 1);
       }
     }
 	},
@@ -26,6 +44,12 @@ export default {
     },
     wishProducts(state, getters, rootState) {
       return getters.wishlist.products;
+    },
+    wishCurGroup(state, getters, rootState) {
+      return rootState.wishlist.curGroup;
+    },
+    wishGroups(state, getters, rootState) {
+      return rootState.wishlist.groups;
     }
   },
   actions: {
@@ -45,6 +69,22 @@ export default {
       }
       localStorage.setItem('wishlist', JSON.stringify(wish));
       commit('setWishlist', wish);
+    },
+    addToServerWishlist({commit, dispatch}, data) {
+      return dispatch('queryPostToServer', {
+        url: '/account/wishlist/add',
+        params: {
+          id: data
+        }
+      })
+    },
+    delFromServerWishlist({commit, dispatch}, data) {
+      return dispatch('queryPostToServer', {
+        url: '/account/wishlist/delete',
+        params: {
+          id: data
+        }
+      })
     },
     delFromLocalWishlist({commit, dispatch}, data) {
       let wish = localStorage.getItem('wishlist');

@@ -91,6 +91,7 @@ class Products extends Model
 
         foreach ($row as $val) {
             $min_price = $val->min_price ? $val->min_price : 0;
+            $price_disc = $min_price*0.9;
             $res[] = [
                 'id' => $val->id,
                 'id_1s' => $val->id_1s,
@@ -99,6 +100,7 @@ class Products extends Model
                 'sku' => $val->sku,
                 'stock' => $val->stock,
                 'price' => $min_price,
+                'price_with_discount' => $price_disc,
                 'percent' => 10,
                 'image' => JSRender::resizeImage($val->image,68,55)
             ];

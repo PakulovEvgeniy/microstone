@@ -59,6 +59,8 @@
               :authOnly="true"
               delLocalAction="delFromLocalWishlist"
               addLocalAction="addToLocalWishlist"
+              addAuthAction="addToServerWishlist"
+              delAuthAction="delFromServerWishlist"
               toolStrAdd="Добавить в избранное"
               toolStrDel="Удалить из избранного"
               icon="fa-heart-o"

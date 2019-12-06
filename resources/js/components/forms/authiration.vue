@@ -59,7 +59,8 @@ import { mapGetters, mapActions } from 'vuex';
                 return this.login.valid && this.password.valid;
             },
             ...mapGetters([
-                'csrf'
+                'csrf',
+                'wishlist'
             ])
         },
         methods: {
@@ -91,7 +92,8 @@ import { mapGetters, mapActions } from 'vuex';
                     params: {   
                         _token: this.csrf,
                         email: this.login.value,
-                        password: this.password.value
+                        password: this.password.value,
+                        wishlist: this.wishlist.items
                     }
                 });
             }

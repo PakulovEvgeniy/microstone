@@ -2,6 +2,7 @@
 namespace App\Helpers\Pakula;
 use Illuminate\Support\Facades\File; 
 use App\Setting;
+use App\Wishlist;
 use Auth;
 
 class Image {
@@ -212,6 +213,13 @@ class Jsrender {
         if ($state['auth']) {
             $state['userEmail'] = Auth::user()->email;
             $state['isVerify'] = Auth::user()->hasVerifiedEmail();
+            if (!isset($state['wishlist'])) {
+              $state['wishlist']= [];
+              $state['wishlist']['items'] = Wishlist::getWishlistAll(Auth::user()->id);
+              $state['wishlist']['products'] = [];
+              $state['wishlist']['curGroup'] = null;
+              $state['wishlist']['groups'] = [];
+            }
         } else {
             $state['userEmail'] = '';
             $state['isVerify'] = false;

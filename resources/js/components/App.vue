@@ -30,6 +30,7 @@
         <i class="fa fa-arrow-up"></i>
       </div>
       <wait-load></wait-load>
+      <modals-container/>
     </div>
 </template>
 

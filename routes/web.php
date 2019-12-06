@@ -10,6 +10,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+//URL::forceScheme('https');
+
 
 Route::get('/', 'HomeController@get');
 Route::get('/category/{id?}', 'Category_prod@get');
@@ -18,7 +20,11 @@ Route::get('/product/{id}', 'Product_page@get');
 Route::get('/manufacturer/{id?}', 'Manufacturer@get');
 Route::get('/about', 'AppController@get');
 Route::get('/contact', 'AppController@get');
-Route::get('/account/wishlist', 'Account\Account@wishlist');
+Route::get('/account/wishlist', 'Account\Wishlist@wishlist');
+Route::post('/account/wishlist/add', 'Account\Wishlist@addToWish');
+Route::post('/account/wishlist/delete', 'Account\Wishlist@delFromWish');
+Route::post('/account/wishlist/addgroup', 'Account\Wishlist@addWishGroup');
+Route::get('/account/wishlist/{id?}', 'Account\Wishlist@wishlistGroup');
 Route::get('/account/{id?}/{act?}', 'Account\Account@get');
 Route::post('/account/personal', 'Account\Account@post');
 Route::post('/account/changepsw', 'Account\Account@changePassword');

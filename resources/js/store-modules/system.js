@@ -101,7 +101,7 @@ export default {
       },
       queryPostToServer({commit, dispatch}, data) {
         dispatch('showWait');
-        axios.post(data.url, data.params)
+        return axios.post(data.url, data.params)
           .then(response => {
             dispatch('closeWait');
             if (response.data.status=='OK' && data.successAction) {

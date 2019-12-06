@@ -17,6 +17,7 @@ class CreateTableWishlistGroups extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->index();
             $table->string('name', 100);
+            $table->boolean('archived');
         });
     }
 
