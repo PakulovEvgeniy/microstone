@@ -5953,10 +5953,11 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _product_avail_links_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../product/avail-links.vue */ "./resources/js/components/pages/product/avail-links.vue");
-/* harmony import */ var _wishlist_wishlist_products_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./wishlist/wishlist-products.vue */ "./resources/js/components/pages/accountcomps/wishlist/wishlist-products.vue");
-/* harmony import */ var _wishlist_wishlist_products_small_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./wishlist/wishlist-products-small.vue */ "./resources/js/components/pages/accountcomps/wishlist/wishlist-products-small.vue");
-/* harmony import */ var _wishlist_add_list_dialog_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./wishlist/add-list-dialog.vue */ "./resources/js/components/pages/accountcomps/wishlist/add-list-dialog.vue");
+/* harmony import */ var _system_vue_anchor_router_link_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../system/vue-anchor-router-link.vue */ "./resources/js/components/system/vue-anchor-router-link.vue");
+/* harmony import */ var _product_avail_links_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../product/avail-links.vue */ "./resources/js/components/pages/product/avail-links.vue");
+/* harmony import */ var _wishlist_wishlist_products_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./wishlist/wishlist-products.vue */ "./resources/js/components/pages/accountcomps/wishlist/wishlist-products.vue");
+/* harmony import */ var _wishlist_wishlist_products_small_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./wishlist/wishlist-products-small.vue */ "./resources/js/components/pages/accountcomps/wishlist/wishlist-products-small.vue");
+/* harmony import */ var _wishlist_add_list_dialog_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./wishlist/add-list-dialog.vue */ "./resources/js/components/pages/accountcomps/wishlist/add-list-dialog.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -6044,6 +6045,61 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -6051,15 +6107,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      archOpen: false
+    };
   },
   props: [],
   components: {
-    availLinks: _product_avail_links_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
-    wishlistProducts: _wishlist_wishlist_products_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    wishlistProductsSmall: _wishlist_wishlist_products_small_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+    availLinks: _product_avail_links_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    wishlistProducts: _wishlist_wishlist_products_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    wishlistProductsSmall: _wishlist_wishlist_products_small_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
+    AnchorRouterLink: _system_vue_anchor_router_link_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['auth', 'countWishlist', 'wishlist', 'wishProducts', 'compare', 'mounted', 'cart', 'wishCurGroup']), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['auth', 'countWishlist', 'wishlist', 'wishProducts', 'compare', 'mounted', 'cart', 'wishCurGroup', 'wishCurName', 'wishGroups']), {
     curDate: function curDate() {
       var today = new Date();
       var dd = today.getDate();
@@ -6077,12 +6136,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return dd + '.' + mm + '.' + yyyy;
     },
+    nameList: function nameList() {
+      if (!this.auth) {
+        return 'Список товаров ' + this.curDate;
+      } else {
+        if (!this.wishCurGroup) {
+          return 'Общий список ' + this.curDate;
+        } else {
+          return this.wishCurName;
+        }
+      }
+    },
     qtyWishlistText: function qtyWishlistText() {
-      if (!this.countWishlist) {
+      if (!this.wishProducts.length) {
         return 'Нет товаров';
       }
 
-      return this.countWishlist + ' ' + this.goodsEnd(this.countWishlist) + ' (' + this.curDate + ')';
+      return this.wishProducts.length + ' ' + this.goodsEnd(this.wishProducts.length) + ' (' + this.curDate + ')';
     },
     totalPrice: function totalPrice() {
       //if (this.auth) return 0;
@@ -6109,11 +6179,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     allBtnText: function allBtnText() {
       return this.allInCart ? 'Всё в корзине' : 'Купить все';
+    },
+    listNotArchived: function listNotArchived() {
+      return this.wishGroups.filter(function (el) {
+        return el.archived == 0;
+      });
+    },
+    listArchived: function listArchived() {
+      return this.wishGroups.filter(function (el) {
+        return el.archived == 1;
+      });
     }
   }),
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['clearLocalWishlist', 'delFromLocalWishlist', 'addArrayToLocalCart']), {
     newList: function newList() {
-      this.$modal.show(_wishlist_add_list_dialog_vue__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      this.$modal.show(_wishlist_add_list_dialog_vue__WEBPACK_IMPORTED_MODULE_5__["default"], {
         holder: 'Мой список ' + this.curDate,
         actFunc: this.addList
       }, {
@@ -6172,6 +6252,63 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           }]
         });
       }
+    },
+    customClick: function customClick(id) {
+      this.$router.push('/account/wishlist/' + id);
+    },
+    renameCustom: function renameCustom(el) {
+      this.$modal.show(_wishlist_add_list_dialog_vue__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        holder: el.name,
+        edit: true,
+        actFunc: this.editList,
+        item: el
+      }, {
+        width: 350,
+        height: 'auto'
+      });
+    },
+    editList: function editList(id, val) {
+      this.$store.dispatch('queryPostToServer', {
+        url: '/account/wishlist/editgroup',
+        params: {
+          id: id,
+          name: val
+        }
+      });
+    },
+    archiveCustom: function archiveCustom(el, arch) {
+      this.$store.dispatch('queryPostToServer', {
+        url: '/account/wishlist/archivegroup',
+        params: {
+          id: el.id,
+          arch: arch
+        }
+      });
+    },
+    delCustom: function delCustom(el) {
+      var _this3 = this;
+
+      this.$modal.show('dialog', {
+        text: 'Вы действительно хотите удалить список?',
+        buttons: [{
+          title: 'ОК',
+          handler: function handler() {
+            _this3.delCustomList(el);
+
+            _this3.$modal.hide('dialog');
+          }
+        }, {
+          title: 'Отмена'
+        }]
+      });
+    },
+    delCustomList: function delCustomList(el) {
+      this.$store.dispatch('queryPostToServer', {
+        url: '/account/wishlist/delgroup',
+        params: {
+          id: el.id
+        }
+      });
     }
   }),
   mounted: function mounted() {
@@ -6222,14 +6359,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      value: ''
+      value: this.edit ? this.item.name : ''
     };
   },
-  props: ['holder', 'actFunc'],
+  props: ['holder', 'actFunc', 'edit', 'item'],
   methods: {
     actRun: function actRun() {
       this.$emit('close');
-      this.actFunc(this.value);
+
+      if (this.edit) {
+        this.actFunc(this.item.id, this.value);
+      } else {
+        this.actFunc(this.value);
+      }
     }
   }
 });
@@ -50920,20 +51062,14 @@ var render = function() {
     [
       _c("div", { staticClass: "account-wishlist__info" }, [
         _c("div", { staticClass: "main-block" }, [
-          _c("div", { staticClass: "name" }, [
-            _vm._v(
-              _vm._s(_vm.auth ? "Общий список" : "Список товаров") +
-                " " +
-                _vm._s(_vm.curDate)
-            )
-          ]),
+          _c("div", { staticClass: "name" }, [_vm._v(_vm._s(_vm.nameList))]),
           _vm._v(" "),
           _c("div", { staticClass: "products-count" }, [
             _vm._v(_vm._s(_vm.qtyWishlistText))
           ])
         ]),
         _vm._v(" "),
-        _vm.countWishlist
+        _vm.wishProducts.length
           ? _c("div", { staticClass: "right-block" }, [
               _c("div", { staticClass: "price-line" }, [
                 _c("div", { staticClass: "price" }, [
@@ -50975,7 +51111,7 @@ var render = function() {
         "div",
         { staticClass: "account-wishlist__body" },
         [
-          _vm.countWishlist == 0
+          _vm.wishProducts.length == 0
             ? _c("div", [
                 _c("div", { staticClass: "add-product-to-wish" }, [
                   _vm._m(0),
@@ -51028,7 +51164,7 @@ var render = function() {
               ])
             : _vm._e(),
           _vm._v(" "),
-          _vm.countWishlist != 0
+          _vm.wishProducts.length != 0
             ? [
                 !_vm.auth
                   ? _c("div", { staticClass: "action-buttons" }, [
@@ -51086,6 +51222,120 @@ var render = function() {
         2
       ),
       _vm._v(" "),
+      _vm.auth && _vm.wishCurGroup === null && _vm.listNotArchived.length
+        ? _c(
+            "div",
+            { staticClass: "account-wishlist__list" },
+            [
+              _c(
+                "h3",
+                [
+                  _vm._v(
+                    "Созданные списки (" +
+                      _vm._s(_vm.listNotArchived.length) +
+                      ")\n      "
+                  ),
+                  _vm.listArchived.length
+                    ? _c(
+                        "anchor-router-link",
+                        {
+                          attrs: {
+                            to: { hash: "#tocArch" },
+                            scrollOptions: {
+                              container: "body",
+                              duration: 700,
+                              easing: "ease"
+                            }
+                          }
+                        },
+                        [
+                          _c("i", { staticClass: "fa fa-file-archive-o" }),
+                          _vm._v("В архиве ("),
+                          _c("span", [_vm._v(_vm._s(_vm.listArchived.length))]),
+                          _vm._v(")\n      ")
+                        ]
+                      )
+                    : _vm._e()
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _vm._l(_vm.listNotArchived, function(el) {
+                return _c(
+                  "div",
+                  {
+                    key: el.id,
+                    staticClass: "custom",
+                    on: {
+                      click: function($event) {
+                        return _vm.customClick(el.id)
+                      }
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "main-info" }, [
+                      _c("div", { staticClass: "name" }, [
+                        _vm._v(_vm._s(el.name))
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "count" }, [
+                        _vm._v(
+                          _vm._s(
+                            el.count
+                              ? el.count + " " + _vm.goodsEnd(el.count)
+                              : "Нет товаров"
+                          )
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "action-buttons" }, [
+                      _c(
+                        "a",
+                        {
+                          staticClass: "rename",
+                          on: {
+                            click: function($event) {
+                              $event.stopPropagation()
+                              return _vm.renameCustom(el)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", { staticClass: "fa fa-pencil-square-o" }),
+                          _c("span", [_vm._v("Переименовать")])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "archive",
+                          on: {
+                            click: function($event) {
+                              $event.stopPropagation()
+                              return _vm.archiveCustom(el, 1)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", { staticClass: "fa fa-file-archive-o" }),
+                          _c("span", [_vm._v("Архивировать")])
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "price" }),
+                    _vm._v(" "),
+                    _c("i", { staticClass: "fa fa-chevron-right" })
+                  ]
+                )
+              })
+            ],
+            2
+          )
+        : _vm._e(),
+      _vm._v(" "),
       _vm.auth && _vm.wishCurGroup === null
         ? _c(
             "div",
@@ -51096,6 +51346,113 @@ var render = function() {
             [
               _c("i", { staticClass: "fa fa-plus" }),
               _vm._v("\n    Создать новый список\n  ")
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.auth && _vm.wishCurGroup === null && _vm.listArchived.length
+        ? _c(
+            "div",
+            {
+              staticClass: "account-wishlist__archive",
+              attrs: { id: "tocArch" }
+            },
+            [
+              _c("h3", [
+                _vm._v(
+                  "Архив (" + _vm._s(_vm.listArchived.length) + ")\n      "
+                ),
+                _c(
+                  "a",
+                  {
+                    staticClass: "toggle-archived",
+                    on: {
+                      click: function($event) {
+                        _vm.archOpen = !_vm.archOpen
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(_vm.archOpen ? "Скрыть" : "Развернуть"))]
+                )
+              ]),
+              _vm._v(" "),
+              _vm.archOpen
+                ? _c(
+                    "div",
+                    _vm._l(_vm.listArchived, function(el) {
+                      return _c(
+                        "div",
+                        {
+                          key: el.id,
+                          staticClass: "custom",
+                          on: {
+                            click: function($event) {
+                              return _vm.customClick(el.id)
+                            }
+                          }
+                        },
+                        [
+                          _c("div", { staticClass: "main-info" }, [
+                            _c("div", { staticClass: "name" }, [
+                              _vm._v(_vm._s(el.name))
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "count" }, [
+                              _vm._v(
+                                _vm._s(
+                                  el.count
+                                    ? el.count + " " + _vm.goodsEnd(el.count)
+                                    : "Нет товаров"
+                                )
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "action-buttons" }, [
+                            _c(
+                              "a",
+                              {
+                                staticClass: "rename",
+                                on: {
+                                  click: function($event) {
+                                    $event.stopPropagation()
+                                    return _vm.archiveCustom(el, 0)
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", { staticClass: "fa fa-reply" }),
+                                _c("span", [_vm._v("Вернуть")])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                staticClass: "archive",
+                                on: {
+                                  click: function($event) {
+                                    $event.stopPropagation()
+                                    return _vm.delCustom(el)
+                                  }
+                                }
+                              },
+                              [
+                                _c("i", { staticClass: "fa fa-times" }),
+                                _c("span", [_vm._v("Удалить")])
+                              ]
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "price" }),
+                          _vm._v(" "),
+                          _c("i", { staticClass: "fa fa-chevron-right" })
+                        ]
+                      )
+                    }),
+                    0
+                  )
+                : _vm._e()
             ]
           )
         : _vm._e(),
@@ -51167,7 +51524,10 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "modal-content" }, [
     _c("div", { staticClass: "modal-header" }, [
-      _vm._v("Создать список избранных товаров")
+      _vm._v(
+        _vm._s(_vm.edit ? "Редактировать" : "Создать") +
+          " список избранных товаров"
+      )
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "modal-body" }, [
@@ -51221,7 +51581,7 @@ var render = function() {
         _c(
           "span",
           { staticClass: "m-btn m-btn-additional", on: { click: _vm.actRun } },
-          [_vm._v("Создать")]
+          [_vm._v(_vm._s(_vm.edit ? "Сохранить" : "Создать"))]
         )
       ])
     ])
@@ -82802,6 +83162,9 @@ __webpack_require__.r(__webpack_exports__);
     setWishGroup: function setWishGroup(state, payload) {
       this.state.wishlist.curGroup = payload;
     },
+    setWishName: function setWishName(state, payload) {
+      this.state.wishlist.curName = payload;
+    },
     setWishGroups: function setWishGroups(state, payload) {
       this.state.wishlist.groups = payload;
     },
@@ -82846,6 +83209,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     wishCurGroup: function wishCurGroup(state, getters, rootState) {
       return rootState.wishlist.curGroup;
+    },
+    wishCurName: function wishCurName(state, getters, rootState) {
+      return rootState.wishlist.curName;
     },
     wishGroups: function wishGroups(state, getters, rootState) {
       return rootState.wishlist.groups;
@@ -83064,6 +83430,7 @@ function createStore() {
         items: [],
         products: [],
         curGroup: null,
+        curName: '',
         groups: []
       },
       waitlist: {

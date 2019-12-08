@@ -5635,6 +5635,7 @@ button.buy.active:hover {
 .account-wishlist__body {
   border: 1px solid #ddd;
   border-top: none;
+  margin-bottom: 50px;
 }
 .account-wishlist__body .add-product-to-wish {
   padding: 30px;
@@ -5718,6 +5719,117 @@ button.buy.active:hover {
   border-color: #1D71B8;
   border-style: solid;
 }
+.account-wishlist__archive h3 {
+  color: #333;
+  font-size: 24px;
+  margin: 0 0 20px;
+  font-weight: normal;
+  padding-top: 0;
+}
+.account-wishlist__archive h3 a {
+  font-size: 13px;
+  margin-top: 5px;
+  color: #0094d9;
+  outline: 0;
+  margin-left: 10px;
+}
+.account-wishlist__archive h3 a:hover {
+  color: #00608d;
+  text-decoration: underline;
+}
+.account-wishlist__list .custom,
+.account-wishlist__archive .custom {
+  background: #fff;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  margin-bottom: 20px;
+  padding: 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.account-wishlist__list .custom .action-buttons,
+.account-wishlist__archive .custom .action-buttons {
+  font-size: 13px;
+  margin-left: 10px;
+  text-align: right;
+}
+.account-wishlist__list .custom .action-buttons a,
+.account-wishlist__archive .custom .action-buttons a {
+  border: 1px dashed #e4e4e4;
+  padding: 10px 7px 10px 3px;
+  color: gray;
+  text-decoration: none;
+}
+.account-wishlist__list .custom .action-buttons a i,
+.account-wishlist__archive .custom .action-buttons a i {
+  margin-right: 5px;
+}
+.account-wishlist__list .custom .action-buttons a:hover,
+.account-wishlist__archive .custom .action-buttons a:hover {
+  color: #1D71B8;
+}
+.account-wishlist__list .custom .action-buttons a:hover i,
+.account-wishlist__archive .custom .action-buttons a:hover i {
+  color: #1D71B8;
+}
+.account-wishlist__list .custom .action-buttons a + a,
+.account-wishlist__archive .custom .action-buttons a + a {
+  margin-left: 15px;
+}
+.account-wishlist__list .custom:hover,
+.account-wishlist__archive .custom:hover {
+  border-color: #1D71B8;
+}
+.account-wishlist__list .custom .name,
+.account-wishlist__archive .custom .name {
+  font-size: 18px;
+  margin-bottom: 5px;
+  word-wrap: break-word;
+}
+.account-wishlist__list .custom .count,
+.account-wishlist__archive .custom .count {
+  color: gray;
+  font-size: 13px;
+}
+.account-wishlist__list .custom .main-info,
+.account-wishlist__archive .custom .main-info {
+  flex-grow: 1;
+}
+.account-wishlist__list .custom i,
+.account-wishlist__archive .custom i {
+  color: gray;
+  font-size: 13px;
+}
+.account-wishlist__list .custom .price,
+.account-wishlist__archive .custom .price {
+  min-width: 150px;
+}
+.account-wishlist__list h3 {
+  color: #333;
+  font-size: 24px;
+  margin: 0 0 20px;
+  font-weight: normal;
+  padding-top: 0;
+}
+.account-wishlist__list h3 a {
+  float: right;
+  font-size: 13px;
+  margin-top: 5px;
+  color: #0094d9;
+  outline: 0;
+}
+.account-wishlist__list h3 a i {
+  margin-right: 5px;
+  color: #0094d9;
+}
+.account-wishlist__list h3 a:hover {
+  color: #00608d;
+  text-decoration: underline;
+}
+.account-wishlist__list h3 a:hover i {
+  color: #00608D;
+}
 @media (min-width: 992px) {
 .account-wishlist__info {
     border-top-right-radius: 8px;
@@ -5729,6 +5841,18 @@ button.buy.active:hover {
 }
 .account-wishlist__newlist {
     border-radius: 8px;
+}
+.account-wishlist__list .custom,
+  .account-wishlist__archive .custom {
+    border-radius: 8px;
+}
+.account-wishlist__list .custom .action-buttons a,
+  .account-wishlist__archive .custom .action-buttons a {
+    display: none;
+}
+.account-wishlist__list .custom:hover .action-buttons a,
+  .account-wishlist__archive .custom:hover .action-buttons a {
+    display: inline-block;
 }
 }
 

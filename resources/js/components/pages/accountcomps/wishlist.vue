@@ -2,10 +2,10 @@
     <div v-show="mounted" class="account-wishlist">
       <div class="account-wishlist__info">
           <div class="main-block">
-            <div class="name">{{auth ? 'Общий список' : 'Список товаров'}} {{curDate}}</div>
+            <div class="name">{{nameList}}</div>
             <div class="products-count">{{qtyWishlistText}}</div>
           </div>
-          <div v-if="countWishlist" class="right-block">
+          <div v-if="wishProducts.length" class="right-block">
             <div class="price-line">
               <div class="price">
                 <span>{{totalPrice}}</span>
@@ -25,7 +25,7 @@
           </div>
       </div>
       <div class="account-wishlist__body">
-        <div v-if="countWishlist==0">
+        <div v-if="wishProducts.length==0">
           <div class="add-product-to-wish">
             <div class="b-icon">
               <i class="fa fa-heart-o"></i>
@@ -51,7 +51,7 @@
             </div>
           </div>
         </div>
-        <template v-if="countWishlist!=0">
+        <template v-if="wishProducts.length!=0">
           <div v-if="!auth" class="action-buttons">
             <div class="guest-info">
               <b>Если вы не авторизуетесь, список может быть удален.</b>
@@ -68,6 +68,36 @@
           <wishlist-products-small v-else :wishProducts="wishProducts"></wishlist-products-small>
         </template>
       </div>
+      <div v-if="auth && wishCurGroup===null && listNotArchived.length" class="account-wishlist__list">
+        <h3>Созданные списки ({{listNotArchived.length}})
+          <anchor-router-link v-if="listArchived.length" :to="{hash: '#tocArch'}"
+            :scrollOptions="{
+                container: 'body',
+                duration: 700,
+                easing: 'ease'
+              }"
+          >
+            <i class="fa fa-file-archive-o"></i>В архиве (<span>{{listArchived.length}}</span>)
+          </anchor-router-link>
+        </h3>
+        <div 
+          class="custom"
+          v-for="el in listNotArchived"
+          :key="el.id"
+          @click = "customClick(el.id)"
+        >
+          <div class="main-info">
+            <div class="name">{{el.name}}</div>
+            <div class="count">{{el.count ? el.count + ' ' + goodsEnd(el.count) : 'Нет товаров'}}</div>
+          </div>
+          <div class="action-buttons">
+            <a @click.stop="renameCustom(el)" class="rename"><i class="fa fa-pencil-square-o"></i><span>Переименовать</span></a>
+            <a @click.stop="archiveCustom(el, 1)" class="archive"><i class="fa fa-file-archive-o"></i><span>Архивировать</span></a>
+          </div>
+          <div class="price"></div>
+          <i class="fa fa-chevron-right"></i>
+        </div>
+      </div>
       <div v-if="auth && wishCurGroup===null" 
         class="account-wishlist__newlist"
         @click="newList"
@@ -75,12 +105,37 @@
         <i class="fa fa-plus"></i>
         Создать новый список
       </div>
+      <div id="tocArch" v-if="auth && wishCurGroup===null && listArchived.length" class="account-wishlist__archive">
+        <h3>Архив ({{listArchived.length}})
+          <a @click="archOpen=!archOpen" class="toggle-archived">{{archOpen ? 'Скрыть' : 'Развернуть'}}</a>
+        </h3>
+        <div v-if="archOpen">
+          <div
+            class="custom"
+            v-for="el in listArchived"
+            :key="el.id"
+            @click = "customClick(el.id)"
+          >
+            <div class="main-info">
+              <div class="name">{{el.name}}</div>
+              <div class="count">{{el.count ? el.count + ' ' + goodsEnd(el.count) : 'Нет товаров'}}</div>
+            </div>
+            <div class="action-buttons">
+              <a @click.stop="archiveCustom(el, 0)" class="rename"><i class="fa fa-reply"></i><span>Вернуть</span></a>
+              <a @click.stop="delCustom(el)" class="archive"><i class="fa fa-times"></i><span>Удалить</span></a>
+            </div>
+            <div class="price"></div>
+            <i class="fa fa-chevron-right"></i>
+          </div>
+        </div>
+      </div>
       <v-dialog/>
     </div>
 </template>
 
 <script>
     import { mapGetters, mapActions } from 'vuex';
+    import AnchorRouterLink from '../../system/vue-anchor-router-link.vue';
     import availLinks from '../product/avail-links.vue';
     import wishlistProducts from './wishlist/wishlist-products.vue';
     import wishlistProductsSmall from './wishlist/wishlist-products-small.vue';
@@ -88,6 +143,7 @@
     export default {
         data() {
             return {
+              archOpen: false
             }
         }, 
         props: [
@@ -95,7 +151,8 @@
         components: {
           availLinks,
           wishlistProducts,
-          wishlistProductsSmall
+          wishlistProductsSmall,
+          AnchorRouterLink
         },
         computed: {
           ...mapGetters([
@@ -106,7 +163,9 @@
            'compare',
            'mounted',
            'cart',
-           'wishCurGroup'
+           'wishCurGroup',
+           'wishCurName',
+           'wishGroups'
           ]),
           curDate() {
             let today = new Date();
@@ -121,11 +180,22 @@
             } 
             return dd + '.' + mm + '.' + yyyy;
           },
+          nameList() {
+            if (!this.auth) {
+              return 'Список товаров ' + this.curDate;
+            } else {
+              if (!this.wishCurGroup) {
+                return 'Общий список ' + this.curDate;
+              } else {
+                return this.wishCurName;
+              }
+            }
+          },
           qtyWishlistText() {
-            if (!this.countWishlist) {
+            if (!this.wishProducts.length) {
               return 'Нет товаров';
             }
-            return this.countWishlist + ' ' + this.goodsEnd(this.countWishlist) + ' (' + this.curDate + ')';
+            return this.wishProducts.length + ' ' + this.goodsEnd(this.wishProducts.length) + ' (' + this.curDate + ')';
           },
           totalPrice() {
             //if (this.auth) return 0;
@@ -150,6 +220,16 @@
           },
           allBtnText() {
             return this.allInCart ? 'Всё в корзине' : 'Купить все';
+          },
+          listNotArchived() {
+            return this.wishGroups.filter((el) => {
+              return el.archived == 0
+            });
+          },
+          listArchived() {
+            return this.wishGroups.filter((el) => {
+              return el.archived == 1
+            });
           }
         },
         methods: {
@@ -217,6 +297,63 @@
                 ]
               })
             }
+          },
+          customClick(id) {
+            this.$router.push('/account/wishlist/'+id);
+          },
+          renameCustom(el) {
+            this.$modal.show(addListDialog, {
+              holder: el.name,
+              edit: true,
+              actFunc: this.editList,
+              item: el
+            }, {
+              width: 350,
+              height: 'auto'
+            });
+          },
+          editList(id, val) {
+            this.$store.dispatch('queryPostToServer', {
+                url: '/account/wishlist/editgroup',
+                params: {
+                  id: id,
+                  name: val
+                }
+            });
+          },
+          archiveCustom(el, arch) {
+            this.$store.dispatch('queryPostToServer', {
+                url: '/account/wishlist/archivegroup',
+                params: {
+                  id: el.id,
+                  arch: arch
+                }
+            });
+          },
+          delCustom(el) {
+            this.$modal.show('dialog', {
+              text: 'Вы действительно хотите удалить список?',
+              buttons: [
+                {
+                  title: 'ОК',
+                  handler: () => { 
+                    this.delCustomList(el);
+                    this.$modal.hide('dialog');
+                  }
+                },
+                {
+                  title: 'Отмена'
+                }
+              ]
+            })
+          },
+          delCustomList(el) {
+            this.$store.dispatch('queryPostToServer', {
+                url: '/account/wishlist/delgroup',
+                params: {
+                  id: el.id
+                }
+            });
           }
         },
         mounted() {
@@ -290,6 +427,7 @@
     &__body {
       border: 1px solid #ddd;
       border-top: none;
+      margin-bottom: 50px;
       .add-product-to-wish {
         padding: 30px;
         .b-icon {
@@ -373,6 +511,112 @@
         border-style: solid;
       }
     }
+    &__archive {
+      h3 {
+        color: #333;
+        font-size: 24px;
+        margin: 0 0 20px;
+        font-weight: normal;
+        padding-top: 0;
+        a {
+          font-size: 13px;
+          margin-top: 5px;
+          color: #0094d9;
+          outline: 0;
+          margin-left: 10px;
+          &:hover {
+            color: #00608d;
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    &__list, &__archive {
+      .custom {
+        background: #fff;
+        border: 1px solid #ddd;
+        cursor: pointer;
+        margin-bottom: 20px;
+        padding: 20px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        .action-buttons {
+          font-size: 13px;
+          margin-left: 10px;
+          text-align: right;
+          a {
+            border: 1px dashed #e4e4e4;
+            padding: 10px 7px 10px 3px;
+            color: gray;
+            text-decoration: none;
+            i {
+              margin-right: 5px;
+            }
+            &:hover {
+              color: @main-color;
+              i {
+                color: @main-color;
+              }
+            }
+          }
+          a + a {
+            margin-left: 15px;
+          }
+        }
+        &:hover {
+          border-color: @main-color;
+        }
+        .name {
+          font-size: 18px;
+          margin-bottom: 5px;
+          word-wrap: break-word;
+        }
+        .count {
+          color: gray;
+          font-size: 13px;
+        }
+        .main-info {
+          flex-grow: 1;
+        }
+        i {
+          color: gray;
+          font-size: 13px;
+        }
+        .price {
+          min-width: 150px;
+        }
+      }
+    }
+
+    &__list {
+      h3 {
+        color: #333;
+        font-size: 24px;
+        margin: 0 0 20px;
+        font-weight: normal;
+        padding-top: 0;
+        a {
+          float: right;
+          font-size: 13px;
+          margin-top: 5px;
+          color: #0094d9;
+          outline: 0;
+          i {
+            margin-right: 5px;
+            color: #0094d9;
+          }
+          &:hover {
+            color: #00608d;
+            text-decoration: underline;
+            i {
+              color: #00608D
+            }
+          }
+        }
+      }
+    }
   }
 
   
@@ -389,6 +633,23 @@
       }
       &__newlist {
         border-radius: 8px;
+      }
+      &__list, &__archive {
+        .custom {
+          border-radius: 8px;
+          .action-buttons {
+            a {
+              display: none;
+            }
+          }
+          &:hover {
+            .action-buttons {
+              a {
+                display: inline-block;
+              }
+            } 
+          }
+        }
       }
     }
   }

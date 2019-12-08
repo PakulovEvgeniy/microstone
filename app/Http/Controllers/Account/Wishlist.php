@@ -31,6 +31,7 @@ class Wishlist extends Controller
           'items' => $arr_wish,
           'products' => Products::getProductsList($arr_wish),
           'curGroup' => null,
+          'curName' => '',
           'groups' => Wishlist_groups::getAllGroups($request->user()->id)
         ];
 
@@ -41,6 +42,7 @@ class Wishlist extends Controller
               'setWishlist' => $arr_wish,
               'setWishlistProducts' => $dat['wishlist']['products'],
               'setWishGroup' => null,
+              'setWishName' => '',
               'setWishGroups' => $dat['wishlist']['groups']
             ]
           ];
@@ -72,10 +74,13 @@ class Wishlist extends Controller
 
       if (Auth::check()) {
         $arr_wish = WishModel::getWishlistAll($request->user()->id, $id);
+        $grp = Wishlist_groups::find($id);
+        $arr_wish_all = WishModel::getWishlistAll($request->user()->id);
         $dat['wishlist'] = [
-          'items' => $arr_wish,
+          'items' => $arr_wish_all,
           'products' => Products::getProductsList($arr_wish),
           'curGroup' => $id,
+          'curName' => $grp ? $grp->name : '',
           'groups' => [] 
         ];
 
@@ -83,9 +88,10 @@ class Wishlist extends Controller
           return [
             'status' => 'OK',
             'data' => [
-              'setWishlist' => $arr_wish,
+              'setWishlist' => $arr_wish_all,
               'setWishlistProducts' => $dat['wishlist']['products'],
               'setWishGroup' => $id,
+              'setWishName' => $grp ? $grp->name : '',
               'setWishGroups' => []
             ]
           ];
@@ -129,6 +135,110 @@ class Wishlist extends Controller
         return [
           'status' => 'OK',
           'message' => 'Список успешно добавлен!',
+          'data' => [
+            'setWishGroups' => Wishlist_groups::getAllGroups($request->user()->id)
+          ]
+        ];
+      }
+    }
+
+    public function editWishGroup(Request $request) {
+      if ($request->ajax()) {
+        $this->validate($request, [
+          'name' => 'required',
+          'id' => 'required|integer'
+        ]);
+        $param = $request->all();
+        $row = Wishlist_groups::where([
+          ['user_id', '=', $request->user()->id],
+          ['name', '=', $param['name']],
+          ['id', '<>', $param['id']]
+        ])->first();
+        if ($row) {
+          $error = ValidationException::withMessages([
+            'name' => ['Такой список уже существует']
+          ]);
+          throw $error;
+        }
+        $grp = Wishlist_groups::where([
+          ['id' , '=', $param['id']],
+          ['user_id', '=', $request->user()->id]
+        ])->first();
+        if (!$grp) {
+          $error = ValidationException::withMessages([
+            'id' => ['Не найден id списка']
+          ]);
+          throw $error;
+        }
+
+        $grp->name = $param['name'];
+        $grp->save();
+        return [
+          'status' => 'OK',
+          'message' => 'Список успешно сохранен!',
+          'data' => [
+            'setWishGroups' => Wishlist_groups::getAllGroups($request->user()->id)
+          ]
+        ];
+      }
+    }
+
+    public function archiveWishGroup(Request $request) {
+      if ($request->ajax()) {
+        $this->validate($request, [
+          'id' => 'required|integer'
+        ]);
+        $param = $request->all();
+        $grp = Wishlist_groups::where([
+          ['id' , '=', $param['id']],
+          ['user_id', '=', $request->user()->id]
+        ])->first();
+        if (!$grp) {
+          $error = ValidationException::withMessages([
+            'id' => ['Не найден id списка']
+          ]);
+          throw $error;
+        }
+
+        $arch = 0;
+        if (isset($param['arch']) && $param['arch']) {
+          $arch = 1;
+        }
+
+        $grp->archived = $arch;
+        $grp->save();
+        return [
+          'status' => 'OK',
+          'message' => $arch ? 'Список успешно добавлен в архив!' : 'Список успешно извлечен из архива',
+          'data' => [
+            'setWishGroups' => Wishlist_groups::getAllGroups($request->user()->id)
+          ]
+        ];
+      }
+    }
+
+    public function delWishGroup(Request $request) {
+      if ($request->ajax()) {
+        $this->validate($request, [
+          'id' => 'required|integer'
+        ]);
+        $param = $request->all();
+        $grp = Wishlist_groups::where([
+          ['id' , '=', $param['id']],
+          ['user_id', '=', $request->user()->id]
+        ])->first();
+        if (!$grp) {
+          $error = ValidationException::withMessages([
+            'id' => ['Не найден id списка']
+          ]);
+          throw $error;
+        }
+
+        $grp->delete();
+        
+        return [
+          'status' => 'OK',
+          'message' => 'Список успешно удален!',
           'data' => [
             'setWishGroups' => Wishlist_groups::getAllGroups($request->user()->id)
           ]

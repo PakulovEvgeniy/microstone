@@ -9,6 +9,9 @@ export default {
     setWishGroup(state, payload) {
       this.state.wishlist.curGroup = payload;
     },
+    setWishName(state, payload) {
+      this.state.wishlist.curName = payload;
+    },
     setWishGroups(state, payload) {
       this.state.wishlist.groups = payload;
     },
@@ -47,6 +50,9 @@ export default {
     },
     wishCurGroup(state, getters, rootState) {
       return rootState.wishlist.curGroup;
+    },
+    wishCurName(state, getters, rootState) {
+      return rootState.wishlist.curName;
     },
     wishGroups(state, getters, rootState) {
       return rootState.wishlist.groups;

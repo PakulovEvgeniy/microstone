@@ -1,6 +1,6 @@
 <template>
     <div class="modal-content">
-      <div class="modal-header">Создать список избранных товаров</div>
+      <div class="modal-header">{{edit ? 'Редактировать' : 'Создать'}} список избранных товаров</div>
       <div class="modal-body">
         <label for="create-wishlist-input">Название списка</label>
         <div class="form-group">
@@ -8,7 +8,7 @@
         </div>
         <div class="m-buttons">
           <span @click="$emit('close')" class="m-btn m-btn-default">Отмена</span>
-          <span class="m-btn m-btn-additional" @click="actRun">Создать</span>
+          <span class="m-btn m-btn-additional" @click="actRun">{{edit ? 'Сохранить' : 'Создать'}}</span>
         </div>
       </div>
     </div>
@@ -18,17 +18,23 @@
     export default {
         data() {
             return {
-              value: ''
+              value: this.edit ? this.item.name : ''
             }
         }, 
         props: [
             'holder',
-            'actFunc'
+            'actFunc',
+            'edit',
+            'item'
         ],
         methods: {
           actRun() {
             this.$emit('close');
-            this.actFunc(this.value);
+            if (this.edit) {
+              this.actFunc(this.item.id, this.value);  
+            } else {
+              this.actFunc(this.value);
+            }
           }
         }
     }

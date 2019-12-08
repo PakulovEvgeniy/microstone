@@ -218,6 +218,7 @@ class Jsrender {
               $state['wishlist']['items'] = Wishlist::getWishlistAll(Auth::user()->id);
               $state['wishlist']['products'] = [];
               $state['wishlist']['curGroup'] = null;
+              $state['wishlist']['curName'] = '';
               $state['wishlist']['groups'] = [];
             }
         } else {
