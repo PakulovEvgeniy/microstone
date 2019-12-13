@@ -84,46 +84,8 @@
         box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(102,175,233,0.6);
       }
     }
-    .m-buttons {
-      margin-top: 20px;
-    }
-    .m-btn {
-      display: inline-block;
-      margin-bottom: 0;
-      text-align: center;
-      touch-action: manipulation;
-      cursor: pointer;
-      border: 1px solid transparent;
-      user-select: none;
-      padding: 6px 12px;
-      font-size: 16px;
-      line-height: 1.42857;
-      border-radius: 4px;
-      box-shadow: none;
-      font-weight: normal;
+    m-btn {
       width: calc((100% - 20px) / 2);
-      + .m-btn {
-        margin-left: 15px;
-      }
-    }
-    .m-btn-default {
-      color: #333;
-      background-color: #fff;
-      border-color: #e3e3e3;
-      &:hover, &:focus, &:active {
-        color: #333;
-        background-color: #e6e6e6;
-        border-color: #c4c4c4;
-      }
-    }
-    .m-btn-additional {
-      color: #fff;
-      background-color: @hover-color;
-      border-color: @main-color;
-      font-weight: normal;
-      &:hover, &:focus, &:active {
-        background-color: @main-color;
-      }
     }
   }
 </style>

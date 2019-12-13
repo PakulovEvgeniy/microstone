@@ -81,7 +81,7 @@ class Wishlist extends Controller
           'products' => Products::getProductsList($arr_wish),
           'curGroup' => $id,
           'curName' => $grp ? $grp->name : '',
-          'groups' => [] 
+          'groups' => Wishlist_groups::getAllGroups($request->user()->id) 
         ];
 
         if ($request->ajax()) {
@@ -92,7 +92,7 @@ class Wishlist extends Controller
               'setWishlistProducts' => $dat['wishlist']['products'],
               'setWishGroup' => $id,
               'setWishName' => $grp ? $grp->name : '',
-              'setWishGroups' => []
+              'setWishGroups' => $dat['wishlist']['groups']
             ]
           ];
         }

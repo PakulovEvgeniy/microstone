@@ -1,5 +1,15 @@
 <template>
     <div v-show="mounted" class="account-wishlist">
+      <div v-if="auth && wishCurGroup !== null" class="account-wishlist__head">
+        <router-link to="/account/wishlist" class="button-ui button-ui_white back">Назад</router-link>
+        <dropdown-menu>
+          <template v-slot:activator>
+            <i class="fa fa-chevron-down"></i>  
+          </template>
+          <li><router-link to="/account/wishlist/0">Общий список</router-link></li>
+          <li v-for="el in wishGroups" :key="el.id"><router-link :to="'/account/wishlist/'+el.id">{{el.name}}</router-link></li>
+        </dropdown-menu>
+      </div>
       <div class="account-wishlist__info">
           <div class="main-block">
             <div class="name">{{nameList}}</div>
@@ -52,19 +62,29 @@
           </div>
         </div>
         <template v-if="wishProducts.length!=0">
-          <div v-if="!auth" class="action-buttons">
-            <div class="guest-info">
+          <div v-if="!auth || wishCurGroup!==null" class="action-buttons" :class="{'auth': auth}">
+            <div v-if="!auth" class="guest-info">
               <b>Если вы не авторизуетесь, список может быть удален.</b>
               Чтобы сохранить список и иметь к нему доступ с различных устройств,
               <router-link to="/login">авторизуйтесь</router-link> или 
               <router-link to="/register">зарегистрируйтесь.</router-link><br>
               Авторизованные пользователи могут создавать любое количество списков, а также загружать произвольные спецификации.
             </div>
+            <div v-if="auth" class="guest-info">
+              <dropdown-menu v-if="listCategory.length>2" icon_after="fa fa-chevron-down">
+                <template v-slot:activator>
+                   {{curCatName}} 
+                </template>
+                <li @click="curCatId=el.id" v-for="el in listCategory" :key="el.id"><a>{{el.name}}</a></li>
+              </dropdown-menu>
+              <button class="m-btn m-btn-default">Добавить товары в другой список</button>
+              <button class="m-btn m-btn-default">Добавить товары в корзину</button>
+            </div>
             <a @click="clearWish" class="clear-wishlist">
               <i class="fa fa-trash-o"></i>Очистить список
             </a>
           </div>
-          <wishlist-products v-if="!auth || wishCurGroup || wishCurGroup === 0" :wishProducts="wishProducts"></wishlist-products>
+          <wishlist-products v-if="!auth || wishCurGroup || wishCurGroup === 0" :wishProducts="wishProductsFiltr"></wishlist-products>
           <wishlist-products-small v-else :wishProducts="wishProducts"></wishlist-products-small>
         </template>
       </div>
@@ -140,10 +160,12 @@
     import wishlistProducts from './wishlist/wishlist-products.vue';
     import wishlistProductsSmall from './wishlist/wishlist-products-small.vue';
     import addListDialog from './wishlist/add-list-dialog.vue';
+    import dropdownMenu from '../../system/drop-down.vue';
     export default {
         data() {
             return {
-              archOpen: false
+              archOpen: false,
+              curCatId: 0
             }
         }, 
         props: [
@@ -152,7 +174,8 @@
           availLinks,
           wishlistProducts,
           wishlistProductsSmall,
-          AnchorRouterLink
+          AnchorRouterLink,
+          dropdownMenu
         },
         computed: {
           ...mapGetters([
@@ -230,6 +253,55 @@
             return this.wishGroups.filter((el) => {
               return el.archived == 1
             });
+          },
+          listCategory() {
+            if (!this.auth) {
+              return [];
+            }
+            let res = [];
+            res.push({
+              name: 'Все товары',
+              id: 0
+            });
+            let i = 0;
+            this.wishProducts.forEach((el1) => {
+              let f = res.find((el2) => {
+                return el2.name == el1.cat_name;
+              })
+              if (!f) {
+                res.push({
+                  name: el1.cat_name,
+                  id: ++i
+                });
+              }
+            });
+            return res;
+          },
+          curCatName() {
+            if (!this.auth) {return ''}
+            let it = this.listCategory.find((el) => {
+              return el.id == this.curCatId;
+            });
+            return it ? it.name : '';
+          },
+          wishProductsFiltr() {
+            if (!this.auth) {
+              return this.wishProducts;
+            } else {
+              if (this.curCatId==0) {
+                return this.wishProducts;
+              } else {
+                let lCat = this.listCategory.find((el) => {
+                  return el.id == this.curCatId;
+                });
+                if (!lCat) {
+                  return this.wishProducts;
+                }
+                return this.wishProducts.filter((el) => {
+                  return el.cat_name == lCat.name;
+                })
+              }
+            }
           }
         },
         methods: {
@@ -377,6 +449,57 @@
 <style lang="less">
 @import '../../../../less/vars.less';
   .account-wishlist {
+    &__head {
+      line-height: 35px;
+      margin-bottom: 15px;
+      min-height: 35px;
+      display: flex;
+      a.back {
+        padding-right: 20px;
+        padding-left: 20px;
+        margin-right: 20px;
+        &:hover {
+          text-decoration: none;
+        }
+      }
+      .menu-dropdown-target {
+        border-radius: 8px;
+        height: 40px;
+        padding: 0;
+        font-size: 16px;
+        outline: none;
+        cursor: pointer;
+        text-align: center;
+        background: #fff;
+        color: #333;
+        border: 1px solid #d9d9d9;
+        min-width: 40px;
+        padding: 0;
+        color: #8c8c8c;
+        &:hover {
+          background-image: linear-gradient(to bottom, #2a8cde, #165b92);
+          box-shadow: inset 0 -2px 0 0 rgba(0, 0, 0, 0.2);
+          color: #fff;
+          border: none;
+          font-weight: bold;
+        }
+      }
+      .menu-dropdown-items {
+        top: 0;
+        left: 0;
+        font-size: 13px;
+        &:before, &:after {
+          content: none;
+        }
+        li:hover {
+          background: #f5f5f5;
+        }
+        a:hover {
+          text-decoration: none;
+          color: inherit;
+        }
+      }
+    }
     &__info {
       display: flex;
       border: 1px solid #ddd;
@@ -485,8 +608,60 @@
             }
           }
         }
+        &.auth {
+          height: auto;
+        }
         .guest-info {
           max-width: 80%;
+          display: flex;
+          align-items: center;
+          .menu-dropdown {
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+          }
+          .m-btn {
+            font-size: 13px;
+          }
+          .menu-dropdown-target {
+            color: gray;
+            margin-right: 5px;
+            max-width: 150px;
+            overflow-x: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            + i {
+              color: gray;
+              font-size: 14px;
+            }
+            &:hover {
+              text-decoration: none;
+            }
+          }
+          .menu-dropdown-items {
+            top: 0;
+            left: 0;
+            font-size: 14px;
+            &:before, &:after {
+              content: none;
+            }
+            li {
+              line-height: 1.2em;
+              padding: 9px 17px;
+              cursor: pointer;
+              width: 100%;
+            }
+            li:hover {
+              background: #f5f5f5;
+            }
+            a {
+              color: #000;
+            }
+            a:hover {
+              text-decoration: none;
+              color: inherit;
+            }
+          }
         }
       }
     }

@@ -5958,6 +5958,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wishlist_wishlist_products_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./wishlist/wishlist-products.vue */ "./resources/js/components/pages/accountcomps/wishlist/wishlist-products.vue");
 /* harmony import */ var _wishlist_wishlist_products_small_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./wishlist/wishlist-products-small.vue */ "./resources/js/components/pages/accountcomps/wishlist/wishlist-products-small.vue");
 /* harmony import */ var _wishlist_add_list_dialog_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./wishlist/add-list-dialog.vue */ "./resources/js/components/pages/accountcomps/wishlist/add-list-dialog.vue");
+/* harmony import */ var _system_drop_down_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../system/drop-down.vue */ "./resources/js/components/system/drop-down.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -6099,6 +6100,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -6108,7 +6130,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      archOpen: false
+      archOpen: false,
+      curCatId: 0
     };
   },
   props: [],
@@ -6116,7 +6139,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     availLinks: _product_avail_links_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     wishlistProducts: _wishlist_wishlist_products_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
     wishlistProductsSmall: _wishlist_wishlist_products_small_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
-    AnchorRouterLink: _system_vue_anchor_router_link_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+    AnchorRouterLink: _system_vue_anchor_router_link_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    dropdownMenu: _system_drop_down_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['auth', 'countWishlist', 'wishlist', 'wishProducts', 'compare', 'mounted', 'cart', 'wishCurGroup', 'wishCurName', 'wishGroups']), {
     curDate: function curDate() {
@@ -6189,6 +6213,66 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.wishGroups.filter(function (el) {
         return el.archived == 1;
       });
+    },
+    listCategory: function listCategory() {
+      if (!this.auth) {
+        return [];
+      }
+
+      var res = [];
+      res.push({
+        name: 'Все товары',
+        id: 0
+      });
+      var i = 0;
+      this.wishProducts.forEach(function (el1) {
+        var f = res.find(function (el2) {
+          return el2.name == el1.cat_name;
+        });
+
+        if (!f) {
+          res.push({
+            name: el1.cat_name,
+            id: ++i
+          });
+        }
+      });
+      return res;
+    },
+    curCatName: function curCatName() {
+      var _this2 = this;
+
+      if (!this.auth) {
+        return '';
+      }
+
+      var it = this.listCategory.find(function (el) {
+        return el.id == _this2.curCatId;
+      });
+      return it ? it.name : '';
+    },
+    wishProductsFiltr: function wishProductsFiltr() {
+      var _this3 = this;
+
+      if (!this.auth) {
+        return this.wishProducts;
+      } else {
+        if (this.curCatId == 0) {
+          return this.wishProducts;
+        } else {
+          var lCat = this.listCategory.find(function (el) {
+            return el.id == _this3.curCatId;
+          });
+
+          if (!lCat) {
+            return this.wishProducts;
+          }
+
+          return this.wishProducts.filter(function (el) {
+            return el.cat_name == lCat.name;
+          });
+        }
+      }
     }
   }),
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['clearLocalWishlist', 'delFromLocalWishlist', 'addArrayToLocalCart']), {
@@ -6235,7 +6319,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     },
     clearWish: function clearWish() {
-      var _this2 = this;
+      var _this4 = this;
 
       if (!this.auth) {
         this.$modal.show('dialog', {
@@ -6243,9 +6327,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           buttons: [{
             title: 'ОК',
             handler: function handler() {
-              _this2.clearLocalWishlist();
+              _this4.clearLocalWishlist();
 
-              _this2.$modal.hide('dialog');
+              _this4.$modal.hide('dialog');
             }
           }, {
             title: 'Отмена'
@@ -6286,16 +6370,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     },
     delCustom: function delCustom(el) {
-      var _this3 = this;
+      var _this5 = this;
 
       this.$modal.show('dialog', {
         text: 'Вы действительно хотите удалить список?',
         buttons: [{
           title: 'ОК',
           handler: function handler() {
-            _this3.delCustomList(el);
+            _this5.delCustomList(el);
 
-            _this3.$modal.hide('dialog');
+            _this5.$modal.hide('dialog');
           }
         }, {
           title: 'Отмена'
@@ -6462,6 +6546,11 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
 //
 //
 //
@@ -51060,6 +51149,76 @@ var render = function() {
       staticClass: "account-wishlist"
     },
     [
+      _vm.auth && _vm.wishCurGroup !== null
+        ? _c(
+            "div",
+            { staticClass: "account-wishlist__head" },
+            [
+              _c(
+                "router-link",
+                {
+                  staticClass: "button-ui button-ui_white back",
+                  attrs: { to: "/account/wishlist" }
+                },
+                [_vm._v("Назад")]
+              ),
+              _vm._v(" "),
+              _c(
+                "dropdown-menu",
+                {
+                  scopedSlots: _vm._u(
+                    [
+                      {
+                        key: "activator",
+                        fn: function() {
+                          return [
+                            _c("i", { staticClass: "fa fa-chevron-down" })
+                          ]
+                        },
+                        proxy: true
+                      }
+                    ],
+                    null,
+                    false,
+                    2480269791
+                  )
+                },
+                [
+                  _vm._v(" "),
+                  _c(
+                    "li",
+                    [
+                      _c(
+                        "router-link",
+                        { attrs: { to: "/account/wishlist/0" } },
+                        [_vm._v("Общий список")]
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _vm._l(_vm.wishGroups, function(el) {
+                    return _c(
+                      "li",
+                      { key: el.id },
+                      [
+                        _c(
+                          "router-link",
+                          { attrs: { to: "/account/wishlist/" + el.id } },
+                          [_vm._v(_vm._s(el.name))]
+                        )
+                      ],
+                      1
+                    )
+                  })
+                ],
+                2
+              )
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
       _c("div", { staticClass: "account-wishlist__info" }, [
         _c("div", { staticClass: "main-block" }, [
           _c("div", { staticClass: "name" }, [_vm._v(_vm._s(_vm.nameList))]),
@@ -51166,52 +51325,133 @@ var render = function() {
           _vm._v(" "),
           _vm.wishProducts.length != 0
             ? [
-                !_vm.auth
-                  ? _c("div", { staticClass: "action-buttons" }, [
-                      _c(
-                        "div",
-                        { staticClass: "guest-info" },
-                        [
-                          _c("b", [
-                            _vm._v(
-                              "Если вы не авторизуетесь, список может быть удален."
+                !_vm.auth || _vm.wishCurGroup !== null
+                  ? _c(
+                      "div",
+                      {
+                        staticClass: "action-buttons",
+                        class: { auth: _vm.auth }
+                      },
+                      [
+                        !_vm.auth
+                          ? _c(
+                              "div",
+                              { staticClass: "guest-info" },
+                              [
+                                _c("b", [
+                                  _vm._v(
+                                    "Если вы не авторизуетесь, список может быть удален."
+                                  )
+                                ]),
+                                _vm._v(
+                                  "\n          Чтобы сохранить список и иметь к нему доступ с различных устройств,\n          "
+                                ),
+                                _c("router-link", { attrs: { to: "/login" } }, [
+                                  _vm._v("авторизуйтесь")
+                                ]),
+                                _vm._v(" или \n          "),
+                                _c(
+                                  "router-link",
+                                  { attrs: { to: "/register" } },
+                                  [_vm._v("зарегистрируйтесь.")]
+                                ),
+                                _c("br"),
+                                _vm._v(
+                                  "\n          Авторизованные пользователи могут создавать любое количество списков, а также загружать произвольные спецификации.\n        "
+                                )
+                              ],
+                              1
                             )
-                          ]),
-                          _vm._v(
-                            "\n          Чтобы сохранить список и иметь к нему доступ с различных устройств,\n          "
-                          ),
-                          _c("router-link", { attrs: { to: "/login" } }, [
-                            _vm._v("авторизуйтесь")
-                          ]),
-                          _vm._v(" или \n          "),
-                          _c("router-link", { attrs: { to: "/register" } }, [
-                            _vm._v("зарегистрируйтесь.")
-                          ]),
-                          _c("br"),
-                          _vm._v(
-                            "\n          Авторизованные пользователи могут создавать любое количество списков, а также загружать произвольные спецификации.\n        "
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "clear-wishlist",
-                          on: { click: _vm.clearWish }
-                        },
-                        [
-                          _c("i", { staticClass: "fa fa-trash-o" }),
-                          _vm._v("Очистить список\n        ")
-                        ]
-                      )
-                    ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.auth
+                          ? _c(
+                              "div",
+                              { staticClass: "guest-info" },
+                              [
+                                _vm.listCategory.length > 2
+                                  ? _c(
+                                      "dropdown-menu",
+                                      {
+                                        attrs: {
+                                          icon_after: "fa fa-chevron-down"
+                                        },
+                                        scopedSlots: _vm._u(
+                                          [
+                                            {
+                                              key: "activator",
+                                              fn: function() {
+                                                return [
+                                                  _vm._v(
+                                                    "\n               " +
+                                                      _vm._s(_vm.curCatName) +
+                                                      " \n            "
+                                                  )
+                                                ]
+                                              },
+                                              proxy: true
+                                            }
+                                          ],
+                                          null,
+                                          false,
+                                          595007332
+                                        )
+                                      },
+                                      [
+                                        _vm._v(" "),
+                                        _vm._l(_vm.listCategory, function(el) {
+                                          return _c(
+                                            "li",
+                                            {
+                                              key: el.id,
+                                              on: {
+                                                click: function($event) {
+                                                  _vm.curCatId = el.id
+                                                }
+                                              }
+                                            },
+                                            [_c("a", [_vm._v(_vm._s(el.name))])]
+                                          )
+                                        })
+                                      ],
+                                      2
+                                    )
+                                  : _vm._e(),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  { staticClass: "m-btn m-btn-default" },
+                                  [_vm._v("Добавить товары в другой список")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "button",
+                                  { staticClass: "m-btn m-btn-default" },
+                                  [_vm._v("Добавить товары в корзину")]
+                                )
+                              ],
+                              1
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            staticClass: "clear-wishlist",
+                            on: { click: _vm.clearWish }
+                          },
+                          [
+                            _c("i", { staticClass: "fa fa-trash-o" }),
+                            _vm._v("Очистить список\n        ")
+                          ]
+                        )
+                      ]
+                    )
                   : _vm._e(),
                 _vm._v(" "),
                 !_vm.auth || _vm.wishCurGroup || _vm.wishCurGroup === 0
                   ? _c("wishlist-products", {
-                      attrs: { wishProducts: _vm.wishProducts }
+                      attrs: { wishProducts: _vm.wishProductsFiltr }
                     })
                   : _c("wishlist-products-small", {
                       attrs: { wishProducts: _vm.wishProducts }
@@ -51800,7 +52040,31 @@ var render = function() {
                   toolStrDel: "Удалить из сравнения",
                   icon: "fa-bar-chart"
                 }
-              })
+              }),
+              _vm._v(" "),
+              _vm.auth
+                ? _c(
+                    "button",
+                    {
+                      directives: [
+                        {
+                          name: "tooltip",
+                          rawName: "v-tooltip.top",
+                          value: "Добавить товар в другой список",
+                          expression: "'Добавить товар в другой список'",
+                          modifiers: { top: true }
+                        }
+                      ],
+                      staticClass: "button-ui button-ui_white button-ui_icon",
+                      on: {
+                        click: function($event) {
+                          return _vm.addToOtherList(el.id)
+                        }
+                      }
+                    },
+                    [_c("i", { staticClass: "fa fa-plus" })]
+                  )
+                : _vm._e()
             ],
             1
           ),

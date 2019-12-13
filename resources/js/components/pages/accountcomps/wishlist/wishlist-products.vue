@@ -45,6 +45,11 @@
             toolStrDel="Удалить из сравнения"
             icon="fa-bar-chart"
           ></add-in-list-button>
+          <button v-if="auth"
+            @click="addToOtherList(el.id)"
+            v-tooltip.top="'Добавить товар в другой список'"
+            class="button-ui button-ui_white button-ui_icon"
+          ><i class="fa fa-plus"></i></button>
         </div>
         <a @click="delFromWish(el.id)" class="wishlist-product__remove"><span>Удалить</span></a>
       </div>

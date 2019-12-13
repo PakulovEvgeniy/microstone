@@ -206,6 +206,54 @@ header {
     height: 40px;
   }
 }
+.m-buttons {
+  margin-top: 20px;
+}
+.m-btn {
+  display: inline-block;
+  margin-bottom: 0;
+  text-align: center;
+  touch-action: manipulation;
+  cursor: pointer;
+  border: 1px solid transparent;
+  user-select: none;
+  padding: 6px 12px;
+  font-size: 16px;
+  line-height: 1.42857;
+  border-radius: 4px;
+  box-shadow: none;
+  font-weight: normal;
+}
+.m-btn:hover {
+  text-decoration: none;
+}
+.m-btn + .m-btn {
+  margin-left: 15px;
+}
+.m-btn-default {
+  color: #333;
+  background-color: #fff;
+  border-color: #e3e3e3;
+}
+.m-btn-default:hover,
+.m-btn-default:focus,
+.m-btn-default:active {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #c4c4c4;
+  outline: none;
+}
+.m-btn-additional {
+  color: #fff;
+  background-color: #2a8cde;
+  border-color: #1D71B8;
+  font-weight: normal;
+}
+.m-btn-additional:hover,
+.m-btn-additional:focus,
+.m-btn-additional:active {
+  background-color: #1D71B8;
+}
 .tooltip {
   display: block !important;
   z-index: 10000;
@@ -5539,52 +5587,61 @@ button.buy.active:hover {
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
-.modal-content .m-buttons {
-  margin-top: 20px;
-}
-.modal-content .m-btn {
-  display: inline-block;
-  margin-bottom: 0;
-  text-align: center;
-  touch-action: manipulation;
-  cursor: pointer;
-  border: 1px solid transparent;
-  user-select: none;
-  padding: 6px 12px;
-  font-size: 16px;
-  line-height: 1.42857;
-  border-radius: 4px;
-  box-shadow: none;
-  font-weight: normal;
+.modal-content m-btn {
   width: calc((100% - 20px) / 2);
 }
-.modal-content .m-btn + .m-btn {
-  margin-left: 15px;
-}
-.modal-content .m-btn-default {
-  color: #333;
-  background-color: #fff;
-  border-color: #e3e3e3;
-}
-.modal-content .m-btn-default:hover,
-.modal-content .m-btn-default:focus,
-.modal-content .m-btn-default:active {
-  color: #333;
-  background-color: #e6e6e6;
-  border-color: #c4c4c4;
-}
-.modal-content .m-btn-additional {
-  color: #fff;
-  background-color: #2a8cde;
-  border-color: #1D71B8;
-  font-weight: normal;
-}
-.modal-content .m-btn-additional:hover,
-.modal-content .m-btn-additional:focus,
-.modal-content .m-btn-additional:active {
-  background-color: #1D71B8;
-}
 
+.account-wishlist__head {
+  line-height: 35px;
+  margin-bottom: 15px;
+  min-height: 35px;
+  display: flex;
+}
+.account-wishlist__head a.back {
+  padding-right: 20px;
+  padding-left: 20px;
+  margin-right: 20px;
+}
+.account-wishlist__head a.back:hover {
+  text-decoration: none;
+}
+.account-wishlist__head .menu-dropdown-target {
+  border-radius: 8px;
+  height: 40px;
+  font-size: 16px;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  background: #fff;
+  color: #333;
+  border: 1px solid #d9d9d9;
+  min-width: 40px;
+  padding: 0;
+  color: #8c8c8c;
+}
+.account-wishlist__head .menu-dropdown-target:hover {
+  background-image: linear-gradient(to bottom, #2a8cde, #165b92);
+  box-shadow: inset 0 -2px 0 0 rgba(0, 0, 0, 0.2);
+  color: #fff;
+  border: none;
+  font-weight: bold;
+}
+.account-wishlist__head .menu-dropdown-items {
+  top: 0;
+  left: 0;
+  font-size: 13px;
+}
+.account-wishlist__head .menu-dropdown-items:before,
+.account-wishlist__head .menu-dropdown-items:after {
+  content: none;
+}
+.account-wishlist__head .menu-dropdown-items li:hover {
+  background: #f5f5f5;
+}
+.account-wishlist__head .menu-dropdown-items a:hover {
+  text-decoration: none;
+  color: inherit;
+}
 .account-wishlist__info {
   display: flex;
   border: 1px solid #ddd;
@@ -5695,8 +5752,61 @@ button.buy.active:hover {
 .account-wishlist__body .action-buttons a.clear-wishlist:hover {
   text-decoration: none;
 }
+.account-wishlist__body .action-buttons.auth {
+  height: auto;
+}
 .account-wishlist__body .action-buttons .guest-info {
   max-width: 80%;
+  display: flex;
+  align-items: center;
+}
+.account-wishlist__body .action-buttons .guest-info .menu-dropdown {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
+.account-wishlist__body .action-buttons .guest-info .m-btn {
+  font-size: 13px;
+}
+.account-wishlist__body .action-buttons .guest-info .menu-dropdown-target {
+  color: gray;
+  margin-right: 5px;
+  max-width: 150px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.account-wishlist__body .action-buttons .guest-info .menu-dropdown-target + i {
+  color: gray;
+  font-size: 14px;
+}
+.account-wishlist__body .action-buttons .guest-info .menu-dropdown-target:hover {
+  text-decoration: none;
+}
+.account-wishlist__body .action-buttons .guest-info .menu-dropdown-items {
+  top: 0;
+  left: 0;
+  font-size: 14px;
+}
+.account-wishlist__body .action-buttons .guest-info .menu-dropdown-items:before,
+.account-wishlist__body .action-buttons .guest-info .menu-dropdown-items:after {
+  content: none;
+}
+.account-wishlist__body .action-buttons .guest-info .menu-dropdown-items li {
+  line-height: 1.2em;
+  padding: 9px 17px;
+  cursor: pointer;
+  width: 100%;
+}
+.account-wishlist__body .action-buttons .guest-info .menu-dropdown-items li:hover {
+  background: #f5f5f5;
+}
+.account-wishlist__body .action-buttons .guest-info .menu-dropdown-items a {
+  color: #000;
+}
+.account-wishlist__body .action-buttons .guest-info .menu-dropdown-items a:hover {
+  text-decoration: none;
+  color: inherit;
 }
 .account-wishlist__newlist {
   border: 2px dashed #ddd;
