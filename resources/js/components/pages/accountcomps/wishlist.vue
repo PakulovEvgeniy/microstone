@@ -7,7 +7,7 @@
             <i class="fa fa-chevron-down"></i>  
           </template>
           <li><router-link to="/account/wishlist/0">Общий список</router-link></li>
-          <li v-for="el in wishGroups" :key="el.id"><router-link :to="'/account/wishlist/'+el.id">{{el.name}}</router-link></li>
+          <li v-for="el in listNotArchived" :key="el.id"><router-link :to="'/account/wishlist/'+el.id">{{el.name}}</router-link></li>
         </dropdown-menu>
       </div>
       <div class="account-wishlist__info">
@@ -62,7 +62,7 @@
           </div>
         </div>
         <template v-if="wishProducts.length!=0">
-          <div v-if="!auth || wishCurGroup!==null" class="action-buttons" :class="{'auth': auth}">
+          <div v-if="!auth || wishCurGroup!==null" class="action-buttons" :class="{'auth': auth, 'selectable': select}">
             <div v-if="!auth" class="guest-info">
               <b>Если вы не авторизуетесь, список может быть удален.</b>
               Чтобы сохранить список и иметь к нему доступ с различных устройств,
@@ -70,21 +70,51 @@
               <router-link to="/register">зарегистрируйтесь.</router-link><br>
               Авторизованные пользователи могут создавать любое количество списков, а также загружать произвольные спецификации.
             </div>
-            <div v-if="auth" class="guest-info">
-              <dropdown-menu v-if="listCategory.length>2" icon_after="fa fa-chevron-down">
+            <template v-if="auth">
+              <dropdown-menu v-if="listCategory.length>2" 
+                icon_after="fa fa-chevron-down"
+                add_class="visible-on-selection"
+              >
                 <template v-slot:activator>
                    {{curCatName}} 
                 </template>
                 <li @click="curCatId=el.id" v-for="el in listCategory" :key="el.id"><a>{{el.name}}</a></li>
               </dropdown-menu>
-              <button class="m-btn m-btn-default">Добавить товары в другой список</button>
-              <button class="m-btn m-btn-default">Добавить товары в корзину</button>
+              <div class="selection-panel visible-on-selection">
+                <span class="product-counter">{{qtyChecked ? qtyChecked : ''}}</span>
+                <div @click="onAllCheck" class="m-checkbox">
+                  <input type="checkbox" :checked="allChecked">
+                  <label><i class="fa fa-check"></i>Выделить все</label>
+                </div>
+                <a @click="addToOtherList(listChecked, selType=='cart')" class="apply" :class="{disabled: !qtyChecked}">{{selType=='list' ? 'Выбрать список' : 'Добавить в корзину'}}</a>
+                <a @click="select=false" class="cancel">Отменить</a>
+              </div>
+              <button @click="select=true; selType='list'" class="m-btn m-btn-default">Добавить товары в другой список</button>
+              <button @click="select=true; selType='cart'" class="m-btn m-btn-default">Добавить товары в корзину</button>
+            </template>
+            <div class="act-list">
+              <a @click="clearWish" class="clear-wishlist">
+                <i class="fa fa-trash-o"></i>Очистить список
+              </a>
+              <a v-if="wishCurGroup && curList" class="rename" @click.stop="renameCustom(curList)">
+                <i class="fa fa-pencil-square-o"></i>Переименовать
+              </a>
+              <a v-if="wishCurGroup && curList" class="archive" @click.stop="archiveAct(curList, 1)">
+                <i class="fa fa-file-archive-o"></i>В архив
+              </a>
             </div>
-            <a @click="clearWish" class="clear-wishlist">
-              <i class="fa fa-trash-o"></i>Очистить список
-            </a>
           </div>
-          <wishlist-products v-if="!auth || wishCurGroup || wishCurGroup === 0" :wishProducts="wishProductsFiltr"></wishlist-products>
+          <wishlist-products 
+            v-if="!auth || wishCurGroup || wishCurGroup === 0" 
+            :wishProducts="wishProductsFiltr"
+            :curGroup = 'wishCurGroup'
+            :select="select"
+            :prodChecked="prodChecked"
+            :qtyChecked="qtyChecked"
+            @addToOtherList="addToOtherList($event)"
+            @updateCheckProds="updateCheckProds($event)"
+            @cancelSelection="select=false"
+          ></wishlist-products>
           <wishlist-products-small v-else :wishProducts="wishProducts"></wishlist-products-small>
         </template>
       </div>
@@ -114,7 +144,7 @@
             <a @click.stop="renameCustom(el)" class="rename"><i class="fa fa-pencil-square-o"></i><span>Переименовать</span></a>
             <a @click.stop="archiveCustom(el, 1)" class="archive"><i class="fa fa-file-archive-o"></i><span>Архивировать</span></a>
           </div>
-          <div class="price"></div>
+          <div class="price"><span v-if="el.count">{{'от ' + el.total_price}}<i class="fa fa-rub"></i></span></div>
           <i class="fa fa-chevron-right"></i>
         </div>
       </div>
@@ -144,7 +174,7 @@
               <a @click.stop="archiveCustom(el, 0)" class="rename"><i class="fa fa-reply"></i><span>Вернуть</span></a>
               <a @click.stop="delCustom(el)" class="archive"><i class="fa fa-times"></i><span>Удалить</span></a>
             </div>
-            <div class="price"></div>
+            <div class="price"><span v-if="el.count">{{'от ' + el.total_price}}<i class="fa fa-rub"></i></span></div>
             <i class="fa fa-chevron-right"></i>
           </div>
         </div>
@@ -160,12 +190,16 @@
     import wishlistProducts from './wishlist/wishlist-products.vue';
     import wishlistProductsSmall from './wishlist/wishlist-products-small.vue';
     import addListDialog from './wishlist/add-list-dialog.vue';
+    import addToOther from './wishlist/add-to-other-list-dialog.vue';
     import dropdownMenu from '../../system/drop-down.vue';
     export default {
         data() {
             return {
               archOpen: false,
-              curCatId: 0
+              curCatId: 0,
+              select: false,
+              prodChecked: [],
+              selType: 'list'
             }
         }, 
         props: [
@@ -229,7 +263,7 @@
           }, 
           allInCart() {
             //if (this.auth) return false;
-            let res = this.wishProducts.every((el) => {
+            let res = this.wishProductsFiltr.every((el) => {
               return this.cart.items.indexOf(el.id) != -1;
             });
             return res;
@@ -252,6 +286,11 @@
           listArchived() {
             return this.wishGroups.filter((el) => {
               return el.archived == 1
+            });
+          },
+          curList() {
+            return this.wishGroups.find((el) => {
+              return el.id == this.wishCurGroup
             });
           },
           listCategory() {
@@ -302,14 +341,32 @@
                 })
               }
             }
+          },
+          allChecked() {
+            return this.wishProductsFiltr.every((el) => {
+              return this.prodChecked.indexOf(el.id) != -1
+            });
+          },
+          listChecked() {
+            return this.wishProductsFiltr.filter((el) => {
+              return this.prodChecked.indexOf(el.id) != -1;
+            }).map(el => el.id);
+          },
+          qtyChecked() {
+            return this.listChecked.length;
           }
         },
         methods: {
           ...mapActions([
             'clearLocalWishlist',
+            'clearServerWishlist',
             'delFromLocalWishlist',
-            'addArrayToLocalCart'
+            'addArrayToLocalCart',
+            'addToCart'
           ]),
+          updateCheckProds(val) {
+            this.prodChecked = val;
+          },
           newList() {
             this.$modal.show(addListDialog, {
               holder: 'Мой список ' + this.curDate,
@@ -319,9 +376,36 @@
               height: 'auto'
             });
           },
-          addList(val) {
+          addToOtherListServer(par, isCart) {
+            this.$store.dispatch('queryPostToServer', {
+              url: '/account/wishlist/addingrouplist',
+              params: par
+            });  
+          },
+          addToOtherList(e, isCart) {
+            if (isCart !== undefined && !this.qtyChecked) {
+              return;
+            }
+            if (!isCart) {
+              this.$modal.show(addToOther, {
+                holder: 'Мой список ' + this.curDate,
+                curGroup: this.wishCurGroup,
+                editList: this.editList,
+                addList: this.addList,
+                product_id: e,
+                actFunc: this.addToOtherListServer
+              }, {
+                width: 500,
+                height: 'auto'
+              });
+            } else {
+              this.addToCart(e);
+            }
+          },
+          addList(val, sucFunc) {
             this.$store.dispatch('queryPostToServer', {
                 url: '/account/wishlist/addgroup',
+                successAction: sucFunc,
                 params: {
                   name: val ? val : 'Мой список ' + this.curDate
                 }
@@ -349,26 +433,36 @@
               } else {
                 this.$router.push('/account/cart');
               }
+            } else {
+              if (!this.allInCart) {
+                this.addToCart(
+                  this.wishProductsFiltr.map(el => el.id)
+                )
+              } else {
+                this.$router.push('/account/cart');
+              };
             }
           },
           clearWish() {
-            if (!this.auth) {
-              this.$modal.show('dialog', {
-                text: 'Вы действительно хотите очистить список избранного?',
-                buttons: [
-                  {
-                    title: 'ОК',
-                    handler: () => { 
+            this.$modal.show('dialog', {
+              text: 'Вы действительно хотите очистить список?',
+              buttons: [
+                {
+                  title: 'ОК',
+                  handler: () => {
+                    if (!this.auth) { 
                       this.clearLocalWishlist();
-                      this.$modal.hide('dialog');
+                    } else {
+                      this.clearServerWishlist(this.wishCurGroup);
                     }
-                  },
-                  {
-                    title: 'Отмена'
+                    this.$modal.hide('dialog');
                   }
-                ]
-              })
-            }
+                },
+                {
+                  title: 'Отмена'
+                }
+              ]
+            })
           },
           customClick(id) {
             this.$router.push('/account/wishlist/'+id);
@@ -402,6 +496,10 @@
                 }
             });
           },
+          archiveAct(el, arch) {
+            this.archiveCustom(el, arch);
+            this.$router.push('/account/wishlist/0');
+          },
           delCustom(el) {
             this.$modal.show('dialog', {
               text: 'Вы действительно хотите удалить список?',
@@ -426,6 +524,21 @@
                   id: el.id
                 }
             });
+          },
+          onAllCheck() {
+            let allC = this.allChecked;
+            this.wishProductsFiltr.forEach((el) => {
+              let ind = this.prodChecked.indexOf(el.id);
+              if (allC) {
+                if (ind!=-1) {
+                  this.prodChecked.splice(ind, 1);
+                }
+              } else {
+                if (ind==-1) {
+                  this.prodChecked.push(el.id);
+                }
+              }
+            });
           }
         },
         mounted() {
@@ -442,6 +555,13 @@
               this.$store.commit('setWishlistProducts', []);
             }
           }
+        },
+        watch: {
+          '$route' (to, from) {
+            this.curCatId = 0;
+            this.select = false;
+            this.prodChecked = [];
+          }
         }
     }
 </script>
@@ -449,8 +569,11 @@
 <style lang="less">
 @import '../../../../less/vars.less';
   .account-wishlist {
+    :last-child {
+      margin-bottom: 0;
+    }
     &__head {
-      line-height: 35px;
+      line-height: 40px;
       margin-bottom: 15px;
       min-height: 35px;
       display: flex;
@@ -471,11 +594,11 @@
         cursor: pointer;
         text-align: center;
         background: #fff;
-        color: #333;
         border: 1px solid #d9d9d9;
         min-width: 40px;
         padding: 0;
         color: #8c8c8c;
+        display: block;
         &:hover {
           background-image: linear-gradient(to bottom, #2a8cde, #165b92);
           box-shadow: inset 0 -2px 0 0 rgba(0, 0, 0, 0.2);
@@ -535,6 +658,7 @@
           font-size: 20px;
           font-weight: bold;
           flex-grow: 1;
+          white-space: nowrap;
           i {
             margin-left: 5px;
             color: #b2b2b2;
@@ -588,7 +712,6 @@
         height: 125px;
         padding: 30px 20px;
         display: flex;
-        justify-content: space-between;
         align-items: center;
         a {
           color: #0094d9;
@@ -597,9 +720,12 @@
             color: #00608d;
             text-decoration: underline;
           }
-          &.clear-wishlist {
+          &.clear-wishlist, &.rename, &.archive {
             color: gray;
             font-size: 13px;
+            white-space: nowrap;
+            display: block;
+            margin-bottom: 5px;
             i {
               margin-right: 5px;
             }
@@ -610,58 +736,146 @@
         }
         &.auth {
           height: auto;
+          &.selectable {
+            background-color: #424a54;
+            > :not(.visible-on-selection) {
+              display: none;
+            }
+            .menu-dropdown-target {
+              color: #fff;
+              + i {
+                color: #fff;
+              }
+            }
+            .selection-panel {
+              color: #fff;
+              display: block;
+              width: 100%;
+              a {
+                border-radius: 4px;
+                text-decoration: none;
+                float: right;
+                margin-left: 30px;
+                text-align: center;
+                display: inline-block;
+                height: 35px;
+                line-height: 35px;
+                text-align: center;
+                &.cancel {
+                  color: #fff;
+                  width: 90px;
+                  &:hover {
+                    background: rgba(255,255,255,0.05);
+                  }
+                }
+                &.apply {
+                  width: 150px;
+                  border: 1px solid #d8d8d8;
+                  background: #fff;
+                  color: #333;
+                  font-size: 13px;
+                  white-space: nowrap;
+                  &.disabled {
+                    cursor: not-allowed;
+                    border-color: rgba(51,51,51,0.25);
+                    background: rgba(51,51,51,0.25);
+                    color: gray;
+                  }
+                  &:not(.disabled):hover {
+                    background: #f5f5f5;
+                  }
+                }
+              }
+            }
+          }
+        }
+        .selection-panel {
+          display: none;
+          line-height: 35px;
+          .product-counter {
+            width: 3em;
+            font-weight: bold;
+            text-align: right;
+            margin-right: 5px;
+            display: inline-block;
+            line-height: 35px;
+          }
+          .m-checkbox {
+              display: inline-block;
+              label {
+                line-height: 35px;
+              }
+          }
+          .m-checkbox input[type="checkbox"] + label::before {
+            background: transparent;
+            border-color: #fff;
+          }
+          .m-checkbox input[type="checkbox"]:checked + label::before {
+            background: #fff;
+          }
+          .m-checkbox input[type="checkbox"]:checked + label i {
+            line-height: unset;
+            top: -10px;
+          }
         }
         .guest-info {
           max-width: 80%;
+          align-items: center;
+        }
+        .menu-dropdown {
+          margin-right: 10px;
           display: flex;
           align-items: center;
-          .menu-dropdown {
-            margin-right: 10px;
-            display: flex;
-            align-items: center;
+        }
+        .m-btn {
+          font-size: 13px;
+          min-height: 35px;
+          + .m-btn {
+            margin-right: 15px;
           }
-          .m-btn {
-            font-size: 13px;
-          }
-          .menu-dropdown-target {
+        }
+        .menu-dropdown-target {
+          color: gray;
+          margin-right: 5px;
+          max-width: 150px;
+          overflow-x: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          + i {
             color: gray;
-            margin-right: 5px;
-            max-width: 150px;
-            overflow-x: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            + i {
-              color: gray;
-              font-size: 14px;
-            }
-            &:hover {
-              text-decoration: none;
-            }
-          }
-          .menu-dropdown-items {
-            top: 0;
-            left: 0;
             font-size: 14px;
-            &:before, &:after {
-              content: none;
-            }
-            li {
-              line-height: 1.2em;
-              padding: 9px 17px;
-              cursor: pointer;
-              width: 100%;
-            }
-            li:hover {
-              background: #f5f5f5;
-            }
-            a {
-              color: #000;
-            }
-            a:hover {
-              text-decoration: none;
-              color: inherit;
-            }
           }
+          &:hover {
+            text-decoration: none;
+            color: gray;
+          }
+        }
+        .menu-dropdown-items {
+          top: 0;
+          left: 0;
+          font-size: 14px;
+          &:before, &:after {
+            content: none;
+          }
+          li {
+            line-height: 1.2em;
+            padding: 9px 17px;
+            cursor: pointer;
+            width: 100%;
+          }
+          li:hover {
+            background: #f5f5f5;
+          }
+          a {
+            color: #000;
+          }
+          a:hover {
+            text-decoration: none;
+            color: inherit;
+          }
+        }
+        .act-list {
+          margin-left: auto;
         }
       }
     }
@@ -761,6 +975,20 @@
         }
         .price {
           min-width: 150px;
+          color: #333;
+          font-size: 24px;
+          font-weight: bold;
+          padding-right: 25px;
+          text-align: right;
+          span {
+            white-space: nowrap;
+          }
+          i {
+            color: #333;
+            font-size: 22px;
+            font-weight: bold;
+            margin-left: 5px;
+          }
         }
       }
     }
@@ -794,7 +1022,75 @@
     }
   }
 
-  
+  @media (max-width: 991px) {
+    .account-wishlist {
+      background-color: #f6f6f6;
+      &__info {
+        background-color: #fff;
+      }
+      &__list, &__archive {
+        .custom {
+          .action-buttons {
+            width: 100px;
+            white-space: nowrap;
+            a {
+              border-radius: 4px;
+              border: 1px solid #ddd;
+              display: inline-block;
+              height: 35px;
+              padding: 0;
+              text-align: center;
+              width: 35px;
+              line-height: 35px;
+              span {
+                display: none;
+              }
+              i {
+                font-size: 16px;
+                margin: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 767px) {
+    .account-wishlist { 
+      &__list, &__archive {
+        .custom {
+          flex-direction: column;
+          align-items: flex-start;
+          min-height: 120px;
+          .action-buttons {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            width: 35px;
+            white-space: unset;
+            a {
+              + a {
+                margin-left: 0;
+                margin-top: 10px;
+              }
+            }
+          }
+          .price {
+            text-align: left;
+            font-size: 18px;
+            margin-top: 10px;
+            i {
+              font-size: 16px;
+            }
+          }
+          > i {
+            display: none;
+          }
+        }
+      }
+    }
+  }
 
   @media (min-width: 992px) {
     .account-wishlist {
@@ -823,6 +1119,140 @@
                 display: inline-block;
               }
             } 
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 767px) {
+    .account-wishlist {
+      &__info {
+        .main-block {
+          display: block;
+          width: 100%;
+        }
+      }
+      &__body {
+        .action-buttons {
+          height: auto;
+          flex-direction: column;
+          padding-top: 10px;
+          padding-bottom: 10px;
+          .guest-info {
+            max-width: 100%;
+          }
+          .act-list {
+            margin-left: 0;
+            width: 100%;
+          }
+          &.auth.selectable {
+            .selection-panel {
+              position: fixed;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              padding: 15px 20px;
+              border-top: 1px solid #e5e5e5;
+              background: #f6f6f6;
+              z-index: 1011;
+              height: 65px;
+              color: #333;
+              .m-checkbox {
+                label {
+                  &:before {
+                    border: solid 1px #333;
+                  }
+                }
+              }
+              .cancel, .product-counter {
+                display: none;
+              }
+              a.apply {
+                border-color: @main-color;
+                background-color: @main-color;
+                color: #fff;
+                font-weight: bold;
+                &:not(.disabled):hover {
+                  background-color: @hover-color;
+                }
+              }
+            }
+          }
+          a.clear-wishlist, a.rename, a.archive {
+            border-radius: 4px;
+            background: #fff;
+            border: 1px solid #d8d8d8;
+            color: #333;
+            text-align: center;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0 0;
+            display: inline-block;
+            line-height: 35px;
+          }
+          > button {
+            width: 100%;
+            margin-top: 10px;
+          }
+          .menu-dropdown {
+            width: 100%;
+            justify-content: center;
+            margin-right: 0;
+            order: 1;
+            margin-top: 10px;
+            border-radius: 4px;
+            background: #fff;
+            border: 1px solid #d8d8d8;
+            line-height: 35px;
+            a {
+              max-width: unset;
+              color: #333;
+              &:hover {
+                color: #333;
+              }
+            }
+            .menu-dropdown-items {
+              width: 100%;
+              li {
+                line-height: 2em;
+                border-bottom: 1px solid #d8d8d8;
+                &:last-child {
+                  border-bottom: none;
+                }
+              }
+            }
+          }
+        }
+      }
+    }  
+  }
+
+  @media (min-width:767px) and (max-width: 1199px) {
+    .account-wishlist {
+      &__body {
+        .guest-info {
+          max-width: 55%;
+          font-size: 13px;
+        }
+      }
+    }
+  }
+
+  @media (min-width:992px) and (max-width: 1199px) {
+    .account-wishlist {
+      &__list, &__archive {
+        .custom {
+          .action-buttons {
+            text-align: left;
+            a {
+              border: none;
+              padding: 0;
+              width: 100%;
+              + a {
+                margin: 10px 0 0;
+              }
+            }
           }
         }
       }

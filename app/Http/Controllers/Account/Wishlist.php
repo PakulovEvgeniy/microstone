@@ -31,7 +31,6 @@ class Wishlist extends Controller
           'items' => $arr_wish,
           'products' => Products::getProductsList($arr_wish),
           'curGroup' => null,
-          'curName' => '',
           'groups' => Wishlist_groups::getAllGroups($request->user()->id)
         ];
 
@@ -42,7 +41,6 @@ class Wishlist extends Controller
               'setWishlist' => $arr_wish,
               'setWishlistProducts' => $dat['wishlist']['products'],
               'setWishGroup' => null,
-              'setWishName' => '',
               'setWishGroups' => $dat['wishlist']['groups']
             ]
           ];
@@ -80,7 +78,6 @@ class Wishlist extends Controller
           'items' => $arr_wish_all,
           'products' => Products::getProductsList($arr_wish),
           'curGroup' => $id,
-          'curName' => $grp ? $grp->name : '',
           'groups' => Wishlist_groups::getAllGroups($request->user()->id) 
         ];
 
@@ -91,7 +88,6 @@ class Wishlist extends Controller
               'setWishlist' => $arr_wish_all,
               'setWishlistProducts' => $dat['wishlist']['products'],
               'setWishGroup' => $id,
-              'setWishName' => $grp ? $grp->name : '',
               'setWishGroups' => $dat['wishlist']['groups']
             ]
           ];
@@ -135,6 +131,7 @@ class Wishlist extends Controller
         return [
           'status' => 'OK',
           'message' => 'Список успешно добавлен!',
+          'succesParams' => $grp->id,
           'data' => [
             'setWishGroups' => Wishlist_groups::getAllGroups($request->user()->id)
           ]
@@ -234,6 +231,10 @@ class Wishlist extends Controller
           throw $error;
         }
 
+        WishModel::where([
+          ['user_id', '=', $request->user()->id],
+	    		['wish_group_id', '=', $param['id']]
+        ])->delete();
         $grp->delete();
         
         return [
@@ -249,25 +250,57 @@ class Wishlist extends Controller
     public function delFromWish(Request $request) {
     	if ($request->ajax()) {
     		$this->validate($request, [
-	        'id' => 'required|integer',
+          'id' => 'required|integer',
+          'group_id' => 'required|integer'
 	      ]);
     		$param = $request->all();
 	    	$row = WishModel::where([
 	    		['user_id', '=', $request->user()->id],
 	    		['product_id', '=', $param['id']],
-	    		['wish_group_id', '=', 0]
+	    		['wish_group_id', '=', $param['group_id']]
 	    	])->first();
 	    	if (!$row) {
 	    		return ['status' => 'OK'];
 	    	} else {
-	    		$row->delete();
+          $row->delete();
+          $data = [];
+          if ((int)$param['group_id'] == 0) {
+            $data['delFromItemWish'] = $param['id'];
+            $data['delFromWishListProducts'] = $param['id'];
+          } else {
+            $data['delFromWishListProducts'] = $param['id'];
+          }
 	    		return [
           	'status' => 'OK',
-          	'data' => [
-          		'delFromItemWish' => $param['id']
-          	]
+          	'data' => $data
         	];
 	    	}
+    	}
+    }
+
+    public function delFromWishGroup(Request $request) {
+    	if ($request->ajax()) {
+    		$this->validate($request, [
+          'group_id' => 'required|integer'
+        ]);
+        $param = $request->all();
+        $grp_id = (int)$param['group_id'];
+	    	WishModel::where([
+	    		['user_id', '=', $request->user()->id],
+	    		['wish_group_id', '=', $grp_id]
+	    	])->delete();
+	    	
+        $data = [];
+        if ($grp_id == 0) {
+          $data['setWishlist'] = [];
+          $data['setWishlistProducts'] = [];
+        } else {
+          $data['setWishlistProducts'] = [];
+        }
+	    	return [
+        	'status' => 'OK',
+        	'data' => $data
+        ];
     	}
     }
 
@@ -276,25 +309,58 @@ class Wishlist extends Controller
 	    	$this->validate($request, [
 	        'id' => 'required|integer',
 	      ]);
-	    	$param = $request->all();
-	    	$row = WishModel::where([
-	    		['user_id', '=', $request->user()->id],
-	    		['product_id', '=', $param['id']],
-	    		['wish_group_id', '=', 0]
-	    	])->first();
-
-	    	if ($row) {
+        $param = $request->all();
+        $res = WishModel::AddToWishList($request->user()->id, $param['id'], 0);
+	    	
+	    	if (!$res) {
 	    		return ['status' => 'OK'];
 	    	} else {
-	    		$neww = new WishModel();
-	    		$neww->user_id = $request->user()->id;
-	    		$neww->product_id = $param['id'];
-	    		$neww->save();
 	    		return [
           	'status' => 'OK',
           	'data' => [
           		'addToItemWish' => $param['id']
           	]
+        	];
+	    	}
+    	}
+    }
+
+    public function addToWishList(Request $request) {
+    	if ($request->ajax()) {
+	    	$this->validate($request, [
+          'product_id' => 'required|array',
+          'groups' => 'required|array'
+	      ]);
+        $param = $request->all();
+        
+        $flAdd = false;
+        $user_id = $request->user()->id;
+
+        foreach ($param['product_id'] as $prod_id) {
+          $prd = (int)$prod_id;
+          if (!$prd) {
+            continue;
+          }
+          foreach ($param['groups'] as $val) {
+            $grp_id = (int)$val;
+            $res = WishModel::AddToWishList($user_id, $prd, $grp_id);
+            if ($res) {
+              $flAdd = true;
+            }
+          }
+        }
+        
+
+	    	if (!$flAdd) {
+	    		return ['status' => 'OK'];
+	    	} else {
+          $arr_wish_all = WishModel::getWishlistAll($request->user()->id);
+	    		return [
+            'status' => 'OK',
+            'message' => 'Товар успешно добавлен в списки!',
+            'data' => [
+              'setWishlist' => $arr_wish_all
+            ]
         	];
 	    	}
     	}

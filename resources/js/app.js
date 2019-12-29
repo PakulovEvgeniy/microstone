@@ -9,6 +9,7 @@ import VueGoodTable from 'vue-good-table';
 import 'vue-good-table/dist/vue-good-table.css';
 import VModal from 'vue-js-modal/dist/ssr.index';
 import 'vue-js-modal/dist/styles.css';
+
  
 
 var store = createStore();
@@ -35,6 +36,7 @@ Vue.use(VTooltip);
 Vue.use(Vue2TouchEvents);
 Vue.use(VueGoodTable);
 Vue.use(VModal, { dialog: true, dynamic: true, dynamicDefaults: { clickToClose: false } });
+
 Vue.component('subcategory', Subcategory);
 Vue.component('vs-notify',
 {

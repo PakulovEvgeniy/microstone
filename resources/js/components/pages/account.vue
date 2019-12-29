@@ -344,6 +344,12 @@
       &.not-auth {
         margin-top: 0;
       }
+      &_block {
+        border-radius: unset;
+        box-shadow: none;
+        border: none;
+        padding: 0;
+      }
     }
   }
 </style>

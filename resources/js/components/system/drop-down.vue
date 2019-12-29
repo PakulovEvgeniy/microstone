@@ -1,5 +1,5 @@
 <template>
-    <div class="menu-dropdown" :class="{'menu-dropdown-active' : active}">
+    <div class="menu-dropdown" :class="[{'menu-dropdown-active' : active}, add_class]">
       <i v-if="icon_before" :class="icon_before"></i>
       <a class="menu-dropdown-target" @click="onClick($event)"><slot name="activator"></slot></a>
       <i v-if="icon_after" :class="icon_after"></i>
@@ -19,7 +19,8 @@
         }, 
         props: [
           'icon_after',
-          'icon_before'
+          'icon_before',
+          'add_class'
         ],
         methods: {
           onClick(e) {

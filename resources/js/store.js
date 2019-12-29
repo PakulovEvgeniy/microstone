@@ -115,7 +115,6 @@ export function createStore () {
         products:[
         ],
         curGroup: null,
-        curName: '',
         groups: []
       },
       waitlist: {

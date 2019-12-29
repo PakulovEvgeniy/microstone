@@ -1,5 +1,5 @@
 import 'font-awesome/css/font-awesome.min.css';
-
+import Vue from 'vue';
 import "regenerator-runtime/runtime";
 import "ie-array-find-polyfill";
 import 'promise-polyfill/src/polyfill';
@@ -13,7 +13,6 @@ Object.keys = function (obj) {
     return keys(obj);
   }
 }
-
 
 import '../less/app.less';
 import app from './app';

@@ -80,13 +80,14 @@ class Products extends Model
     {
         $res = [];
         $row = Products::whereIn('products.id', $list)
-            ->select('products.id_1s as id_1s', 'products.id as id', 'products_descriptions.chpu as chpu' , 'products_descriptions.name as name', 'sku', 'products.image as image', 'category_description.name as cat_name', DB::raw('SUM(stock) as stock, MIN(price) as min_price'))
+            ->select('products.id_1s as id_1s', 'products.id as id', 'products_descriptions.chpu as chpu' , 'products_descriptions.name as name', 'sku', 'products.image as image', 'category_description.name as cat_name', 'compare_groups.id as cg_id', 'compare_groups.name as cg_name', 'category.id as cat_id' , DB::raw('SUM(stock) as stock, MIN(price) as min_price'))
             ->leftJoin('products_descriptions','products.id','=','products_descriptions.products_id')
             ->leftJoin('price_party','products.id_1s','=','price_party.product_id1s')
             ->leftJoin('stock_party', 'products.id_1s','=','stock_party.product_id1s')
             ->leftJoin('category','products.parent_id','=','category.id_1s')
+            ->leftJoin('compare_groups','category.compare_group','=','compare_groups.id_1s')
             ->leftJoin('category_description','category.id','=','category_description.category_id')
-            ->groupBy('id_1s', 'id', 'name', 'chpu', 'sku', 'image', 'cat_name')
+            ->groupBy('id_1s', 'id', 'name', 'chpu', 'sku', 'image', 'cat_name', 'cg_id', 'cg_name', 'cat_id')
             ->get();
 
         //$price_g = $min_price - (10/100*$min_price);
@@ -105,7 +106,10 @@ class Products extends Model
                 'price_with_discount' => $price_disc,
                 'percent' => 10,
                 'image' => JSRender::resizeImage($val->image,68,55),
-                'cat_name' => $val->cat_name
+                'cat_id' => $val->cat_id,
+                'cat_name' => $val->cat_name,
+                'cg_id' => $val->cg_id,
+                'cg_name' => $val->cg_name
             ];
         }
 

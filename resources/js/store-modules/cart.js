@@ -15,6 +15,17 @@ export default {
       if (fl != -1) {
         prod.splice(fl, 1);
       }
+    },
+    addToItemCart(state, payload) {
+      payload.forEach((el) => {
+        let id = +el;
+        if (id) {
+          let ind = this.state.cart.items.indexOf(id);
+          if (ind == -1) {
+            this.state.cart.items.push(id);
+          }
+        }
+      });
     }
 	},
 	getters: {
@@ -86,6 +97,14 @@ export default {
         wish = JSON.parse(wish);
       }
       commit('setCart', wish);
+    },
+    addToCart({commit, dispatch}, data) {
+      return dispatch('queryPostToServer', {
+        url: '/account/cart/add',
+        params: {
+          id_list: data
+        }
+      });
     }
   }
 }

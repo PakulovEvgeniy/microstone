@@ -60,7 +60,8 @@ import { mapGetters, mapActions } from 'vuex';
             },
             ...mapGetters([
                 'csrf',
-                'wishlist'
+                'wishlist',
+                'cart'
             ])
         },
         methods: {
@@ -93,7 +94,8 @@ import { mapGetters, mapActions } from 'vuex';
                         _token: this.csrf,
                         email: this.login.value,
                         password: this.password.value,
-                        wishlist: this.wishlist.items
+                        wishlist: this.wishlist.items,
+                        cart: this.cart.items
                     }
                 });
             }

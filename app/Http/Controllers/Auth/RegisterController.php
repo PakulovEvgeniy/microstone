@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use App\Rules\Captcha;
+use App\Wishlist;
+use App\Products;
+use App\Cart;
 use JSRender;
 
 class RegisterController extends Controller
@@ -79,9 +82,15 @@ class RegisterController extends Controller
             $par = $request->all();
             $new_list = [];
             $prod = [];
+            $new_cart = [];
             if (isset($par['wishlist']) && is_array($par['wishlist'])) {
                 $new_list = Wishlist::AddToWishListFromLocal($user->id, $par['wishlist']);
-                $prod = $Products::getProductsList($new_list);
+                $prod = Products::getProductsList($new_list);
+            }
+
+            if (isset($par['cart']) && is_array($par['cart'])) {
+                $new_cart = Cart::AddToCartFromLocal($user->id, $par['cart']);
+                //$prod = Products::getProductsList($new_list);
             }
 
             return [
@@ -93,7 +102,8 @@ class RegisterController extends Controller
                 'message' => 'Регистрация прошла успешно!',
                 'data' => [
                     'setWishlist' => $new_list,
-                    'setWishlistProducts' => $prod
+                    'setWishlistProducts' => $prod,
+                    'setCart' => $new_cart
                 ]
             ];   
         }

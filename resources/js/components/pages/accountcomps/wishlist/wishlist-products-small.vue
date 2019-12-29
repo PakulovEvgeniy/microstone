@@ -121,4 +121,21 @@
       width: 200px;
     }
   }
+
+  @media (max-width: 767px){
+    .wishlist-products__small {
+      .small-list {
+        max-height: none;
+        overflow-y: hidden;
+        > a {
+          height: auto;
+        }
+      }
+    }
+    .wishlist-products__buttons {
+      button {
+        width: 100%;
+      }
+    }
+  }
 </style>

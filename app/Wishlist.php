@@ -41,5 +41,23 @@ class Wishlist extends Model
 
 		return self::getWishlistAll($user_id, 0);
 	}
+
+	public static function AddToWishList($user_id, $prod_id, $group_id = 0)
+	{
+		$row = self::where([
+			['user_id', '=', $user_id],
+			['product_id', '=', $prod_id],
+			['wish_group_id', '=', $group_id]
+		])->first();
+		if (!$row) {
+			$neww = new Wishlist();
+			$neww->user_id = $user_id;
+			$neww->product_id = $prod_id;
+			$neww->wish_group_id = $group_id;
+			$neww->save();
+			return $neww->id;
+		}
+		return false;
+	}
 }
 

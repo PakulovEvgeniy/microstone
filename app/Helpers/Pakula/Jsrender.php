@@ -3,6 +3,7 @@ namespace App\Helpers\Pakula;
 use Illuminate\Support\Facades\File; 
 use App\Setting;
 use App\Wishlist;
+use App\Cart;
 use Auth;
 
 class Image {
@@ -218,8 +219,11 @@ class Jsrender {
               $state['wishlist']['items'] = Wishlist::getWishlistAll(Auth::user()->id);
               $state['wishlist']['products'] = [];
               $state['wishlist']['curGroup'] = null;
-              $state['wishlist']['curName'] = '';
               $state['wishlist']['groups'] = [];
+            }
+            if (!isset($state['cart'])) {
+              $state['cart']= [];
+              $state['cart']['items'] = Cart::getCartListId(Auth::user()->id);
             }
         } else {
             $state['userEmail'] = '';

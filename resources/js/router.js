@@ -6,6 +6,7 @@ import registerComp from './components/pages/register.vue';
 import passwordLink from './components/pages/password-link.vue';
 import passwordReset from './components/pages/password-reset.vue';
 import Category from './components/pages/category.vue';
+import Compare from './components/pages/compare.vue';
 import CategoryF from './components/pages/category-filters.vue';
 import Home from './components/pages/home.vue';
 import Product from './components/pages/product.vue';
@@ -31,6 +32,7 @@ export default new Router({
   routes: [
     { path: '/', component: Home, name: 'home' },
     { path: '/category', component: Category, name: 'allCategory' },
+    { path: '/compare', component: Compare, name: 'compare'},
     { path: '/category/:id', component: Category, name: 'category'},
     { path: '/category/:idF/filters', component: CategoryF, name: 'filtersCategory'},
     { path: '/product/:id', component: Product, name: 'product'},

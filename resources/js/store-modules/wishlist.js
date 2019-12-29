@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 export default {
 	mutations: {
 		setWishlist(state, payload) {
@@ -33,7 +35,7 @@ export default {
         return el == payload;
       });
       if (ind != -1) {
-        this.commit('delFromWishListProducts', this.state.wishlist.items[ind]);
+        //this.commit('delFromWishListProducts', this.state.wishlist.items[ind]);
         this.state.wishlist.items.splice(ind, 1);
       }
     }
@@ -51,17 +53,29 @@ export default {
     wishCurGroup(state, getters, rootState) {
       return rootState.wishlist.curGroup;
     },
-    wishCurName(state, getters, rootState) {
-      return rootState.wishlist.curName;
-    },
     wishGroups(state, getters, rootState) {
       return rootState.wishlist.groups;
-    }
+    },
+    wishCurName(state, getters, rootState) {
+      let el = rootState.wishlist.groups.find((el) => {
+        return el.id == rootState.wishlist.curGroup;
+      });
+      return el ? el.name : '';
+    },
   },
   actions: {
     clearLocalWishlist({commit, dispatch}, data) {
       localStorage.removeItem('wishlist');
       commit('setWishlist', []);
+      commit('setWishlistProducts', []);
+    },
+    clearServerWishlist({commit, dispatch}, data) {
+      return dispatch('queryPostToServer', {
+        url: '/account/wishlist/deletefromgroup',
+        params: {
+          group_id: data
+        }
+      });
     },
     addToLocalWishlist({commit, dispatch}, data) {
       let wish = localStorage.getItem('wishlist');
@@ -87,9 +101,7 @@ export default {
     delFromServerWishlist({commit, dispatch}, data) {
       return dispatch('queryPostToServer', {
         url: '/account/wishlist/delete',
-        params: {
-          id: data
-        }
+        params: data
       })
     },
     delFromLocalWishlist({commit, dispatch}, data) {

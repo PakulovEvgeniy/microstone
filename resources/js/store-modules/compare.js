@@ -26,6 +26,31 @@ export default {
     },
     compareProducts(state, getters, rootState) {
       return getters.compare.products;
+    },
+    compareGroups(state, getters, rootState) {
+      let res = [];
+      rootState.compare.products.forEach((el) => {
+        let id=0;
+        let name = '';
+        if (el.cg_id) {
+          id = '2_'+el.cg_id;
+          name = el.cg_name;
+        } else {
+          id = '1_' + el.cat_id;
+          name = el.cat_name;
+        }
+        let elRes = res.find(el1 => el1.id == id);
+        if (elRes) {
+          elRes.items.push(el);
+        } else {
+          res.push({
+            id: id,
+            name: name,
+            items: [el]
+          });
+        }
+      });
+      return res;
     }
   },
   actions: {

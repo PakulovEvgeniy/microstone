@@ -34,6 +34,9 @@ export default {
         return 2
       }
     },
+    smallScreen(state, getters, rootState) {
+      return !(rootState.screenWidth==0 || rootState.screenWidth>767); 
+    },
    	screenWidth(state, getters, rootState) {
       return rootState.screenWidth;
     },
@@ -105,7 +108,7 @@ export default {
           .then(response => {
             dispatch('closeWait');
             if (response.data.status=='OK' && data.successAction) {
-              data.successAction();
+              data.successAction(response.data.succesParams);
             }
             if (response.data.status=='ER' && data.errorAction) {
               data.errorAction();

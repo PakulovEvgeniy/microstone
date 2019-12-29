@@ -117,6 +117,16 @@ class Products extends Controller
 			}
 		}
 
+		if ($param == 'compare') {
+			$qu = $request->all();
+			if (isset($qu['pr']) && is_array($qu['pr'])) {
+				$stat = 'OK';
+				$data = [
+					'setCompareProducts' => mod_Products::getProductsList($qu['pr'])
+				];
+			}
+		}
+
 		
 		if ($param == 'banners') {
 			$stat = 'OK';

@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Wishlist;
 use App\Products;
+use App\Cart;
 use JSRender;
 
 class LoginController extends Controller
@@ -63,9 +64,15 @@ class LoginController extends Controller
             $par = $request->all();
             $new_list = [];
             $prod = [];
+            $new_cart = [];
             if (isset($par['wishlist']) && is_array($par['wishlist'])) {
                 $new_list = Wishlist::AddToWishListFromLocal($user->id, $par['wishlist']);
                 $prod = Products::getProductsList($new_list);
+            }
+
+            if (isset($par['cart']) && is_array($par['cart'])) {
+                $new_cart = Cart::AddToCartFromLocal($user->id, $par['cart']);
+                //$prod = Products::getProductsList($new_list);
             }
 
             return [
@@ -77,7 +84,8 @@ class LoginController extends Controller
                 'message' => 'Вы успешно авторизовались',
                 'data' => [
                     'setWishlist' => $new_list,
-                    'setWishlistProducts' => $prod
+                    'setWishlistProducts' => $prod,
+                    'setCart' => $new_cart
                 ]
             ];   
         }

@@ -27,6 +27,7 @@ use App\FiltersDefGroups;
 use App\FiltersDefParams;
 use App\ProductPictures;
 use App\Setting;
+use App\CompareGroups;
 
 class Obmen extends Controller
 {
@@ -529,13 +530,28 @@ class Obmen extends Controller
     		}
     		if (!$chpu) {
     			$chpu = $this->translit($name);
-    		}
+            }
+            
+            $compar_id = '';
+            $compar_name = '';
+            if (isset($par['gr_compare_id'])) {
+                $compar_id = $par['gr_compare_id'];
+                $compar_name = $par['gr_compare_name'];
+
+                $cg = CompareGroups::firstOrNew(['id_1s' => $compar_id]);
+                $cg->id_1s = $compar_id;
+                $cg->name = $compar_name;
+                $cg->save();
+            }
+
+
     		$grp = Category::firstOrNew(['id_1s' => $id_1s]);
     		$grp->parent_id = $rodit;
     		$grp->id_1s = $id_1s;
     		$grp->image = 'catalog/' . $pict;
     		$grp->status = $active;
-    		$grp->sort_order = $kodsort;
+            $grp->sort_order = $kodsort;
+            $grp->compare_group = $compar_id;
     		$grp->save();
 
     		$grp_desc = Category_description::firstOrNew(['category_id' => $grp->id]);
