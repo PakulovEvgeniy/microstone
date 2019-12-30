@@ -1,8 +1,8 @@
 <template>
   <div class="compare__actions">
-    <div class="compare__groups">
-      <div class="compare__group" v-for="el in compareGroups" :key = "el.id">
-        <a>{{el.name}} ({{el.items.length}})</a>
+    <div class="compare__groups"  ref="comp_prod">
+      <div class="compare__group" v-for="(el, ind) in compareGroups" :key = "el.id">
+        <a @click="$emit('changeGroup', ind)">{{el.name}} ({{el.items.length}})</a>
       </div>
     </div>
     <div class="compare__controls">
@@ -12,38 +12,34 @@
       <a class="clear-compare-list"><i class="fa fa-trash"></i><span>Очистить список</span></a>
     </div>
     <div class="compare__products">
-      <carousel 
-        :navigationEnabled="true" 
-        ref="carousel" 
-        :scrollPerPage="false" 
-        :paginationEnabled="false"
-        :mouseDrag="false"
-        :touchDrag="false"
-        :loop="true"
-        :perPageCustom="[[767, 3],[992, 4], [1200, 5]]"
-      >
-        <slide>
-          Slide 1 Content
-        </slide>
-        <slide>
-          Slide 2 Content
-        </slide>
-        <slide>
-          Slide 3 Content
-        </slide>
-        <slide>
-          Slide 4 Content
-        </slide>
-        <slide>
-          Slide 5 Content
-        </slide>
-        <slide>
-          Slide 5 Content
-        </slide>
-        <slide>
-          Slide 7 Content
-        </slide>
-      </carousel>
+      <div class="fixed" ref="fixed">
+        <div 
+          v-for="el in itemFixed" 
+          :key="el.id" 
+          class="fixed-product"
+          :style="{'width': baseWidth+'px'}"
+        >
+          <i @click="setFixed(el,false)" class="fa fa-lock"></i>
+          {{el.name}}
+        </div>
+      </div>
+      <div v-if="perPageCustom>0" class="caro" :style="{'margin-left': marg+'px'}">
+        <carousel 
+          :navigationEnabled="true" 
+          ref="carousel" 
+          :scrollPerPage="false" 
+          :paginationEnabled="false"
+          :mouseDrag="false"
+          :touchDrag="false"
+          :loop="true"
+          :perPage="perPageCustom"
+        >
+          <slide v-for="el in itemNotFixed" :key="el.id">
+            <i @click="setFixed(el, true)" class="fa fa-unlock-alt"></i>
+            {{el.name}}
+          </slide>
+        </carousel>
+      </div>
     </div>
   </div>
 </template>
@@ -56,27 +52,63 @@
   export default {
     data() {
         return {
-          mouseDrag: true
+
         }
     },
     computed: {
       ...mapGetters([
-        'compareGroups'
-      ])
-    },
-    methods: {
-      onDrag() {
-        console.log(this.$refs.carusel.elementHandle);
-        this.mouseDrag = false;
-        this.$refs.carusel.owl.data(this.$refs.carusel.elementHandle).reinit({
-          mouseDrag : false
-        });
+        'compareGroups',
+        'getScreenState',
+        'smallScreen'
+      ]),
+      itemFixed() {
+        return this.curGroup.items.filter(el => el.isFixed)
       },
-      onDragged() {
-        console.log('enddrag');
-        //this.mouseDrag = true;
+      itemNotFixed() {
+        return this.curGroup.items.filter(el => !el.isFixed)
+      },
+      perPageCustom() {
+        let c = 2;
+        if (!this.smallScreen) {
+          c = c+=this.getScreenState;
+        } else {
+          return c;
+        }
+        return Math.max(c-this.itemFixed.length,0);
+      },
+      baseWidth() {
+        if (this.smallScreen) {
+          return 0;
+        }
+        return 220;
+      },
+      marg() {
+        //if (!this.$refs['comp_prod']) {return 0}
+        return this.baseWidth*this.itemFixed.length;
       }
     },
+    methods: {
+      setFixed(el, val) {
+        if (el.isFixed === undefined) {
+          this.$set(el, 'isFixed', val);
+        } else {
+          el.isFixed = val;
+        }
+        if(typeof(Event) === 'function') {
+  // modern browsers
+          window.dispatchEvent(new Event('resize'));
+        }else{
+          // for IE and other old browsers
+          // causes deprecation warning on modern browsers
+          var evt = window.document.createEvent('UIEvents'); 
+          evt.initUIEvent('resize', true, false, window, 0); 
+          window.dispatchEvent(evt);
+        }
+      }
+    },
+    props: [
+      'curGroup'
+    ],
     components: {
       uiToggle,
       Carousel,
@@ -127,9 +159,39 @@
       }
     }
     &__products {
-      .item {
-        height: 150px;
+      position: relative;
+      margin-top: 30px;
+      &:after {
+        content: '';
+        display: block;
+        clear: both;
+      }
+      .VueCarousel {
+        width: 100%;
+      }
+      .caro {
+        
+      }
+      .fixed {
+        float: left;
+        display: flex;
+      }
+      .fixed-product {
+        min-height: 150px;
+      }
+      .VueCarousel-slide {
+        min-height: 150px;
       }
     }
+  }
+
+  @media (max-width: 768px) {
+    .compare {
+      &__products {
+        .fixed {
+          display: none;
+        }
+      }
+    }    
   }
 </style>

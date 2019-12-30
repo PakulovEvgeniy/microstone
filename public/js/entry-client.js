@@ -8740,18 +8740,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      mount: false
+      mount: false,
+      curGroupIndex: 0
     };
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['countCompare', 'compare']), {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['countCompare', 'compare', 'compareGroups']), {
     title: function title() {
       return 'Сравнение товаров';
+    },
+    curGroup: function curGroup() {
+      if (!this.compareGroups.length) {
+        return [];
+      }
+
+      return this.compareGroups[this.curGroupIndex];
     }
   }),
   methods: {},
@@ -8852,33 +8863,69 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
-      mouseDrag: true
-    };
+    return {};
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['compareGroups'])),
-  methods: {
-    onDrag: function onDrag() {
-      console.log(this.$refs.carusel.elementHandle);
-      this.mouseDrag = false;
-      this.$refs.carusel.owl.data(this.$refs.carusel.elementHandle).reinit({
-        mouseDrag: false
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['compareGroups', 'getScreenState', 'smallScreen']), {
+    itemFixed: function itemFixed() {
+      return this.curGroup.items.filter(function (el) {
+        return el.isFixed;
       });
     },
-    onDragged: function onDragged() {
-      console.log('enddrag'); //this.mouseDrag = true;
+    itemNotFixed: function itemNotFixed() {
+      return this.curGroup.items.filter(function (el) {
+        return !el.isFixed;
+      });
+    },
+    perPageCustom: function perPageCustom() {
+      var c = 2;
+
+      if (!this.smallScreen) {
+        c = c += this.getScreenState;
+      } else {
+        return c;
+      }
+
+      return Math.max(c - this.itemFixed.length, 0);
+    },
+    baseWidth: function baseWidth() {
+      if (this.smallScreen) {
+        return 0;
+      }
+
+      return 220;
+    },
+    marg: function marg() {
+      //if (!this.$refs['comp_prod']) {return 0}
+      return this.baseWidth * this.itemFixed.length;
+    }
+  }),
+  methods: {
+    setFixed: function setFixed(el, val) {
+      if (el.isFixed === undefined) {
+        this.$set(el, 'isFixed', val);
+      } else {
+        el.isFixed = val;
+      }
+
+      if (typeof Event === 'function') {
+        // modern browsers
+        window.dispatchEvent(new Event('resize'));
+      } else {
+        // for IE and other old browsers
+        // causes deprecation warning on modern browsers
+        var evt = window.document.createEvent('UIEvents');
+        evt.initUIEvent('resize', true, false, window, 0);
+        window.dispatchEvent(evt);
+      }
     }
   },
+  props: ['curGroup'],
   components: {
     uiToggle: _system_ui_toggle_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     Carousel: _Carousel_Carousel_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -55255,7 +55302,18 @@ var render = function() {
         [
           !_vm.countCompare ? _c("compare-empty") : _vm._e(),
           _vm._v(" "),
-          _vm.mount && _vm.countCompare ? [_c("compare-actions")] : _vm._e()
+          _vm.mount && _vm.countCompare
+            ? [
+                _c("compare-actions", {
+                  attrs: { curGroup: _vm.curGroup },
+                  on: {
+                    changeGroup: function($event) {
+                      _vm.curGroupIndex = $event
+                    }
+                  }
+                })
+              ]
+            : _vm._e()
         ],
         2
       )
@@ -55287,12 +55345,20 @@ var render = function() {
   return _c("div", { staticClass: "compare__actions" }, [
     _c(
       "div",
-      { staticClass: "compare__groups" },
-      _vm._l(_vm.compareGroups, function(el) {
+      { ref: "comp_prod", staticClass: "compare__groups" },
+      _vm._l(_vm.compareGroups, function(el, ind) {
         return _c("div", { key: el.id, staticClass: "compare__group" }, [
-          _c("a", [
-            _vm._v(_vm._s(el.name) + " (" + _vm._s(el.items.length) + ")")
-          ])
+          _c(
+            "a",
+            {
+              on: {
+                click: function($event) {
+                  return _vm.$emit("changeGroup", ind)
+                }
+              }
+            },
+            [_vm._v(_vm._s(el.name) + " (" + _vm._s(el.items.length) + ")")]
+          )
         ])
       }),
       0
@@ -55311,44 +55377,73 @@ var render = function() {
       1
     ),
     _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "compare__products" },
-      [
-        _c(
-          "carousel",
-          {
-            ref: "carousel",
-            attrs: {
-              navigationEnabled: true,
-              scrollPerPage: false,
-              paginationEnabled: false,
-              mouseDrag: false,
-              touchDrag: false,
-              loop: true,
-              perPageCustom: [[767, 3], [992, 4], [1200, 5]]
-            }
-          },
-          [
-            _c("slide", [_vm._v("\n        Slide 1 Content\n      ")]),
-            _vm._v(" "),
-            _c("slide", [_vm._v("\n        Slide 2 Content\n      ")]),
-            _vm._v(" "),
-            _c("slide", [_vm._v("\n        Slide 3 Content\n      ")]),
-            _vm._v(" "),
-            _c("slide", [_vm._v("\n        Slide 4 Content\n      ")]),
-            _vm._v(" "),
-            _c("slide", [_vm._v("\n        Slide 5 Content\n      ")]),
-            _vm._v(" "),
-            _c("slide", [_vm._v("\n        Slide 5 Content\n      ")]),
-            _vm._v(" "),
-            _c("slide", [_vm._v("\n        Slide 7 Content\n      ")])
-          ],
-          1
-        )
-      ],
-      1
-    )
+    _c("div", { staticClass: "compare__products" }, [
+      _c(
+        "div",
+        { ref: "fixed", staticClass: "fixed" },
+        _vm._l(_vm.itemFixed, function(el) {
+          return _c(
+            "div",
+            {
+              key: el.id,
+              staticClass: "fixed-product",
+              style: { width: _vm.baseWidth + "px" }
+            },
+            [
+              _c("i", {
+                staticClass: "fa fa-lock",
+                on: {
+                  click: function($event) {
+                    return _vm.setFixed(el, false)
+                  }
+                }
+              }),
+              _vm._v("\n        " + _vm._s(el.name) + "\n      ")
+            ]
+          )
+        }),
+        0
+      ),
+      _vm._v(" "),
+      _vm.perPageCustom > 0
+        ? _c(
+            "div",
+            { staticClass: "caro", style: { "margin-left": _vm.marg + "px" } },
+            [
+              _c(
+                "carousel",
+                {
+                  ref: "carousel",
+                  attrs: {
+                    navigationEnabled: true,
+                    scrollPerPage: false,
+                    paginationEnabled: false,
+                    mouseDrag: false,
+                    touchDrag: false,
+                    loop: true,
+                    perPage: _vm.perPageCustom
+                  }
+                },
+                _vm._l(_vm.itemNotFixed, function(el) {
+                  return _c("slide", { key: el.id }, [
+                    _c("i", {
+                      staticClass: "fa fa-unlock-alt",
+                      on: {
+                        click: function($event) {
+                          return _vm.setFixed(el, true)
+                        }
+                      }
+                    }),
+                    _vm._v("\n          " + _vm._s(el.name) + "\n        ")
+                  ])
+                }),
+                1
+              )
+            ],
+            1
+          )
+        : _vm._e()
+    ])
   ])
 }
 var staticRenderFns = [

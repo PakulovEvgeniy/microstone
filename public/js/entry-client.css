@@ -4197,8 +4197,32 @@ button.buy.small span {
   font-size: 13px;
   border-bottom: 1px dotted #000;
 }
-.compare__products .item {
-  height: 150px;
+.compare__products {
+  position: relative;
+  margin-top: 30px;
+}
+.compare__products:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.compare__products .VueCarousel {
+  width: 100%;
+}
+.compare__products .fixed {
+  float: left;
+  display: flex;
+}
+.compare__products .fixed-product {
+  min-height: 150px;
+}
+.compare__products .VueCarousel-slide {
+  min-height: 150px;
+}
+@media (max-width: 768px) {
+.compare__products .fixed {
+    display: none;
+}
 }
 
 .compare h1 {

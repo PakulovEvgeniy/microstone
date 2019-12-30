@@ -4,7 +4,10 @@
     <div v-show="mount" class="compare__block">
       <compare-empty v-if="!countCompare"></compare-empty>
       <template v-if="mount && countCompare">
-        <compare-actions></compare-actions>
+        <compare-actions
+          :curGroup="curGroup"
+          @changeGroup="curGroupIndex=$event"
+        ></compare-actions>
       </template>
     </div>
   </div>
@@ -17,16 +20,24 @@
   export default {
     data() {
         return {
-          mount: false
+          mount: false,
+          curGroupIndex: 0
         }
     },
     computed: {
       ...mapGetters([
         'countCompare',
-        'compare'
+        'compare',
+        'compareGroups'
       ]),
       title() {
         return 'Сравнение товаров';
+      },
+      curGroup() {
+        if (!this.compareGroups.length) {
+          return [];
+        }
+        return this.compareGroups[this.curGroupIndex];
       }
     },
     methods: {
