@@ -7,10 +7,16 @@
     :class="{
       'VueCarousel-slide-active': isActive,
       'VueCarousel-slide-center': isCenter,
+      'VueCarousel-slide-dragto': isDragTo,
       'VueCarousel-slide-adjustableHeight': isAdjustableHeight
     }"
   >
-    <slot></slot>
+    <div 
+      class="slide-drg"
+      :style="slStyle"
+    >
+      <slot></slot>
+    </div>
   </div>
 </template>
 
@@ -51,7 +57,6 @@ export default {
         activeSlides.push(child);
         i++;
       }
-
       return activeSlides;
     },
     /**
@@ -73,6 +78,22 @@ export default {
         this.activeSlides.indexOf(this._uid) ===
         Math.floor(breakpointSlidesPerPage / 2)
       );
+    },
+    isDragTo() {
+      let dragto = this.carousel.dragto;
+      if (!dragto) {
+        return false;
+      }
+      return dragto._uid == this._uid;
+    },
+    slStyle() {
+      if (!this.isDragTo) {
+        return undefined;
+      }
+      return {
+        'width': this.carousel.slideWidth+'px',
+        'left': this.carousel.dragtoLeft + this.carousel.dragOffsetTo + 'px'
+      };
     },
     /**
      * `isAdjustableHeight` describes if the carousel adjusts its height to the active slide(s)
@@ -108,7 +129,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang='less'>
 .VueCarousel-slide {
   flex-basis: inherit;
   flex-grow: 0;
@@ -118,6 +139,9 @@ export default {
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   outline: none;
+  &.VueCarousel-slide-dragto .slide-drg {
+    position: absolute;
+  }
 }
 
 .VueCarousel-slide-adjustableHeight {

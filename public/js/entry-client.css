@@ -4121,7 +4121,6 @@ button.buy.small span {
   outline: 1px solid lightblue;
 }
 
-
 .VueCarousel-slide {
   flex-basis: inherit;
   flex-grow: 0;
@@ -4132,17 +4131,28 @@ button.buy.small span {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   outline: none;
 }
+.VueCarousel-slide.VueCarousel-slide-dragto .slide-drg {
+  position: absolute;
+}
 .VueCarousel-slide-adjustableHeight {
   display: table;
   flex-basis: auto;
   width: 100%;
 }
 
-
 .VueCarousel {
   display: flex;
   flex-direction: column;
   position: relative;
+}
+.VueCarousel.dragable .VueCarousel-slide .slide-drg {
+  border: 1px dashed #fff;
+  background-color: #fff;
+  cursor: move;
+  height: 100%;
+}
+.VueCarousel.dragable .VueCarousel-slide .slide-drg:hover {
+  border-color: #d8d8d8;
 }
 .VueCarousel--reverse {
   flex-direction: column-reverse;

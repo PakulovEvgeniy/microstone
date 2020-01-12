@@ -1,7 +1,8 @@
 <template>
   <div
     class="VueCarousel"
-    v-bind:class="{ 'VueCarousel--reverse': paginationPosition === 'top' }"
+    v-bind:class="{ 'VueCarousel--reverse': paginationPosition === 'top',
+                    'dragable': draggableEnable }"
   >
     <div
       class="VueCarousel-wrapper"
@@ -94,8 +95,11 @@ export default {
       carouselWidth: 0,
       currentPage: 0,
       dragging: false,
+      dragto:false,
+      dragtoLeft: 0,
       dragMomentum: 0,
       dragOffset: 0,
+      dragOffsetTo: 0,
       dragStartY: 0,
       dragStartX: 0,
       isTouch: typeof window !== "undefined" && "ontouchstart" in window,
@@ -172,6 +176,10 @@ export default {
     mouseDrag: {
       type: Boolean,
       default: true
+    },
+    draggableEnable: {
+      type: Boolean,
+      default: false
     },
     /**
      * Flag to toggle touch dragging
@@ -726,7 +734,7 @@ export default {
       if (e.button == 2) {
         return;
       }
-
+      
       document.addEventListener(
         this.isTouch ? "touchend" : "mouseup",
         this.onEnd,
@@ -740,7 +748,19 @@ export default {
       );
 
       this.startTime = e.timeStamp;
-      this.dragging = true;
+      if (this.draggableEnable) {
+        this.dragto = this.$children.find(it => it.$el === e.target.parentElement);
+        if (this.dragto) {
+          let ind = this.$children.findIndex(el => el._uid == this.dragto._uid);
+          console.log(ind);
+          this.dragtoLeft = this.slideWidth * ind;
+        }
+        
+        this.dragging = true;
+        
+      } else {
+        this.dragging = true;
+      }
       this.dragStartX = this.isTouch ? e.touches[0].clientX : e.clientX;
       this.dragStartY = this.isTouch ? e.touches[0].clientY : e.clientY;
     },
@@ -757,29 +777,33 @@ export default {
       this.pauseAutoplay();
 
       // compute the momemtum speed
-      const eventPosX = this.isTouch ? e.changedTouches[0].clientX : e.clientX;
-      const deltaX = this.dragStartX - eventPosX;
-      this.dragMomentum = deltaX / (e.timeStamp - this.startTime);
+      if (!this.draggableEnable) {
+        const eventPosX = this.isTouch ? e.changedTouches[0].clientX : e.clientX;
+        const deltaX = this.dragStartX - eventPosX;
+        this.dragMomentum = deltaX / (e.timeStamp - this.startTime);
 
-      // take care of the minSwipteDistance prop, if not 0 and delta is bigger than delta
-      if (
-        this.minSwipeDistance !== 0 &&
-        Math.abs(deltaX) >= this.minSwipeDistance
-      ) {
-        const width = this.scrollPerPage
-          ? this.slideWidth * this.currentPerPage
-          : this.slideWidth;
-        this.dragOffset = this.dragOffset + Math.sign(deltaX) * (width / 2);
-      }
+        // take care of the minSwipteDistance prop, if not 0 and delta is bigger than delta
+        if (
+          this.minSwipeDistance !== 0 &&
+          Math.abs(deltaX) >= this.minSwipeDistance
+        ) {
+          const width = this.scrollPerPage
+            ? this.slideWidth * this.currentPerPage
+            : this.slideWidth;
+          this.dragOffset = this.dragOffset + Math.sign(deltaX) * (width / 2);
+        }
 
-      if (this.rtl) {
-        this.offset -= this.dragOffset;
-      } else {
-        this.offset += this.dragOffset;
+        if (this.rtl) {
+          this.offset -= this.dragOffset;
+        } else {
+          this.offset += this.dragOffset;
+        }
       }
+      
       this.dragOffset = 0;
+      this.dragOffsetTo = 0;
       this.dragging = false;
-
+      this.dragto = false;
       this.render();
 
       // clear events listeners
@@ -811,22 +835,27 @@ export default {
       }
 
       e.stopImmediatePropagation();
+      
 
-      this.dragOffset = newOffsetX;
-      const nextOffset = this.offset + this.dragOffset;
+      if (!this.draggableEnable) {
+        this.dragOffset = newOffsetX;
+        const nextOffset = this.offset + this.dragOffset;
 
-      if (this.rtl) {
-        if (this.offset == 0 && this.dragOffset > 0) {
-          this.dragOffset = Math.sqrt(this.resistanceCoef * this.dragOffset);
-        } else if (this.offset == this.maxOffset && this.dragOffset < 0) {
-          this.dragOffset = -Math.sqrt(-this.resistanceCoef * this.dragOffset);
-        }
+        if (this.rtl) {
+          if (this.offset == 0 && this.dragOffset > 0) {
+            this.dragOffset = Math.sqrt(this.resistanceCoef * this.dragOffset);
+          } else if (this.offset == this.maxOffset && this.dragOffset < 0) {
+            this.dragOffset = -Math.sqrt(-this.resistanceCoef * this.dragOffset);
+          }
+        } else {
+          if (nextOffset < 0) {
+            this.dragOffset = -Math.sqrt(-this.resistanceCoef * this.dragOffset);
+          } else if (nextOffset > this.maxOffset) {
+            this.dragOffset = Math.sqrt(this.resistanceCoef * this.dragOffset);
+          }
+        } 
       } else {
-        if (nextOffset < 0) {
-          this.dragOffset = -Math.sqrt(-this.resistanceCoef * this.dragOffset);
-        } else if (nextOffset > this.maxOffset) {
-          this.dragOffset = Math.sqrt(this.resistanceCoef * this.dragOffset);
-        }
+        this.dragOffsetTo = -newOffsetX;
       }
     },
     onResize() {
@@ -922,7 +951,7 @@ export default {
     );
     
     // setup the start event only if touch device or mousedrag activated
-    if ((this.isTouch && this.touchDrag) || this.mouseDrag) {
+    if ((this.isTouch && this.touchDrag) || this.mouseDrag || this.draggableEnable) {
       this.$refs["VueCarousel-wrapper"].addEventListener(
         this.isTouch ? "touchstart" : "mousedown",
         this.onStart
@@ -970,11 +999,22 @@ export default {
   }
 };
 </script>
-<style>
+<style lang='less'>
 .VueCarousel {
   display: flex;
   flex-direction: column;
   position: relative;
+  &.dragable {
+    .VueCarousel-slide .slide-drg {
+      border: 1px dashed #fff;
+      background-color: #fff;
+      cursor: move;
+      height: 100%;
+      &:hover {
+        border-color: #d8d8d8;
+      }
+    }
+  }
 }
 
 .VueCarousel--reverse {

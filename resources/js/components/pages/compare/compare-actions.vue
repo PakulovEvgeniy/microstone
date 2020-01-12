@@ -33,10 +33,12 @@
           :touchDrag="false"
           :loop="true"
           :perPage="perPageCustom"
+          :draggableEnable="true"
+          :draggable="true"
         >
           <slide v-for="el in itemNotFixed" :key="el.id">
-            <i @click="setFixed(el, true)" class="fa fa-unlock-alt"></i>
-            {{el.name}}
+              <i @click="setFixed(el, true)" class="fa fa-unlock-alt"></i>
+              {{el.name}}
           </slide>
         </carousel>
       </div>
