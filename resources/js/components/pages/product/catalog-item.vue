@@ -28,13 +28,7 @@
               </div>
               <div class="product-info__social">
                 <div class="product-info__stat">
-                  <div class="product-info__rating">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star-o"></i>
-                    <i class="fa fa-star-o"></i>
-                    <i class="fa fa-star-o"></i>
-                  </div>
+                  <product-rating></product-rating>
                   <a class="product-info__comments-count ui-link ui-link_blue">
                     <i class="fa fa-comment-o"></i>
                     &nbsp;1
@@ -97,6 +91,7 @@
   import availLinks from './avail-links.vue';
   import addInListButton from '../../system/add-in-list-button.vue';
   import buyButton from '../../system/buy-button.vue';
+  import productRating from './product-rating.vue';
   import { mapGetters, mapActions } from 'vuex';
     export default {
         data() {
@@ -135,7 +130,8 @@
           voblers,
           availLinks,
           addInListButton,
-          buyButton
+          buyButton,
+          productRating
         },
         methods: {
           ...mapActions([

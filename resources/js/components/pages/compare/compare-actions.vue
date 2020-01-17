@@ -9,18 +9,23 @@
       <ui-toggle 
         caption="Только различающиеся параметры"
       ></ui-toggle>
-      <a class="clear-compare-list"><i class="fa fa-trash"></i><span>Очистить список</span></a>
+      <a @click="$emit('clearGroup')" class="clear-compare-list"><i class="fa fa-trash"></i><span>Очистить список</span></a>
+      <a class="edit-compare-list"><i class="fa fa-edit"></i><span>Редактировать</span></a>
     </div>
     <div class="compare__products">
-      <div class="fixed" ref="fixed">
+      <div class="fixed">
         <div 
           v-for="el in itemFixed" 
           :key="el.id" 
           class="fixed-product"
           :style="{'width': baseWidth+'px'}"
         >
-          <i @click="setFixed(el,false)" class="fa fa-lock"></i>
-          {{el.name}}
+          <product-compare
+            :product="el"
+            :lock="true"
+            @clickFixed="setFixed(el, false)"
+          >
+          </product-compare>
         </div>
       </div>
       <div v-if="perPageCustom>0" class="caro" :style="{'margin-left': marg+'px'}">
@@ -34,11 +39,17 @@
           :loop="true"
           :perPage="perPageCustom"
           :draggableEnable="true"
-          :draggable="true"
+          :listKeys="listKeys"
+          @changeInd="changeInd"
         >
           <slide v-for="el in itemNotFixed" :key="el.id">
-              <i @click="setFixed(el, true)" class="fa fa-unlock-alt"></i>
-              {{el.name}}
+              <product-compare
+                :product="el"
+                :lock="false"
+                @clickFixed="setFixed(el, true)"
+                @clickTrash="delFromCompare(el)"
+              >
+              </product-compare>
           </slide>
         </carousel>
       </div>
@@ -51,6 +62,7 @@
   import uiToggle from '../../system/ui-toggle.vue';
   import Carousel from '../../Carousel/Carousel.vue';
   import Slide from '../../Carousel/Slide.vue';
+  import productCompare from './product-compare.vue';
   export default {
     data() {
         return {
@@ -69,6 +81,9 @@
       itemNotFixed() {
         return this.curGroup.items.filter(el => !el.isFixed)
       },
+      listKeys() {
+        return this.itemNotFixed.map(el => el.id)
+      },
       perPageCustom() {
         let c = 2;
         if (!this.smallScreen) {
@@ -86,7 +101,7 @@
       },
       marg() {
         //if (!this.$refs['comp_prod']) {return 0}
-        return this.baseWidth*this.itemFixed.length;
+        return this.baseWidth*this.itemFixed.length+8;
       }
     },
     methods: {
@@ -106,6 +121,16 @@
           evt.initUIEvent('resize', true, false, window, 0); 
           window.dispatchEvent(evt);
         }
+      },
+      changeInd(e) {
+        this.$store.commit('changeDragIndex', {
+          offsetIndex: e.offsetIndex,
+          id: e.id,
+          currentId: this.itemNotFixed[e.currentIndex].id
+        });
+      },
+      delFromCompare(el) {
+        this.$store.dispatch('delFromLocalCompare', el.id);
       }
     },
     props: [
@@ -114,7 +139,8 @@
     components: {
       uiToggle,
       Carousel,
-      Slide
+      Slide,
+      productCompare
     },
     mounted() {
 
@@ -143,10 +169,11 @@
       display: flex;
       padding-top: 29px;
       justify-content: space-between;
-      .clear-compare-list {
+      .clear-compare-list, .edit-compare-list {
         background-color: transparent;
         font-size: 20px;
         text-decoration: none;
+        white-space: nowrap;
         i {
           color: #afafaf;
           margin-right: 5px;
@@ -158,6 +185,9 @@
           font-size: 13px;
           border-bottom: 1px dotted #000;
         }
+      }
+      .edit-compare-list {
+        display: none;
       }
     }
     &__products {
@@ -177,12 +207,28 @@
       .fixed {
         float: left;
         display: flex;
+        box-shadow: 2px 2px 15px 0 rgba(0,0,0,0.15);
+        box-sizing: content-box;
       }
       .fixed-product {
         min-height: 150px;
       }
       .VueCarousel-slide {
         min-height: 150px;
+      }
+      .VueCarousel-navigation {
+        &-button {
+          color: #8a8a8a;
+          &:hover {
+            color: #000;
+          }
+        }
+        &-prev {
+          left: 15px;
+        }
+        &-next {
+          right: 15px;
+        }
       }
     }
   }
@@ -195,5 +241,18 @@
         }
       }
     }    
+  }
+
+  @media (max-width: 992px) {
+    .compare {
+      &__controls {
+        .clear-compare-list {
+          display: none;
+        }
+        .edit-compare-list {
+          display: block;
+        }
+      }
+    }
   }
 </style>

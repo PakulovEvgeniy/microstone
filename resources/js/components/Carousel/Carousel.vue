@@ -106,6 +106,8 @@ export default {
       offset: 0,
       refreshRate: 16,
       slideCount: 0,
+      changeIndex: 0,
+      curIndex: 0,
       transitionstart: "transitionstart",
       transitionend: "transitionend",
       currentHeight: "auto"
@@ -351,6 +353,11 @@ export default {
     rtl: {
       type: Boolean,
       default: false
+    },
+
+    listKeys: {
+      type: Array,
+      default: []
     }
   },
   watch: {
@@ -749,11 +756,25 @@ export default {
 
       this.startTime = e.timeStamp;
       if (this.draggableEnable) {
-        this.dragto = this.$children.find(it => it.$el === e.target.parentElement);
+        this.changeIndex = 0;
+        this.curIndex = undefined;
+        
+        this.dragto = this.$children.find(it => {
+          let el = e.target.parentElement;
+          while(el) {
+            if (el.classList.contains('VueCarousel-slide')) {
+              break;
+            }
+            el = el.parentElement;
+          }
+          return it.$el === el;
+        });
         if (this.dragto) {
-          let ind = this.$children.findIndex(el => el._uid == this.dragto._uid);
-          console.log(ind);
+          let ind = this.listKeys.findIndex(el => {
+            return el == this.dragto.$vnode.data.key;
+          });
           this.dragtoLeft = this.slideWidth * ind;
+          this.curIndex = ind;
         }
         
         this.dragging = true;
@@ -835,6 +856,8 @@ export default {
       }
 
       e.stopImmediatePropagation();
+      console.dir(e.target);
+      //console.log('dff');
       
 
       if (!this.draggableEnable) {
@@ -856,6 +879,19 @@ export default {
         } 
       } else {
         this.dragOffsetTo = -newOffsetX;
+        let offs = this.slideWidth*0.25;
+        let offc = 0;
+        if (this.dragOffsetTo>0) {
+          offc = Math.floor((this.dragOffsetTo+this.slideWidth-offs)/this.slideWidth);
+        } else {
+          offc = -Math.floor((-this.dragOffsetTo+this.slideWidth-offs)/this.slideWidth);
+        }
+        if (this.changeIndex != offc) {
+          if (this.dragto) {
+            this.changeIndex = offc;
+            this.$emit('changeInd', {offsetIndex: offc, currentIndex: this.curIndex, id: this.dragto.$vnode.data.key});
+          }
+        }
       }
     },
     onResize() {

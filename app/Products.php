@@ -106,6 +106,7 @@ class Products extends Model
                 'price_with_discount' => $price_disc,
                 'percent' => 10,
                 'image' => JSRender::resizeImage($val->image,68,55),
+                'image_2' => JSRender::resizeImage($val->image,80,80),
                 'cat_id' => $val->cat_id,
                 'cat_name' => $val->cat_name,
                 'cg_id' => $val->cg_id,

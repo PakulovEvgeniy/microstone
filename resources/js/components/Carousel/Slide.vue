@@ -141,6 +141,7 @@ export default {
   outline: none;
   &.VueCarousel-slide-dragto .slide-drg {
     position: absolute;
+    z-index: 10;
   }
 }
 

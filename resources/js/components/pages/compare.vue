@@ -7,6 +7,7 @@
         <compare-actions
           :curGroup="curGroup"
           @changeGroup="curGroupIndex=$event"
+          @clearGroup="$store.dispatch('clearGroup', curGroup)"
         ></compare-actions>
       </template>
     </div>
