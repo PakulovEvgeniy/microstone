@@ -2,7 +2,7 @@
   <button
     :disabled="disable"
     @click="addToList(item.id)"
-    v-tooltip.top="toolStr"
+    v-tooltip.bottom="toolStr"
     class="button-ui button-ui_white button-ui_icon"
     :class="{
       'button-ui_done': isInList, 

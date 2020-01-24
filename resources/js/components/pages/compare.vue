@@ -6,11 +6,12 @@
       <template v-if="mount && countCompare">
         <compare-actions
           :curGroup="curGroup"
-          @changeGroup="curGroupIndex=$event"
-          @clearGroup="$store.dispatch('clearGroup', curGroup)"
+          @changeGroup="$store.commit('setCurGroupIndex', $event)"
+          @clearGroup="clearGroup"
         ></compare-actions>
       </template>
     </div>
+    <v-dialog/>
   </div>
 </template>
 
@@ -21,27 +22,38 @@
   export default {
     data() {
         return {
-          mount: false,
-          curGroupIndex: 0
+          mount: false
         }
     },
     computed: {
       ...mapGetters([
         'countCompare',
         'compare',
-        'compareGroups'
+        'compareGroups',
+        'curGroup'
       ]),
       title() {
         return 'Сравнение товаров';
-      },
-      curGroup() {
-        if (!this.compareGroups.length) {
-          return [];
-        }
-        return this.compareGroups[this.curGroupIndex];
       }
     },
     methods: {
+      clearGroup() {
+        this.$modal.show('dialog', {
+          text: 'Вы действительно хотите очистить список сравнения?',
+          buttons: [
+            {
+              title: 'ОК',
+              handler: () => { 
+                this.$store.dispatch('clearGroup', this.curGroup);
+                this.$modal.hide('dialog');
+              }
+            },
+            {
+              title: 'Отмена'
+            }
+          ]
+        })
+      }
     },
     components: {
       compareEmpty,

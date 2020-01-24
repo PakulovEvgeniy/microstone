@@ -95,6 +95,7 @@ export default {
       carouselWidth: 0,
       currentPage: 0,
       dragging: false,
+      draggingStart: false,
       dragto:false,
       dragtoLeft: 0,
       dragMomentum: 0,
@@ -753,7 +754,7 @@ export default {
         this.onDrag,
         true
       );
-
+      this.draggingStart = false;
       this.startTime = e.timeStamp;
       if (this.draggableEnable) {
         this.changeIndex = 0;
@@ -856,9 +857,8 @@ export default {
       }
 
       e.stopImmediatePropagation();
-      console.dir(e.target);
-      //console.log('dff');
-      
+
+  
 
       if (!this.draggableEnable) {
         this.dragOffset = newOffsetX;
@@ -882,8 +882,10 @@ export default {
         let offs = this.slideWidth*0.25;
         let offc = 0;
         if (this.dragOffsetTo>0) {
+          this.draggingStart = true;
           offc = Math.floor((this.dragOffsetTo+this.slideWidth-offs)/this.slideWidth);
-        } else {
+        } else if  (this.dragOffsetTo<0){
+          this.draggingStart = true;
           offc = -Math.floor((-this.dragOffsetTo+this.slideWidth-offs)/this.slideWidth);
         }
         if (this.changeIndex != offc) {

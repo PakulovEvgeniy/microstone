@@ -1,10 +1,16 @@
 export default {
-	mutations: {
+	state: {
+    curGroupIndex: 0
+  },
+  mutations: {
 	  setCompare(state, payload) {
       this.state.compare.items = payload;
     },
     setCompareProducts(state, payload) {
       this.state.compare.products = payload;
+    },
+    setCurGroupIndex(state, payload) {
+      state.curGroupIndex = payload;
     },
     delFromCompareProducts(state, payload) {
       let prod = this.state.compare.products;
@@ -110,6 +116,12 @@ export default {
         }
       });
       return res;
+    },
+    curGroup(state, getters, rootState) {
+      if (!getters.compareGroups.length) {
+        return undefined;
+      }
+      return getters.compareGroups[state.curGroupIndex];
     }
   },
   actions: {

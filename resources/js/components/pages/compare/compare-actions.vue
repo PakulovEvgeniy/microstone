@@ -10,7 +10,7 @@
         caption="Только различающиеся параметры"
       ></ui-toggle>
       <a @click="$emit('clearGroup')" class="clear-compare-list"><i class="fa fa-trash"></i><span>Очистить список</span></a>
-      <a class="edit-compare-list"><i class="fa fa-edit"></i><span>Редактировать</span></a>
+      <a @click="editCompare" class="edit-compare-list"><i class="fa fa-edit"></i><span>Редактировать</span></a>
     </div>
     <div class="compare__products">
       <div class="fixed">
@@ -63,6 +63,7 @@
   import Carousel from '../../Carousel/Carousel.vue';
   import Slide from '../../Carousel/Slide.vue';
   import productCompare from './product-compare.vue';
+  import editDialog from './edit-dialog.vue';
   export default {
     data() {
         return {
@@ -131,6 +132,13 @@
       },
       delFromCompare(el) {
         this.$store.dispatch('delFromLocalCompare', el.id);
+      },
+      editCompare() {
+        this.$store.commit('setBodyBlocked',true);
+        this.$modal.show(editDialog, {
+        }, {
+          height: 'auto'
+        });
       }
     },
     props: [
@@ -188,6 +196,7 @@
       }
       .edit-compare-list {
         display: none;
+        margin-left: 10px;
       }
     }
     &__products {
@@ -233,7 +242,7 @@
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     .compare {
       &__products {
         .fixed {
@@ -243,7 +252,7 @@
     }    
   }
 
-  @media (max-width: 992px) {
+  @media (max-width: 991px) {
     .compare {
       &__controls {
         .clear-compare-list {

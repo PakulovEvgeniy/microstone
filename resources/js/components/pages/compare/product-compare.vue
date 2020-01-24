@@ -56,6 +56,9 @@
       'product',
       'lock'
     ],
+    inject: {
+      carousel: { default: {} }
+    },
     computed: {
       ...mapGetters([
         'auth',
@@ -90,7 +93,9 @@
         }
       },
       click() {
-        console.log('fdgdfgdfgdf');
+        if(!this.carousel.draggingStart) {
+          this.$router.push('/product/'+this.product.chpu);
+        }
       }
     },
     components: {
