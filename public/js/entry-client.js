@@ -2389,8 +2389,7 @@ var getTransitionEnd = function getTransitionEnd() {
       "default": false
     },
     listKeys: {
-      type: Array,
-      "default": []
+      type: Array
     }
   },
   watch: {
@@ -8934,6 +8933,46 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -56199,6 +56238,81 @@ var render = function() {
             _c("i", { staticClass: "fa fa-edit" }),
             _c("span", [_vm._v("Редактировать")])
           ]
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "compare__products-mobile" },
+      [
+        _c(
+          "carousel",
+          {
+            attrs: {
+              navigationEnabled: true,
+              scrollPerPage: false,
+              paginationEnabled: false,
+              mouseDrag: true,
+              touchDrag: true,
+              loop: true,
+              perPage: 1,
+              draggableEnable: false
+            }
+          },
+          _vm._l(_vm.curGroup.items, function(el) {
+            return _c(
+              "slide",
+              { key: el.id },
+              [
+                _c("product-compare", {
+                  attrs: { product: el, lock: false },
+                  on: {
+                    clickTrash: function($event) {
+                      return _vm.delFromCompare(el)
+                    }
+                  }
+                })
+              ],
+              1
+            )
+          }),
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "carousel",
+          {
+            attrs: {
+              navigationEnabled: true,
+              scrollPerPage: false,
+              paginationEnabled: false,
+              mouseDrag: true,
+              touchDrag: true,
+              loop: true,
+              perPage: 1,
+              draggableEnable: false
+            }
+          },
+          _vm._l(_vm.curGroup.items, function(el) {
+            return _c(
+              "slide",
+              { key: el.id },
+              [
+                _c("product-compare", {
+                  attrs: { product: el, lock: false },
+                  on: {
+                    clickTrash: function($event) {
+                      return _vm.delFromCompare(el)
+                    }
+                  }
+                })
+              ],
+              1
+            )
+          }),
+          1
         )
       ],
       1

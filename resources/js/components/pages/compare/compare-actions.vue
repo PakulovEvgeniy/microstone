@@ -12,6 +12,46 @@
       <a @click="$emit('clearGroup')" class="clear-compare-list"><i class="fa fa-trash"></i><span>Очистить список</span></a>
       <a @click="editCompare" class="edit-compare-list"><i class="fa fa-edit"></i><span>Редактировать</span></a>
     </div>
+    <div class="compare__products-mobile">
+      <carousel 
+        :navigationEnabled="true" 
+        :scrollPerPage="false" 
+        :paginationEnabled="false"
+        :mouseDrag="true"
+        :touchDrag="true"
+        :loop="true"
+        :perPage="1"
+        :draggableEnable="false"
+      >
+        <slide v-for="el in curGroup.items" :key="el.id">
+            <product-compare
+              :product="el"
+              :lock="false"
+              @clickTrash="delFromCompare(el)"
+            >
+            </product-compare>
+        </slide>
+      </carousel>
+      <carousel 
+        :navigationEnabled="true" 
+        :scrollPerPage="false" 
+        :paginationEnabled="false"
+        :mouseDrag="true"
+        :touchDrag="true"
+        :loop="true"
+        :perPage="1"
+        :draggableEnable="false"
+      >
+        <slide v-for="el in curGroup.items" :key="el.id">
+            <product-compare
+              :product="el"
+              :lock="false"
+              @clickTrash="delFromCompare(el)"
+            >
+            </product-compare>
+        </slide>
+      </carousel>
+    </div>
     <div class="compare__products">
       <div class="fixed">
         <div 
@@ -200,6 +240,10 @@
       }
     }
     &__products {
+      &-mobile {
+        display: none;
+        margin-top: 30px;
+      }
       position: relative;
       margin-top: 30px;
       &:after {
@@ -245,8 +289,21 @@
   @media (max-width: 767px) {
     .compare {
       &__products {
-        .fixed {
-          display: none;
+        display: none;
+        &-mobile {
+          display: flex;
+          .VueCarousel {
+            width: 50%;
+          }
+          .compare__product {
+            .icon-lock, .icon-favorite {
+              display: none;
+            }
+            .icon-trash {
+              right: 10px;
+              top: 0;
+            }
+          }
         }
       }
     }    

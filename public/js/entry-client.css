@@ -4575,6 +4575,10 @@ button.trash {
   position: relative;
   margin-top: 30px;
 }
+.compare__products-mobile {
+  display: none;
+  margin-top: 30px;
+}
 .compare__products:after {
   content: '';
   display: block;
@@ -4608,8 +4612,22 @@ button.trash {
   right: 15px;
 }
 @media (max-width: 767px) {
-.compare__products .fixed {
+.compare__products {
     display: none;
+}
+.compare__products-mobile {
+    display: flex;
+}
+.compare__products-mobile .VueCarousel {
+    width: 50%;
+}
+.compare__products-mobile .compare__product .icon-lock,
+  .compare__products-mobile .compare__product .icon-favorite {
+    display: none;
+}
+.compare__products-mobile .compare__product .icon-trash {
+    right: 10px;
+    top: 0;
 }
 }
 @media (max-width: 991px) {

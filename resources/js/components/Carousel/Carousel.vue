@@ -357,8 +357,7 @@ export default {
     },
 
     listKeys: {
-      type: Array,
-      default: []
+      type: Array
     }
   },
   watch: {
