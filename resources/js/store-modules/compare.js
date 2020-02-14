@@ -1,10 +1,37 @@
+import {getListExcludeSome} from '../utils/utils.js';
+
 export default {
 	state: {
-    curGroupIndex: 0
+    curGroupIndex: 0,
+    exclude1Id: 1,
+    exclude2Id: 0,
+    curMobile1: 0,
+    curMobile2: 0,
+    curCompareSlide: 0,
+    onlyDifferent: false
   },
+
   mutations: {
 	  setCompare(state, payload) {
       this.state.compare.items = payload;
+    },
+    setCurCompareSlide(state, payload) {
+      state.curCompareSlide = payload;
+    },
+    setCurMobile1(state, payload) {
+      state.curMobile1 = payload;
+    },
+    setCurMobile2(state, payload) {
+      state.curMobile2 = payload;
+    },
+    setExclude1Id(state, payload) {
+      state.exclude1Id = payload;
+    },
+    setExclude2Id(state, payload) {
+      state.exclude2Id = payload;
+    },
+    setOnlyDifferent(state, payload) {
+      state.onlyDifferent = payload;
     },
     setCompareProducts(state, payload) {
       this.state.compare.products = payload;
@@ -91,6 +118,96 @@ export default {
     },
     compareProducts(state, getters, rootState) {
       return getters.compare.products;
+    },
+    itemFixed(state, getters, rootState) {
+      if (getters.smallScreen) { return; }
+      if(getters.curGroup) {
+        return getters.curGroup.items.filter(el => el.isFixed);
+      }
+    },
+    itemNotFixed(state, getters, rootState) {
+      if (getters.smallScreen) { return; }
+      if (getters.curGroup) {
+        return getters.curGroup.items.filter(el => !el.isFixed);
+      }
+    },
+    perPageCustom(state, getters, rootState) {
+      let c = 2;
+      if (!getters.smallScreen) {
+        c = c+=getters.getScreenState;
+      } else {
+        return c;
+      }
+      return Math.max(c-getters.itemFixed.length,0);
+    },
+    list1Mobile(state, getters, rootState) {
+      if (!getters.smallScreen) { return; }
+      return getListExcludeSome(state.exclude1Id, getters.curGroup);
+    },
+    list2Mobile(state, getters, rootState) {
+      if (!getters.smallScreen) { return; }
+      return getListExcludeSome(state.exclude2Id, getters.curGroup);
+    },
+    listParams(state, getters, rootState) {
+      let res = [];
+      if (getters.smallScreen) {
+        if (getters.list1Mobile && getters.list1Mobile.length) {
+          res.push(getters.list1Mobile[state.curMobile1]);
+        }
+        if (getters.list2Mobile && getters.list2Mobile.length) {
+          res.push(getters.list2Mobile[state.curMobile2]);
+        }
+      } else {
+        let c = 2 + getters.getScreenState;
+        if (getters.itemFixed && getters.itemFixed.length>0) {
+          for (var i = 0; i < getters.itemFixed.length; i++) {
+            res.push(getters.itemFixed[i]);
+            if (--c == 0) break;
+          }
+        }
+        if (c>0 && getters.itemNotFixed && getters.itemNotFixed.length>0) {
+          for (var i = state.curCompareSlide; i < getters.itemNotFixed.length; i++) {
+            res.push(getters.itemNotFixed[i]);
+            if (--c == 0) break;
+          }
+        }
+      }
+      return res;
+    },
+    tableOfParams(state, getters, rootState) {
+      let parms = [];
+      getters.listParams.forEach((el) => {
+        el.product_params.forEach((it) => {
+          let par = parms.find((p) => {
+            return it.param_type_id == p.param_type_id;
+          });
+          if (!par) {
+            par = {
+              param_type_id: it.param_type_id,
+              name: it.name
+            }
+            parms.push(par);
+          }
+        })
+      });
+      parms.forEach((el) => {
+        let par_val = getters.listParams.map((it) => {
+          let p = it.product_params.find(pp => el.param_type_id == pp.param_type_id);
+          return p ? p.value : '';
+        });
+        el.params = par_val;
+        el.notDifferent = true;
+        if (par_val.length) {
+          el.notDifferent = par_val.every(el => el == par_val[0]);
+        }
+      })
+      return parms;
+    },
+    baseWidth(state, getters, rootState) {
+      if (getters.smallScreen) {
+        return 0;
+      }
+      return 220;
     },
     compareGroups(state, getters, rootState) {
       let res = [];

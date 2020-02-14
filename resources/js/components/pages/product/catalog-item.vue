@@ -48,6 +48,7 @@
           </div>
           <div class="n-catalog-product__buttons">
             <add-in-list-button
+              v-tooltip.top="wishlist.items.indexOf(item.id) != -1 ? 'Удалить из избранного' : 'Добавить в избранное'"
               :item="item"
               :list="wishlist.items"
               :authOnly="true"
@@ -55,23 +56,21 @@
               addLocalAction="addToLocalWishlist"
               addAuthAction="addToServerWishlist"
               delAuthAction="delFromServerWishlist"
-              toolStrAdd="Добавить в избранное"
-              toolStrDel="Удалить из избранного"
               icon="fa-heart-o"
             ></add-in-list-button>
             <add-in-list-button
+              v-tooltip.top="compare.items.indexOf(item.id) != -1 ? 'Удалить из сравнения' : 'Добавить в сравнение'"
               :item="item"
               :list="compare.items"
               :authOnly="false"
               delLocalAction="delFromLocalCompare"
               addLocalAction="addToLocalCompare"
-              toolStrAdd="Добавить в сравнение"
-              toolStrDel="Удалить из сравнения"
               icon="fa-bar-chart"
             ></add-in-list-button>
 
             <div class="primary-btn">
               <buy-button
+                v-tooltip.top="cart.items.indexOf(item.id) != -1 ? 'Перейти в корзину'  : 'Добавить в корзину'"
                 :item="item"
                 :list="cart.items"
                 :passive="inItem ? false : true"
@@ -111,8 +110,6 @@
            'compare',
            'cart'
           ]),
-     
-
           price() {
             if (this.item.min_price && this.item.max_price) {
               let pr1 = parseFloat(this.item.min_price);

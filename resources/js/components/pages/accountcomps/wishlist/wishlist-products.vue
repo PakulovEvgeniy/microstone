@@ -44,19 +44,19 @@
           </div>
           <div class="wishlist-product__buttons">
             <buy-button
+              v-tooltip.top="cart.items.indexOf(el.id) != -1 ? 'Перейти в корзину'  : 'Добавить в корзину'"
               :item="el"
               :list="cart.items"
               :small="true"
             ></buy-button>
             <span class="but-group">
             <add-in-list-button
+              v-tooltip.top="compare.items.indexOf(el.id) != -1 ? 'Удалить из сравнения' : 'Добавить в сравнение'"
               :item="el"
               :list="compare.items"
               :authOnly="false"
               delLocalAction="delFromLocalCompare"
               addLocalAction="addToLocalCompare"
-              toolStrAdd="Добавить в сравнение"
-              toolStrDel="Удалить из сравнения"
               icon="fa-bar-chart"
             ></add-in-list-button>
             <button v-if="auth"

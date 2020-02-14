@@ -76,7 +76,7 @@ class Products extends Model
         }
         return $res;
     }
-    public static function getProductsList($list)
+    public static function getProductsList($list, $with_params=false)
     {
         $res = [];
         $row = Products::whereIn('products.id', $list)
@@ -95,6 +95,10 @@ class Products extends Model
         foreach ($row as $val) {
             $min_price = $val->min_price ? $val->min_price : 0;
             $price_disc = $min_price*0.9;
+            $prod_params=[];
+            if ($with_params) {
+               $prod_params = PartyParams::getProductParams($val->id_1s); 
+            }
             $res[] = [
                 'id' => $val->id,
                 'id_1s' => $val->id_1s,
@@ -110,7 +114,8 @@ class Products extends Model
                 'cat_id' => $val->cat_id,
                 'cat_name' => $val->cat_name,
                 'cg_id' => $val->cg_id,
-                'cg_name' => $val->cg_name
+                'cg_name' => $val->cg_name,
+                'product_params' => $prod_params
             ];
         }
 

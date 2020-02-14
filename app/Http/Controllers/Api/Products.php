@@ -122,7 +122,7 @@ class Products extends Controller
 			if (isset($qu['pr']) && is_array($qu['pr'])) {
 				$stat = 'OK';
 				$data = [
-					'setCompareProducts' => mod_Products::getProductsList($qu['pr'])
+					'setCompareProducts' => mod_Products::getProductsList($qu['pr'], true)
 				];
 			}
 		}

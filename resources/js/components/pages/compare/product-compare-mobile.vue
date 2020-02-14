@@ -14,11 +14,13 @@
     </div>
     <div class="compare__product-controls">
       <buy-button
+        v-tooltip.bottom="cart.items.indexOf(product.id) != -1 ? 'Перейти в корзину'  : 'Добавить в корзину'"
         :item="product"
         :list="cart.items"
         :small="true"
       ></buy-button>
       <add-in-list-button
+        v-tooltip.bottom="isInList ? 'Удалить из избранного' : 'Добавить в избранное'"
         :item="product"
         :list="wishlist.items"
         :authOnly="true"
@@ -26,8 +28,6 @@
         addLocalAction="addToLocalWishlist"
         addAuthAction="addToServerWishlist"
         delAuthAction="delFromServerWishlist"
-        toolStrAdd="Добавить в избранное"
-        toolStrDel="Удалить из избранного"
         icon="fa-heart-o"
       ></add-in-list-button>
       <trash-button @click="clickTrash"></trash-button>
@@ -38,8 +38,8 @@
 <script>
   import { mapGetters, mapActions } from 'vuex';
   import productRating from '../product/product-rating.vue';
-  import buyButton from '../../system/buy-button-down.vue';
-  import addInListButton from '../../system/add-in-list-button-down.vue';
+  import buyButton from '../../system/buy-button.vue';
+  import addInListButton from '../../system/add-in-list-button.vue';
   import trashButton from '../../system/trash-button.vue';
   export default {
     data() {

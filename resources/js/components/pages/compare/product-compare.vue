@@ -33,6 +33,7 @@
         </div>
         <div class="buttons" :class="{'lock': lock}">
           <buy-button
+            v-tooltip.bottom="cart.items.indexOf(product.id) != -1 ? 'Перейти в корзину'  : 'Добавить в корзину'"
             :item="product"
             :list="cart.items"
             :big="true"
@@ -46,7 +47,7 @@
 <script>
   import { mapGetters, mapActions } from 'vuex';
   import productRating from '../product/product-rating.vue';
-  import buyButton from '../../system/buy-button-down.vue';
+  import buyButton from '../../system/buy-button.vue';
   export default {
     data() {
         return {

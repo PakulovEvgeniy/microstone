@@ -8,51 +8,71 @@
     <div class="compare__controls">
       <ui-toggle 
         caption="Только различающиеся параметры"
+        :checked="onlyDifferent"
+        @input="onlyDifferent = !onlyDifferent"
       ></ui-toggle>
       <a @click="$emit('clearGroup')" class="clear-compare-list"><i class="fa fa-trash"></i><span>Очистить список</span></a>
       <a @click="editCompare" class="edit-compare-list"><i class="fa fa-edit"></i><span>Редактировать</span></a>
     </div>
-    <div class="compare__products-mobile">
-      <carousel 
-        :navigationEnabled="true" 
-        :scrollPerPage="false" 
-        :paginationEnabled="false"
-        :mouseDrag="true"
-        :touchDrag="true"
-        :loop="true"
-        :perPage="1"
-        :draggableEnable="false"
-      >
-        <slide v-for="el in curGroup.items" :key="el.id">
-            <product-compare
-              :product="el"
-              :lock="false"
-              @clickTrash="delFromCompare(el)"
-            >
-            </product-compare>
-        </slide>
-      </carousel>
-      <carousel 
-        :navigationEnabled="true" 
-        :scrollPerPage="false" 
-        :paginationEnabled="false"
-        :mouseDrag="true"
-        :touchDrag="true"
-        :loop="true"
-        :perPage="1"
-        :draggableEnable="false"
-      >
-        <slide v-for="el in curGroup.items" :key="el.id">
-            <product-compare
-              :product="el"
-              :lock="false"
-              @clickTrash="delFromCompare(el)"
-            >
-            </product-compare>
-        </slide>
-      </carousel>
+    <div v-if="smallScreen" class="compare__products-mobile">
+      <div>
+        <carousel
+          ref="car1"
+          v-model="curMobile1" 
+          :navigationEnabled="true" 
+          :scrollPerPage="false" 
+          :paginationEnabled="false"
+          :mouseDrag="true"
+          :touchDrag="true"
+          :loop="true"
+          :perPage="1"
+          :draggableEnable="false"
+          navigationNextLabel="<i class='fa fa-chevron-right'></i>"
+          navigationPrevLabel="<i class='fa fa-chevron-left'></i>"
+        >
+          <slide v-for="el in list1Mobile" :key="el.id">
+              <product-compare
+                :product="el"
+                :lock="false"
+                @clickTrash="delFromCompare(el)"
+              >
+              </product-compare>
+          </slide>
+        </carousel>
+        <div class="slide-controls">
+          <span v-show="list1Mobile.length>1">{{curMobile1ItemIndex}} из {{curGroup.items.length}}</span>
+        </div>
+      </div>
+      <div v-if="list2Mobile.length>1">
+        <carousel
+          ref="car2"
+          v-model="curMobile2" 
+          :navigationEnabled="true" 
+          :scrollPerPage="false" 
+          :paginationEnabled="false"
+          :mouseDrag="true"
+          :touchDrag="true"
+          :loop="true"
+          :perPage="1"
+          :draggableEnable="false"
+          navigationNextLabel="<i class='fa fa-chevron-right'></i>"
+          navigationPrevLabel="<i class='fa fa-chevron-left'></i>"
+        >
+          <slide v-for="el in list2Mobile" :key="el.id">
+              <product-compare
+                :product="el"
+                :lock="false"
+                @clickTrash="delFromCompare(el)"
+              >
+              </product-compare>
+          </slide>
+        </carousel>
+        <div class="slide-controls">
+          <span>{{curMobile2ItemIndex}} из {{curGroup.items.length}}</span>
+        </div>
+      </div>
     </div>
-    <div class="compare__products">
+    <div v-else class="compare__products">
       <div class="fixed">
         <div 
           v-for="el in itemFixed" 
@@ -70,6 +90,7 @@
       </div>
       <div v-if="perPageCustom>0" class="caro" :style="{'margin-left': marg+'px'}">
         <carousel 
+          v-model="curCompareSlide"
           :navigationEnabled="true" 
           ref="carousel" 
           :scrollPerPage="false" 
@@ -107,45 +128,90 @@
   export default {
     data() {
         return {
-
+          reCalc1: false,
+          reCalc2: false
         }
     },
     computed: {
       ...mapGetters([
         'compareGroups',
         'getScreenState',
-        'smallScreen'
+        'smallScreen',
+        'itemFixed',
+        'itemNotFixed',
+        'perPageCustom',
+        'baseWidth',
+        'list1Mobile',
+        'list2Mobile'
       ]),
-      itemFixed() {
-        return this.curGroup.items.filter(el => el.isFixed)
+      curMobile1: {
+        get () {
+          return this.$store.state.mCompare.curMobile1;
+        },
+        set (value) {
+          this.$store.commit('setCurMobile1', value);
+        }
       },
-      itemNotFixed() {
-        return this.curGroup.items.filter(el => !el.isFixed)
+      curMobile2: {
+        get () {
+          return this.$store.state.mCompare.curMobile2;
+        },
+        set (value) {
+          this.$store.commit('setCurMobile2', value);
+        }
+      },
+      onlyDifferent: {
+        get () {
+          return this.$store.state.mCompare.onlyDifferent;
+        },
+        set (value) {
+          this.$store.commit('setOnlyDifferent', value);
+        }
+      },
+      curCompareSlide: {
+        get () {
+          return this.$store.state.mCompare.curCompareSlide;
+        },
+        set (value) {
+          this.$store.commit('setCurCompareSlide', value);
+        }
       },
       listKeys() {
         return this.itemNotFixed.map(el => el.id)
       },
-      perPageCustom() {
-        let c = 2;
-        if (!this.smallScreen) {
-          c = c+=this.getScreenState;
-        } else {
-          return c;
-        }
-        return Math.max(c-this.itemFixed.length,0);
-      },
-      baseWidth() {
-        if (this.smallScreen) {
-          return 0;
-        }
-        return 220;
-      },
       marg() {
         //if (!this.$refs['comp_prod']) {return 0}
         return this.baseWidth*this.itemFixed.length+8;
+      },
+      curMobile1ItemIndex() {
+        if (this.curGroup && this.curGroup.items.length>1) {
+          return this.curGroup.items.findIndex((el) => {
+            return el.id == this.list1Mobile[this.curMobile1].id;
+          }) + 1;
+        }
+      },
+      curMobile2ItemIndex() {
+        if (this.curGroup && this.curGroup.items.length>1) {
+          return this.curGroup.items.findIndex((el) => {
+            return el.id == this.list2Mobile[this.curMobile2].id;
+          }) + 1;
+        }
       }
     },
     methods: {
+      getListExcludeSome(exclude) {
+        if (this.curGroup && this.curGroup.items.length) {
+          if (this.curGroup.items.length>0) {
+            return this.curGroup.items.filter((el, ind) => {
+               return ind != exclude;
+            });
+          } else {
+            return [];
+          }
+        } else {
+          return [];
+        }
+      },
       setFixed(el, val) {
         if (el.isFixed === undefined) {
           this.$set(el, 'isFixed', val);
@@ -189,6 +255,52 @@
       Carousel,
       Slide,
       productCompare
+    },
+    watch: {
+      curMobile1(val) {
+        if (!this.$refs.car2) {return;}
+        if (!this.reCalc2) {
+          this.$refs.car2.$data.dragging = true;
+        }
+        this.reCalc1 = true;
+        let it = this.list1Mobile[val];
+        let itOther = this.list2Mobile[this.curMobile2];
+        let ind = this.curGroup.items.findIndex((el) => {
+          return el.id == it.id;
+        });
+        this.$store.commit('setExclude2Id', ind);
+        let list = this.getListExcludeSome(ind);
+
+        this.curMobile2 = list.findIndex((el) => {
+          return el.id == itOther.id;
+        });
+        this.$nextTick(() => {
+          this.$refs.car2.$data.dragging = false;
+          this.reCalc1 = false;
+        });
+      },
+      curMobile2(val) {
+        if (!this.$refs.car1) {return;}
+        if (!this.reCalc1) {
+          this.$refs.car1.$data.dragging = true;
+        }
+        this.reCalc2 = true;
+        let it = this.list2Mobile[val];
+        let itOther = this.list1Mobile[this.curMobile1];
+        let ind = this.curGroup.items.findIndex((el) => {
+          return el.id == it.id;
+        });
+        this.$store.commit('setExclude1Id', ind);
+        let list = this.getListExcludeSome(ind);
+
+        this.curMobile1 = list.findIndex((el) => {
+          return el.id == itOther.id;
+        });
+        this.$nextTick(() => {
+          this.$refs.car1.$data.dragging = false;
+          this.reCalc2 = false;
+        });
+      }
     },
     mounted() {
 
@@ -291,9 +403,38 @@
       &__products {
         display: none;
         &-mobile {
+          .slide-controls {
+            height: 40px;
+            width: 100%;
+            text-align: center;
+            span {
+              line-height: 40px;
+            }
+          }
+          > div {
+            width: 50%;
+          }
           display: flex;
           .VueCarousel {
-            width: 50%;
+            width: 100%;
+            .VueCarousel-navigation-prev {
+              top: unset;
+              bottom: -65px;
+              left: 30px;
+              outline: none;
+              color: #8a8a8a;
+              font-size: 24px;
+              font-weight: bold;
+            }
+            .VueCarousel-navigation-next {
+              top: unset;
+              bottom: -65px;
+              right: 30px; 
+              outline: none;
+              color: #8a8a8a;
+              font-size: 24px;
+              font-weight: bold;
+            }
           }
           .compare__product {
             .icon-lock, .icon-favorite {

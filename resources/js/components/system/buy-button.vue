@@ -2,9 +2,8 @@
   <button
     :disabled="disable"
     @click="addToCart(item.id)"
-    v-tooltip.top="toolStr"
     class="buy button-ui button-ui_brand"
-    :class="{'active': isInList, 'button-ui_passive': passive, small: small}"
+    :class="{'active': isInList, 'button-ui_passive': passive, small: small, big: big}"
   >
   <span>{{btnText}}</span>
   <i class="fa" :class="{'fa-shopping-cart': !isInList, 'fa-check': isInList}"></i>
@@ -26,9 +25,6 @@ export default {
     isInList() {
       return this.list.indexOf(this.item.id) != -1;
     },
-    toolStr() {
-      return this.isInList ? 'Перейти в корзину'  : 'Добавить в корзину';
-    },
     btnText() {
       return this.isInList ? 'В корзине'  : 'Купить';
     }
@@ -37,7 +33,8 @@ export default {
     'item',
     'list',
     'passive',
-    'small'
+    'small',
+    'big'
   ],
   methods: {
     addToCart(id) {
@@ -72,7 +69,7 @@ export default {
         box-shadow: none;
       }
     }
-    &.small {
+    &.small, &.big {
       i {
         display: none;
       }

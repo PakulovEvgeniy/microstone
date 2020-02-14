@@ -2,7 +2,6 @@
   <button
     :disabled="disable"
     @click="addToList(item.id)"
-    v-tooltip.top="toolStr"
     class="button-ui button-ui_white button-ui_icon"
     :class="{
       'button-ui_done': isInList, 
@@ -36,9 +35,6 @@ export default {
     ]),
     isInList() {
       return this.list.indexOf(this.item.id) != -1;
-    },
-    toolStr() {
-      return this.isInList ? this.toolStrDel  : this.toolStrAdd;
     }
   },
   props: [
@@ -49,8 +45,6 @@ export default {
     'addLocalAction',
     'delAuthAction',
     'addAuthAction',
-    'toolStrAdd',
-    'toolStrDel',
     'icon'
   ],
   methods: {

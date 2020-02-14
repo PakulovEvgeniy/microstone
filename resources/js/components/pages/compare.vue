@@ -1,7 +1,7 @@
 <template>
   <div class="compare" v-title="title">
     <h1>{{title}}</h1>
-    <div v-show="mount" class="compare__block">
+    <div v-show="mount" class="compare__block" :class="{empty: !countCompare}">
       <compare-empty v-if="!countCompare"></compare-empty>
       <template v-if="mount && countCompare">
         <compare-actions
@@ -11,6 +11,7 @@
         ></compare-actions>
       </template>
     </div>
+    <compare-params v-if="mount && countCompare"></compare-params>
     <v-dialog/>
   </div>
 </template>
@@ -19,6 +20,7 @@
   import { mapGetters } from 'vuex';
   import compareEmpty from './compare/compare-empty.vue';
   import compareActions from './compare/compare-actions.vue';
+  import compareParams from './compare/compare-params.vue';
   export default {
     data() {
         return {
@@ -30,7 +32,8 @@
         'countCompare',
         'compare',
         'compareGroups',
-        'curGroup'
+        'curGroup',
+        'smallScreen'
       ]),
       title() {
         return 'Сравнение товаров';
@@ -57,7 +60,8 @@
     },
     components: {
       compareEmpty,
-      compareActions
+      compareActions,
+      compareParams
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {
@@ -79,6 +83,18 @@
         this.$store.commit('setCompareProducts', []);
         this.mount = true;
       }
+    },
+    watch: {
+      smallScreen(val) {
+        if (val) {
+          this.$store.commit('setExclude1Id', 1);
+          this.$store.commit('setExclude2Id', 0);
+          this.$store.commit('setCurMobile1', 0);
+          this.$store.commit('setCurMobile2', 0);
+        } else {
+          this.$store.commit('setCurCompareSlide', 0);
+        }
+      }
     }
   }
 </script>
@@ -91,11 +107,16 @@
       margin: 10px 0;
     }
     &__block {
-      border-radius: 8px;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
       box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16);
       border: solid 1px transparent;
       background-color: #fff;
       padding: 25px;
+      &.empty {
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+      }
     }
   }
 </style>
