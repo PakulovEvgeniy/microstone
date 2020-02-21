@@ -13,7 +13,7 @@
       </div>
       <div class="account__content" :class="{'not-auth': !auth}">
         <h1 :class="{show: !auth}">{{title}}</h1>
-        <div class="account__content_block">
+        <div class="account__content_block" :class="{wishlist: curComponent=='wishlist'}">
           <component :is="curComponent"></component>
         </div>
       </div>
@@ -344,7 +344,7 @@
       &.not-auth {
         margin-top: 0;
       }
-      &_block {
+      &_block.wishlist {
         border-radius: unset;
         box-shadow: none;
         border: none;

@@ -171,12 +171,18 @@ export default {
             if (--c == 0) break;
           }
         }
+        if (c>0) {
+          while (c--) {
+            res.push(undefined);
+          }
+        }
       }
       return res;
     },
     tableOfParams(state, getters, rootState) {
       let parms = [];
       getters.listParams.forEach((el) => {
+        if (el === undefined) {return;}
         el.product_params.forEach((it) => {
           let par = parms.find((p) => {
             return it.param_type_id == p.param_type_id;
@@ -192,13 +198,17 @@ export default {
       });
       parms.forEach((el) => {
         let par_val = getters.listParams.map((it) => {
+          if (it === undefined) { return undefined; }
           let p = it.product_params.find(pp => el.param_type_id == pp.param_type_id);
           return p ? p.value : '';
         });
         el.params = par_val;
         el.notDifferent = true;
         if (par_val.length) {
-          el.notDifferent = par_val.every(el => el == par_val[0]);
+          el.notDifferent = par_val.every((el) =>  {
+            if (el === undefined) { return true; }
+            return el == par_val[0]
+          });
         }
       })
       return parms;

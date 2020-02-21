@@ -200,7 +200,7 @@
       .block-2 {
         display: flex;
         flex-grow: 1;
-        justify-content: right;
+        justify-content: flex-end;
         margin-top: 10px;
       }
       .image {

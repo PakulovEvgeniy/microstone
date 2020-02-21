@@ -861,6 +861,9 @@ export default {
 
       if (!this.draggableEnable) {
         this.dragOffset = newOffsetX;
+        if (newOffsetX != 0) {
+          this.draggingStart = true;
+        }
         const nextOffset = this.offset + this.dragOffset;
 
         if (this.rtl) {

@@ -105,6 +105,15 @@ export default {
     cancelNewMode() {
       this.editMode = false;
       this.newMode = false;
+    },
+    close() {
+      this.$store.commit('setBodyBlocked',false);
+      this.$emit('close');
+    }
+  },
+  watch: {
+    '$route' (val) {
+      this.close();
     }
   },
   computed: {

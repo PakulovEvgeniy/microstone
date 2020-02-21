@@ -11,6 +11,14 @@
         ></compare-actions>
       </template>
     </div>
+    <div v-if="mount" class="compare__add">
+      <button @click="isSearch=!isSearch" class="button-ui button-ui_brand">Добавить товар</button>
+      <search-module 
+        v-if="isSearch"
+        @close="isSearch=false"
+      >
+      </search-module>
+    </div>
     <compare-params v-if="mount && countCompare"></compare-params>
     <v-dialog/>
   </div>
@@ -21,10 +29,12 @@
   import compareEmpty from './compare/compare-empty.vue';
   import compareActions from './compare/compare-actions.vue';
   import compareParams from './compare/compare-params.vue';
+  import searchModule from '../system/search-module.vue';
   export default {
     data() {
         return {
-          mount: false
+          mount: false,
+          isSearch: false
         }
     },
     computed: {
@@ -61,7 +71,8 @@
     components: {
       compareEmpty,
       compareActions,
-      compareParams
+      compareParams,
+      searchModule
     },
     beforeRouteEnter (to, from, next) {
       next(vm => {
@@ -105,6 +116,16 @@
       font-weight: normal;
       font-size: 28px;
       margin: 10px 0;
+    }
+    &__add {
+      background: #fff;
+      position: relative;
+      > button {
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-left: 20px;
+        margin-bottom: 20px;
+      }
     }
     &__block {
       border-top-left-radius: 8px;

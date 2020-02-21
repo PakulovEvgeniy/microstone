@@ -64,6 +64,7 @@ export default {
         setTimeout(() => {
           this.disable = false;    
         }, 1000);
+        console.log(this.isInList);
         if (this.isInList) {
           this.$store.dispatch(this.delAuthAction, id);
         } else {

@@ -99,9 +99,16 @@ export default {
       })
     },
     delFromServerWishlist({commit, dispatch}, data) {
+      let param = data;
+      if (typeof data !== 'object') {
+        param = {
+          id: data,
+          group_id: 0
+        }
+      }
       return dispatch('queryPostToServer', {
         url: '/account/wishlist/delete',
-        params: data
+        params: param
       })
     },
     delFromLocalWishlist({commit, dispatch}, data) {

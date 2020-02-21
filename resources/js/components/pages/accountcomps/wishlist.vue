@@ -1,5 +1,5 @@
 <template>
-    <div v-show="mounted" class="account-wishlist">
+    <div v-show="mount" class="account-wishlist">
       <div v-if="auth && wishCurGroup !== null" class="account-wishlist__head">
         <router-link to="/account/wishlist" class="button-ui button-ui_white back">Назад</router-link>
         <dropdown-menu>
@@ -199,7 +199,8 @@
               curCatId: 0,
               select: false,
               prodChecked: [],
-              selType: 'list'
+              selType: 'list',
+              mount: false
             }
         }, 
         props: [
@@ -218,7 +219,6 @@
            'wishlist',
            'wishProducts',
            'compare',
-           'mounted',
            'cart',
            'wishCurGroup',
            'wishCurName',
@@ -550,10 +550,15 @@
                 params: {
                   pr: this.wishlist.items
                 }
+              }).then(() => {
+                this.mount = true;
               });
             } else {
               this.$store.commit('setWishlistProducts', []);
+              this.mount = true;
             }
+          } else {
+            this.mount = true;
           }
         },
         watch: {
@@ -561,6 +566,7 @@
             this.curCatId = 0;
             this.select = false;
             this.prodChecked = [];
+            this.$modal.hide('dialog');
           }
         }
     }
@@ -837,7 +843,7 @@
         .menu-dropdown-target {
           color: gray;
           margin-right: 5px;
-          max-width: 150px;
+          max-width: 140px;
           overflow-x: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;

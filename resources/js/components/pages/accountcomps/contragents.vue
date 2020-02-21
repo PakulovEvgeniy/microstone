@@ -207,9 +207,4 @@
       }
     }
 
-    @media (max-width: 991px) {
-      .account-contragents__add {
-        line-height: 48px;
-      }
-    }
 </style>

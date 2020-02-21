@@ -35,6 +35,15 @@
             } else {
               this.actFunc(this.value);
             }
+          },
+          close() {
+            this.$store.commit('setBodyBlocked',false);
+            this.$emit('close');
+          }
+        },
+        watch: {
+          '$route' (val) {
+            this.close();
           }
         }
     }

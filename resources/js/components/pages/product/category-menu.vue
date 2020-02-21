@@ -114,7 +114,7 @@ import { mapGetters } from 'vuex';
     height: auto;
     width: 240px;
     font-size: 14px;
-    z-index: 898;
+    z-index: 91;
   }
 
   .catalog li {

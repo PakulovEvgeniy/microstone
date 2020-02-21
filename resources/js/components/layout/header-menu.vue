@@ -37,6 +37,13 @@
            <span v-show="wishlist.items.length" class="btn-wishlist-link__badge">{{wishlist.items.length}}</span>
          </router-link>
        </li>
+       <li class="menu-item-comparelist">
+         <router-link class="btn-comparelist-link" to="/compare">
+           <i class="fa fa-bar-chart icon"></i>
+           Сравнение
+           <span v-show="compare.items.length" class="btn-comparelist-link__badge">{{compare.items.length}}</span>
+         </router-link>
+       </li>
        <li class="menu-item-waitlist">
          <router-link class="btn-waitlist-link" to="/account/waitlist">
            <i class="fa fa-clock-o icon"></i>
@@ -92,7 +99,8 @@
             'userEmail',
             'csrf',
             'wishlist',
-            'waitlist'
+            'waitlist',
+            'compare'
           ])
         },
         methods: {
@@ -245,7 +253,7 @@
       background: rgba(29, 113, 184);
       color: #fff !important;
     }
-    .btn-wishlist-link__badge, .btn-waitlist-link__badge {
+    .btn-wishlist-link__badge, .btn-waitlist-link__badge, .btn-comparelist-link__badge {
       border-radius: 13px;
       display: inline-flex;
       justify-content: center;

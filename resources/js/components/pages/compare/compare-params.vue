@@ -161,7 +161,7 @@
     &__params {
       
       &-table_title {
-        padding: 2em 20px;
+        padding: 1em 20px 2em;
       }
     }
   }
@@ -191,7 +191,7 @@
     &__params {
       
       &-table_title {
-        padding: 2em 20px 1em;
+        padding: 1em 20px 1em;
         border-top: 1px solid #d8d8d8;
       }
     }
