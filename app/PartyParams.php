@@ -15,8 +15,8 @@ class PartyParams extends Model
     public static function getProductParams($id_1s) {
     	$prd = PartyParams::where(['product_id1s' => $id_1s])
             ->leftJoin('param_type','party_params.param_type_id','=','param_type.id')
-    		->select('party_params.param_type_id as param_type_id', 'value', 'param_type.name as name')
-    		->groupBy('party_params.param_type_id', 'value', 'param_type.name')
+    		->select('party_params.param_type_id as param_type_id', 'value', 'param_type.name as name', 'param_type.kod_sort as kod_sort','param_type.description as description')
+    		->groupBy('party_params.param_type_id', 'value', 'param_type.name', 'param_type.kod_sort', 'param_type.description')
     		->get();
     	return $prd->toArray();
     }

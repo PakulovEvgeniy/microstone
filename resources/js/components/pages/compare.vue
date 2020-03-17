@@ -11,9 +11,10 @@
         ></compare-actions>
       </template>
     </div>
-    <div v-if="mount" class="compare__add">
+    <div v-if="mount" class="compare__add" :class="{empty: !countCompare}">
       <button @click="isSearch=!isSearch" class="button-ui button-ui_brand">Добавить товар</button>
-      <search-module 
+      <search-module
+        :notCompare="true" 
         v-if="isSearch"
         @close="isSearch=false"
       >
@@ -126,6 +127,12 @@
         margin-left: 20px;
         margin-bottom: 20px;
       }
+      &.empty {
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        border: solid 1px transparent;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16);
+      }
     }
     &__block {
       border-top-left-radius: 8px;
@@ -134,10 +141,7 @@
       border: solid 1px transparent;
       background-color: #fff;
       padding: 25px;
-      &.empty {
-        border-bottom-left-radius: 8px;
-        border-bottom-right-radius: 8px;
-      }
+    
     }
   }
 </style>

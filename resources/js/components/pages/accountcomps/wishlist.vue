@@ -488,7 +488,7 @@
             });
           },
           archiveCustom(el, arch) {
-            this.$store.dispatch('queryPostToServer', {
+            return this.$store.dispatch('queryPostToServer', {
                 url: '/account/wishlist/archivegroup',
                 params: {
                   id: el.id,
@@ -497,8 +497,9 @@
             });
           },
           archiveAct(el, arch) {
-            this.archiveCustom(el, arch);
-            this.$router.push('/account/wishlist/0');
+            this.archiveCustom(el, arch).then(() => {
+              this.$router.push('/account/wishlist/0');
+            });
           },
           delCustom(el) {
             this.$modal.show('dialog', {

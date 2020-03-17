@@ -58,6 +58,7 @@
               delAuthAction="delFromServerWishlist"
               icon="fa-heart-o"
             ></add-in-list-button>
+            <div class="compare-button" :class="{incompare: compare.items.indexOf(item.id) != -1}">
             <add-in-list-button
               v-tooltip.top="compare.items.indexOf(item.id) != -1 ? 'Удалить из сравнения' : 'Добавить в сравнение'"
               :item="item"
@@ -66,8 +67,10 @@
               delLocalAction="delFromLocalCompare"
               addLocalAction="addToLocalCompare"
               icon="fa-bar-chart"
+              @click="clickCompare"
             ></add-in-list-button>
-
+            <compare-popover v-if="compare.items.indexOf(item.id) != -1"></compare-popover>
+            </div>
             <div class="primary-btn">
               <buy-button
                 v-tooltip.top="cart.items.indexOf(item.id) != -1 ? 'Перейти в корзину'  : 'Добавить в корзину'"
@@ -91,6 +94,7 @@
   import addInListButton from '../../system/add-in-list-button.vue';
   import buyButton from '../../system/buy-button.vue';
   import productRating from './product-rating.vue';
+  import comparePopover from '../compare/compare-popover.vue';
   import { mapGetters, mapActions } from 'vuex';
     export default {
         data() {
@@ -108,7 +112,8 @@
            'auth',
            'wishlist',
            'compare',
-           'cart'
+           'cart',
+           'getScreenState'
           ]),
           price() {
             if (this.item.min_price && this.item.max_price) {
@@ -128,7 +133,8 @@
           availLinks,
           addInListButton,
           buyButton,
-          productRating
+          productRating,
+          comparePopover
         },
         methods: {
           ...mapActions([
@@ -137,6 +143,24 @@
           ]),
           clickBuy() {
             this.$router.push('/product/'+this.item.chpu);
+          },
+          goodsEnd(qty) {
+            let c = qty % 100;
+            let a1 = [1, 21, 31, 41, 51, 61, 71, 81, 91];
+            let a2 = [2, 3, 4, 22, 23, 24, 32, 33, 34, 42, 43, 44, 52, 53, 54, 62, 63, 64, 72, 73, 74, 82, 83, 84, 92, 93, 94];
+            if (a1.indexOf(c) != -1) {
+              return 'товар';
+            } else if(a2.indexOf(c) != -1) {
+              return 'товара';
+            } else {
+              return 'товаров';
+            }
+          },
+          clickCompare() {
+            if (this.getScreenState == 1) {
+              $notify("compare");
+              $notify("compare", 'В сравнении ' + this.compare.items.length + ' ' + this.goodsEnd(this.compare.items.length), "compare");
+            }
           }
         }
     }
@@ -162,11 +186,51 @@
     color: rgb(29, 113, 184);
   }
 
+  .n-catalog-product__buttons {
+    .compare-button {
+      position: relative;
+      .compare-info {
+        display: none;
+      }
+    }
+    .compare-button.incompare:hover {
+      .compare-info {
+        display: block;
+        z-index: 1000;
+      }
+    }
+  }
+
   .n-catalog-product__buttons button{
     margin-right: 12px;
   }
   .n-catalog-product__buttons button:first-child {
    margin: 0 12px 0 auto;
   }
-  
+
+  .vs-notify.compare .ntf {
+    border-radius: 8px;
+    background-color: #333;
+    bottom: 75px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.16);
+    color: #fff;
+    max-width: 100%;
+    min-width: 315px;
+    left: 50%;
+    padding: 19px 16px;
+    border-left: none;
+    div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #333;
+      color: #fff;
+      a {
+        color: #fc7b08;
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+  }  
 </style>

@@ -12,13 +12,13 @@
         v-show="!el.notDifferent || (el.notDifferent && !onlyDifferent)"
         >
         <div class="compare__params-table_title_col">
-          <span v-if="getScreenState>1">{{el.name}}</span>
-          <a v-else class="mobile-popover" v-tooltip.bottom="{ content: 'lorem erjtkl erjtkwjre tjeklrt wekrjwkl rwkjerkl wekjrlkwejrlkwejrl wekrjlkwejr kwejr klwejrlkjweklrjwekljrlkwejrl kwejrkljweklrj wklejr lkwejr klwejrlkwejrlkwejrlkjwelkrjlwk ejr kwejrlkwej', classes: ['lite'], trigger: 'click'}">
+          <span v-show="getScreenState>1">{{el.name}}</span>
+          <a v-show="getScreenState<=1" class="mobile-popover" v-tooltip.bottom="{ content: el.description, classes: ['lite'], trigger: 'click'}">
             {{el.name}}
-            <i class="fa fa-question-circle-o"></i>
+            <i v-show="el.description" class="fa fa-question-circle-o"></i>
           </a>
-            <a v-if="getScreenState>1" class="show-popover" v-tooltip.right="{ content: 'lorem erjtkl erjtkwjre tjeklrt wekrjwkl rwkjerkl wekjrlkwejrlkwejrl wekrjlkwejr kwejr klwejrlkjweklrjwekljrlkwejrl kwejrkljweklrj wklejr lkwejr klwejrlkwejrlkwejrlkjwelkrjlwk ejr kwejrlkwej', classes: ['lite']}">
-              <i class="fa fa-question-circle-o"></i>
+            <a v-show="getScreenState>1" class="show-popover" v-tooltip.right="{ content: el.description, classes: ['lite']}">
+              <i v-show="el.description" class="fa fa-question-circle-o"></i>
             </a>
         </div>
         <div class="compare__params-val_cont">

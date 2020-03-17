@@ -96,7 +96,9 @@ export default {
 	actions: {
       queryForApp({commit, dispatch}, data) {
         data.notwait = true;
-        data.notcatch = true;
+        if (data.notcatch === undefined) {
+          data.notcatch = true;
+        }
         if (!data.params) {
           data.params = {};
         }
@@ -147,10 +149,10 @@ export default {
               dispatch('closeWait');
             }
             if (response.data.status=='OK' && data.successAction) {
-              data.successAction();
+              data.successAction(response.data);
             }
             if (response.data.status=='ER' && data.errorAction) {
-              data.errorAction();
+              data.errorAction(response.data);
             }
             dispatch('setParams', response.data);
           })
@@ -159,7 +161,7 @@ export default {
         } else {
           return gt.catch(e => {
             if (data.errorAction) {
-              data.errorAction();
+              data.errorAction(e);
             }
             dispatch('showError', e);
           })

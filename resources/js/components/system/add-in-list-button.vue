@@ -58,13 +58,13 @@ export default {
             this.$store.dispatch(this.addLocalAction, id);
           }
           this.disable = false;
+          this.$emit('click');
         } , 1000);
       } else {
         this.disable = true;
         setTimeout(() => {
           this.disable = false;    
         }, 1000);
-        console.log(this.isInList);
         if (this.isInList) {
           this.$store.dispatch(this.delAuthAction, id);
         } else {

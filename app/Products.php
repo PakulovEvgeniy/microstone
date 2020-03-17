@@ -76,6 +76,9 @@ class Products extends Model
         }
         return $res;
     }
+
+
+
     public static function getProductsList($list, $with_params=false)
     {
         $res = [];
@@ -194,6 +197,40 @@ class Products extends Model
             }
         
             return $it;
+    }
+
+    public static function searchProducts($qu) 
+    {
+        if (isset($qu['perPage'])) {
+            $pgCount = intval($qu['perPage']);
+        }
+        if (!$pgCount) {
+            $pgCount = 10;
+        }
+        $page = 0;
+        if (isset($qu['page'])) {
+            $page = intval($qu['page']);
+        }
+        if (!$page) {
+            $page = 0;
+        }
+        
+
+        $prd = Products::where(['products.status' => 1])
+            ->select('products.id as id')
+            ->leftJoin('products_descriptions','products.id','=','products_descriptions.products_id')
+            ->where('name', 'like' , '%' . $qu['value'] . '%');
+
+        $qty = $prd->get()->count();
+
+        $prd = $prd->orderBy('id')->offset(($page)*$pgCount)->limit($pgCount)->get(); 
+
+        $dat = [];
+
+        foreach ($prd as $val) {
+            $dat[] = $val['id'];
+        }
+        return ['totalQty' => $qty, 'items' => self::getProductsList($dat)];
     }
 
     public static function getProductsCategoryPage($id_1s, $filtr) {

@@ -113,6 +113,19 @@ export default {
 		compare(state, getters, rootState) {
       return rootState.compare;
     },
+    compareEqual(state, getters, rootState) {
+      let it = getters.compare.items;
+      let prod = getters.compare.products;
+      if (!it.length) { return false; }
+      if (it.length != prod.length) { return false; }
+      for (let i = 0; i < it.length; i++) {
+        let elem = prod.find((el) => {
+          return el.id == it[i];
+        });
+        if (!elem) { return false; }
+      }
+      return true;
+    },
     countCompare(state, getters, rootState) {
       return getters.compare.items.length;
     },
@@ -120,16 +133,18 @@ export default {
       return getters.compare.products;
     },
     itemFixed(state, getters, rootState) {
-      if (getters.smallScreen) { return; }
+      if (getters.smallScreen) { return [];}
       if(getters.curGroup) {
         return getters.curGroup.items.filter(el => el.isFixed);
       }
+      return [];
     },
     itemNotFixed(state, getters, rootState) {
-      if (getters.smallScreen) { return; }
+      if (getters.smallScreen) { return []; }
       if (getters.curGroup) {
         return getters.curGroup.items.filter(el => !el.isFixed);
       }
+      return [];
     },
     perPageCustom(state, getters, rootState) {
       let c = 2;
@@ -190,7 +205,9 @@ export default {
           if (!par) {
             par = {
               param_type_id: it.param_type_id,
-              name: it.name
+              name: it.name,
+              kod_sort: it.kod_sort,
+              description: it.description
             }
             parms.push(par);
           }
@@ -211,7 +228,9 @@ export default {
           });
         }
       })
-      return parms;
+      return parms.sort((el1, el2) => {
+        return el1.kod_sort - el2.kod_sort;
+      });
     },
     baseWidth(state, getters, rootState) {
       if (getters.smallScreen) {
@@ -259,6 +278,7 @@ export default {
     clearGroup({commit, dispatch}, data) {
       let arr = data.items.map(el => el.id);
       dispatch('delFromLocalCompare', arr);
+      commit('setCurGroupIndex', 0);
     },
     addToLocalCompare({commit, dispatch}, data) {
       let wish = localStorage.getItem('compare');
@@ -267,8 +287,16 @@ export default {
       } else {
         wish = JSON.parse(wish);
       }
-      if (wish.indexOf(data) == -1) {
-        wish.push(data);
+      if (Array.isArray(data)) {
+        data.forEach(el => {
+          if (wish.indexOf(el) == -1) {
+            wish.push(el);
+          }
+        })
+      } else {
+        if (wish.indexOf(data) == -1) {
+          wish.push(data);
+        }
       }
       localStorage.setItem('compare', JSON.stringify(wish));
       commit('setCompare', wish);

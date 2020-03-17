@@ -68,14 +68,21 @@ class Obmen extends Controller
            $id = $par['pt_id'];
            $name = $par['pt_name'];
            $table = $par['pt_table'];
+           $kod_sort = $par['pt_sort'];
+           $opis = $par['pt_opis'];
            if (!$table) {
                $table = '';
+           }
+           if (!$kod_sort) {
+             $kod_sort = 0;
            }
 
            $ord = ParamTypes::firstOrNew(['id' => $id]);
            $ord->id = $id;
            $ord->name = $name;
            $ord->table = $table;
+           $ord->kod_sort = $kod_sort;
+           $ord->description = $opis;
            $ord->save();
            return 'OK'; 
         }

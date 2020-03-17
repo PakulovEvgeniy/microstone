@@ -6,6 +6,14 @@
         transition="ntf-top" 
         :duration="4000">
       </vs-notify>
+      <vs-notify 
+        group="compare" 
+        position="bottom center" 
+        :duration="4000">
+        <template v-slot:body="props">
+          <div><span class="content" v-html="props.item.text"></span><a @click="comparePop(props)">Сравнить</a></div>
+        </template>
+      </vs-notify>
       <div v-if = "!nonVisibleMain">
         <header-component></header-component>
       </div>
@@ -85,6 +93,10 @@
                 body.classList.remove('blocked');
               }
             }
+          },
+          comparePop(props) {
+            this.$router.push('/compare');
+            props.close();
           }
         },
         computed: {

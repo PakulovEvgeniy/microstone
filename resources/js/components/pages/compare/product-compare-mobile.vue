@@ -124,6 +124,7 @@
       font-weight: bold;
       font-size: 22px;
       width: calc(40% - 30px);
+      white-space: nowrap; 
       span {
         margin-right: 10px;
       }

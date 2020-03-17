@@ -16,6 +16,9 @@ class CreateParamTypesTable extends Migration
         Schema::create('param_type', function (Blueprint $table) {
             $table->string('id', 11);
             $table->string('name', 100)->default('');
+            $table->string('table', 50);
+            $table->integer('kod_sort')->default(0);
+            $table->text('description')->nullable();
             $table->primary(['id']);
         });
     }

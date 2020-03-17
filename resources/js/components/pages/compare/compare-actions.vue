@@ -43,7 +43,7 @@
           <span v-show="list1Mobile.length>1">{{curMobile1ItemIndex}} из {{curGroup.items.length}}</span>
         </div>
       </div>
-      <div v-if="list2Mobile.length>1">
+      <div v-if="list2Mobile.length>0">
         <carousel
           ref="car2"
           v-model="curMobile2" 
@@ -68,7 +68,7 @@
           </slide>
         </carousel>
         <div class="slide-controls">
-          <span>{{curMobile2ItemIndex}} из {{curGroup.items.length}}</span>
+          <span v-show="list2Mobile.length>1">{{curMobile2ItemIndex}} из {{curGroup.items.length}}</span>
         </div>
       </div>
     </div>

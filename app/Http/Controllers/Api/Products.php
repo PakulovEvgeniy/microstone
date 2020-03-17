@@ -21,6 +21,16 @@ class Products extends Controller
     	$param = $request->route('id');
     	$stat = 'ER';
     	$data = [];
+    	
+    	if ($param == 'quickseach') {
+    		$qu = $request->all();
+    		if (isset($qu['value'])) {
+    			$stat = 'OK';
+    			$products = mod_Products::searchProducts($qu);
+    			return ['status' => $stat, 'products' => $products];
+    		}
+    	}
+
     	if ($param == 'category') {
     		$stat = 'OK';
     		$data = [
