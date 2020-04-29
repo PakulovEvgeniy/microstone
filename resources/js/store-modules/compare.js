@@ -38,6 +38,11 @@ export default {
     },
     setCurGroupIndex(state, payload) {
       state.curGroupIndex = payload;
+      state.exclude1Id = 1;
+      state.exclude2Id = 0;
+      state.curMobile1 = 0;
+      state.curMobile2 = 0;
+      state.curCompareSlide = 0;
     },
     delFromCompareProducts(state, payload) {
       let prod = this.state.compare.products;
@@ -261,7 +266,15 @@ export default {
           });
         }
       });
-      return res;
+      return res.sort((el1, el2) => {
+        if (el1.name > el2.name) {
+          return 1;
+        } else if (el1.name < el2.name) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
     },
     curGroup(state, getters, rootState) {
       if (!getters.compareGroups.length) {

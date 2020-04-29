@@ -84,8 +84,10 @@ export default {
     i {
       font-size: 18px;
     }
-    &:hover {
-      color: #fff;
+    @media (min-width: 992px) {
+      &:hover {
+        color: #fff;
+      }
     }
   }
   .button-ui.button-ui_action-icon-off {
@@ -94,8 +96,10 @@ export default {
     i {
       font-size: 18px;
     }
-    &:hover {
-      color: #fff;
+    @media (min-width: 992px) {
+      &:hover {
+        color: #fff;
+      }
     }
   }
 

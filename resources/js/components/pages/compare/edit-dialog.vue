@@ -12,18 +12,25 @@
         v-for="el in curGroup.items" 
         :key="el.id"
         :product="el"
+        @onZoom="clickZoom($event)"
       ></product-compare-mobile>
       <v-dialog/>
+      <vue-gallery :images="galImages" 
+        :index="indexGallery" 
+        id = "blueimp-gallery-edit"
+        @close="closeGallery"></vue-gallery>
     </div>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
-  import productCompareMobile from './product-compare-mobile.vue'; 
+  import productCompareMobile from './product-compare-mobile.vue';
+  import VueGallery from '../../Gallery/gallery.vue'; 
     export default {
         data() {
             return {
-              
+              indexGallery: null,
+              galImages: []
             }
         }, 
         props: [
@@ -35,9 +42,19 @@
           ])
         },
         components: {
-          productCompareMobile
+          productCompareMobile,
+          VueGallery
         },
         methods: {
+          clickZoom(e) {
+            this.galImages = e.images;
+            this.indexGallery = 0;
+          },
+          closeGallery() {
+            if (this.indexGallery!==null) {
+              this.indexGallery = null;
+            }
+          },
           close() {
             this.$store.commit('setBodyBlocked',false);
             this.$emit('close');

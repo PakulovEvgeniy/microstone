@@ -367,6 +367,21 @@ export default {
         this.render();
       }
     },
+    draggableEnable(val) {
+      if(this.$refs["VueCarousel-wrapper"]) {
+        if (val) {
+          this.$refs["VueCarousel-wrapper"].addEventListener(
+            "mousedown",
+            this.onStart
+          );
+        } else {
+          this.$refs["VueCarousel-wrapper"].removeEventListener(
+            "mousedown",
+            this.onStart
+          );
+        }
+      }
+    },
     navigateTo: {
       immediate: true,
       handler(val) {

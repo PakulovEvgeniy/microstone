@@ -2411,6 +2411,15 @@ var getTransitionEnd = function getTransitionEnd() {
         this.render();
       }
     },
+    draggableEnable: function draggableEnable(val) {
+      if (this.$refs["VueCarousel-wrapper"]) {
+        if (val) {
+          this.$refs["VueCarousel-wrapper"].addEventListener("mousedown", this.onStart);
+        } else {
+          this.$refs["VueCarousel-wrapper"].removeEventListener("mousedown", this.onStart);
+        }
+      }
+    },
     navigateTo: {
       immediate: true,
       handler: function handler(val) {
@@ -3397,6 +3406,184 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
       if (this.carousel.minSwipeDistance === 0 || Math.abs(deltaX) < this.carousel.minSwipeDistance) {
         this.$emit("slideclick", _extends({}, e.currentTarget.dataset));
         this.$emit("slide-click", _extends({}, e.currentTarget.dataset));
+      }
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gallery/gallery.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Gallery/gallery.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var blueimp_gallery_css_blueimp_gallery_min_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! blueimp-gallery/css/blueimp-gallery.min.css */ "./node_modules/blueimp-gallery/css/blueimp-gallery.min.css");
+/* harmony import */ var blueimp_gallery_css_blueimp_gallery_min_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(blueimp_gallery_css_blueimp_gallery_min_css__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _blueimp_gallery_fullscreen_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./blueimp-gallery-fullscreen.js */ "./resources/js/components/Gallery/blueimp-gallery-fullscreen.js");
+/* harmony import */ var _blueimp_gallery_fullscreen_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_blueimp_gallery_fullscreen_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _blueimp_gallery_video_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./blueimp-gallery-video.js */ "./resources/js/components/Gallery/blueimp-gallery-video.js");
+/* harmony import */ var _blueimp_gallery_video_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_blueimp_gallery_video_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _blueimp_gallery_youtube_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./blueimp-gallery-youtube.js */ "./resources/js/components/Gallery/blueimp-gallery-youtube.js");
+/* harmony import */ var _blueimp_gallery_youtube_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_blueimp_gallery_youtube_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _blueimp_gallery_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./blueimp-gallery.js */ "./resources/js/components/Gallery/blueimp-gallery.js");
+/* harmony import */ var _blueimp_gallery_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_blueimp_gallery_js__WEBPACK_IMPORTED_MODULE_4__);
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    images: {
+      type: Array,
+      "default": function _default() {
+        return [];
+      }
+    },
+    options: {
+      type: Object,
+      "default": function _default() {
+        return {};
+      }
+    },
+    carousel: {
+      type: Boolean,
+      "default": false
+    },
+    index: {
+      type: Number
+    },
+    id: {
+      type: String,
+      "default": 'blueimp-gallery'
+    }
+  },
+  data: function data() {
+    return {
+      instance: null
+    };
+  },
+  watch: {
+    index: function index(value) {
+      if (this.carousel) {
+        return;
+      }
+
+      if (value !== null) {
+        this.open(value);
+      } else {
+        if (this.instance) {
+          this.instance.close();
+        }
+
+        this.$emit('close');
+      }
+    }
+  },
+  mounted: function mounted() {
+    if (this.carousel) {
+      this.open();
+    }
+  },
+  destroyed: function destroyed() {
+    if (this.instance !== null) {
+      this.instance.destroyEventListeners();
+      this.instance.close();
+      this.instance = null;
+    }
+  },
+  methods: {
+    open: function open() {
+      var _this = this;
+
+      var index = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      var instance = typeof _blueimp_gallery_js__WEBPACK_IMPORTED_MODULE_4___default.a.Gallery !== 'undefined' ? _blueimp_gallery_js__WEBPACK_IMPORTED_MODULE_4___default.a.Gallery : _blueimp_gallery_js__WEBPACK_IMPORTED_MODULE_4___default.a;
+
+      var options = _extends({
+        toggleControlsOnReturn: false,
+        toggleControlsOnSlideClick: false,
+        closeOnSlideClick: false,
+        carousel: this.carousel,
+        container: "#".concat(this.id),
+        index: index,
+        onopen: function onopen() {
+          return _this.$emit('onopen');
+        },
+        onopened: function onopened() {
+          return _this.$emit('onopened');
+        },
+        onslide: this.onSlideCustom,
+        onslideend: function onslideend(index, slide) {
+          return _this.$emit('onslideend', {
+            index: index,
+            slide: slide
+          });
+        },
+        onslidecomplete: function onslidecomplete(index, slide) {
+          return _this.$emit('onslidecomplete', {
+            index: index,
+            slide: slide
+          });
+        },
+        onclose: function onclose() {
+          return _this.$emit('close');
+        },
+        onclosed: function onclosed() {
+          return _this.$emit('onclosed');
+        }
+      }, this.options);
+
+      if (this.carousel) {
+        options.container = this.$el;
+      }
+
+      this.instance = instance(this.images, options);
+    },
+    onSlideCustom: function onSlideCustom(index, slide) {
+      this.$emit('onslide', {
+        index: index,
+        slide: slide
+      });
+      var image = this.images[index];
+
+      if (image !== undefined) {
+        var text = image.description;
+        var node = this.instance.container.find('.description');
+
+        if (text) {
+          node.empty();
+          node[0].appendChild(document.createTextNode(text));
+        }
       }
     }
   }
@@ -9010,6 +9197,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Carousel_Slide_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../Carousel/Slide.vue */ "./resources/js/components/Carousel/Slide.vue");
 /* harmony import */ var _product_compare_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./product-compare.vue */ "./resources/js/components/pages/compare/product-compare.vue");
 /* harmony import */ var _edit_dialog_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./edit-dialog.vue */ "./resources/js/components/pages/compare/edit-dialog.vue");
+/* harmony import */ var _Gallery_gallery_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../Gallery/gallery.vue */ "./resources/js/components/Gallery/gallery.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -9136,6 +9324,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 
@@ -9146,7 +9340,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       reCalc1: false,
-      reCalc2: false
+      reCalc2: false,
+      indexGallery: null,
+      galImages: []
     };
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['compareGroups', 'getScreenState', 'smallScreen', 'itemFixed', 'itemNotFixed', 'perPageCustom', 'baseWidth', 'list1Mobile', 'list2Mobile']), {
@@ -9211,6 +9407,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   }),
   methods: {
+    clickZoom: function clickZoom(e) {
+      this.galImages = e.images;
+      this.indexGallery = 0;
+    },
+    closeGallery: function closeGallery() {
+      var _this3 = this;
+
+      if (this.indexGallery !== null) {
+        this.indexGallery = null;
+        setTimeout(function () {
+          _this3.resizeCar();
+        }, 500);
+      }
+    },
     getListExcludeSome: function getListExcludeSome(exclude) {
       if (this.curGroup && this.curGroup.items.length) {
         if (this.curGroup.items.length > 0) {
@@ -9224,15 +9434,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return [];
       }
     },
-    setFixed: function setFixed(el, val) {
-      if (el.isFixed === undefined) {
-        this.$set(el, 'isFixed', val);
-      } else {
-        el.isFixed = val;
-      }
-
+    resizeCar: function resizeCar() {
       if (typeof Event === 'function') {
-        // modern browsers
         window.dispatchEvent(new Event('resize'));
       } else {
         // for IE and other old browsers
@@ -9241,6 +9444,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         evt.initUIEvent('resize', true, false, window, 0);
         window.dispatchEvent(evt);
       }
+    },
+    setFixed: function setFixed(el, val) {
+      if (el.isFixed === undefined) {
+        this.$set(el, 'isFixed', val);
+      } else {
+        el.isFixed = val;
+      }
+
+      this.resizeCar();
     },
     changeInd: function changeInd(e) {
       this.$store.commit('changeDragIndex', {
@@ -9264,11 +9476,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     uiToggle: _system_ui_toggle_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     Carousel: _Carousel_Carousel_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
     Slide: _Carousel_Slide_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
-    productCompare: _product_compare_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
+    productCompare: _product_compare_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
+    VueGallery: _Gallery_gallery_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
   },
   watch: {
     curMobile1: function curMobile1(val) {
-      var _this3 = this;
+      var _this4 = this;
 
       if (!this.$refs.car2) {
         return;
@@ -9290,12 +9503,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return el.id == itOther.id;
       });
       this.$nextTick(function () {
-        _this3.$refs.car2.$data.dragging = false;
-        _this3.reCalc1 = false;
+        _this4.$refs.car2.$data.dragging = false;
+        _this4.reCalc1 = false;
       });
     },
     curMobile2: function curMobile2(val) {
-      var _this4 = this;
+      var _this5 = this;
 
       if (!this.$refs.car1) {
         return;
@@ -9317,8 +9530,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return el.id == itOther.id;
       });
       this.$nextTick(function () {
-        _this4.$refs.car1.$data.dragging = false;
-        _this4.reCalc2 = false;
+        _this5.$refs.car1.$data.dragging = false;
+        _this5.reCalc2 = false;
       });
     }
   },
@@ -9515,6 +9728,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _product_compare_mobile_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./product-compare-mobile.vue */ "./resources/js/components/pages/compare/product-compare-mobile.vue");
+/* harmony import */ var _Gallery_gallery_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../Gallery/gallery.vue */ "./resources/js/components/Gallery/gallery.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -9540,18 +9754,37 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      indexGallery: null,
+      galImages: []
+    };
   },
   props: [],
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['curGroup', 'getScreenState'])),
   components: {
-    productCompareMobile: _product_compare_mobile_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
+    productCompareMobile: _product_compare_mobile_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+    VueGallery: _Gallery_gallery_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   methods: {
+    clickZoom: function clickZoom(e) {
+      this.galImages = e.images;
+      this.indexGallery = 0;
+    },
+    closeGallery: function closeGallery() {
+      if (this.indexGallery !== null) {
+        this.indexGallery = null;
+      }
+    },
     close: function close() {
       this.$store.commit('setBodyBlocked', false);
       this.$emit('close');
@@ -9648,6 +9881,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
@@ -9655,7 +9891,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      clientX: 0,
+      clientY: 0
+    };
   },
   props: ['product'],
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['auth', 'wishlist', 'cart']), {
@@ -9664,6 +9903,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   }),
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['addToLocalWishlist', 'delFromLocalWishlist', 'addToServerWishlist', 'delFromServerWishlist']), {
+    mouseDownGal: function mouseDownGal(e) {
+      this.clientX = e.clientX;
+      this.clientY = e.clientY;
+    },
+    clickGallery: function clickGallery(e) {
+      var difX = e.clientX - this.clientX;
+      if (difX < 0) difX = -difX;
+      var difY = e.clientY - this.clientY;
+      if (difY < 0) difY = -difY;
+
+      if (difX < 5 && difY < 5) {
+        this.$emit('onZoom', this.product);
+      }
+    },
     clickFavorite: function clickFavorite() {
       var id = this.product.id;
 
@@ -9759,12 +10012,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {};
+    return {
+      clientX: 0,
+      clientY: 0
+    };
   },
   props: ['product', 'lock'],
   inject: {
@@ -9778,6 +10037,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   }),
   methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapActions"])(['addToLocalWishlist', 'delFromLocalWishlist', 'addToServerWishlist', 'delFromServerWishlist']), {
+    mouseDownGal: function mouseDownGal(e) {
+      this.clientX = e.clientX;
+      this.clientY = e.clientY;
+    },
+    clickGallery: function clickGallery(e) {
+      var difX = e.clientX - this.clientX;
+      if (difX < 0) difX = -difX;
+      var difY = e.clientY - this.clientY;
+      if (difY < 0) difY = -difY;
+
+      if (difX < 5 && difY < 5) {
+        this.$emit('onZoom', this.product);
+      }
+    },
     clickFavorite: function clickFavorite() {
       var id = this.product.id;
 
@@ -10520,10 +10793,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _system_breadcrump_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../system/breadcrump.vue */ "./resources/js/components/system/breadcrump.vue");
 /* harmony import */ var _product_voblers_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./product/voblers.vue */ "./resources/js/components/pages/product/voblers.vue");
 /* harmony import */ var _system_owl_carousel_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../system/owl-carousel.vue */ "./resources/js/components/system/owl-carousel.vue");
-/* harmony import */ var _system_overblock_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../system/overblock.vue */ "./resources/js/components/system/overblock.vue");
-/* harmony import */ var vue_dragscroll__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-dragscroll */ "./node_modules/vue-dragscroll/dist/vue-dragscroll.min.js");
-/* harmony import */ var vue_dragscroll__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue_dragscroll__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _general_not_found_comp_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./general/not-found-comp.vue */ "./resources/js/components/pages/general/not-found-comp.vue");
+/* harmony import */ var _Carousel_Carousel_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Carousel/Carousel.vue */ "./resources/js/components/Carousel/Carousel.vue");
+/* harmony import */ var _Carousel_Slide_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Carousel/Slide.vue */ "./resources/js/components/Carousel/Slide.vue");
+/* harmony import */ var vue_dragscroll__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-dragscroll */ "./node_modules/vue-dragscroll/dist/vue-dragscroll.min.js");
+/* harmony import */ var vue_dragscroll__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(vue_dragscroll__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _general_not_found_comp_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./general/not-found-comp.vue */ "./resources/js/components/pages/general/not-found-comp.vue");
+/* harmony import */ var _Gallery_gallery_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Gallery/gallery.vue */ "./resources/js/components/Gallery/gallery.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -10587,33 +10862,44 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 
 
 
+
+
+ //import NoSSR from 'vue-no-ssr';
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       curPicture: 0,
-      width: 335,
-      bigPicture: false,
-      bigPictStyle: {
-        left: 0,
-        top: 0,
-        'max-height': 0,
-        'max-width': 0
-      },
-      divStyle: {
-        width: 'auto',
-        height: 'auto'
-      }
+      indexGallery: null,
+      clientX: 0,
+      clientY: 0
     };
   },
   directives: {
-    'dragscroll': vue_dragscroll__WEBPACK_IMPORTED_MODULE_5__["dragscroll"]
+    'dragscroll': vue_dragscroll__WEBPACK_IMPORTED_MODULE_6__["dragscroll"]
   },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['getCatalog', 'getScreenState', 'product', 'screenWidth', 'screenHeight']), {
     title: function title() {
@@ -10667,72 +10953,37 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
       }
     },
-    clickNext: function clickNext() {
-      this.curPicture++;
+    onMouseEnter: function onMouseEnter(ind) {
+      this.curPicture = ind;
+    },
+    clickGallery: function clickGallery(e, ind) {
+      var difX = e.clientX - this.clientX;
+      if (difX < 0) difX = -difX;
+      var difY = e.clientY - this.clientY;
+      if (difY < 0) difY = -difY;
 
-      if (this.curPicture >= this.product.images.length) {
-        this.curPicture = 0;
+      if (difX < 5 && difY < 5) {
+        this.indexGallery = ind;
       }
     },
-    clickPrev: function clickPrev() {
-      this.curPicture--;
-
-      if (this.curPicture < 0) {
-        this.curPicture = this.product.images.length - 1;
-      }
-    },
-    clickPict: function clickPict(val) {
-      var _this = this;
-
-      //console.dir(this.$refs.big_pict);
-      this.bigPicture = true;
-      setTimeout(function () {
-        _this.bigPictStyle['max-width'] = _this.screenWidth + 'px';
-        _this.bigPictStyle['max-height'] = _this.screenHeight + 'px';
-        _this.divStyle.width = 'auto';
-        _this.divStyle.height = 'auto';
-        setTimeout(function () {
-          _this.bigPictStyle.left = 'calc(50% - ' + parseInt(_this.$refs.big_pict.clientWidth / 2) + 'px)';
-          _this.bigPictStyle.top = 'calc(50% - ' + parseInt(_this.$refs.big_pict.clientHeight / 2) + 'px)';
-          _this.divStyle.width = _this.$refs.big_pict.clientWidth + 'px';
-          _this.divStyle.height = _this.$refs.big_pict.clientHeight + 'px';
-        }, 0);
-      }, 0);
+    mouseDownGal: function mouseDownGal(e) {
+      this.clientX = e.clientX;
+      this.clientY = e.clientY;
     }
   },
   components: {
     'bread-crump': _system_breadcrump_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     voblers: _product_voblers_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    'owl-carousel': _system_owl_carousel_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
-    'over-block': _system_overblock_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
-    notFoundComp: _general_not_found_comp_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
+    Carousel: _Carousel_Carousel_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
+    Slide: _Carousel_Slide_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+    owlCarousel: _system_owl_carousel_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    notFoundComp: _general_not_found_comp_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
+    VueGallery: _Gallery_gallery_vue__WEBPACK_IMPORTED_MODULE_8__["default"]
   },
   beforeRouteEnter: function beforeRouteEnter(to, from, next) {
     next(function (vm) {
       vm.$store.commit('setNonVisibleAside', true);
     });
-  },
-  watch: {
-    screenWidth: function screenWidth(val) {
-      if (this.getScreenState > 1) {
-        this.width = 335;
-        return;
-      }
-
-      this.width = this.$refs.carus.clientWidth - 50;
-      if (this.bigPicture) this.clickPict();
-    },
-    screenHeight: function screenHeight(val) {
-      if (this.bigPicture) this.clickPict();
-    }
-  },
-  mounted: function mounted() {
-    if (this.getScreenState > 1) {
-      this.width = 335;
-      return;
-    }
-
-    this.width = this.$refs.carus.clientWidth - 50;
   }
 });
 
@@ -13401,54 +13652,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/overblock.vue?vue&type=script&lang=js&":
-/*!*************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/overblock.vue?vue&type=script&lang=js& ***!
-  \*************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {};
-  },
-  props: ['active'],
-  methods: {
-    onClick: function onClick() {
-      this.$emit('clickOver');
-    }
-  },
-  watch: {
-    active: function active(val) {
-      var body = document.querySelector('body');
-
-      if (body) {
-        if (val) {
-          body.classList.add('blocked');
-        } else {
-          body.classList.remove('blocked');
-        }
-      }
-    }
-  },
-  beforeDestroy: function beforeDestroy() {
-    var body = document.querySelector('body');
-
-    if (body) {
-      body.classList.remove('blocked');
-    }
-  }
-});
-
-/***/ }),
-
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/owl-carousel.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/owl-carousel.vue?vue&type=script&lang=js& ***!
@@ -14323,6 +14526,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])(['activeWait'])),
   methods: {}
 });
+
+/***/ }),
+
+/***/ "./node_modules/blueimp-gallery/css/blueimp-gallery.min.css":
+/*!******************************************************************!*\
+  !*** ./node_modules/blueimp-gallery/css/blueimp-gallery.min.css ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -24588,6 +24802,17 @@ Array.prototype.findIndex = Array.prototype.findIndex || function (callback) {
 
 /***/ }),
 
+/***/ "./node_modules/mini-css-extract-plugin/dist/loader.js?!./node_modules/css-loader/dist/cjs.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gallery/gallery.vue?vue&type=style&index=0&lang=css&":
+/*!*****************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??ref--3-0!./node_modules/css-loader/dist/cjs.js??ref--3-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Gallery/gallery.vue?vue&type=style&index=0&lang=css& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "./node_modules/mini-css-extract-plugin/dist/loader.js?!./node_modules/css-loader/dist/cjs.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/vue-loader/lib/index.js?!./resources/js/components/forms/registartion.vue?vue&type=style&index=0&lang=css&":
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??ref--3-0!./node_modules/css-loader/dist/cjs.js??ref--3-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/forms/registartion.vue?vue&type=style&index=0&lang=css& ***!
@@ -24867,17 +25092,6 @@ Array.prototype.findIndex = Array.prototype.findIndex || function (callback) {
 /*!*********************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??ref--3-0!./node_modules/css-loader/dist/cjs.js??ref--3-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/left-filters.vue?vue&type=style&index=0&lang=css& ***!
   \*********************************************************************************************************************************************************************************************************************************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ "./node_modules/mini-css-extract-plugin/dist/loader.js?!./node_modules/css-loader/dist/cjs.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/overblock.vue?vue&type=style&index=0&lang=css&":
-/*!******************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/mini-css-extract-plugin/dist/loader.js??ref--3-0!./node_modules/css-loader/dist/cjs.js??ref--3-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/overblock.vue?vue&type=style&index=0&lang=css& ***!
-  \******************************************************************************************************************************************************************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -50556,6 +50770,56 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gallery/gallery.vue?vue&type=template&id=6d80190c&":
+/*!******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Gallery/gallery.vue?vue&type=template&id=6d80190c& ***!
+  \******************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    {
+      staticClass: "blueimp-gallery blueimp-gallery-controls",
+      class: { "blueimp-gallery-carousel": _vm.carousel },
+      attrs: { id: _vm.id }
+    },
+    [
+      _c("div", { staticClass: "slides" }),
+      _vm._v(" "),
+      _c("h3", { staticClass: "title" }),
+      _vm._v(" "),
+      _c("p", { staticClass: "description" }),
+      _vm._v(" "),
+      _c("a", { staticClass: "prev" }, [_vm._t("prev", [_vm._v("‹")])], 2),
+      _vm._v(" "),
+      _c("a", { staticClass: "next" }, [_vm._t("next", [_vm._v("›")])], 2),
+      _vm._v(" "),
+      !_vm.carousel
+        ? _c("a", { staticClass: "close" }, [_vm._t("close", [_vm._v("×")])], 2)
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.carousel ? _c("ol", { staticClass: "indicator" }) : _vm._e(),
+      _vm._v(" "),
+      _vm.carousel ? _c("a", { staticClass: "play-pause" }) : _vm._e()
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Page.vue?vue&type=template&id=524c0c0c&":
 /*!*******************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Page.vue?vue&type=template&id=524c0c0c& ***!
@@ -56741,312 +57005,338 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "compare__actions" }, [
-    _c(
-      "div",
-      { ref: "comp_prod", staticClass: "compare__groups" },
-      _vm._l(_vm.compareGroups, function(el, ind) {
-        return _c("div", { key: el.id, staticClass: "compare__group" }, [
+  return _c(
+    "div",
+    { staticClass: "compare__actions" },
+    [
+      _c(
+        "div",
+        { ref: "comp_prod", staticClass: "compare__groups" },
+        _vm._l(_vm.compareGroups, function(el, ind) {
+          return _c("div", { key: el.id, staticClass: "compare__group" }, [
+            _c(
+              "a",
+              {
+                on: {
+                  click: function($event) {
+                    return _vm.$emit("changeGroup", ind)
+                  }
+                }
+              },
+              [_vm._v(_vm._s(el.name) + " (" + _vm._s(el.items.length) + ")")]
+            )
+          ])
+        }),
+        0
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "compare__controls" },
+        [
+          _c("ui-toggle", {
+            attrs: {
+              caption: "Только различающиеся параметры",
+              checked: _vm.onlyDifferent
+            },
+            on: {
+              input: function($event) {
+                _vm.onlyDifferent = !_vm.onlyDifferent
+              }
+            }
+          }),
+          _vm._v(" "),
           _c(
             "a",
             {
+              staticClass: "clear-compare-list",
               on: {
                 click: function($event) {
-                  return _vm.$emit("changeGroup", ind)
+                  return _vm.$emit("clearGroup")
                 }
               }
             },
-            [_vm._v(_vm._s(el.name) + " (" + _vm._s(el.items.length) + ")")]
-          )
-        ])
-      }),
-      0
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "compare__controls" },
-      [
-        _c("ui-toggle", {
-          attrs: {
-            caption: "Только различающиеся параметры",
-            checked: _vm.onlyDifferent
-          },
-          on: {
-            input: function($event) {
-              _vm.onlyDifferent = !_vm.onlyDifferent
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass: "clear-compare-list",
-            on: {
-              click: function($event) {
-                return _vm.$emit("clearGroup")
-              }
-            }
-          },
-          [
-            _c("i", { staticClass: "fa fa-trash" }),
-            _c("span", [_vm._v("Очистить список")])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "a",
-          { staticClass: "edit-compare-list", on: { click: _vm.editCompare } },
-          [
-            _c("i", { staticClass: "fa fa-edit" }),
-            _c("span", [_vm._v("Редактировать")])
-          ]
-        )
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _vm.smallScreen
-      ? _c("div", { staticClass: "compare__products-mobile" }, [
-          _c(
-            "div",
             [
-              _c(
-                "carousel",
-                {
-                  ref: "car1",
-                  attrs: {
-                    navigationEnabled: true,
-                    scrollPerPage: false,
-                    paginationEnabled: false,
-                    mouseDrag: true,
-                    touchDrag: true,
-                    loop: true,
-                    perPage: 1,
-                    draggableEnable: false,
-                    navigationNextLabel: "<i class='fa fa-chevron-right'></i>",
-                    navigationPrevLabel: "<i class='fa fa-chevron-left'></i>"
-                  },
-                  model: {
-                    value: _vm.curMobile1,
-                    callback: function($$v) {
-                      _vm.curMobile1 = $$v
-                    },
-                    expression: "curMobile1"
-                  }
-                },
-                _vm._l(_vm.list1Mobile, function(el) {
-                  return _c(
-                    "slide",
-                    { key: el.id },
-                    [
-                      _c("product-compare", {
-                        attrs: { product: el, lock: false },
-                        on: {
-                          clickTrash: function($event) {
-                            return _vm.delFromCompare(el)
-                          }
-                        }
-                      })
-                    ],
-                    1
-                  )
-                }),
-                1
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "slide-controls" }, [
+              _c("i", { staticClass: "fa fa-trash" }),
+              _c("span", [_vm._v("Очистить список")])
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "edit-compare-list",
+              on: { click: _vm.editCompare }
+            },
+            [
+              _c("i", { staticClass: "fa fa-edit" }),
+              _c("span", [_vm._v("Редактировать")])
+            ]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _vm.smallScreen
+        ? _c("div", { staticClass: "compare__products-mobile" }, [
+            _c(
+              "div",
+              [
                 _c(
-                  "span",
+                  "carousel",
                   {
-                    directives: [
-                      {
-                        name: "show",
-                        rawName: "v-show",
-                        value: _vm.list1Mobile.length > 1,
-                        expression: "list1Mobile.length>1"
-                      }
+                    ref: "car1",
+                    attrs: {
+                      navigationEnabled: true,
+                      scrollPerPage: false,
+                      paginationEnabled: false,
+                      mouseDrag: true,
+                      touchDrag: true,
+                      loop: true,
+                      perPage: 1,
+                      draggableEnable: false,
+                      navigationNextLabel:
+                        "<i class='fa fa-chevron-right'></i>",
+                      navigationPrevLabel: "<i class='fa fa-chevron-left'></i>"
+                    },
+                    model: {
+                      value: _vm.curMobile1,
+                      callback: function($$v) {
+                        _vm.curMobile1 = $$v
+                      },
+                      expression: "curMobile1"
+                    }
+                  },
+                  _vm._l(_vm.list1Mobile, function(el) {
+                    return _c(
+                      "slide",
+                      { key: el.id },
+                      [
+                        _c("product-compare", {
+                          attrs: { product: el, lock: false },
+                          on: {
+                            clickTrash: function($event) {
+                              return _vm.delFromCompare(el)
+                            },
+                            onZoom: function($event) {
+                              return _vm.clickZoom($event)
+                            }
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  }),
+                  1
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "slide-controls" }, [
+                  _c(
+                    "span",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.list1Mobile.length > 1,
+                          expression: "list1Mobile.length>1"
+                        }
+                      ]
+                    },
+                    [
+                      _vm._v(
+                        _vm._s(_vm.curMobile1ItemIndex) +
+                          " из " +
+                          _vm._s(_vm.curGroup.items.length)
+                      )
                     ]
+                  )
+                ])
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _vm.list2Mobile.length > 0
+              ? _c(
+                  "div",
+                  [
+                    _c(
+                      "carousel",
+                      {
+                        ref: "car2",
+                        attrs: {
+                          navigationEnabled: true,
+                          scrollPerPage: false,
+                          paginationEnabled: false,
+                          mouseDrag: true,
+                          touchDrag: true,
+                          loop: true,
+                          perPage: 1,
+                          draggableEnable: false,
+                          navigationNextLabel:
+                            "<i class='fa fa-chevron-right'></i>",
+                          navigationPrevLabel:
+                            "<i class='fa fa-chevron-left'></i>"
+                        },
+                        model: {
+                          value: _vm.curMobile2,
+                          callback: function($$v) {
+                            _vm.curMobile2 = $$v
+                          },
+                          expression: "curMobile2"
+                        }
+                      },
+                      _vm._l(_vm.list2Mobile, function(el) {
+                        return _c(
+                          "slide",
+                          { key: el.id },
+                          [
+                            _c("product-compare", {
+                              attrs: { product: el, lock: false },
+                              on: {
+                                clickTrash: function($event) {
+                                  return _vm.delFromCompare(el)
+                                },
+                                onZoom: function($event) {
+                                  return _vm.clickZoom($event)
+                                }
+                              }
+                            })
+                          ],
+                          1
+                        )
+                      }),
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "slide-controls" }, [
+                      _c(
+                        "span",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.list2Mobile.length > 1,
+                              expression: "list2Mobile.length>1"
+                            }
+                          ]
+                        },
+                        [
+                          _vm._v(
+                            _vm._s(_vm.curMobile2ItemIndex) +
+                              " из " +
+                              _vm._s(_vm.curGroup.items.length)
+                          )
+                        ]
+                      )
+                    ])
+                  ],
+                  1
+                )
+              : _vm._e()
+          ])
+        : _c("div", { staticClass: "compare__products" }, [
+            _c(
+              "div",
+              { staticClass: "fixed" },
+              _vm._l(_vm.itemFixed, function(el) {
+                return _c(
+                  "div",
+                  {
+                    key: el.id,
+                    staticClass: "fixed-product",
+                    style: { width: _vm.baseWidth + "px" }
                   },
                   [
-                    _vm._v(
-                      _vm._s(_vm.curMobile1ItemIndex) +
-                        " из " +
-                        _vm._s(_vm.curGroup.items.length)
-                    )
-                  ]
+                    _c("product-compare", {
+                      attrs: { product: el, lock: true },
+                      on: {
+                        clickFixed: function($event) {
+                          return _vm.setFixed(el, false)
+                        },
+                        onZoom: function($event) {
+                          return _vm.clickZoom($event)
+                        }
+                      }
+                    })
+                  ],
+                  1
                 )
-              ])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _vm.list2Mobile.length > 0
-            ? _c(
-                "div",
-                [
-                  _c(
-                    "carousel",
-                    {
-                      ref: "car2",
-                      attrs: {
-                        navigationEnabled: true,
-                        scrollPerPage: false,
-                        paginationEnabled: false,
-                        mouseDrag: true,
-                        touchDrag: true,
-                        loop: true,
-                        perPage: 1,
-                        draggableEnable: false,
-                        navigationNextLabel:
-                          "<i class='fa fa-chevron-right'></i>",
-                        navigationPrevLabel:
-                          "<i class='fa fa-chevron-left'></i>"
-                      },
-                      model: {
-                        value: _vm.curMobile2,
-                        callback: function($$v) {
-                          _vm.curMobile2 = $$v
-                        },
-                        expression: "curMobile2"
-                      }
-                    },
-                    _vm._l(_vm.list2Mobile, function(el) {
-                      return _c(
-                        "slide",
-                        { key: el.id },
-                        [
-                          _c("product-compare", {
-                            attrs: { product: el, lock: false },
-                            on: {
-                              clickTrash: function($event) {
-                                return _vm.delFromCompare(el)
-                              }
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    }),
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "slide-controls" }, [
+              }),
+              0
+            ),
+            _vm._v(" "),
+            _vm.perPageCustom > 0
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "caro",
+                    style: { "margin-left": _vm.marg + "px" }
+                  },
+                  [
                     _c(
-                      "span",
+                      "carousel",
                       {
-                        directives: [
-                          {
-                            name: "show",
-                            rawName: "v-show",
-                            value: _vm.list2Mobile.length > 1,
-                            expression: "list2Mobile.length>1"
-                          }
-                        ]
-                      },
-                      [
-                        _vm._v(
-                          _vm._s(_vm.curMobile2ItemIndex) +
-                            " из " +
-                            _vm._s(_vm.curGroup.items.length)
-                        )
-                      ]
-                    )
-                  ])
-                ],
-                1
-              )
-            : _vm._e()
-        ])
-      : _c("div", { staticClass: "compare__products" }, [
-          _c(
-            "div",
-            { staticClass: "fixed" },
-            _vm._l(_vm.itemFixed, function(el) {
-              return _c(
-                "div",
-                {
-                  key: el.id,
-                  staticClass: "fixed-product",
-                  style: { width: _vm.baseWidth + "px" }
-                },
-                [
-                  _c("product-compare", {
-                    attrs: { product: el, lock: true },
-                    on: {
-                      clickFixed: function($event) {
-                        return _vm.setFixed(el, false)
-                      }
-                    }
-                  })
-                ],
-                1
-              )
-            }),
-            0
-          ),
-          _vm._v(" "),
-          _vm.perPageCustom > 0
-            ? _c(
-                "div",
-                {
-                  staticClass: "caro",
-                  style: { "margin-left": _vm.marg + "px" }
-                },
-                [
-                  _c(
-                    "carousel",
-                    {
-                      ref: "carousel",
-                      attrs: {
-                        navigationEnabled: true,
-                        scrollPerPage: false,
-                        paginationEnabled: false,
-                        mouseDrag: false,
-                        touchDrag: false,
-                        loop: true,
-                        perPage: _vm.perPageCustom,
-                        draggableEnable: true,
-                        listKeys: _vm.listKeys
-                      },
-                      on: { changeInd: _vm.changeInd },
-                      model: {
-                        value: _vm.curCompareSlide,
-                        callback: function($$v) {
-                          _vm.curCompareSlide = $$v
+                        ref: "carousel",
+                        attrs: {
+                          navigationEnabled: true,
+                          scrollPerPage: false,
+                          paginationEnabled: false,
+                          mouseDrag: false,
+                          touchDrag: false,
+                          loop: true,
+                          perPage: _vm.perPageCustom,
+                          draggableEnable: _vm.itemNotFixed.length > 1,
+                          listKeys: _vm.listKeys
                         },
-                        expression: "curCompareSlide"
-                      }
-                    },
-                    _vm._l(_vm.itemNotFixed, function(el) {
-                      return _c(
-                        "slide",
-                        { key: el.id },
-                        [
-                          _c("product-compare", {
-                            attrs: { product: el, lock: false },
-                            on: {
-                              clickFixed: function($event) {
-                                return _vm.setFixed(el, true)
-                              },
-                              clickTrash: function($event) {
-                                return _vm.delFromCompare(el)
+                        on: { changeInd: _vm.changeInd },
+                        model: {
+                          value: _vm.curCompareSlide,
+                          callback: function($$v) {
+                            _vm.curCompareSlide = $$v
+                          },
+                          expression: "curCompareSlide"
+                        }
+                      },
+                      _vm._l(_vm.itemNotFixed, function(el) {
+                        return _c(
+                          "slide",
+                          { key: el.id },
+                          [
+                            _c("product-compare", {
+                              attrs: { product: el, lock: false },
+                              on: {
+                                clickFixed: function($event) {
+                                  return _vm.setFixed(el, true)
+                                },
+                                clickTrash: function($event) {
+                                  return _vm.delFromCompare(el)
+                                },
+                                onZoom: function($event) {
+                                  return _vm.clickZoom($event)
+                                }
                               }
-                            }
-                          })
-                        ],
-                        1
-                      )
-                    }),
-                    1
-                  )
-                ],
-                1
-              )
-            : _vm._e()
-        ])
-  ])
+                            })
+                          ],
+                          1
+                        )
+                      }),
+                      1
+                    )
+                  ],
+                  1
+                )
+              : _vm._e()
+          ]),
+      _vm._v(" "),
+      _c("vue-gallery", {
+        attrs: { images: _vm.galImages, index: _vm.indexGallery },
+        on: { close: _vm.closeGallery }
+      })
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -57425,11 +57715,25 @@ var render = function() {
       _vm._l(_vm.curGroup.items, function(el) {
         return _c("product-compare-mobile", {
           key: el.id,
-          attrs: { product: el }
+          attrs: { product: el },
+          on: {
+            onZoom: function($event) {
+              return _vm.clickZoom($event)
+            }
+          }
         })
       }),
       _vm._v(" "),
-      _c("v-dialog")
+      _c("v-dialog"),
+      _vm._v(" "),
+      _c("vue-gallery", {
+        attrs: {
+          images: _vm.galImages,
+          index: _vm.indexGallery,
+          id: "blueimp-gallery-edit"
+        },
+        on: { close: _vm.closeGallery }
+      })
     ],
     2
   )
@@ -57464,7 +57768,28 @@ var render = function() {
             attrs: { alt: _vm.product.name, src: _vm.product.image_2 }
           })
         ])
-      ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "zoom-button",
+          on: {
+            click: function($event) {
+              return _vm.clickGallery($event)
+            },
+            mousedown: function($event) {
+              return _vm.mouseDownGal($event)
+            }
+          }
+        },
+        [
+          _c("i", {
+            staticClass: "fa fa-search-plus",
+            attrs: { "aria-hidden": "true" }
+          })
+        ]
+      )
     ]),
     _vm._v(" "),
     _c(
@@ -57622,7 +57947,28 @@ var render = function() {
             attrs: { alt: _vm.product.name, src: _vm.product.image_2 }
           })
         ])
-      ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "zoom-button",
+          on: {
+            click: function($event) {
+              return _vm.clickGallery($event)
+            },
+            mousedown: function($event) {
+              return _vm.mouseDownGal($event)
+            }
+          }
+        },
+        [
+          _c("i", {
+            staticClass: "fa fa-search-plus",
+            attrs: { "aria-hidden": "true" }
+          })
+        ]
+      )
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "compare__product-content" }, [
@@ -58858,7 +59204,7 @@ var render = function() {
             }),
             _vm._v(" "),
             _c("div", { staticClass: "price-item-code" }, [
-              _vm._v("\n          Код товара:\n          "),
+              _vm._v("\n\t\t\t\t\t\t\tКод товара:\n\t\t\t\t\t\t\t"),
               _c("span", [_vm._v(_vm._s(_vm.product.sku))])
             ]),
             _vm._v(" "),
@@ -58869,164 +59215,132 @@ var render = function() {
                 _c("div", { staticClass: "item-header" }, [
                   _c(
                     "div",
-                    { ref: "carus", staticClass: "col-header col-photo" },
+                    { staticClass: "col-header col-photo" },
                     [
                       _c(
-                        "div",
-                        { staticClass: "main-image-slider-wrap" },
-                        [
-                          _c("owl-carousel", {
-                            attrs: {
-                              pictQty: 1,
-                              images: _vm.product.images,
-                              width: _vm.width,
-                              type: "img",
-                              curPicture: _vm.curPicture
+                        "carousel",
+                        {
+                          attrs: {
+                            navigationEnabled: true,
+                            scrollPerPage: false,
+                            paginationEnabled: false,
+                            mouseDrag: true,
+                            touchDrag: true,
+                            loop: true,
+                            perPage: 1,
+                            draggableEnable: false,
+                            navigationNextLabel:
+                              "<i class='fa fa-chevron-right'></i>",
+                            navigationPrevLabel:
+                              "<i class='fa fa-chevron-left'></i>"
+                          },
+                          model: {
+                            value: _vm.curPicture,
+                            callback: function($$v) {
+                              _vm.curPicture = $$v
                             },
-                            on: {
-                              clickPicture: _vm.clickPict,
-                              changePict: function($event) {
-                                _vm.curPicture = $event
-                              }
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "a",
+                            expression: "curPicture"
+                          }
+                        },
+                        _vm._l(_vm.product.images, function(el, ind) {
+                          return _c(
+                            "slide",
                             {
-                              staticClass: "button-left",
-                              on: { click: _vm.clickPrev }
-                            },
-                            [_c("i", { staticClass: "fa fa-chevron-left" })]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "a",
-                            {
-                              staticClass: "button-right",
-                              on: { click: _vm.clickNext }
-                            },
-                            [_c("i", { staticClass: "fa fa-chevron-right" })]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "div",
-                            {
-                              directives: [
-                                {
-                                  name: "show",
-                                  rawName: "v-show",
-                                  value: _vm.bigPicture,
-                                  expression: "bigPicture"
-                                }
-                              ],
-                              ref: "big_pict",
-                              staticClass: "big-picture",
-                              style: _vm.bigPictStyle
+                              key: ind,
+                              staticClass: "image-slider image-slider-big"
                             },
                             [
                               _c(
                                 "a",
                                 {
-                                  staticClass: "close",
+                                  staticClass: "lightbox-img",
                                   on: {
+                                    mousedown: function($event) {
+                                      return _vm.mouseDownGal($event)
+                                    },
                                     click: function($event) {
-                                      _vm.bigPicture = false
+                                      return _vm.clickGallery($event, ind)
                                     }
                                   }
                                 },
-                                [_c("i", { staticClass: "fa fa-times" })]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                {
-                                  directives: [
-                                    {
-                                      name: "dragscroll",
-                                      rawName: "v-dragscroll"
-                                    }
-                                  ],
-                                  style: _vm.divStyle
-                                },
-                                [
-                                  _c("img", {
-                                    attrs: {
-                                      src: _vm.product.bigImages[_vm.curPicture]
-                                    }
-                                  })
-                                ]
+                                [_c("img", { attrs: { src: el } })]
                               )
                             ]
                           )
-                        ],
+                        }),
                         1
                       ),
                       _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          directives: [
-                            {
-                              name: "show",
-                              rawName: "v-show",
-                              value: _vm.product.images.length > 1,
-                              expression: "product.images.length>1"
-                            }
-                          ],
-                          staticClass: "thumb-slider-wrap"
+                      _c("vue-gallery", {
+                        attrs: {
+                          images: _vm.product.images,
+                          index: _vm.indexGallery
                         },
-                        [
-                          _c("owl-carousel", {
-                            attrs: {
-                              pictQty: 4,
-                              images: _vm.product.images2,
-                              width: 81,
-                              type: "thumb",
-                              curPicture: _vm.curPicture
+                        on: {
+                          close: function($event) {
+                            _vm.indexGallery = null
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "carousel",
+                        {
+                          staticClass: "small",
+                          attrs: {
+                            navigationEnabled: true,
+                            scrollPerPage: false,
+                            paginationEnabled: false,
+                            mouseDrag: true,
+                            touchDrag: true,
+                            loop: true,
+                            perPage: 4,
+                            draggableEnable: false,
+                            navigationNextLabel:
+                              "<i class='fa fa-chevron-right'></i>",
+                            navigationPrevLabel:
+                              "<i class='fa fa-chevron-left'></i>"
+                          },
+                          model: {
+                            value: _vm.curPicture,
+                            callback: function($$v) {
+                              _vm.curPicture = $$v
                             },
-                            on: {
-                              changePict: function($event) {
-                                _vm.curPicture = $event
-                              },
-                              clickPicture: _vm.clickPict
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c(
-                            "a",
+                            expression: "curPicture"
+                          }
+                        },
+                        _vm._l(_vm.product.images2, function(el, ind) {
+                          return _c(
+                            "slide",
                             {
-                              staticClass: "button-left",
-                              on: { click: _vm.clickPrev }
+                              key: ind,
+                              staticClass: "image-slider image-slider-small"
                             },
-                            [_c("i", { staticClass: "fa fa-chevron-left" })]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "a",
-                            {
-                              staticClass: "button-right",
-                              on: { click: _vm.clickNext }
-                            },
-                            [_c("i", { staticClass: "fa fa-chevron-right" })]
+                            [
+                              _c(
+                                "a",
+                                {
+                                  staticClass: "lightbox-img",
+                                  class: { active: _vm.curPicture == ind },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.onMouseEnter(ind)
+                                    }
+                                  }
+                                },
+                                [_c("img", { attrs: { src: el } })]
+                              )
+                            ]
                           )
-                        ],
+                        }),
                         1
                       )
-                    ]
+                    ],
+                    1
                   )
                 ])
               ])
-            ]),
-            _vm._v(" "),
-            _c("over-block", {
-              attrs: { active: _vm.bigPicture },
-              on: {
-                clickOver: function($event) {
-                  _vm.bigPicture = false
-                }
-              }
-            })
+            ])
           ]
     ],
     2
@@ -61496,34 +61810,6 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/overblock.vue?vue&type=template&id=854303b8&":
-/*!*******************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/overblock.vue?vue&type=template&id=854303b8& ***!
-  \*******************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", {
-    staticClass: "over-block",
-    class: { "is-active": _vm.active },
-    on: { click: _vm.onClick }
-  })
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/owl-carousel.vue?vue&type=template&id=0bf5d224&":
 /*!**********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/system/owl-carousel.vue?vue&type=template&id=0bf5d224& ***!
@@ -61830,7 +62116,7 @@ var render = function() {
             }
           }
         },
-        [_c("i", { staticClass: "fas fa-times" })]
+        [_c("i", { staticClass: "fa fa-times" })]
       ),
       _vm._v(" "),
       _c(
@@ -80808,6 +81094,2208 @@ var debounce = function debounce(func, wait, immediate) {
 
 /***/ }),
 
+/***/ "./resources/js/components/Gallery/blueimp-gallery-fullscreen.js":
+/*!***********************************************************************!*\
+  !*** ./resources/js/components/Gallery/blueimp-gallery-fullscreen.js ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
+ * blueimp Gallery Fullscreen JS
+ * https://github.com/blueimp/Gallery
+ *
+ * Copyright 2013, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * https://opensource.org/licenses/MIT
+ */
+
+/* global define */
+;
+
+(function (factory) {
+  'use strict';
+
+  if (true) {
+    // Register as an anonymous AMD module:
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! ./blueimp-helper */ "./resources/js/components/Gallery/blueimp-helper.js"), __webpack_require__(/*! ./blueimp-gallery */ "./resources/js/components/Gallery/blueimp-gallery.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {}
+})(function ($, Gallery) {
+  'use strict';
+
+  $.extend(Gallery.prototype.options, {
+    // Defines if the gallery should open in fullscreen mode:
+    fullScreen: false
+  });
+  var _initialize = Gallery.prototype.initialize;
+  var _close = Gallery.prototype.close;
+  $.extend(Gallery.prototype, {
+    getFullScreenElement: function getFullScreenElement() {
+      return document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+    },
+    requestFullScreen: function requestFullScreen(element) {
+      if (element.requestFullscreen) {
+        element.requestFullscreen();
+      } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+      } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+      } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+      }
+    },
+    exitFullScreen: function exitFullScreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitCancelFullScreen) {
+        document.webkitCancelFullScreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+    },
+    initialize: function initialize() {
+      _initialize.call(this);
+
+      if (this.options.fullScreen && !this.getFullScreenElement()) {
+        this.requestFullScreen(this.container[0]);
+      }
+    },
+    close: function close() {
+      if (this.getFullScreenElement() === this.container[0]) {
+        this.exitFullScreen();
+      }
+
+      _close.call(this);
+    }
+  });
+  return Gallery;
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/Gallery/blueimp-gallery-video.js":
+/*!******************************************************************!*\
+  !*** ./resources/js/components/Gallery/blueimp-gallery-video.js ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
+ * blueimp Gallery Video Factory JS
+ * https://github.com/blueimp/Gallery
+ *
+ * Copyright 2013, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * https://opensource.org/licenses/MIT
+ */
+
+/* global define */
+;
+
+(function (factory) {
+  'use strict';
+
+  if (true) {
+    // Register as an anonymous AMD module:
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! ./blueimp-helper */ "./resources/js/components/Gallery/blueimp-helper.js"), __webpack_require__(/*! ./blueimp-gallery */ "./resources/js/components/Gallery/blueimp-gallery.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {}
+})(function ($, Gallery) {
+  'use strict';
+
+  $.extend(Gallery.prototype.options, {
+    // The class for video content elements:
+    videoContentClass: 'video-content',
+    // The class for video when it is loading:
+    videoLoadingClass: 'video-loading',
+    // The class for video when it is playing:
+    videoPlayingClass: 'video-playing',
+    // The list object property (or data attribute) for the video poster URL:
+    videoPosterProperty: 'poster',
+    // The list object property (or data attribute) for the video sources array:
+    videoSourcesProperty: 'sources'
+  });
+  var _handleSlide = Gallery.prototype.handleSlide;
+  $.extend(Gallery.prototype, {
+    handleSlide: function handleSlide(index) {
+      _handleSlide.call(this, index);
+
+      if (this.playingVideo) {
+        this.playingVideo.pause();
+      }
+    },
+    videoFactory: function videoFactory(obj, callback, videoInterface) {
+      var that = this;
+      var options = this.options;
+      var videoContainerNode = this.elementPrototype.cloneNode(false);
+      var videoContainer = $(videoContainerNode);
+      var errorArgs = [{
+        type: 'error',
+        target: videoContainerNode
+      }];
+      var video = videoInterface || document.createElement('video');
+      var url = this.getItemProperty(obj, options.urlProperty);
+      var type = this.getItemProperty(obj, options.typeProperty);
+      var title = this.getItemProperty(obj, options.titleProperty);
+      var altText = this.getItemProperty(obj, this.options.altTextProperty) || title;
+      var posterUrl = this.getItemProperty(obj, options.videoPosterProperty);
+      var posterImage;
+      var sources = this.getItemProperty(obj, options.videoSourcesProperty);
+      var source;
+      var playMediaControl;
+      var isLoading;
+      var hasControls;
+      videoContainer.addClass(options.videoContentClass);
+
+      if (title) {
+        videoContainerNode.title = title;
+      }
+
+      if (video.canPlayType) {
+        if (url && type && video.canPlayType(type)) {
+          video.src = url;
+        } else if (sources) {
+          while (sources.length) {
+            source = sources.shift();
+            url = this.getItemProperty(source, options.urlProperty);
+            type = this.getItemProperty(source, options.typeProperty);
+
+            if (url && type && video.canPlayType(type)) {
+              video.src = url;
+              break;
+            }
+          }
+        }
+      }
+
+      if (posterUrl) {
+        video.poster = posterUrl;
+        posterImage = this.imagePrototype.cloneNode(false);
+        $(posterImage).addClass(options.toggleClass);
+        posterImage.src = posterUrl;
+        posterImage.draggable = false;
+        posterImage.alt = altText;
+        videoContainerNode.appendChild(posterImage);
+      }
+
+      playMediaControl = document.createElement('a');
+      playMediaControl.setAttribute('target', '_blank');
+
+      if (!videoInterface) {
+        playMediaControl.setAttribute('download', title);
+      }
+
+      playMediaControl.href = url;
+
+      if (video.src) {
+        video.controls = true;
+        (videoInterface || $(video)).on('error', function () {
+          that.setTimeout(callback, errorArgs);
+        }).on('pause', function () {
+          if (video.seeking) return;
+          isLoading = false;
+          videoContainer.removeClass(that.options.videoLoadingClass).removeClass(that.options.videoPlayingClass);
+
+          if (hasControls) {
+            that.container.addClass(that.options.controlsClass);
+          }
+
+          delete that.playingVideo;
+
+          if (that.interval) {
+            that.play();
+          }
+        }).on('playing', function () {
+          isLoading = false;
+          videoContainer.removeClass(that.options.videoLoadingClass).addClass(that.options.videoPlayingClass);
+
+          if (that.container.hasClass(that.options.controlsClass)) {
+            hasControls = true;
+            that.container.removeClass(that.options.controlsClass);
+          } else {
+            hasControls = false;
+          }
+        }).on('play', function () {
+          window.clearTimeout(that.timeout);
+          isLoading = true;
+          videoContainer.addClass(that.options.videoLoadingClass);
+          that.playingVideo = video;
+        });
+        $(playMediaControl).on('click', function (event) {
+          that.preventDefault(event);
+
+          if (isLoading) {
+            video.pause();
+          } else {
+            video.play();
+          }
+        });
+        videoContainerNode.appendChild(videoInterface && videoInterface.element || video);
+      }
+
+      videoContainerNode.appendChild(playMediaControl);
+      this.setTimeout(callback, [{
+        type: 'load',
+        target: videoContainerNode
+      }]);
+      return videoContainerNode;
+    }
+  });
+  return Gallery;
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/Gallery/blueimp-gallery-youtube.js":
+/*!********************************************************************!*\
+  !*** ./resources/js/components/Gallery/blueimp-gallery-youtube.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
+ * blueimp Gallery YouTube Video Factory JS
+ * https://github.com/blueimp/Gallery
+ *
+ * Copyright 2013, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * https://opensource.org/licenses/MIT
+ */
+
+/* global define, YT */
+;
+
+(function (factory) {
+  'use strict';
+
+  if (true) {
+    // Register as an anonymous AMD module:
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! ./blueimp-helper */ "./resources/js/components/Gallery/blueimp-helper.js"), __webpack_require__(/*! ./blueimp-gallery-video */ "./resources/js/components/Gallery/blueimp-gallery-video.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {}
+})(function ($, Gallery) {
+  'use strict';
+
+  if (typeof window === 'undefined' || !window.postMessage) {
+    return Gallery;
+  }
+
+  $.extend(Gallery.prototype.options, {
+    // The list object property (or data attribute) with the YouTube video id:
+    youTubeVideoIdProperty: 'youtube',
+    // Optional object with parameters passed to the YouTube video player:
+    // https://developers.google.com/youtube/player_parameters
+    youTubePlayerVars: {
+      wmode: 'transparent'
+    },
+    // Require a click on the native YouTube player for the initial playback:
+    youTubeClickToPlay: true
+  });
+
+  var _textFactory = Gallery.prototype.textFactory || Gallery.prototype.imageFactory;
+
+  var YouTubePlayer = function YouTubePlayer(videoId, playerVars, clickToPlay) {
+    this.videoId = videoId;
+    this.playerVars = playerVars;
+    this.clickToPlay = clickToPlay;
+    this.element = document.createElement('div');
+    this.listeners = {};
+  };
+
+  $.extend(YouTubePlayer.prototype, {
+    canPlayType: function canPlayType() {
+      return true;
+    },
+    on: function on(type, func) {
+      this.listeners[type] = func;
+      return this;
+    },
+    loadAPI: function loadAPI() {
+      var that = this;
+      var onYouTubeIframeAPIReady = window.onYouTubeIframeAPIReady;
+      var apiUrl = '//www.youtube.com/iframe_api';
+      var scriptTags = document.getElementsByTagName('script');
+      var i = scriptTags.length;
+      var scriptTag;
+
+      window.onYouTubeIframeAPIReady = function () {
+        if (onYouTubeIframeAPIReady) {
+          onYouTubeIframeAPIReady.apply(this);
+        }
+
+        if (that.playOnReady) {
+          that.play();
+        }
+      };
+
+      while (i) {
+        i -= 1;
+
+        if (scriptTags[i].src === apiUrl) {
+          return;
+        }
+      }
+
+      scriptTag = document.createElement('script');
+      scriptTag.src = apiUrl;
+      scriptTags[0].parentNode.insertBefore(scriptTag, scriptTags[0]);
+    },
+    onReady: function onReady() {
+      this.ready = true;
+
+      if (this.playOnReady) {
+        this.play();
+      }
+    },
+    onPlaying: function onPlaying() {
+      if (this.playStatus < 2) {
+        this.listeners.playing();
+        this.playStatus = 2;
+      }
+    },
+    onPause: function onPause() {
+      Gallery.prototype.setTimeout.call(this, this.checkSeek, null, 2000);
+    },
+    checkSeek: function checkSeek() {
+      if (this.stateChange === YT.PlayerState.PAUSED || this.stateChange === YT.PlayerState.ENDED) {
+        // check if current state change is actually paused
+        this.listeners.pause();
+        delete this.playStatus;
+      }
+    },
+    onStateChange: function onStateChange(event) {
+      switch (event.data) {
+        case YT.PlayerState.PLAYING:
+          this.hasPlayed = true;
+          this.onPlaying();
+          break;
+
+        case YT.PlayerState.PAUSED:
+        case YT.PlayerState.ENDED:
+          this.onPause();
+          break;
+      } // Save most recent state change to this.stateChange
+
+
+      this.stateChange = event.data;
+    },
+    onError: function onError(event) {
+      this.listeners.error(event);
+    },
+    play: function play() {
+      var that = this;
+
+      if (!this.playStatus) {
+        this.listeners.play();
+        this.playStatus = 1;
+      }
+
+      if (this.ready) {
+        if (!this.hasPlayed && (this.clickToPlay || window.navigator && /iP(hone|od|ad)/.test(window.navigator.platform))) {
+          // Manually trigger the playing callback if clickToPlay
+          // is enabled and to workaround a limitation in iOS,
+          // which requires synchronous user interaction to start
+          // the video playback:
+          this.onPlaying();
+        } else {
+          this.player.playVideo();
+        }
+      } else {
+        this.playOnReady = true;
+
+        if (!(window.YT && YT.Player)) {
+          this.loadAPI();
+        } else if (!this.player) {
+          this.player = new YT.Player(this.element, {
+            videoId: this.videoId,
+            playerVars: this.playerVars,
+            events: {
+              onReady: function onReady() {
+                that.onReady();
+              },
+              onStateChange: function onStateChange(event) {
+                that.onStateChange(event);
+              },
+              onError: function onError(event) {
+                that.onError(event);
+              }
+            }
+          });
+        }
+      }
+    },
+    pause: function pause() {
+      if (this.ready) {
+        this.player.pauseVideo();
+      } else if (this.playStatus) {
+        delete this.playOnReady;
+        this.listeners.pause();
+        delete this.playStatus;
+      }
+    }
+  });
+  $.extend(Gallery.prototype, {
+    YouTubePlayer: YouTubePlayer,
+    textFactory: function textFactory(obj, callback) {
+      var options = this.options;
+      var videoId = this.getItemProperty(obj, options.youTubeVideoIdProperty);
+
+      if (videoId) {
+        if (this.getItemProperty(obj, options.urlProperty) === undefined) {
+          obj[options.urlProperty] = '//www.youtube.com/watch?v=' + videoId;
+        }
+
+        if (this.getItemProperty(obj, options.videoPosterProperty) === undefined) {
+          obj[options.videoPosterProperty] = '//img.youtube.com/vi/' + videoId + '/maxresdefault.jpg';
+        }
+
+        return this.videoFactory(obj, callback, new YouTubePlayer(videoId, options.youTubePlayerVars, options.youTubeClickToPlay));
+      }
+
+      return _textFactory.call(this, obj, callback);
+    }
+  });
+  return Gallery;
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/Gallery/blueimp-gallery.js":
+/*!************************************************************!*\
+  !*** ./resources/js/components/Gallery/blueimp-gallery.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
+ * blueimp Gallery JS
+ * https://github.com/blueimp/Gallery
+ *
+ * Copyright 2013, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Swipe implementation based on
+ * https://github.com/bradbirdsall/Swipe
+ *
+ * Licensed under the MIT license:
+ * https://opensource.org/licenses/MIT
+ */
+
+/* global define, DocumentTouch */
+
+/* eslint-disable no-param-reassign */
+;
+
+(function (factory) {
+  'use strict';
+
+  if (true) {
+    // Register as an anonymous AMD module:
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! ./blueimp-helper */ "./resources/js/components/Gallery/blueimp-helper.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {}
+})(function ($) {
+  'use strict';
+  /**
+   * Gallery constructor
+   *
+   * @class
+   * @param {Array|NodeList} list Gallery content
+   * @param {object} [options] Gallery options
+   * @returns {object} Gallery object
+   */
+
+  function Gallery(list, options) {
+    if (document.body.style.maxHeight === undefined) {
+      // document.body.style.maxHeight is undefined on IE6 and lower
+      return null;
+    }
+
+    if (!this || this.options !== Gallery.prototype.options) {
+      // Called as function instead of as constructor,
+      // so we simply return a new instance:
+      return new Gallery(list, options);
+    }
+
+    if (!list || !list.length) {
+      this.console.log('blueimp Gallery: No or empty list provided as first argument.', list);
+      return;
+    }
+
+    this.list = list;
+    this.num = list.length;
+    this.initOptions(options);
+    this.initialize();
+  }
+
+  $.extend(Gallery.prototype, {
+    options: {
+      // The Id, element or querySelector of the gallery widget:
+      container: '#blueimp-gallery',
+      // The tag name, Id, element or querySelector of the slides container:
+      slidesContainer: 'div',
+      // The tag name, Id, element or querySelector of the title element:
+      titleElement: 'h3',
+      // The class to add when the gallery is visible:
+      displayClass: 'blueimp-gallery-display',
+      // The class to add when the gallery controls are visible:
+      controlsClass: 'blueimp-gallery-controls',
+      // The class to add when the gallery only displays one element:
+      singleClass: 'blueimp-gallery-single',
+      // The class to add when the left edge has been reached:
+      leftEdgeClass: 'blueimp-gallery-left',
+      // The class to add when the right edge has been reached:
+      rightEdgeClass: 'blueimp-gallery-right',
+      // The class to add when the automatic slideshow is active:
+      playingClass: 'blueimp-gallery-playing',
+      // The class for all slides:
+      slideClass: 'slide',
+      // The slide class for loading elements:
+      slideLoadingClass: 'slide-loading',
+      // The slide class for elements that failed to load:
+      slideErrorClass: 'slide-error',
+      // The class for the content element loaded into each slide:
+      slideContentClass: 'slide-content',
+      // The class for the "toggle" control:
+      toggleClass: 'toggle',
+      // The class for the "prev" control:
+      prevClass: 'prev',
+      // The class for the "next" control:
+      nextClass: 'next',
+      // The class for the "close" control:
+      closeClass: 'close',
+      // The class for the "play-pause" toggle control:
+      playPauseClass: 'play-pause',
+      // The list object property (or data attribute) with the object type:
+      typeProperty: 'type',
+      // The list object property (or data attribute) with the object title:
+      titleProperty: 'title',
+      // The list object property (or data attribute) with the object alt text:
+      altTextProperty: 'alt',
+      // The list object property (or data attribute) with the object URL:
+      urlProperty: 'href',
+      // The list object property (or data attribute) with the object srcset URL(s):
+      srcsetProperty: 'urlset',
+      // The gallery listens for transitionend events before triggering the
+      // opened and closed events, unless the following option is set to false:
+      displayTransition: true,
+      // Defines if the gallery slides are cleared from the gallery modal,
+      // or reused for the next gallery initialization:
+      clearSlides: true,
+      // Defines if images should be stretched to fill the available space,
+      // while maintaining their aspect ratio (will only be enabled for browsers
+      // supporting background-size="contain", which excludes IE < 9).
+      // Set to "cover", to make images cover all available space (requires
+      // support for background-size="cover", which excludes IE < 9):
+      stretchImages: false,
+      // Toggle the controls on pressing the Return key:
+      toggleControlsOnReturn: true,
+      // Toggle the controls on slide click:
+      toggleControlsOnSlideClick: true,
+      // Toggle the automatic slideshow interval on pressing the Space key:
+      toggleSlideshowOnSpace: true,
+      // Navigate the gallery by pressing left and right on the keyboard:
+      enableKeyboardNavigation: true,
+      // Close the gallery on pressing the Esc key:
+      closeOnEscape: true,
+      // Close the gallery when clicking on an empty slide area:
+      closeOnSlideClick: true,
+      // Close the gallery by swiping up or down:
+      closeOnSwipeUpOrDown: true,
+      // Emulate touch events on mouse-pointer devices such as desktop browsers:
+      emulateTouchEvents: true,
+      // Stop touch events from bubbling up to ancestor elements of the Gallery:
+      stopTouchEventsPropagation: false,
+      // Hide the page scrollbars:
+      hidePageScrollbars: true,
+      // Stops any touches on the container from scrolling the page:
+      disableScroll: true,
+      // Carousel mode (shortcut for carousel specific options):
+      carousel: false,
+      // Allow continuous navigation, moving from last to first
+      // and from first to last slide:
+      continuous: true,
+      // Remove elements outside of the preload range from the DOM:
+      unloadElements: true,
+      // Start with the automatic slideshow:
+      startSlideshow: false,
+      // Delay in milliseconds between slides for the automatic slideshow:
+      slideshowInterval: 5000,
+      // The direction the slides are moving: ltr=LeftToRight or rtl=RightToLeft
+      slideshowDirection: 'ltr',
+      // The starting index as integer.
+      // Can also be an object of the given list,
+      // or an equal object with the same url property:
+      index: 0,
+      // The number of elements to load around the current index:
+      preloadRange: 2,
+      // The transition speed between slide changes in milliseconds:
+      transitionSpeed: 400,
+      // The transition speed for automatic slide changes, set to an integer
+      // greater 0 to override the default transition speed:
+      slideshowTransitionSpeed: undefined,
+      // The event object for which the default action will be canceled
+      // on Gallery initialization (e.g. the click event to open the Gallery):
+      event: undefined,
+      // Callback function executed when the Gallery is initialized.
+      // Is called with the gallery instance as "this" object:
+      onopen: undefined,
+      // Callback function executed when the Gallery has been initialized
+      // and the initialization transition has been completed.
+      // Is called with the gallery instance as "this" object:
+      onopened: undefined,
+      // Callback function executed on slide change.
+      // Is called with the gallery instance as "this" object and the
+      // current index and slide as arguments:
+      onslide: undefined,
+      // Callback function executed after the slide change transition.
+      // Is called with the gallery instance as "this" object and the
+      // current index and slide as arguments:
+      onslideend: undefined,
+      // Callback function executed on slide content load.
+      // Is called with the gallery instance as "this" object and the
+      // slide index and slide element as arguments:
+      onslidecomplete: undefined,
+      // Callback function executed when the Gallery is about to be closed.
+      // Is called with the gallery instance as "this" object:
+      onclose: undefined,
+      // Callback function executed when the Gallery has been closed
+      // and the closing transition has been completed.
+      // Is called with the gallery instance as "this" object:
+      onclosed: undefined
+    },
+    carouselOptions: {
+      hidePageScrollbars: false,
+      toggleControlsOnReturn: false,
+      toggleSlideshowOnSpace: false,
+      enableKeyboardNavigation: false,
+      closeOnEscape: false,
+      closeOnSlideClick: false,
+      closeOnSwipeUpOrDown: false,
+      disableScroll: false,
+      startSlideshow: true
+    },
+    console: typeof window !== 'undefined' && window.console && typeof window.console.log === 'function' ? window.console : {
+      log: function log() {}
+    },
+    // Detect touch, transition, transform and background-size support:
+    support: typeof window === 'undefined' ? {} : function (element) {
+      var support = {
+        touch: window.ontouchstart !== undefined || window.DocumentTouch && document instanceof DocumentTouch
+      };
+      var transitions = {
+        webkitTransition: {
+          end: 'webkitTransitionEnd',
+          prefix: '-webkit-'
+        },
+        MozTransition: {
+          end: 'transitionend',
+          prefix: '-moz-'
+        },
+        OTransition: {
+          end: 'otransitionend',
+          prefix: '-o-'
+        },
+        transition: {
+          end: 'transitionend',
+          prefix: ''
+        }
+      };
+      var prop;
+
+      for (prop in transitions) {
+        if (Object.prototype.hasOwnProperty.call(transitions, prop) && element.style[prop] !== undefined) {
+          support.transition = transitions[prop];
+          support.transition.name = prop;
+          break;
+        }
+      }
+      /**
+       * Tests browser support
+       */
+
+
+      function elementTests() {
+        var transition = support.transition;
+        var prop;
+        var translateZ;
+        document.body.appendChild(element);
+
+        if (transition) {
+          prop = transition.name.slice(0, -9) + 'ransform';
+
+          if (element.style[prop] !== undefined) {
+            element.style[prop] = 'translateZ(0)';
+            translateZ = window.getComputedStyle(element).getPropertyValue(transition.prefix + 'transform');
+            support.transform = {
+              prefix: transition.prefix,
+              name: prop,
+              translate: true,
+              translateZ: !!translateZ && translateZ !== 'none'
+            };
+          }
+        }
+
+        if (element.style.backgroundSize !== undefined) {
+          support.backgroundSize = {};
+          element.style.backgroundSize = 'contain';
+          support.backgroundSize.contain = window.getComputedStyle(element).getPropertyValue('background-size') === 'contain';
+          element.style.backgroundSize = 'cover';
+          support.backgroundSize.cover = window.getComputedStyle(element).getPropertyValue('background-size') === 'cover';
+        }
+
+        document.body.removeChild(element);
+      }
+
+      if (document.body) {
+        elementTests();
+      } else {
+        $(document).on('DOMContentLoaded', elementTests);
+      }
+
+      return support; // Test element, has to be standard HTML and must not be hidden
+      // for the CSS3 tests using window.getComputedStyle to be applicable:
+    }(document.createElement('div')),
+    requestAnimationFrame: typeof window === 'undefined' || window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame,
+    cancelAnimationFrame: typeof window === 'undefined' || window.cancelAnimationFrame || window.webkitCancelRequestAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame,
+    initialize: function initialize() {
+      this.initStartIndex();
+
+      if (this.initWidget() === false) {
+        return false;
+      }
+
+      this.initEventListeners(); // Load the slide at the given index:
+
+      this.onslide(this.index); // Manually trigger the slideend event for the initial slide:
+
+      this.ontransitionend(); // Start the automatic slideshow if applicable:
+
+      if (this.options.startSlideshow) {
+        this.play();
+      }
+    },
+    slide: function slide(to, speed) {
+      window.clearTimeout(this.timeout);
+      var index = this.index;
+      var direction;
+      var naturalDirection;
+      var diff;
+
+      if (index === to || this.num === 1) {
+        return;
+      }
+
+      if (!speed) {
+        speed = this.options.transitionSpeed;
+      }
+
+      if (this.support.transform) {
+        if (!this.options.continuous) {
+          to = this.circle(to);
+        } // 1: backward, -1: forward:
+
+
+        direction = Math.abs(index - to) / (index - to); // Get the actual position of the slide:
+
+        if (this.options.continuous) {
+          naturalDirection = direction;
+          direction = -this.positions[this.circle(to)] / this.slideWidth; // If going forward but to < index, use to = slides.length + to
+          // If going backward but to > index, use to = -slides.length + to
+
+          if (direction !== naturalDirection) {
+            to = -direction * this.num + to;
+          }
+        }
+
+        diff = Math.abs(index - to) - 1; // Move all the slides between index and to in the right direction:
+
+        while (diff) {
+          diff -= 1;
+          this.move(this.circle((to > index ? to : index) - diff - 1), this.slideWidth * direction, 0);
+        }
+
+        to = this.circle(to);
+        this.move(index, this.slideWidth * direction, speed);
+        this.move(to, 0, speed);
+
+        if (this.options.continuous) {
+          this.move(this.circle(to - direction), -(this.slideWidth * direction), 0);
+        }
+      } else {
+        to = this.circle(to);
+        this.animate(index * -this.slideWidth, to * -this.slideWidth, speed);
+      }
+
+      this.onslide(to);
+    },
+    getIndex: function getIndex() {
+      return this.index;
+    },
+    getNumber: function getNumber() {
+      return this.num;
+    },
+    prev: function prev() {
+      if (this.options.continuous || this.index) {
+        this.slide(this.index - 1);
+      }
+    },
+    next: function next() {
+      if (this.options.continuous || this.index < this.num - 1) {
+        this.slide(this.index + 1);
+      }
+    },
+    play: function play(time) {
+      var that = this;
+      var nextIndex = this.index + (this.options.slideshowDirection === 'rtl' ? -1 : 1);
+      window.clearTimeout(this.timeout);
+      this.interval = time || this.options.slideshowInterval;
+
+      if (this.elements[this.index] > 1) {
+        this.timeout = this.setTimeout(!this.requestAnimationFrame && this.slide || function (to, speed) {
+          that.animationFrameId = that.requestAnimationFrame.call(window, function () {
+            that.slide(to, speed);
+          });
+        }, [nextIndex, this.options.slideshowTransitionSpeed], this.interval);
+      }
+
+      this.container.addClass(this.options.playingClass);
+    },
+    pause: function pause() {
+      window.clearTimeout(this.timeout);
+      this.interval = null;
+
+      if (this.cancelAnimationFrame) {
+        this.cancelAnimationFrame.call(window, this.animationFrameId);
+        this.animationFrameId = null;
+      }
+
+      this.container.removeClass(this.options.playingClass);
+    },
+    add: function add(list) {
+      var i;
+
+      if (!list.concat) {
+        // Make a real array out of the list to add:
+        list = Array.prototype.slice.call(list);
+      }
+
+      if (!this.list.concat) {
+        // Make a real array out of the Gallery list:
+        this.list = Array.prototype.slice.call(this.list);
+      }
+
+      this.list = this.list.concat(list);
+      this.num = this.list.length;
+
+      if (this.num > 2 && this.options.continuous === null) {
+        this.options.continuous = true;
+        this.container.removeClass(this.options.leftEdgeClass);
+      }
+
+      this.container.removeClass(this.options.rightEdgeClass).removeClass(this.options.singleClass);
+
+      for (i = this.num - list.length; i < this.num; i += 1) {
+        this.addSlide(i);
+        this.positionSlide(i);
+      }
+
+      this.positions.length = this.num;
+      this.initSlides(true);
+    },
+    resetSlides: function resetSlides() {
+      this.slidesContainer.empty();
+      this.unloadAllSlides();
+      this.slides = [];
+    },
+    handleClose: function handleClose() {
+      var options = this.options;
+      this.destroyEventListeners(); // Cancel the slideshow:
+
+      this.pause();
+      this.container[0].style.display = 'none';
+      this.container.removeClass(options.displayClass).removeClass(options.singleClass).removeClass(options.leftEdgeClass).removeClass(options.rightEdgeClass);
+
+      if (options.hidePageScrollbars) {
+        document.body.style.overflow = this.bodyOverflowStyle;
+      }
+
+      if (this.options.clearSlides) {
+        this.resetSlides();
+      }
+
+      if (this.options.onclosed) {
+        this.options.onclosed.call(this);
+      }
+    },
+    close: function close() {
+      var that = this;
+      /**
+       * Close handler
+       *
+       * @param {event} event Close event
+       */
+
+      function closeHandler(event) {
+        if (event.target === that.container[0]) {
+          that.container.off(that.support.transition.end, closeHandler);
+          that.handleClose();
+        }
+      }
+
+      if (this.options.onclose) {
+        this.options.onclose.call(this);
+      }
+
+      if (this.support.transition && this.options.displayTransition) {
+        this.container.on(this.support.transition.end, closeHandler);
+        this.container.removeClass(this.options.displayClass);
+      } else {
+        this.handleClose();
+      }
+    },
+    circle: function circle(index) {
+      // Always return a number inside of the slides index range:
+      return (this.num + index % this.num) % this.num;
+    },
+    move: function move(index, dist, speed) {
+      this.translateX(index, dist, speed);
+      this.positions[index] = dist;
+    },
+    translate: function translate(index, x, y, speed) {
+      if (!this.slides[index]) return;
+      var style = this.slides[index].style;
+      var transition = this.support.transition;
+      var transform = this.support.transform;
+      style[transition.name + 'Duration'] = speed + 'ms';
+      style[transform.name] = 'translate(' + x + 'px, ' + y + 'px)' + (transform.translateZ ? ' translateZ(0)' : '');
+    },
+    translateX: function translateX(index, x, speed) {
+      this.translate(index, x, 0, speed);
+    },
+    translateY: function translateY(index, y, speed) {
+      this.translate(index, 0, y, speed);
+    },
+    animate: function animate(from, to, speed) {
+      if (!speed) {
+        this.slidesContainer[0].style.left = to + 'px';
+        return;
+      }
+
+      var that = this;
+      var start = new Date().getTime();
+      var timer = window.setInterval(function () {
+        var timeElap = new Date().getTime() - start;
+
+        if (timeElap > speed) {
+          that.slidesContainer[0].style.left = to + 'px';
+          that.ontransitionend();
+          window.clearInterval(timer);
+          return;
+        }
+
+        that.slidesContainer[0].style.left = (to - from) * (Math.floor(timeElap / speed * 100) / 100) + from + 'px';
+      }, 4);
+    },
+    preventDefault: function preventDefault(event) {
+      if (event.preventDefault) {
+        event.preventDefault();
+      } else {
+        event.returnValue = false;
+      }
+    },
+    stopPropagation: function stopPropagation(event) {
+      if (event.stopPropagation) {
+        event.stopPropagation();
+      } else {
+        event.cancelBubble = true;
+      }
+    },
+    onresize: function onresize() {
+      this.initSlides(true);
+    },
+    onmousedown: function onmousedown(event) {
+      // Trigger on clicks of the left mouse button only
+      // and exclude video & audio elements:
+      if (event.which && event.which === 1 && event.target.nodeName !== 'VIDEO' && event.target.nodeName !== 'AUDIO') {
+        // Preventing the default mousedown action is required
+        // to make touch emulation work with Firefox:
+        event.preventDefault();
+        (event.originalEvent || event).touches = [{
+          pageX: event.pageX,
+          pageY: event.pageY
+        }];
+        this.ontouchstart(event);
+      }
+    },
+    onmousemove: function onmousemove(event) {
+      if (this.touchStart) {
+        ;
+        (event.originalEvent || event).touches = [{
+          pageX: event.pageX,
+          pageY: event.pageY
+        }];
+        this.ontouchmove(event);
+      }
+    },
+    onmouseup: function onmouseup(event) {
+      if (this.touchStart) {
+        this.ontouchend(event);
+        delete this.touchStart;
+      }
+    },
+    onmouseout: function onmouseout(event) {
+      if (this.touchStart) {
+        var target = event.target;
+        var related = event.relatedTarget;
+
+        if (!related || related !== target && !$.contains(target, related)) {
+          this.onmouseup(event);
+        }
+      }
+    },
+    ontouchstart: function ontouchstart(event) {
+      if (this.options.stopTouchEventsPropagation) {
+        this.stopPropagation(event);
+      } // jQuery doesn't copy touch event properties by default,
+      // so we have to access the originalEvent object:
+
+
+      var touches = (event.originalEvent || event).touches[0];
+      this.touchStart = {
+        // Remember the initial touch coordinates:
+        x: touches.pageX,
+        y: touches.pageY,
+        // Store the time to determine touch duration:
+        time: Date.now()
+      }; // Helper variable to detect scroll movement:
+
+      this.isScrolling = undefined; // Reset delta values:
+
+      this.touchDelta = {};
+    },
+    ontouchmove: function ontouchmove(event) {
+      if (this.options.stopTouchEventsPropagation) {
+        this.stopPropagation(event);
+      } // jQuery doesn't copy touch event properties by default,
+      // so we have to access the originalEvent object:
+
+
+      var touches = (event.originalEvent || event).touches[0];
+      var scale = (event.originalEvent || event).scale;
+      var index = this.index;
+      var touchDeltaX;
+      var indices; // Ensure this is a one touch swipe and not, e.g. a pinch:
+
+      if (touches.length > 1 || scale && scale !== 1) {
+        return;
+      }
+
+      if (this.options.disableScroll) {
+        event.preventDefault();
+      } // Measure change in x and y coordinates:
+
+
+      this.touchDelta = {
+        x: touches.pageX - this.touchStart.x,
+        y: touches.pageY - this.touchStart.y
+      };
+      touchDeltaX = this.touchDelta.x; // Detect if this is a vertical scroll movement (run only once per touch):
+
+      if (this.isScrolling === undefined) {
+        this.isScrolling = this.isScrolling || Math.abs(touchDeltaX) < Math.abs(this.touchDelta.y);
+      }
+
+      if (!this.isScrolling) {
+        // Always prevent horizontal scroll:
+        event.preventDefault(); // Stop the slideshow:
+
+        window.clearTimeout(this.timeout);
+
+        if (this.options.continuous) {
+          indices = [this.circle(index + 1), index, this.circle(index - 1)];
+        } else {
+          // Increase resistance if first slide and sliding left
+          // or last slide and sliding right:
+          this.touchDelta.x = touchDeltaX = touchDeltaX / (!index && touchDeltaX > 0 || index === this.num - 1 && touchDeltaX < 0 ? Math.abs(touchDeltaX) / this.slideWidth + 1 : 1);
+          indices = [index];
+
+          if (index) {
+            indices.push(index - 1);
+          }
+
+          if (index < this.num - 1) {
+            indices.unshift(index + 1);
+          }
+        }
+
+        while (indices.length) {
+          index = indices.pop();
+          this.translateX(index, touchDeltaX + this.positions[index], 0);
+        }
+      } else {
+        this.translateY(index, this.touchDelta.y + this.positions[index], 0);
+      }
+    },
+    ontouchend: function ontouchend(event) {
+      if (this.options.stopTouchEventsPropagation) {
+        this.stopPropagation(event);
+      }
+
+      var index = this.index;
+      var speed = this.options.transitionSpeed;
+      var slideWidth = this.slideWidth;
+      var isShortDuration = Number(Date.now() - this.touchStart.time) < 250; // Determine if slide attempt triggers next/prev slide:
+
+      var isValidSlide = isShortDuration && Math.abs(this.touchDelta.x) > 20 || Math.abs(this.touchDelta.x) > slideWidth / 2; // Determine if slide attempt is past start or end:
+
+      var isPastBounds = !index && this.touchDelta.x > 0 || index === this.num - 1 && this.touchDelta.x < 0;
+      var isValidClose = !isValidSlide && this.options.closeOnSwipeUpOrDown && (isShortDuration && Math.abs(this.touchDelta.y) > 20 || Math.abs(this.touchDelta.y) > this.slideHeight / 2);
+      var direction;
+      var indexForward;
+      var indexBackward;
+      var distanceForward;
+      var distanceBackward;
+
+      if (this.options.continuous) {
+        isPastBounds = false;
+      } // Determine direction of swipe (true: right, false: left):
+
+
+      direction = this.touchDelta.x < 0 ? -1 : 1;
+
+      if (!this.isScrolling) {
+        if (isValidSlide && !isPastBounds) {
+          indexForward = index + direction;
+          indexBackward = index - direction;
+          distanceForward = slideWidth * direction;
+          distanceBackward = -slideWidth * direction;
+
+          if (this.options.continuous) {
+            this.move(this.circle(indexForward), distanceForward, 0);
+            this.move(this.circle(index - 2 * direction), distanceBackward, 0);
+          } else if (indexForward >= 0 && indexForward < this.num) {
+            this.move(indexForward, distanceForward, 0);
+          }
+
+          this.move(index, this.positions[index] + distanceForward, speed);
+          this.move(this.circle(indexBackward), this.positions[this.circle(indexBackward)] + distanceForward, speed);
+          index = this.circle(indexBackward);
+          this.onslide(index);
+        } else {
+          // Move back into position
+          if (this.options.continuous) {
+            this.move(this.circle(index - 1), -slideWidth, speed);
+            this.move(index, 0, speed);
+            this.move(this.circle(index + 1), slideWidth, speed);
+          } else {
+            if (index) {
+              this.move(index - 1, -slideWidth, speed);
+            }
+
+            this.move(index, 0, speed);
+
+            if (index < this.num - 1) {
+              this.move(index + 1, slideWidth, speed);
+            }
+          }
+        }
+      } else {
+        if (isValidClose) {
+          this.close();
+        } else {
+          // Move back into position
+          this.translateY(index, 0, speed);
+        }
+      }
+    },
+    ontouchcancel: function ontouchcancel(event) {
+      if (this.touchStart) {
+        this.ontouchend(event);
+        delete this.touchStart;
+      }
+    },
+    ontransitionend: function ontransitionend(event) {
+      var slide = this.slides[this.index];
+
+      if (!event || slide === event.target) {
+        if (this.interval) {
+          this.play();
+        }
+
+        this.setTimeout(this.options.onslideend, [this.index, slide]);
+      }
+    },
+    oncomplete: function oncomplete(event) {
+      var target = event.target || event.srcElement;
+      var parent = target && target.parentNode;
+      var index;
+
+      if (!target || !parent) {
+        return;
+      }
+
+      index = this.getNodeIndex(parent);
+      $(parent).removeClass(this.options.slideLoadingClass);
+
+      if (event.type === 'error') {
+        $(parent).addClass(this.options.slideErrorClass);
+        this.elements[index] = 3; // Fail
+      } else {
+        this.elements[index] = 2; // Done
+      } // Fix for IE7's lack of support for percentage max-height:
+
+
+      if (target.clientHeight > this.container[0].clientHeight) {
+        target.style.maxHeight = this.container[0].clientHeight;
+      }
+
+      if (this.interval && this.slides[this.index] === parent) {
+        this.play();
+      }
+
+      this.setTimeout(this.options.onslidecomplete, [index, parent]);
+    },
+    onload: function onload(event) {
+      this.oncomplete(event);
+    },
+    onerror: function onerror(event) {
+      this.oncomplete(event);
+    },
+    onkeydown: function onkeydown(event) {
+      switch (event.which || event.keyCode) {
+        case 13:
+          // Return
+          if (this.options.toggleControlsOnReturn) {
+            this.preventDefault(event);
+            this.toggleControls();
+          }
+
+          break;
+
+        case 27:
+          // Esc
+          if (this.options.closeOnEscape) {
+            this.close(); // prevent Esc from closing other things
+
+            event.stopImmediatePropagation();
+          }
+
+          break;
+
+        case 32:
+          // Space
+          if (this.options.toggleSlideshowOnSpace) {
+            this.preventDefault(event);
+            this.toggleSlideshow();
+          }
+
+          break;
+
+        case 37:
+          // Left
+          if (this.options.enableKeyboardNavigation) {
+            this.preventDefault(event);
+            this.prev();
+          }
+
+          break;
+
+        case 39:
+          // Right
+          if (this.options.enableKeyboardNavigation) {
+            this.preventDefault(event);
+            this.next();
+          }
+
+          break;
+      }
+    },
+    handleClick: function handleClick(event) {
+      var options = this.options;
+      var target = event.target || event.srcElement;
+      var parent = target.parentNode;
+      /**
+       * Checks if the target from the close has the given class
+       *
+       * @param {string} className Class name
+       * @returns {boolean} Returns true if the target has the class name
+       */
+
+      function isTarget(className) {
+        return $(target).hasClass(className) || $(parent).hasClass(className);
+      }
+
+      if (isTarget(options.toggleClass)) {
+        // Click on "toggle" control
+        this.preventDefault(event);
+        this.toggleControls();
+      } else if (isTarget(options.prevClass)) {
+        // Click on "prev" control
+        this.preventDefault(event);
+        this.prev();
+      } else if (isTarget(options.nextClass)) {
+        // Click on "next" control
+        this.preventDefault(event);
+        this.next();
+      } else if (isTarget(options.closeClass)) {
+        // Click on "close" control
+        this.preventDefault(event);
+        this.close();
+      } else if (isTarget(options.playPauseClass)) {
+        // Click on "play-pause" control
+        this.preventDefault(event);
+        this.toggleSlideshow();
+      } else if (parent === this.slidesContainer[0]) {
+        // Click on slide background
+        if (options.closeOnSlideClick) {
+          this.preventDefault(event);
+          this.close();
+        } else if (options.toggleControlsOnSlideClick) {
+          this.preventDefault(event);
+          this.toggleControls();
+        }
+      } else if (parent.parentNode && parent.parentNode === this.slidesContainer[0]) {
+        // Click on displayed element
+        if (options.toggleControlsOnSlideClick) {
+          this.preventDefault(event);
+          this.toggleControls();
+        }
+      }
+    },
+    onclick: function onclick(event) {
+      if (this.options.emulateTouchEvents && this.touchDelta && (Math.abs(this.touchDelta.x) > 20 || Math.abs(this.touchDelta.y) > 20)) {
+        delete this.touchDelta;
+        return;
+      }
+
+      return this.handleClick(event);
+    },
+    updateEdgeClasses: function updateEdgeClasses(index) {
+      if (!index) {
+        this.container.addClass(this.options.leftEdgeClass);
+      } else {
+        this.container.removeClass(this.options.leftEdgeClass);
+      }
+
+      if (index === this.num - 1) {
+        this.container.addClass(this.options.rightEdgeClass);
+      } else {
+        this.container.removeClass(this.options.rightEdgeClass);
+      }
+    },
+    handleSlide: function handleSlide(index) {
+      if (!this.options.continuous) {
+        this.updateEdgeClasses(index);
+      }
+
+      this.loadElements(index);
+
+      if (this.options.unloadElements) {
+        this.unloadElements(index);
+      }
+
+      this.setTitle(index);
+    },
+    onslide: function onslide(index) {
+      this.index = index;
+      this.handleSlide(index);
+      this.setTimeout(this.options.onslide, [index, this.slides[index]]);
+    },
+    setTitle: function setTitle(index) {
+      var firstChild = this.slides[index].firstChild;
+      var text = firstChild.title || firstChild.alt;
+      var titleElement = this.titleElement;
+
+      if (titleElement.length) {
+        this.titleElement.empty();
+
+        if (text) {
+          titleElement[0].appendChild(document.createTextNode(text));
+        }
+      }
+    },
+    setTimeout: function setTimeout(func, args, wait) {
+      var that = this;
+      return func && window.setTimeout(function () {
+        func.apply(that, args || []);
+      }, wait || 0);
+    },
+    imageFactory: function imageFactory(obj, callback) {
+      var that = this;
+      var img = this.imagePrototype.cloneNode(false);
+      var url = obj;
+      var backgroundSize = this.options.stretchImages;
+      var called;
+      var element;
+      var title;
+      var altText;
+      /**
+       * Wraps the callback function for the load/error event
+       *
+       * @param {event} event load/error event
+       * @returns {number} timeout ID
+       */
+
+      function callbackWrapper(event) {
+        if (!called) {
+          event = {
+            type: event.type,
+            target: element
+          };
+
+          if (!element.parentNode) {
+            // Fix for IE7 firing the load event for
+            // cached images before the element could
+            // be added to the DOM:
+            return that.setTimeout(callbackWrapper, [event]);
+          }
+
+          called = true;
+          $(img).off('load error', callbackWrapper);
+
+          if (backgroundSize) {
+            if (event.type === 'load') {
+              element.style.background = 'url("' + url + '") center no-repeat';
+              element.style.backgroundSize = backgroundSize;
+            }
+          }
+
+          callback(event);
+        }
+      }
+
+      if (typeof url !== 'string') {
+        url = this.getItemProperty(obj, this.options.urlProperty);
+        title = this.getItemProperty(obj, this.options.titleProperty);
+        altText = this.getItemProperty(obj, this.options.altTextProperty) || title;
+      }
+
+      if (backgroundSize === true) {
+        backgroundSize = 'contain';
+      }
+
+      backgroundSize = this.support.backgroundSize && this.support.backgroundSize[backgroundSize] && backgroundSize;
+
+      if (backgroundSize) {
+        element = this.elementPrototype.cloneNode(false);
+      } else {
+        element = img;
+        img.draggable = false;
+      }
+
+      if (title) {
+        element.title = title;
+      }
+
+      if (altText) {
+        element.alt = altText;
+      }
+
+      $(img).on('load error', callbackWrapper);
+      img.src = url;
+      return element;
+    },
+    createElement: function createElement(obj, callback) {
+      var type = obj && this.getItemProperty(obj, this.options.typeProperty);
+      var factory = type && this[type.split('/')[0] + 'Factory'] || this.imageFactory;
+      var element = obj && factory.call(this, obj, callback);
+      var srcset = this.getItemProperty(obj, this.options.srcsetProperty);
+
+      if (!element) {
+        element = this.elementPrototype.cloneNode(false);
+        this.setTimeout(callback, [{
+          type: 'error',
+          target: element
+        }]);
+      }
+
+      if (srcset) {
+        element.setAttribute('srcset', srcset);
+      }
+
+      $(element).addClass(this.options.slideContentClass);
+      return element;
+    },
+    loadElement: function loadElement(index) {
+      if (!this.elements[index]) {
+        if (this.slides[index].firstChild) {
+          this.elements[index] = $(this.slides[index]).hasClass(this.options.slideErrorClass) ? 3 : 2;
+        } else {
+          this.elements[index] = 1; // Loading
+
+          $(this.slides[index]).addClass(this.options.slideLoadingClass);
+          this.slides[index].appendChild(this.createElement(this.list[index], this.proxyListener));
+        }
+      }
+    },
+    loadElements: function loadElements(index) {
+      var limit = Math.min(this.num, this.options.preloadRange * 2 + 1);
+      var j = index;
+      var i;
+
+      for (i = 0; i < limit; i += 1) {
+        // First load the current slide element (0),
+        // then the next one (+1),
+        // then the previous one (-2),
+        // then the next after next (+2), etc.:
+        j += i * (i % 2 === 0 ? -1 : 1); // Connect the ends of the list to load slide elements for
+        // continuous navigation:
+
+        j = this.circle(j);
+        this.loadElement(j);
+      }
+    },
+    unloadElements: function unloadElements(index) {
+      var i, diff;
+
+      for (i in this.elements) {
+        if (Object.prototype.hasOwnProperty.call(this.elements, i)) {
+          diff = Math.abs(index - i);
+
+          if (diff > this.options.preloadRange && diff + this.options.preloadRange < this.num) {
+            this.unloadSlide(i);
+            delete this.elements[i];
+          }
+        }
+      }
+    },
+    addSlide: function addSlide(index) {
+      var slide = this.slidePrototype.cloneNode(false);
+      slide.setAttribute('data-index', index);
+      this.slidesContainer[0].appendChild(slide);
+      this.slides.push(slide);
+    },
+    positionSlide: function positionSlide(index) {
+      var slide = this.slides[index];
+      slide.style.width = this.slideWidth + 'px';
+
+      if (this.support.transform) {
+        slide.style.left = index * -this.slideWidth + 'px';
+        this.move(index, this.index > index ? -this.slideWidth : this.index < index ? this.slideWidth : 0, 0);
+      }
+    },
+    initSlides: function initSlides(reload) {
+      var clearSlides, i;
+
+      if (!reload) {
+        this.positions = [];
+        this.positions.length = this.num;
+        this.elements = {};
+        this.imagePrototype = document.createElement('img');
+        this.elementPrototype = document.createElement('div');
+        this.slidePrototype = document.createElement('div');
+        $(this.slidePrototype).addClass(this.options.slideClass);
+        this.slides = this.slidesContainer[0].children;
+        clearSlides = this.options.clearSlides || this.slides.length !== this.num;
+      }
+
+      this.slideWidth = this.container[0].clientWidth;
+      this.slideHeight = this.container[0].clientHeight;
+      this.slidesContainer[0].style.width = this.num * this.slideWidth + 'px';
+
+      if (clearSlides) {
+        this.resetSlides();
+      }
+
+      for (i = 0; i < this.num; i += 1) {
+        if (clearSlides) {
+          this.addSlide(i);
+        }
+
+        this.positionSlide(i);
+      } // Reposition the slides before and after the given index:
+
+
+      if (this.options.continuous && this.support.transform) {
+        this.move(this.circle(this.index - 1), -this.slideWidth, 0);
+        this.move(this.circle(this.index + 1), this.slideWidth, 0);
+      }
+
+      if (!this.support.transform) {
+        this.slidesContainer[0].style.left = this.index * -this.slideWidth + 'px';
+      }
+    },
+    unloadSlide: function unloadSlide(index) {
+      var slide, firstChild;
+      slide = this.slides[index];
+      firstChild = slide.firstChild;
+
+      if (firstChild !== null) {
+        slide.removeChild(firstChild);
+      }
+    },
+    unloadAllSlides: function unloadAllSlides() {
+      var i, len;
+
+      for (i = 0, len = this.slides.length; i < len; i++) {
+        this.unloadSlide(i);
+      }
+    },
+    toggleControls: function toggleControls() {
+      var controlsClass = this.options.controlsClass;
+
+      if (this.container.hasClass(controlsClass)) {
+        this.container.removeClass(controlsClass);
+      } else {
+        this.container.addClass(controlsClass);
+      }
+    },
+    toggleSlideshow: function toggleSlideshow() {
+      if (!this.interval) {
+        this.play();
+      } else {
+        this.pause();
+      }
+    },
+    getNodeIndex: function getNodeIndex(element) {
+      return parseInt(element.getAttribute('data-index'), 10);
+    },
+    getNestedProperty: function getNestedProperty(obj, property) {
+      property.replace( // Matches native JavaScript notation in a String,
+      // e.g. '["doubleQuoteProp"].dotProp[2]'
+      // eslint-disable-next-line no-useless-escape
+      /\[(?:'([^']+)'|"([^"]+)"|(\d+))\]|(?:(?:^|\.)([^\.\[]+))/g, function (str, singleQuoteProp, doubleQuoteProp, arrayIndex, dotProp) {
+        var prop = dotProp || singleQuoteProp || doubleQuoteProp || arrayIndex && parseInt(arrayIndex, 10);
+
+        if (str && obj) {
+          obj = obj[prop];
+        }
+      });
+      return obj;
+    },
+    getDataProperty: function getDataProperty(obj, property) {
+      var key;
+      var prop;
+
+      if (obj.dataset) {
+        key = property.replace(/-([a-z])/g, function (_, b) {
+          return b.toUpperCase();
+        });
+        prop = obj.dataset[key];
+      } else if (obj.getAttribute) {
+        prop = obj.getAttribute('data-' + property.replace(/([A-Z])/g, '-$1').toLowerCase());
+      }
+
+      if (typeof prop === 'string') {
+        // eslint-disable-next-line no-useless-escape
+        if (/^(true|false|null|-?\d+(\.\d+)?|\{[\s\S]*\}|\[[\s\S]*\])$/.test(prop)) {
+          try {
+            return $.parseJSON(prop);
+          } catch (ignore) {// ignore JSON parsing errors
+          }
+        }
+
+        return prop;
+      }
+    },
+    getItemProperty: function getItemProperty(obj, property) {
+      var prop = this.getDataProperty(obj, property);
+
+      if (prop === undefined) {
+        prop = obj[property];
+      }
+
+      if (prop === undefined) {
+        prop = this.getNestedProperty(obj, property);
+      }
+
+      return prop;
+    },
+    initStartIndex: function initStartIndex() {
+      var index = this.options.index;
+      var urlProperty = this.options.urlProperty;
+      var i; // Check if the index is given as a list object:
+
+      if (index && typeof index !== 'number') {
+        for (i = 0; i < this.num; i += 1) {
+          if (this.list[i] === index || this.getItemProperty(this.list[i], urlProperty) === this.getItemProperty(index, urlProperty)) {
+            index = i;
+            break;
+          }
+        }
+      } // Make sure the index is in the list range:
+
+
+      this.index = this.circle(parseInt(index, 10) || 0);
+    },
+    initEventListeners: function initEventListeners() {
+      var that = this;
+      var slidesContainer = this.slidesContainer;
+      /**
+       * Proxy listener
+       *
+       * @param {event} event original event
+       */
+
+      function proxyListener(event) {
+        var type = that.support.transition && that.support.transition.end === event.type ? 'transitionend' : event.type;
+        that['on' + type](event);
+      }
+
+      $(window).on('resize', proxyListener);
+      $(document.body).on('keydown', proxyListener);
+      this.container.on('click', proxyListener);
+
+      if (this.support.touch) {
+        slidesContainer.on('touchstart touchmove touchend touchcancel', proxyListener);
+      } else if (this.options.emulateTouchEvents && this.support.transition) {
+        slidesContainer.on('mousedown mousemove mouseup mouseout', proxyListener);
+      }
+
+      if (this.support.transition) {
+        slidesContainer.on(this.support.transition.end, proxyListener);
+      }
+
+      this.proxyListener = proxyListener;
+    },
+    destroyEventListeners: function destroyEventListeners() {
+      var slidesContainer = this.slidesContainer;
+      var proxyListener = this.proxyListener;
+      $(window).off('resize', proxyListener);
+      $(document.body).off('keydown', proxyListener);
+      this.container.off('click', proxyListener);
+
+      if (this.support.touch) {
+        slidesContainer.off('touchstart touchmove touchend touchcancel', proxyListener);
+      } else if (this.options.emulateTouchEvents && this.support.transition) {
+        slidesContainer.off('mousedown mousemove mouseup mouseout', proxyListener);
+      }
+
+      if (this.support.transition) {
+        slidesContainer.off(this.support.transition.end, proxyListener);
+      }
+    },
+    handleOpen: function handleOpen() {
+      if (this.options.onopened) {
+        this.options.onopened.call(this);
+      }
+    },
+    initWidget: function initWidget() {
+      var that = this;
+      /**
+       * Open handler
+       *
+       * @param {event} event Gallery open event
+       */
+
+      function openHandler(event) {
+        if (event.target === that.container[0]) {
+          that.container.off(that.support.transition.end, openHandler);
+          that.handleOpen();
+        }
+      }
+
+      this.container = $(this.options.container);
+
+      if (!this.container.length) {
+        this.console.log('blueimp Gallery: Widget container not found.', this.options.container);
+        return false;
+      }
+
+      this.slidesContainer = this.container.find(this.options.slidesContainer).first();
+
+      if (!this.slidesContainer.length) {
+        this.console.log('blueimp Gallery: Slides container not found.', this.options.slidesContainer);
+        return false;
+      }
+
+      this.titleElement = this.container.find(this.options.titleElement).first();
+
+      if (this.num === 1) {
+        this.container.addClass(this.options.singleClass);
+      }
+
+      if (this.options.onopen) {
+        this.options.onopen.call(this);
+      }
+
+      if (this.support.transition && this.options.displayTransition) {
+        this.container.on(this.support.transition.end, openHandler);
+      } else {
+        this.handleOpen();
+      }
+
+      if (this.options.hidePageScrollbars) {
+        // Hide the page scrollbars:
+        this.bodyOverflowStyle = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+      }
+
+      this.container[0].style.display = 'block';
+      this.initSlides();
+      this.container.addClass(this.options.displayClass);
+    },
+    initOptions: function initOptions(options) {
+      // Create a copy of the prototype options:
+      this.options = $.extend({}, this.options); // Check if carousel mode is enabled:
+
+      if (options && options.carousel || this.options.carousel && (!options || options.carousel !== false)) {
+        $.extend(this.options, this.carouselOptions);
+      } // Override any given options:
+
+
+      $.extend(this.options, options);
+
+      if (this.num < 3) {
+        // 1 or 2 slides cannot be displayed continuous,
+        // remember the original option by setting to null instead of false:
+        this.options.continuous = this.options.continuous ? null : false;
+      }
+
+      if (!this.support.transition) {
+        this.options.emulateTouchEvents = false;
+      }
+
+      if (this.options.event) {
+        this.preventDefault(this.options.event);
+      }
+    }
+  });
+  return Gallery;
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/Gallery/blueimp-helper.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/Gallery/blueimp-helper.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_RESULT__;/*
+ * blueimp helper JS
+ * https://github.com/blueimp/Gallery
+ *
+ * Copyright 2013, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * https://opensource.org/licenses/MIT
+ */
+
+/* global define */
+
+/* eslint-disable no-param-reassign */
+;
+
+(function () {
+  'use strict';
+  /**
+   * Object.assign polyfill
+   *
+   * @param {object} obj1 First object
+   * @param {object} obj2 Second object
+   * @returns {object} Merged object
+   */
+
+  function extend(obj1, obj2) {
+    var prop;
+
+    for (prop in obj2) {
+      if (Object.prototype.hasOwnProperty.call(obj2, prop)) {
+        obj1[prop] = obj2[prop];
+      }
+    }
+
+    return obj1;
+  }
+  /**
+   * Helper constructor
+   *
+   * @class
+   * @param {*} query jQuery type query argument
+   */
+
+
+  function Helper(query) {
+    if (!this || this.find !== Helper.prototype.find) {
+      // Called as function instead of as constructor,
+      // so we simply return a new instance:
+      return new Helper(query);
+    }
+
+    this.length = 0;
+
+    if (query) {
+      if (typeof query === 'string') {
+        query = this.find(query);
+      }
+
+      if (query.nodeType || query === query.window) {
+        // Single HTML element
+        this.length = 1;
+        this[0] = query;
+      } else {
+        // HTML element collection
+        var i = query.length;
+        this.length = i;
+
+        while (i) {
+          i -= 1;
+          this[i] = query[i];
+        }
+      }
+    }
+  }
+
+  Helper.extend = extend;
+
+  Helper.contains = function (container, element) {
+    do {
+      element = element.parentNode;
+
+      if (element === container) {
+        return true;
+      }
+    } while (element);
+
+    return false;
+  };
+
+  Helper.parseJSON = function (string) {
+    return window.JSON && JSON.parse(string);
+  };
+
+  extend(Helper.prototype, {
+    find: function find(query) {
+      var container = this[0] || document;
+
+      if (typeof query === 'string') {
+        if (container.querySelectorAll) {
+          query = container.querySelectorAll(query);
+        } else if (query.charAt(0) === '#') {
+          query = container.getElementById(query.slice(1));
+        } else {
+          query = container.getElementsByTagName(query);
+        }
+      }
+
+      return new Helper(query);
+    },
+    hasClass: function hasClass(className) {
+      if (!this[0]) {
+        return false;
+      }
+
+      return new RegExp('(^|\\s+)' + className + '(\\s+|$)').test(this[0].className);
+    },
+    addClass: function addClass(className) {
+      var i = this.length;
+      var element;
+
+      while (i) {
+        i -= 1;
+        element = this[i];
+
+        if (!element.className) {
+          element.className = className;
+          return this;
+        }
+
+        if (this.hasClass(className)) {
+          return this;
+        }
+
+        element.className += ' ' + className;
+      }
+
+      return this;
+    },
+    removeClass: function removeClass(className) {
+      var regexp = new RegExp('(^|\\s+)' + className + '(\\s+|$)');
+      var i = this.length;
+      var element;
+
+      while (i) {
+        i -= 1;
+        element = this[i];
+        element.className = element.className.replace(regexp, ' ');
+      }
+
+      return this;
+    },
+    on: function on(eventName, handler) {
+      var eventNames = eventName.split(/\s+/);
+      var i;
+      var element;
+
+      while (eventNames.length) {
+        eventName = eventNames.shift();
+        i = this.length;
+
+        while (i) {
+          i -= 1;
+          element = this[i];
+
+          if (element.addEventListener) {
+            element.addEventListener(eventName, handler, false);
+          } else if (element.attachEvent) {
+            element.attachEvent('on' + eventName, handler);
+          }
+        }
+      }
+
+      return this;
+    },
+    off: function off(eventName, handler) {
+      var eventNames = eventName.split(/\s+/);
+      var i;
+      var element;
+
+      while (eventNames.length) {
+        eventName = eventNames.shift();
+        i = this.length;
+
+        while (i) {
+          i -= 1;
+          element = this[i];
+
+          if (element.removeEventListener) {
+            element.removeEventListener(eventName, handler, false);
+          } else if (element.detachEvent) {
+            element.detachEvent('on' + eventName, handler);
+          }
+        }
+      }
+
+      return this;
+    },
+    empty: function empty() {
+      var i = this.length;
+      var element;
+
+      while (i) {
+        i -= 1;
+        element = this[i];
+
+        while (element.hasChildNodes()) {
+          element.removeChild(element.lastChild);
+        }
+      }
+
+      return this;
+    },
+    first: function first() {
+      return new Helper(this[0]);
+    }
+  });
+
+  if (true) {
+    !(__WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+      return Helper;
+    }).call(exports, __webpack_require__, exports, module),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else {}
+})();
+
+/***/ }),
+
+/***/ "./resources/js/components/Gallery/gallery.vue":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/Gallery/gallery.vue ***!
+  \*****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _gallery_vue_vue_type_template_id_6d80190c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./gallery.vue?vue&type=template&id=6d80190c& */ "./resources/js/components/Gallery/gallery.vue?vue&type=template&id=6d80190c&");
+/* harmony import */ var _gallery_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./gallery.vue?vue&type=script&lang=js& */ "./resources/js/components/Gallery/gallery.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _gallery_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./gallery.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/Gallery/gallery.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _gallery_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _gallery_vue_vue_type_template_id_6d80190c___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _gallery_vue_vue_type_template_id_6d80190c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Gallery/gallery.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Gallery/gallery.vue?vue&type=script&lang=js&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/components/Gallery/gallery.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_2_node_modules_vue_loader_lib_index_js_vue_loader_options_gallery_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--2!../../../../node_modules/vue-loader/lib??vue-loader-options!./gallery.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gallery/gallery.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_2_node_modules_vue_loader_lib_index_js_vue_loader_options_gallery_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Gallery/gallery.vue?vue&type=style&index=0&lang=css&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/Gallery/gallery.vue?vue&type=style&index=0&lang=css& ***!
+  \**************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_3_0_node_modules_css_loader_dist_cjs_js_ref_3_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_gallery_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/mini-css-extract-plugin/dist/loader.js??ref--3-0!../../../../node_modules/css-loader/dist/cjs.js??ref--3-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/vue-loader/lib??vue-loader-options!./gallery.vue?vue&type=style&index=0&lang=css& */ "./node_modules/mini-css-extract-plugin/dist/loader.js?!./node_modules/css-loader/dist/cjs.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gallery/gallery.vue?vue&type=style&index=0&lang=css&");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_3_0_node_modules_css_loader_dist_cjs_js_ref_3_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_gallery_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_3_0_node_modules_css_loader_dist_cjs_js_ref_3_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_gallery_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_mini_css_extract_plugin_dist_loader_js_ref_3_0_node_modules_css_loader_dist_cjs_js_ref_3_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_gallery_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_mini_css_extract_plugin_dist_loader_js_ref_3_0_node_modules_css_loader_dist_cjs_js_ref_3_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_gallery_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_3_0_node_modules_css_loader_dist_cjs_js_ref_3_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_gallery_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Gallery/gallery.vue?vue&type=template&id=6d80190c&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/Gallery/gallery.vue?vue&type=template&id=6d80190c& ***!
+  \************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_gallery_vue_vue_type_template_id_6d80190c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./gallery.vue?vue&type=template&id=6d80190c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Gallery/gallery.vue?vue&type=template&id=6d80190c&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_gallery_vue_vue_type_template_id_6d80190c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_gallery_vue_vue_type_template_id_6d80190c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/Page.vue":
 /*!******************************************!*\
   !*** ./resources/js/components/Page.vue ***!
@@ -88637,93 +91125,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/system/overblock.vue":
-/*!******************************************************!*\
-  !*** ./resources/js/components/system/overblock.vue ***!
-  \******************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _overblock_vue_vue_type_template_id_854303b8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./overblock.vue?vue&type=template&id=854303b8& */ "./resources/js/components/system/overblock.vue?vue&type=template&id=854303b8&");
-/* harmony import */ var _overblock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./overblock.vue?vue&type=script&lang=js& */ "./resources/js/components/system/overblock.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _overblock_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./overblock.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/system/overblock.vue?vue&type=style&index=0&lang=css&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
-  _overblock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _overblock_vue_vue_type_template_id_854303b8___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _overblock_vue_vue_type_template_id_854303b8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/system/overblock.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/system/overblock.vue?vue&type=script&lang=js&":
-/*!*******************************************************************************!*\
-  !*** ./resources/js/components/system/overblock.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_2_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--2!../../../../node_modules/vue-loader/lib??vue-loader-options!./overblock.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/overblock.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_2_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/system/overblock.vue?vue&type=style&index=0&lang=css&":
-/*!***************************************************************************************!*\
-  !*** ./resources/js/components/system/overblock.vue?vue&type=style&index=0&lang=css& ***!
-  \***************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_3_0_node_modules_css_loader_dist_cjs_js_ref_3_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/mini-css-extract-plugin/dist/loader.js??ref--3-0!../../../../node_modules/css-loader/dist/cjs.js??ref--3-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/vue-loader/lib??vue-loader-options!./overblock.vue?vue&type=style&index=0&lang=css& */ "./node_modules/mini-css-extract-plugin/dist/loader.js?!./node_modules/css-loader/dist/cjs.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/overblock.vue?vue&type=style&index=0&lang=css&");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_3_0_node_modules_css_loader_dist_cjs_js_ref_3_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_3_0_node_modules_css_loader_dist_cjs_js_ref_3_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_mini_css_extract_plugin_dist_loader_js_ref_3_0_node_modules_css_loader_dist_cjs_js_ref_3_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_mini_css_extract_plugin_dist_loader_js_ref_3_0_node_modules_css_loader_dist_cjs_js_ref_3_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
- /* harmony default export */ __webpack_exports__["default"] = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_3_0_node_modules_css_loader_dist_cjs_js_ref_3_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
-/***/ "./resources/js/components/system/overblock.vue?vue&type=template&id=854303b8&":
-/*!*************************************************************************************!*\
-  !*** ./resources/js/components/system/overblock.vue?vue&type=template&id=854303b8& ***!
-  \*************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_template_id_854303b8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./overblock.vue?vue&type=template&id=854303b8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/system/overblock.vue?vue&type=template&id=854303b8&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_template_id_854303b8___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_overblock_vue_vue_type_template_id_854303b8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
 /***/ "./resources/js/components/system/owl-carousel.vue":
 /*!*********************************************************!*\
   !*** ./resources/js/components/system/owl-carousel.vue ***!
@@ -89795,6 +92196,18 @@ Object.keys = function (obj) {
   }
 };
 
+if (!Math.sign) {
+  Math.sign = function (x) {
+    x = +x;
+
+    if (x === 0 || isNaN(x)) {
+      return x;
+    }
+
+    return x > 0 ? 1 : -1;
+  };
+}
+
 
 
 
@@ -90470,6 +92883,11 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     },
     setCurGroupIndex: function setCurGroupIndex(state, payload) {
       state.curGroupIndex = payload;
+      state.exclude1Id = 1;
+      state.exclude2Id = 0;
+      state.curMobile1 = 0;
+      state.curMobile2 = 0;
+      state.curCompareSlide = 0;
     },
     delFromCompareProducts: function delFromCompareProducts(state, payload) {
       var prod = this.state.compare.products;
@@ -90774,7 +93192,15 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           });
         }
       });
-      return res;
+      return res.sort(function (el1, el2) {
+        if (el1.name > el2.name) {
+          return 1;
+        } else if (el1.name < el2.name) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
     },
     curGroup: function curGroup(state, getters, rootState) {
       if (!getters.compareGroups.length) {

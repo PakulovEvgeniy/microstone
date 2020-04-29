@@ -1,7 +1,7 @@
 <template>
     <div class="ui-input-search ui-input-search_catalog-filter left-top-filters-search-input">
       <input ref="inpFind" class="ui-input-search__input ui-input-search__input_catalog-filter" placeholder="Поиск по категории" :value="valFindCat">
-      <span class="ui-input-search__icon ui-input-search__icon_clear ui-input-search__icon_catalog-filter" :class="{'ui-input-search__icon_clear-visible' : visFindCat}" @click="onQuickSeach(false)"><i class="fas fa-times"></i></span>
+      <span class="ui-input-search__icon ui-input-search__icon_clear ui-input-search__icon_catalog-filter" :class="{'ui-input-search__icon_clear-visible' : visFindCat}" @click="onQuickSeach(false)"><i class="fa fa-times"></i></span>
       <span class="ui-input-search__icon ui-input-search__icon_search ui-input-search__icon_catalog-filter"><i class="fa fa-search" @click="onQuickSeach(true)"></i></span>
     </div>
 </template>

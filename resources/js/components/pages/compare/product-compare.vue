@@ -19,7 +19,10 @@
     <div class="compare__product-image">
       <a>
         <picture><img :alt="product.name" :src="product.image_2"></picture>
-      </a>      
+      </a>
+      <div @click="clickGallery($event)" @mousedown="mouseDownGal($event)" class="zoom-button">
+        <i class="fa fa-search-plus" aria-hidden="true"></i>
+      </div>      
     </div>
     <div class="compare__product-content">
       <div class="caption">
@@ -51,6 +54,8 @@
   export default {
     data() {
         return {
+          clientX: 0,
+          clientY: 0
         }
     },
     props: [
@@ -77,6 +82,19 @@
         'addToServerWishlist',
         'delFromServerWishlist'
       ]),
+      mouseDownGal(e) {
+        this.clientX = e.clientX;
+        this.clientY = e.clientY;
+      },
+      clickGallery(e) {
+        let difX = e.clientX - this.clientX;
+        if (difX<0) difX = -difX;
+        let difY = e.clientY - this.clientY;
+        if (difY<0) difY = -difY;
+        if (difX<5 && difY<5) {
+          this.$emit('onZoom', this.product);
+        }
+      },
       clickFavorite() {
         let id = this.product.id;
         if (this.auth) {
@@ -115,6 +133,27 @@
       height: 80px;
       margin: auto;
       width: 80px;
+      position: relative;
+      .zoom-button {
+        border-radius: 20px;
+        background: #fff;
+        cursor: pointer;
+        display: none;
+        height: 40px;
+        left: 20px;
+        position: absolute;
+        top: 20px;
+        width: 40px;
+        > i {
+          position: absolute;
+          left: 13px;
+          top: 10px;
+          color: #333;
+        }
+      }
+      &:hover  .zoom-button {
+        display: block;
+      }
     }
     .icon {
       color: #afafaf;

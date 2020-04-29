@@ -97,11 +97,22 @@ class Products extends Model
 
         foreach ($row as $val) {
             $min_price = $val->min_price ? $val->min_price : 0;
-            $price_disc = $min_price*0.9;
+            $price_disc = round($min_price*0.9, 2);
             $prod_params=[];
             if ($with_params) {
                $prod_params = PartyParams::getProductParams($val->id_1s); 
             }
+
+            $pict = ProductPictures::getPictures($val->id_1s);
+            $pc2=[];
+            $pc2[] = '/image/' . $val->image;
+            foreach ($pict as $vl) {
+                if ($vl['image'] != $val->image) {
+                    $pc2[] = '/image/' . $vl['image'];
+                }
+            }
+
+
             $res[] = [
                 'id' => $val->id,
                 'id_1s' => $val->id_1s,
@@ -118,7 +129,8 @@ class Products extends Model
                 'cat_name' => $val->cat_name,
                 'cg_id' => $val->cg_id,
                 'cg_name' => $val->cg_name,
-                'product_params' => $prod_params
+                'product_params' => $prod_params,
+                'images' => $pc2
             ];
         }
 

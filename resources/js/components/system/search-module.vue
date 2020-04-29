@@ -274,7 +274,7 @@
           background-color: #f5f5f5;
         }
         .m-checkbox input[type="checkbox"]:checked + label i {
-          line-height: unset;
+          line-height: 20px;
         }
       }
       &.load {

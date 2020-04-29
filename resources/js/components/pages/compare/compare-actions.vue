@@ -35,6 +35,7 @@
                 :product="el"
                 :lock="false"
                 @clickTrash="delFromCompare(el)"
+                @onZoom="clickZoom($event)"
               >
               </product-compare>
           </slide>
@@ -63,6 +64,7 @@
                 :product="el"
                 :lock="false"
                 @clickTrash="delFromCompare(el)"
+                @onZoom="clickZoom($event)"
               >
               </product-compare>
           </slide>
@@ -84,6 +86,7 @@
             :product="el"
             :lock="true"
             @clickFixed="setFixed(el, false)"
+            @onZoom="clickZoom($event)"
           >
           </product-compare>
         </div>
@@ -99,7 +102,7 @@
           :touchDrag="false"
           :loop="true"
           :perPage="perPageCustom"
-          :draggableEnable="true"
+          :draggableEnable="itemNotFixed.length>1"
           :listKeys="listKeys"
           @changeInd="changeInd"
         >
@@ -109,12 +112,14 @@
                 :lock="false"
                 @clickFixed="setFixed(el, true)"
                 @clickTrash="delFromCompare(el)"
+                @onZoom="clickZoom($event)"
               >
               </product-compare>
           </slide>
         </carousel>
       </div>
     </div>
+    <vue-gallery :images="galImages" :index="indexGallery" @close="closeGallery"></vue-gallery>
   </div>
 </template>
 
@@ -125,11 +130,14 @@
   import Slide from '../../Carousel/Slide.vue';
   import productCompare from './product-compare.vue';
   import editDialog from './edit-dialog.vue';
+  import VueGallery from '../../Gallery/gallery.vue';
   export default {
     data() {
         return {
           reCalc1: false,
-          reCalc2: false
+          reCalc2: false,
+          indexGallery: null,
+          galImages: []
         }
     },
     computed: {
@@ -199,6 +207,18 @@
       }
     },
     methods: {
+      clickZoom(e) {
+        this.galImages = e.images;
+        this.indexGallery = 0;
+      },
+      closeGallery() {
+        if (this.indexGallery!==null) {
+          this.indexGallery = null;
+          setTimeout(() => {
+            this.resizeCar();
+          }, 500); 
+        }
+      },
       getListExcludeSome(exclude) {
         if (this.curGroup && this.curGroup.items.length) {
           if (this.curGroup.items.length>0) {
@@ -212,14 +232,8 @@
           return [];
         }
       },
-      setFixed(el, val) {
-        if (el.isFixed === undefined) {
-          this.$set(el, 'isFixed', val);
-        } else {
-          el.isFixed = val;
-        }
+      resizeCar() {
         if(typeof(Event) === 'function') {
-  // modern browsers
           window.dispatchEvent(new Event('resize'));
         }else{
           // for IE and other old browsers
@@ -228,6 +242,14 @@
           evt.initUIEvent('resize', true, false, window, 0); 
           window.dispatchEvent(evt);
         }
+      },
+      setFixed(el, val) {
+        if (el.isFixed === undefined) {
+          this.$set(el, 'isFixed', val);
+        } else {
+          el.isFixed = val;
+        }
+        this.resizeCar();
       },
       changeInd(e) {
         this.$store.commit('changeDragIndex', {
@@ -254,7 +276,8 @@
       uiToggle,
       Carousel,
       Slide,
-      productCompare
+      productCompare,
+      VueGallery
     },
     watch: {
       curMobile1(val) {
@@ -418,7 +441,7 @@
           .VueCarousel {
             width: 100%;
             .VueCarousel-navigation-prev {
-              top: unset;
+              top: auto;
               bottom: -65px;
               left: 30px;
               outline: none;
@@ -427,7 +450,7 @@
               font-weight: bold;
             }
             .VueCarousel-navigation-next {
-              top: unset;
+              top: auto;
               bottom: -65px;
               right: 30px; 
               outline: none;
