@@ -26,9 +26,9 @@ export default {
       return rootState.scrolled>40;
     },
     getScreenState(state, getters, rootState) {
-      if (rootState.screenWidth==0 || rootState.screenWidth>1199) {
+      if (rootState.screenWidth==0 || rootState.screenWidth>1200) {
         return 3
-      } else if (rootState.screenWidth<992) {
+      } else if (rootState.screenWidth<993) {
         return 1
       } else {
         return 2

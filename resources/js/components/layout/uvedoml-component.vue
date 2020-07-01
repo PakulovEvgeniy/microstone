@@ -14,21 +14,24 @@
     }
 </script>
 
-<style>
+<style lang="less">
     .notification-container {
         display: inline-block;
-    }
-
-    .notification-container .title i {
-        display: inline-block;
-    }
-    .notification-container .title.inactive i {
-        padding: 4px;
-        font-size: 10px;
-        line-height: 10px;
-    }
-    .notification-container .title.inactive:hover i {
-        color: #fff;
-        opacity: 0.7;
+        .title {
+            i {
+                display: inline-block;
+            }
+            &.inactive {
+                i {
+                    padding: 4px;
+                    font-size: 10px;
+                    line-height: 10px;
+                }
+                &:hover i {
+                    color: #fff;
+                    opacity: 0.7;
+                }
+            }
+        }
     }
 </style>

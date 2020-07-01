@@ -21,7 +21,6 @@ class CreateCategory extends Migration
             $table->boolean('status');
             $table->bigInteger('sort_order')->unsigned();
             $table->bigInteger('popul')->default(0);
-            $table->string('compare_group', 100)->nullable();
             $table->timestamps();
         });
     }

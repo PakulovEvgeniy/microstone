@@ -221,8 +221,16 @@ export default {
       parms.forEach((el) => {
         let par_val = getters.listParams.map((it) => {
           if (it === undefined) { return undefined; }
-          let p = it.product_params.find(pp => el.param_type_id == pp.param_type_id);
-          return p ? p.value : '';
+
+          let p = "";
+          it.product_params.forEach((pp) => {
+            if (el.param_type_id == pp.param_type_id) {
+              p += !p ? pp.value : (', '+pp.value); 
+            }
+          });
+          
+          return p;
+
         });
         el.params = par_val;
         el.notDifferent = true;

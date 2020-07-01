@@ -6,7 +6,7 @@
           <router-link v-tooltip.bottom="'Вернуться на главную страницу'" to='/'>
             MICROSTONE
           </router-link>
-          <span @click="onMouseEnter2" v-show="nonVisibleAside" v-tooltip.bottom="'Каталог товаров'" class="logo-chevron"><i class="fa fa-chevron-down"></i></span>
+          <span @click="onMouseEnter2" v-show="nonVisibleAside" v-tooltip.bottom="'Каталог товаров'" class="logo-chevron"><i class="fa" :class="{'fa-chevron-up': visBacdrop, 'fa-chevron-down': !visBacdrop}"></i></span>
         </div>
         <main-seach-form></main-seach-form>
         <div class="header-buttons">
@@ -56,7 +56,6 @@ import headerButtons from '../system/header-buttons.vue';
             'nonVisibleAside',
             'idTimeStartBack',
             'idTimeStopBack',
-            'visBacdrop',
             'countWishlist',
             'countCompare',
             'cartQty'
@@ -87,6 +86,7 @@ import headerButtons from '../system/header-buttons.vue';
 
 <style lang="less">
 @import '../../../less/vars';
+@import '../../../less/smart-grid';
   .header-bottom {
     background: #fff;
     z-index: 1030;
@@ -94,12 +94,14 @@ import headerButtons from '../system/header-buttons.vue';
     box-sizing: content-box;
     top: -64px;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
+    .md(display, none);
     &-container {
-      display: flex;
+      .row-flex();
       padding: 0;
-      margin: 0;
-      list-style: none;
       justify-content: flex-start;
+      > * {
+        .col();
+      }
     }
     &.header-fixed {
       position: fixed;
@@ -110,28 +112,35 @@ import headerButtons from '../system/header-buttons.vue';
     }
   }
 
-.header-buttons {
-  display: flex;
-  min-width: 418px;
-  justify-content: space-between;
-  align-items: center;
-  a {
-    text-decoration: none;
-    margin-left: 20px;   
+  .header-buttons {
+    a {
+      .col-ib();
+      margin-left: 20px;
+      line-height: 60px;   
+    }
   }
-}
 
   .logo-container {
     min-width: 220px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    > * {
+      .col-ib();
+      vertical-align: middle;
+      margin-top: 10px;
+    }
+    vertical-align: middle;
+    .md-block({
+      min-width: 70px;
+      width: 70px;
+      span {
+        display: block;
+        font-size: 20px;
+      }
+    });
     .logo-chevron {
-      display: inline-block;
       width: 29px;
       height: 29px;
       text-align: center;
-      padding-top: 7px;
+      padding-top: 5px;
       border-radius: 50%;
       cursor: pointer;
       i {
@@ -155,15 +164,5 @@ import headerButtons from '../system/header-buttons.vue';
       text-decoration: none;
       line-height: 40px;
     } 
-  }
-  @media (max-width: 991px){
-    .logo-container {
-      min-width: 70px;
-      width: 70px;
-      span {
-        display: block;
-        font-size: 20px;
-      }
-    }
   }
 </style>

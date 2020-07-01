@@ -16,5 +16,6 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('/obmen', 'Api\Obmen@index');
 Route::post('/obmen', 'Api\Obmen@index');
 Route::get('/products/{id}', 'Api\Products@index');

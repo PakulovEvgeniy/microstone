@@ -259,7 +259,7 @@
             let total = this.wishProducts.reduce((acc, el) => {
               return acc + ((+el.percent) ? (Math.round((+el.price-(+el.percent/100*el.price))*100)/100) : Math.round(el.price*100)/100);
             }, 0);
-            return 'от ' + total;
+            return 'от ' + total.toFixed(2);
           }, 
           allInCart() {
             //if (this.auth) return false;

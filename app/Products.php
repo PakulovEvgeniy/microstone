@@ -15,6 +15,9 @@ use App\ProductsDescriptions;
 use App\ProductPictures;
 use App\ParamTypes;
 use App\Setting;
+use App\DiscountPriceGroup;
+use App\Characteristics;
+use App\SoldProduct;
 
 class Products extends Model
 {
@@ -83,21 +86,21 @@ class Products extends Model
     {
         $res = [];
         $row = Products::whereIn('products.id', $list)
-            ->select('products.id_1s as id_1s', 'products.id as id', 'products_descriptions.chpu as chpu' , 'products_descriptions.name as name', 'sku', 'products.image as image', 'category_description.name as cat_name', 'compare_groups.id as cg_id', 'compare_groups.name as cg_name', 'category.id as cat_id' , DB::raw('SUM(stock) as stock, MIN(price) as min_price'))
+            ->select('products.id_1s as id_1s', 'products.id as id', 'products_descriptions.chpu as chpu' , 'products_descriptions.name as name', 'sku', 'products.image as image', 'category_description.name as cat_name', 'compare_groups.id as cg_id', 'compare_groups.name as cg_name', 'category.id as cat_id', 'have_charact' , DB::raw('SUM(stock) as stock, MIN(price) as min_price'))
             ->leftJoin('products_descriptions','products.id','=','products_descriptions.products_id')
             ->leftJoin('price_party','products.id_1s','=','price_party.product_id1s')
             ->leftJoin('stock_party', 'products.id_1s','=','stock_party.product_id1s')
             ->leftJoin('category','products.parent_id','=','category.id_1s')
-            ->leftJoin('compare_groups','category.compare_group','=','compare_groups.id_1s')
+            ->leftJoin('compare_groups','products.compare_group','=','compare_groups.id_1s')
             ->leftJoin('category_description','category.id','=','category_description.category_id')
-            ->groupBy('id_1s', 'id', 'name', 'chpu', 'sku', 'image', 'cat_name', 'cg_id', 'cg_name', 'cat_id')
+            ->groupBy('id_1s', 'id', 'name', 'chpu', 'sku', 'image', 'cat_name', 'cg_id', 'cg_name', 'cat_id', 'have_charact')
             ->get();
 
         //$price_g = $min_price - (10/100*$min_price);
 
         foreach ($row as $val) {
             $min_price = $val->min_price ? $val->min_price : 0;
-            $price_disc = round($min_price*0.9, 2);
+            $price_disc = round($min_price,2);//round($min_price*0.9, 2);
             $prod_params=[];
             if ($with_params) {
                $prod_params = PartyParams::getProductParams($val->id_1s); 
@@ -130,7 +133,9 @@ class Products extends Model
                 'cg_id' => $val->cg_id,
                 'cg_name' => $val->cg_name,
                 'product_params' => $prod_params,
-                'images' => $pc2
+                'images' => $pc2,
+                'have_charact' => $val->have_charact,
+                'characts' => $val->have_charact ? Characteristics::getCharacteristics($val->id_1s) : []
             ];
         }
 
@@ -158,6 +163,18 @@ class Products extends Model
                 
     	if ($prod) {
             $arr_manuf = PartyParams::getManufacturesByProduct($id_1s);
+
+            
+            $disc = DiscountPriceGroup::getDiscounts($prod->price_group);
+
+            $charact=[];
+            if ($prod->have_charact) {
+                $charact = Characteristics::getCharacteristics($prod->id_1s);
+                $price  = PriceParty::getPriceForProductCharact($id_1s);
+            } else {
+               $price  = PriceParty::getMinMaxPriceForProduct($id_1s); 
+            }
+
             $res=[
                 'id' => $prod->id,
                 'id_1s' => $prod->id_1s,
@@ -168,7 +185,11 @@ class Products extends Model
                 'images' => $pc,
                 'images2' => $pc1,
                 'bigImages' => $pc2,
-                'manuf' => $arr_manuf
+                'manuf' => $arr_manuf,
+                'price' => $price,
+                'discount_group' => $disc,
+                'have_charact' => $prod->have_charact,
+                'characts' => $charact
             ];
             $prod->popul = $prod->popul+1;
             $prod->save();
@@ -302,8 +323,8 @@ class Products extends Model
                 });
             }
         }
-        $prd = $prd->select('id_1s', 'products.id as id', 'description', 'chpu' ,'parent_id', 'name', 'sku', 'image', 'popul', DB::raw('MAX(price) as max_price, MIN(price) as min_price, 
-					SUM(stock) as stock, SUM(sold) as sold'));
+        $prd = $prd->select('id_1s', 'products.id as id', 'description', 'chpu' ,'parent_id', 'name', 'sku', 'image', 'popul', 'have_charact', DB::raw('MAX(price) as max_price, MIN(price) as min_price, 
+					SUM(stock) as stock, MAX(sold) as sold'));
         if (count($fld)) {
             for ($i=0; $i < count($fld); $i++) { 
                 $val = $fld[$i];
@@ -333,7 +354,7 @@ class Products extends Model
         }
         
         
-        $prd = $prd->groupBy('id_1s', 'id', 'name', 'description', 'chpu', 'parent_id', 'sku', 'image', 'popul');
+        $prd = $prd->groupBy('id_1s', 'id', 'name', 'description', 'chpu', 'parent_id', 'sku', 'image', 'popul', 'have_charact');
 
         $order_def = Orders::getDefaultOrderId($id_1s);
         $order = $order_def;
@@ -403,6 +424,7 @@ class Products extends Model
     	$dat = [];
 
     	foreach ($prd as $val) {
+
     		$d = [
 				'id' => $val->id,
 				'parent_id' => $val->parent_id,
@@ -416,7 +438,9 @@ class Products extends Model
 				'max_price' => $val->max_price,
 				'min_price' => $val->min_price,
 				'stock' => $val->stock,
-				'sold' => $val->sold
+				'sold' => $val->sold ? $val->sold : 0,
+                'have_charact' => $val->have_charact,
+                'characts' => $val->have_charact ? Characteristics::getCharacteristics($val->id_1s) : []
             ];
             if ($grp && ($grp->name == 'По наличию' || $grp->param_type_id)) {
                 $d['group'] = $val->grp=='я' ? 'Неопределено' : $val->grp; 

@@ -28,7 +28,7 @@ export default {
       }
     },
     addToItemWish(state, payload) {
-      this.state.wishlist.items.push(+payload);
+      this.state.wishlist.items.push(payload);
     },
     delFromItemWish(state, payload) {
       let ind = this.state.wishlist.items.findIndex((el) => {
@@ -77,6 +77,13 @@ export default {
         }
       });
     },
+    addToWishList({commit, dispatch, rootState}, data) {
+      if (rootState.auth) {
+        dispatch('addToServerWishlist', data);
+      } else {
+        dispatch('addToLocalWishlist', data);
+      }
+    },
     addToLocalWishlist({commit, dispatch}, data) {
       let wish = localStorage.getItem('wishlist');
       if (!wish) {
@@ -84,7 +91,9 @@ export default {
       } else {
         wish = JSON.parse(wish);
       }
-      if (wish.indexOf(data) == -1) {
+      if (!wish.find((el) => {
+        return el.id == data.id && el.characteristic == data.characteristic;
+      })) {
         wish.push(data);
       }
       localStorage.setItem('wishlist', JSON.stringify(wish));
@@ -94,15 +103,24 @@ export default {
       return dispatch('queryPostToServer', {
         url: '/account/wishlist/add',
         params: {
-          id: data
+          id: data.id,
+          characteristic: data.characteristic
         }
       })
+    },
+    delFromWishList({commit, dispatch, rootState}, data) {
+      if (rootState.auth) {
+        dispatch('delFromServerWishlist', data);
+      } else {
+        dispatch('delFromLocalWishlist', data);
+      }
     },
     delFromServerWishlist({commit, dispatch}, data) {
       let param = data;
       if (typeof data !== 'object') {
         param = {
-          id: data,
+          id: data.id,
+          characteristic: data.characteristic,
           group_id: 0
         }
       }
@@ -118,14 +136,22 @@ export default {
       } else {
         wish = JSON.parse(wish);
       }
-      let ind = wish.indexOf(data);
+      let ind = wish.findIndex((el) => {
+        return el.id == data.id && el.characteristic == data.characteristic;
+      });
       if (ind == -1) {
         return;
       }
       wish.splice(ind, 1); 
       localStorage.setItem('wishlist', JSON.stringify(wish));
       commit('setWishlist', wish);
-      commit('delFromWishListProducts', data);
+      let it = wish.find((el) => {
+        return el.id == data.id;
+      });
+      if (!it) {
+        commit('delFromWishListProducts', data.id);
+      } 
+      
     },
     restoreWishList({commit, dispatch}, data) {
       let wish = localStorage.getItem('wishlist');

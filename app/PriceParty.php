@@ -9,7 +9,7 @@ use DB;
 class PriceParty extends Model
 {
     protected $table = 'price_party';
-    protected $fillable = ['product_id1s', 'party_id1s', 'min_qty' , 'party_type'];
+    protected $fillable = ['product_id1s', 'party_id1s', 'min_qty'];
     public $timestamps = false;
 
     public static function getMinMaxPriceForCategory($id_1s)
@@ -29,6 +29,23 @@ class PriceParty extends Model
             ->get();
 
         return ['min' => $prd[0]->min ? $prd[0]->min : 0, 'max' => $prd[0]->max ? $prd[0]->max : 0];
+    }
+
+    public static function getPriceForProductCharact($id_1s)
+    {
+        $prd = PriceParty::where(['product_id1s' => $id_1s, 'status' => 1])
+            ->select('party_id1s as charact', 'price')
+            ->get();
+
+        $res = [];
+
+        foreach ($prd as $val) {
+            $res[] = [
+                'id' => $val->charact,
+                'price' => $val->price ? $val->price : 0
+            ];
+        }
+        return $res;
     }
 
     public static function getProductsByFiltr($id_1s, $val)

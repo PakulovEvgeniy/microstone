@@ -56,7 +56,7 @@
                         icon="fa-heart-o"
                       ></add-in-list-button>
                       <buy-button
-                        v-tooltip.bottom="cart.items.indexOf(it.id) != -1 ? 'Перейти в корзину'  : 'Добавить в корзину'"
+                        v-tooltip.bottom="isInCartAll(it) ? 'Перейти в корзину'  : 'Добавить в корзину'"
                         :item="it"
                         :list="cart.items"
                         :small="true"
@@ -108,7 +108,8 @@
           ...mapGetters([
             'wishlist',
             'compare',
-            'cart'
+            'cart',
+            'isInCartAll'
           ]),
           valLength() {
             return this.searchValue.length;

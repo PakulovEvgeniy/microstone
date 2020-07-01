@@ -129,6 +129,7 @@
 
 <style lang="less">
   @import '../../less/vars';
+  @import '../../less/smart-grid';
   main {
     position: relative;
   }
@@ -140,7 +141,7 @@
     cursor: pointer;
     position: fixed;
     z-index: 1000;
-    bottom: 0;
+    bottom: 24px;
     right: 0;
     display: flex;
     justify-content: center;
@@ -156,16 +157,7 @@
         color: @block-color;    
       }
     }
-    @media (min-width: 1200px) {
-      margin-bottom: 24px;
-    }
-    @media (max-width: 1199px) and (min-width: 992px) {
-      bottom: 24px;
-      right: 5px;
-    }
-    @media (max-width: 991px) {
-      display: none;
-    }
+    .md(display, none);
   }
   
   

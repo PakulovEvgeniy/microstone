@@ -73,7 +73,7 @@
             </div>
             <div class="primary-btn">
               <buy-button
-                v-tooltip.top="cart.items.indexOf(item.id) != -1 ? 'Перейти в корзину'  : 'Добавить в корзину'"
+                v-tooltip.top="isInCartAll(item) ? 'Перейти в корзину'  : 'Добавить в корзину'"
                 :item="item"
                 :list="cart.items"
                 :passive="inItem ? false : true"
@@ -113,7 +113,8 @@
            'wishlist',
            'compare',
            'cart',
-           'getScreenState'
+           'getScreenState',
+           'isInCartAll'
           ]),
           price() {
             if (this.item.min_price && this.item.max_price) {

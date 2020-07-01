@@ -39,6 +39,8 @@
     color: #333;
     font-size: 15px;
     position: relative;
+    transition-duration: .3s;
+    transition-property: color;
     i {
       color: #d9d9d9;
       font-size: 20px;
@@ -46,7 +48,8 @@
     }
     .btn-badge {
       left: 8px;
-      top: -5px;
+      top: 5px;
+      line-height: normal;
     }
   }
 </style>

@@ -65,6 +65,10 @@
 													
 													
 											</div>
+											<div v-tooltip.top="'Показать все товары производителя'" v-show="brand && brand.have_logo" class="brand-logo">
+												<router-link :to="'/manufacturer/'+brand.chpu"><img :src="brand.logo"></router-link>
+											</div>
+											<order-block></order-block>
 									</div>
 							</div>
 					</div>
@@ -82,6 +86,7 @@
 		import { dragscroll } from 'vue-dragscroll';
     import notFoundComp from './general/not-found-comp.vue';
     import VueGallery from '../Gallery/gallery.vue';
+    import orderBlock from './product/order-block.vue';
     //import NoSSR from 'vue-no-ssr';
 		export default {
 				data() {
@@ -105,6 +110,12 @@
 					]),
 					title() {
 							return this.product.name || 'Страница не найдена';
+					},
+					brand() {
+						if (!this.product) {return undefined;}
+						if (this.product.manuf && this.product.manuf.length) {
+							return this.product.manuf[0];
+						}
 					},
 					breadItems() {
 						let arr = [];
@@ -170,7 +181,8 @@
             Slide,
             owlCarousel,
             notFoundComp,
-            VueGallery
+            VueGallery,
+            orderBlock
 				},
 				beforeRouteEnter (to, from, next) {
 					next(vm => {
@@ -180,7 +192,33 @@
 		}
 </script>
 
-<style>
+<style lang="less">
+@import '../../../less/smart-grid.less';
+
+	.brand-logo {
+		background-color: #fff;
+		border: 1px solid #ddd;
+		border-radius: 5px;
+		bottom: 40px;
+		box-shadow: -1px -2px 0 rgba(0,0,0,0.13) inset;
+		display: inline-block;
+		float: right;
+		padding: 2px;
+		position: relative;
+		right: 10px;
+		text-align: center;
+		width: 215px;
+		a {
+			display: block;
+			padding-top: 3px;
+		}
+		img {
+			width: 100px;
+			height: 40px;
+		}
+		.md(display, none);
+	}
+
 	 .price-item-title {
 				font-size: 28px;
 				font-weight: normal;

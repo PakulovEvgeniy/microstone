@@ -1,5 +1,5 @@
 const gulp = require('gulp');
-const autoprefixer = require('gulp-autoprefixer');
+/*const autoprefixer = require('gulp-autoprefixer');
 const del = require('del');
 const browserSync = require('browser-sync').create();
 const concat = require('gulp-concat');
@@ -13,10 +13,11 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const rename = require("gulp-rename");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const through = require('through2');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');*/
+const smartgrid = require('smart-grid');
 
 
-console.log(process.argv.indexOf('--dev'));
+/*console.log(process.argv.indexOf('--dev'));
 
 const isDev = process.argv.indexOf('--dev') !== -1;
 const isProd = !isDev;
@@ -140,7 +141,7 @@ function server(cb) {
 				  "vue$": "vue/dist/vue.common.js"
 				}
 			}  
-		}))
+		}))*/
 		/*.pipe(gulpif(isDev,sourcemaps.init({loadMaps: true})))
 		.pipe(gulpif(isDev,through.obj(function (file, enc, cb) {
 			const isSourceMap  = /\.map$/.test(file.path);
@@ -150,7 +151,7 @@ function server(cb) {
 			cb()
 		})))
 		.pipe(gulpif(isDev, sourcemaps.write()))*/
-		.pipe(gulp.dest('./public/js'));
+/*		.pipe(gulp.dest('./public/js'));
 	cb();
 }
 
@@ -172,7 +173,7 @@ function styles() {
 let build = gulp.series(clear,server
 	//gulp.parallel(styles)
 );
-
+*/
 function watch() {
 	if (isSync) {
 		browserSync.init({
@@ -185,6 +186,38 @@ function watch() {
 	gulp.watch(['./public/js/entry-client.js', './public/js/entry-server.js', './app/**/*.*']).on('change', browserSync.reload);
 }
 
-gulp.task('build', build);
-gulp.task('watch', gulp.parallel(build, watch));
+function grid(done){
+	let settings = {
+		columns: 24,
+    	offset: "10px",
+    	//mobileFirst: true,
+    	container: {
+	        maxWidth: "1200px",
+	        fields: "30px"
+	    },
+    	breakPoints: {
+    		lg: {
+    			width: "1200px"
+    		},
+    		md: {
+	            width: "992px",
+	            fields: "15px"
+	        },
+	        sm: {
+	            width: "768px",
+	            fields: "10px"
+	        },
+	        xs: {
+	        	width: "576px"
+	        }
+    	}
+	};
+
+	smartgrid('./resources/less', settings);
+	done();
+}
+
+//gulp.task('build', build);
+//gulp.task('watch', gulp.parallel(build, watch));
+gulp.task('grid', grid);
 

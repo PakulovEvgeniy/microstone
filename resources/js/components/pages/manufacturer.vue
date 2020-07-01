@@ -475,7 +475,7 @@
   .subpages li a:hover span{
     color: tomato;
   }
-  .category-items-phone {
+  .manufacturer .category-items-phone {
     display: none;
   }
   @media (min-width: 1200px) {
@@ -519,7 +519,7 @@
       width: 100%;
       line-height: 45px;
     }
-    .category-items-phone {
+    .manufacturer .category-items-phone {
       display: block;
     }
    } 

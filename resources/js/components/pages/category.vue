@@ -3,11 +3,11 @@
       <not-found-comp v-if="!itemCur"></not-found-comp>
       <template v-else>
         <page-top-back v-if="!itemChilds.length" :link="parLink" :name="parName"></page-top-back>
-        <bread-crump v-show="getScreenState>1" :links="breadItems"></bread-crump>
+        <bread-crump :links="breadItems" :class="{'no-category': !itemChilds.length}"></bread-crump>
         <h1 v-html="itemHeader"></h1>
-        <div class="item-descr" v-html="itemDescr"></div>
+        <div v-show="itemDescr" class="item-descr" v-html="itemDescr"></div>
         <div class="cat-items" v-if="itemChilds.length">
-            <div v-show="getScreenState>1" class="category-items-desktop">
+            <div class="category-items-desktop">
                 <router-link :to="'/category/'+it.chpu" v-for="it in itemChilds" :key="it.id">
                     <div class="image">
                         <picture><img width="80px" height="80px" :src="it.image2"></picture>
@@ -15,7 +15,7 @@
                     <div class="caption" v-html="it.name"></div>
                 </router-link>
             </div>
-            <div v-show="getScreenState<2" class="category-items-phone">
+            <div class="category-items-phone">
                 <category-item-phone :link="parLink" :back="true" :name="parName">
                 </category-item-phone>
                 <category-item-phone v-for="it in itemChilds" :key="it.id" :link="'/category/'+it.chpu" :image="it.image2" :name="it.name" :right="true">
@@ -42,7 +42,6 @@
         computed: {
           ...mapGetters([
             'getCatalog',
-            'getScreenState'
           ]),
           itemCur() {
             if (this.$route.params.id) {
@@ -168,63 +167,65 @@
 </script>
 
 <style lang="less">
-    .category-item h1 {
-        margin-top: 0;
-        padding-top: 0;
-        font-size: 28px;
-        margin-bottom: 11px;
-    }
-    .category-item p {
-        font-size: 14px;
-    }
+@import '../../../less/smart-grid.less';
+    .category-item {
+        h1 {
+            margin-top: 10px;
+            padding-top: 0;
+            font-size: 28px;
+            margin-bottom: 11px;
+        }
+        p {
+            font-size: 14px;
+        }
+        .item-descr {
+            margin-bottom: 15px;
+            font-size: 14px;
+            p {
+                margin-bottom: 5px;
+                margin-top: 5px;
+            }
+        }
+    } 
     .category-items-desktop {
-        display: flex;
-        flex-wrap: wrap;
+        .row-flex();
+        a {
+            .col();
+            .size(6);
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        a:hover {
+            box-shadow: 0 2px 7px 1px #babbd1;
+            transition: box-shadow .2s;
+        }
+        .image {
+            width: 100%;
+            text-align: center;
+            height: 120px;
+            line-height: 120px;
+            margin-bottom: 20px;
+        }
+        .caption {
+            font-size: 16px;
+            text-align: center;
+            height: 75px;
+            color: #0094d9;
+            overflow: hidden;
+            font-weight: bold;
+        }
+        img {
+            height: 80px;
+            width: 80px;
+        }
+        .sm(display, none);
     }
-    .category-items-desktop a:hover {
-        color: rgb(29, 113, 184);
-    }
-    .category-items-desktop a {
-        background: white;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-        width: 217px;
-        padding: 15px;
-        margin-right: 10px;
-        margin-bottom: 10px;
-    }
-    .category-items-desktop a:hover {
-      box-shadow: 0 2px 7px 1px #babbd1;
-      -moz-transition: box-shadow .2s;
-      -o-transition: box-shadow .2s;
-      -webkit-transition: box-shadow .2s;
-      transition: box-shadow .2s;
-    }
-    .category-items-desktop .image {
-        width: 100%;
-        text-align: center;
-        height: 120px;
-        line-height: 120px;
-        margin-bottom: 20px;
-    }
-    .category-items-desktop .caption {
-        font-size: 16px;
-        text-align: center;
-        height: 75px;
-        color: #0094d9;
-        overflow: hidden;
-        font-weight: bold;
-    }
-    .category-items-desktop img {
-        height: 80px;
-        width: 80px;
-    }
-    .category-item .item-descr {
-        margin-bottom: 15px;
-        font-size: 14px;
-    }
-    .item-descr p {
-        margin-bottom: 5px;
-        margin-top: 5px;
+
+    .category-items-phone {
+        display: none;
+        .sm(display, block);
     }
 </style>

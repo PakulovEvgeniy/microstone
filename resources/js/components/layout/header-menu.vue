@@ -188,7 +188,7 @@
     }
   }
 
-  @media (max-width: 991px) {
+  @media (max-width: 992px) {
     .header-menu {
       display: block;
       background: rgba(0,0,0,0.5);
@@ -279,7 +279,7 @@
       color: #fff !important;
     }
   }
-  @media (max-width: 991px) and (min-width: 768px) {
+  @media (max-width: 992px) and (min-width: 769px) {
     .header-menu-list {
       width: 380px;
     }

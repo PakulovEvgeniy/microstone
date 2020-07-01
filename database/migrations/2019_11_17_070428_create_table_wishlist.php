@@ -18,6 +18,7 @@ class CreateTableWishlist extends Migration
             $table->bigInteger('user_id');
             $table->bigInteger('product_id');
             $table->bigInteger('wish_group_id')->default(0);
+            $table->string('characteristic_id', 100)->nullable();
             $table->index(['user_id', 'wish_group_id']);
         });
     }

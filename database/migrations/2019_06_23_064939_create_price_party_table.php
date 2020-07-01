@@ -16,7 +16,6 @@ class CreatePricePartyTable extends Migration
         Schema::create('price_party', function (Blueprint $table) {
             $table->string('product_id1s', 100)->index();
             $table->string('party_id1s', 100)->index();
-            $table->tinyInteger('party_type')->default(1);
             $table->integer('min_qty')->default(1);
             $table->decimal('price', 15, 5)->default(0);
             $table->boolean('status')->default(true);

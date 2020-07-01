@@ -60,7 +60,7 @@
             <div class="mobile-header-btns">
               <router-link class="btn-cart-link" to="/">
                 <i class="fa fa-shopping-cart btn-cart-link__cart"></i>
-                <span v-if="cartQty" class="btn-cart-link__badge">{{cartQty}}</span>
+                <span v-if="cartQty" class="btn-badge">{{cartQty}}</span>
               </router-link>
               
               <i @click="onClickOpen" class="fa btn-cart-link__menu" :class="{'has-notifies': hasNotifies, 'fa-bars': !menuOpen, 'fa-times': menuOpen}"></i>
@@ -122,135 +122,127 @@
 
 <style lang="less">
 @import '../../../less/vars.less';
-  .header-top-menu-list {
+@import '../../../less/smart-grid.less';
+
+.navbar-menu {
+  background: rgba(29, 113, 184, 0.9);
+  border: none;
+  color: #fff;
+  a.menu-dropdown-target, a.white-link {
+    color: #fff;
+    &:hover {
+      opacity: 0.7;
+      ~ i {
+        opacity: 0.7;
+      }
+    }
+  }
+  [class*="fa-"] {
+    font-size: .8em;
+  }
+}
+
+.header-top {
+  min-height: 40px;
+  max-height: 40px;
+  &-menu-list {
+    text-align: right;
     > li {
-      display: inline-block;
-      margin-left: 15px;
+      .col-ib();
       line-height: 40px;
+      margin-left: 10px;
     }
     .fa-phone {
       font-size: 12px !important;
     }
+    .md(display,none);
   }
-  .header-top-phone {
+  &-phone {
     font-weight: bold;
   }
-  .header-top-calltime {
+  &-calltime {
     padding-left: 10px;
   }
-  .navbar-menu [class*="fa-"] {
-    font-size: .8em;
+  .md-block({
+    min-height: 60px;
+    max-height: 60px;
+  });
+  .container {
+    .md-block({
+      padding-left: 0;
+      padding-right: 0;
+    });
   }
-  .navbar-menu {
-    background: rgba(29, 113, 184, 0.9);
-    border: none;
-    color: #fff;
-    a.menu-dropdown-target, a.white-link {
-      color: #fff;
-      &:hover {
-        text-decoration: none;
-        opacity: 0.7;
-        ~ i {
-          opacity: 0.7;
-        }
+  .basic-controls {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 60px;
+    background-color: #fff;
+    border-bottom: solid 1px #d8d8d8;
+    .btn-badge {
+      top: 10px;
+    }
+    .logo-container {
+      margin-left: 40px;
+      a {
+        font-weight: bold;
+        font-size: 40px;
+        color: #0d61af;
+        line-height: 20px;
       }
-    }
-    .menu-dropdown-items {
-      a:hover {
-        text-decoration: none;
-      }
-    }
-  }
-  .header-top .container {
-    padding-right: 0;
-    padding-left: 0;
-  }
-  .basic-controls .logo-container a {
-    font-weight: bold;
-    font-size: 40px;
-    color: #0d61af;
-    line-height: 20px;
-  }
-  .basic-controls .logo-container {
-    margin-left: 40px;
-  }
-  @media (min-width: 992px){
-    .basic-controls { 
-      display: none;
-    }
-  }
-  @media (max-width: 991px) {
-    .basic-controls {
-      position: fixed;
-      width: 100%;
-      display: flex;
-      height: 60px;
-      background-color: #fff;
-      border-bottom: solid 1px #d8d8d8;
-    }
-    
-    .mobile-header-btns .btn-cart-link__cart {
-      color: #8c8c8c;
-      font-size: 20px;
-      margin-right: 8px;
-      line-height: 60px;
-    }
-    .mobile-header-btns .btn-cart-link {
-      color: #ffa218;
-      background: transparent;
-      font-weight: bold;
-      text-decoration: none;
-      position: relative;
-      width: 44px;
     }
     .mobile-header-btns {
       position: relative;
       height: 60px;
       display: flex;
+      > * {
+        display: block;
+        text-align: center;
+      }
+      .md(right, -15px);
+      .btn-cart-link {
+        color: #ffa218;
+        background: transparent;
+        font-weight: bold;
+        text-decoration: none;
+        position: relative;
+        width: 44px;
+        &__cart {
+          color: #8c8c8c;
+          font-size: 20px;
+          margin-right: 8px;
+          line-height: 60px;
+        }
+        &__menu {
+          color: #8c8c8c;
+          height: 60px;
+          margin: 0;
+          transition: background-color .1s ease;
+          width: 44px;
+          font-size: 21px;
+          cursor: pointer;
+          line-height: 60px;
+          &.fa-times {
+            font-size: 25px;
+          }
+          &.has-notifies:after {
+            background-color: #1D71B8;
+            border: 3px solid #fff;
+            border-radius: 10px;
+            content: ' ';
+            height: 13px;
+            position: absolute;
+            right: 5px;
+            top: 14px;
+            width: 13px;
+          }
+        }
+      }
     }
-    .mobile-header-btns>* {
-      display: block;
-      text-align: center;
-    }
-    .mobile-header-btns .btn-cart-link__menu {
-      color: #8c8c8c;
-      height: 60px;
-      margin: 0;
-      transition: background-color .1s ease;
-      width: 44px;
-      font-size: 21px;
-      cursor: pointer;
-      line-height: 60px;
-    }
-    .mobile-header-btns .btn-cart-link__menu.fa-times {
-      font-size: 25px;
-    }
-    .mobile-header-btns .btn-cart-link__badge {
-      border-radius: 13px;
-      background-image: linear-gradient(to top, #1D71B8, #2288DB);
-      color: #fff;
-      font-size: 12px;
-      font-weight: bolder;
-      height: 20px;
-      left: 15px;
-      padding-top: 3px;
-      position: absolute;
-      text-align: center;
-      top: 10px;
-      width: 20px;
-      line-height: 13px;
-    }
-    .btn-cart-link__menu.has-notifies:after {
-      background-color: #1D71B8;
-      border: 3px solid #fff;
-      border-radius: 10px;
-      content: ' ';
-      height: 13px;
-      position: absolute;
-      right: 5px;
-      top: 14px;
-      width: 13px;
-    }
+    .md(display, flex);
   }
+}
+
   
 </style>

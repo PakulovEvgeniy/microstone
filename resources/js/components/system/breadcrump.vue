@@ -21,33 +21,33 @@
     }
 </script>
 
-<style>
+<style lang="less">
+@import '../../../less/smart-grid.less';
  .breadcrump {
     padding-left: 0;
     padding-right: 0;
     padding-top: 8px;
-    margin-bottom: 15px;
+    margin: 0;
     border-radius: 0;
     font-size: 13px;
     color: gray;
     list-style: none;
     background-color: #f5f5f5;
-  }
-  .breadcrump>li {
-    display: inline-block;
-  }
-  .breadcrump>li+li:before {
-    color: gray;
-    content: "> ";
-    padding: 0 5px 0 8px;
-  }
-  .breadcrump a:hover {
-    color: rgb(29, 113, 184);
-    text-decoration: none;
-  }
-  @media (max-width: 991px) {
-    .breadcrump {
-      display: none;
+    > li {
+      display: inline-block;
+      + li:before {
+        color: gray;
+        content: "> ";
+        padding: 0 5px 0 8px;
+      }
+    }
+    a:hover {
+      color: rgb(29, 113, 184);
+      text-decoration: none;
+    }
+    .sm(display, none);
+    &.no-category {
+      .md(display, none);
     }
   }
 </style>

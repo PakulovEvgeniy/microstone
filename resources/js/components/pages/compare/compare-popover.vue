@@ -60,7 +60,7 @@
 <style lang="less">
   .compare-info {
     height: 30px;
-    width: 50px;
+    width: 100%;
     position: absolute;
     &__cont {
       position: absolute;

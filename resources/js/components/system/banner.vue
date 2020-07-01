@@ -2,9 +2,9 @@
   <div class="slider-box-wrapper">
     <div class="slider-box">
       <div class="bx-wrapper">
-        <div class="bx-viewport" :style="{height: heigtW+'px'}">
+        <div class="bx-viewport">
           <ul>
-            <li :style="{'opacity': ind==curBanner ? 1 : 0}" v-for="(it, ind) in bannerList" :key="it.id">
+            <li :style="{'opacity': ind==curBanner ? 1 : 0, 'position': ind==curBanner ? 'static' : 'absolute'}" v-for="(it, ind) in bannerList" :key="it.id">
                 <div class="slide-inner"><img ref="image" :src="it.image"></div>       
             </li>
           </ul>
@@ -36,7 +36,6 @@
             return {
               curBanner: 0,
               interval:undefined,
-              heightView: 0  
             }
         },
         props: [
@@ -44,26 +43,10 @@
         ],
         computed: {
           ...mapGetters([
-            'getScreenState',
-            'screenWidth'
-          ]),
-          heigtW() {
-            switch (this.getScreenState) {
-              case 1:
-                return this.heightView==0 ?205 : this.heightView;
-              case 2:
-                return 205;
-              default:
-                return 266;
-            }
-          }
+          ])
         },
         mounted() {
           this.interval = setInterval(this.next, 3000);
-          this.heightView = this.$refs['image'][0].clientHeight;
-          this.$refs.image[0].onload = () => {
-            this.heightView = this.$refs['image'][0].clientHeight;
-          }
         },
         beforeDestroy() {
           clearInterval(this.interval);
@@ -84,11 +67,6 @@
               this.curBanner = 0;
             }
           }
-        },
-        watch: {
-          screenWidth(val) {
-            this.heightView = this.$refs['image'][0].clientHeight;
-          }
         }
     }
 </script>
@@ -108,7 +86,7 @@
     display: block;
     border: 0;
     width: 100%;
-    height: 266px;
+    height: auto;
   }
   .slider-box-wrapper .bx-wrapper {
     max-width: 100%;
@@ -117,19 +95,18 @@
     width: 100%;
     overflow: hidden;
     position: relative;
-    height: 266px;
     background-color: #fff;
   }
   .bx-viewport ul {
-    width: auto;
     position: relative;
     list-style-type: none;
   }
   .bx-viewport li {
     list-style: none;
-    position: absolute;
     z-index: 0;
     transition: 2s;
+    top: 0;
+    left: 0;
   }
   .slider-box .bx-pager {
     position: absolute;
@@ -200,22 +177,5 @@
   .bx-prev:hover i, .bx-next:hover i {
     background: rgba(33,33,33,0.3);
   }
-  @media (max-width: 1199px) and (min-width: 992px) {
-    .slide-inner img {
-      width: 698px;
-      height: 205px;
-    }
-    .bx-viewport {
-      height: 205px;
-    }
-  }
-  @media (max-width: 991px) {
-    .slide-inner img {
-      width: 100%;
-      height: auto;
-    }
-    .bx-viewport {
-      height: 205px;
-    }
-  }
+
 </style>

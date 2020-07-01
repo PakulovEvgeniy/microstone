@@ -1,3 +1,5 @@
+.reset();
+
 @font-face {
     font-family: 'DigitalMono-7';
     src: url('../fonts/Digital-7Mono.woff2') format('woff2'),
@@ -5,21 +7,12 @@
     font-weight: normal;
     font-style: normal;
 }
-h3 {
-  margin: 0;
-  padding-top: 10px;
-}
+
 
 *, :after, :before {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-ul, ol {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
+
 
 a {
     text-decoration: none;
@@ -28,7 +21,7 @@ a {
     color: #3b3b3b;
     &:hover {
         color: tomato;
-        text-decoration: underline;
+        text-decoration: none;
     }
 }
 
@@ -36,19 +29,13 @@ html {
     font-size: 10px;
     -webkit-tap-highlight-color: transparent;
 }
-html, body {
-    width: 100%;
-    min-height: 100%;
-    margin: 0;
-    padding: 0;
-}
+
 body {
     font-family: "PTSans","Helvetica","Arial",sans-serif;
     font-size: 16px;
     line-height: 1.42857;
     color: @block-color;
     background-color: #f6f6f6;
-    min-width: 320px;
     &.blocked {
        overflow: hidden;
         touch-action: none;
@@ -57,9 +44,7 @@ body {
         left: 0; 
     }
 }
-main {
-  display: block;
-}
+
 
 header {
     background: #f6f6f6;
@@ -72,22 +57,7 @@ header {
     visibility: hidden !important;
 }
 .container {
-    margin: 0 auto;
-    &:after {
-       content: " ";
-        display: table;
-        clear: both; 
-    }
-    @media (min-width: 1200px) {
-        width: 1170px;
-    }
-    @media (max-width: 1199px) and (min-width: 992px) {
-        width: 960px;
-    }
-    @media (max-width: 991px) {
-      width: 100%;
-      padding: 0 10px;
-    }
+  .wrapper();
 }
 
 .ui-link {
@@ -426,13 +396,24 @@ header {
     min-width: 20px;
 }
 
-@media (max-width: 991px) {
+.header-fixed {
+  position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.25);
+}
+
+
+
+
+@media (max-width: 992px) {
     aside {
         display: none;
     }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 993px) {
     aside {
         width: 220px;
         margin-right: 20px;

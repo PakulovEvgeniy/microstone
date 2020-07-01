@@ -36,7 +36,7 @@
         </div>
         <div class="buttons" :class="{'lock': lock}">
           <buy-button
-            v-tooltip.bottom="cart.items.indexOf(product.id) != -1 ? 'Перейти в корзину'  : 'Добавить в корзину'"
+            v-tooltip.bottom="isInCartAll(product) ? 'Перейти в корзину'  : 'Добавить в корзину'"
             :item="product"
             :list="cart.items"
             :big="true"
@@ -69,7 +69,8 @@
       ...mapGetters([
         'auth',
         'wishlist',
-        'cart'
+        'cart',
+        'isInCartAll'
       ]),
       isInList() {
         return this.wishlist.items.indexOf(this.product.id) != -1;
@@ -127,6 +128,15 @@
 <style lang="less">
 @import '../../../../less/vars.less';
   .compare__product {
+    .prodcart-popover__cont {
+      top: auto;
+      left: auto;
+      bottom: 70px;
+      right: -90px;
+    }
+    .prodcart-popover__scroll {
+      max-height: 190px;
+    }
     padding: 10px 5px;
     position: relative;
     &-image {
@@ -252,8 +262,8 @@
           }
         }
         .buttons {
-          bottom: 10px;
           display: none;
+          bottom: 10px;
           position: absolute;
           right: 5px;
           &.lock {

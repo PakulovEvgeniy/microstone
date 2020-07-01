@@ -1,4 +1,5 @@
 export default {
+
 	mutations: {
 	  setCart(state, payload) {
       this.state.cart.items = payload;
@@ -15,17 +16,6 @@ export default {
       if (fl != -1) {
         prod.splice(fl, 1);
       }
-    },
-    addToItemCart(state, payload) {
-      payload.forEach((el) => {
-        let id = +el;
-        if (id) {
-          let ind = this.state.cart.items.indexOf(id);
-          if (ind == -1) {
-            this.state.cart.items.push(id);
-          }
-        }
-      });
     }
 	},
 	getters: {
@@ -37,6 +27,28 @@ export default {
     },
     cartProducts(state, getters, rootState) {
       return getters.cart.products;
+    },
+    isInCart(state, getters, rootState) {
+      return (it) => {
+        return !!rootState.cart.items.find((el) => {
+          return (el.id == it.id && el.characteristic == it.characteristic);
+        });
+      }
+    },
+    isInCartAll(state, getters, rootState) {
+      return (it) => {
+        if (it.have_charact) {
+          return it.characts.every((cr) => {
+            return !!rootState.cart.items.find((el) => {
+              return (el.id == it.id && el.characteristic==cr.id);
+            });
+          });
+        } else {
+          return !!rootState.cart.items.find((el) => {
+            return el.id == it.id
+          });
+        }
+      }
     }
   },
   actions: {
@@ -51,8 +63,13 @@ export default {
       } else {
         wish = JSON.parse(wish);
       }
-      if (wish.indexOf(data) == -1) {
+      let item = wish.find((it) => {
+        return it.id == data.id && it.characteristic == data.characteristic;
+      });
+      if (!item) {
         wish.push(data);
+      } else {
+        item.qty += (+data.qty);
       }
       localStorage.setItem('cart', JSON.stringify(wish));
       commit('setCart', wish);
@@ -65,8 +82,13 @@ export default {
         wish = JSON.parse(wish);
       }
       data.forEach((el) => {
-        if (wish.indexOf(el) == -1) {
+        let item = wish.find((it) => {
+          return it.id == el.id && it.characteristic == el.characteristic;
+        });
+        if (!item) {
           wish.push(el);
+        } else {
+          item.qty += (+el.qty);
         }
       });
       
@@ -80,14 +102,17 @@ export default {
       } else {
         wish = JSON.parse(wish);
       }
-      let ind = wish.indexOf(data);
-      if (ind == -1) {
+      let item = wish.find((it) => {
+        return it.id == data.id && it.characteristic == data.characteristic;
+      });
+      if (!item) {
         return;
       }
+      let ind = wish.indexOf(item);
       wish.splice(ind, 1); 
       localStorage.setItem('cart', JSON.stringify(wish));
       commit('setCart', wish);
-      commit('delFromCartProducts', data);
+      commit('delFromCartProducts', item.id);
     },
     restoreCart({commit, dispatch}, data) {
       let wish = localStorage.getItem('cart');
@@ -98,13 +123,18 @@ export default {
       }
       commit('setCart', wish);
     },
-    addToCart({commit, dispatch}, data) {
-      return dispatch('queryPostToServer', {
-        url: '/account/cart/add',
-        params: {
-          id_list: data
-        }
-      });
+    addToCart({commit, dispatch, rootState}, data) {
+      if (rootState.auth) {
+        return dispatch('queryPostToServer', {
+          url: '/account/cart/add',
+          params: {
+            id_list: data
+          }
+        });
+      } else {
+        dispatch('addArrayToLocalCart', data);
+      }
+      
     }
   }
 }

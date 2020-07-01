@@ -28,6 +28,9 @@ use App\FiltersDefParams;
 use App\ProductPictures;
 use App\Setting;
 use App\CompareGroups;
+use App\Characteristics;
+use App\DiscountPriceGroup;
+use App\PriceGroup;
 
 class Obmen extends Controller
 {
@@ -46,7 +49,14 @@ class Obmen extends Controller
 
     public function index(Request $request) {
     	$par = $request->all();
-    	if (!isset($par['param'])) {
+    	
+      if (isset($par['type']) && $par['type'] == 'catalog') {
+        if (isset($par['mode']) && $par['mode'] == 'checkauth') {
+          return 'success';
+        }
+      }
+
+      if (!isset($par['param'])) {
     		return 'OK';
     	}
 		$pr = $par['param'];
@@ -139,6 +149,27 @@ class Obmen extends Controller
            return 'OK'; 
         }
 
+        if ($pr == 'discount_price_group') {
+          $f_id = $par['f_id'];
+          $f_name = $par['f_name'];
+          $f_qty = $par['f_qty'];
+          $f_status = $par['f_status'];
+          $f_group = $par['f_group'];
+          $f_discount = $par['f_discount'];
+
+          $arr = DiscountPriceGroup::firstOrNew(['id' => $f_id]);
+
+          $arr->id = $f_id;
+          $arr->name = $f_name;
+          $arr->qty = $f_qty;
+          $arr->status = $f_status;
+          $arr->group = $f_group;
+          $arr->discount = $f_discount;
+          $arr->save();
+
+          return 'OK';
+        }
+
         if ($pr == 'party_params') {
            $prod_id = $par['pp_prodid']; 
            $p_id = $par['pp_id'];
@@ -165,65 +196,84 @@ class Obmen extends Controller
         }
 
 		if ($pr == 'soldout') {
-            $id_prod = $par['so_id'];
-            $sold = $par['so_qty'];
-            
-            $arr = SoldProduct::where(['product_id1s' => $id_prod])->first();
-            if ($arr) {
-                SoldProduct::where(['product_id1s' => $id_prod])
-                    ->update(['sold' => $sold]);
-            } else {
-                $pp = new SoldProduct;
-                $pp->product_id1s = $id_prod;
-                $pp->sold = $sold;
-                $pp->save();
-            }
-            return 'OK';
+      if (isset($par['pr_prod'])) {
+        $id_val = $par['pr_prod'];
+        foreach ($id_val as $val) {
+          $ar_val = explode('###', $val);
+          $id_prod = $ar_val[0];
+          $sold = $ar_val[1];
+          $arr = SoldProduct::where(['product_id1s' => $id_prod])->first();
+          if ($arr) {
+              SoldProduct::where(['product_id1s' => $id_prod])
+                  ->update(['sold' => $sold]);
+          } else {
+              $pp = new SoldProduct;
+              $pp->product_id1s = $id_prod;
+              $pp->sold = $sold;
+              $pp->save();
+          }
         }
+      }
+      return 'OK';
+    }
 
-        if ($pr == 'stock_party') {
-            $id_prod = $par['sp_id'];
-            $id_party = $par['sp_party'];
-            $stock = $par['sp_stock'];
-            
-            $arr = StockParty::where(['product_id1s' => $id_prod, 'party_id1s' => $id_party])->first();
-            if ($arr) {
+        if ($pr == 'ostatki') {
+          if (isset($par['pr_ost'])) {
+            $id_val = $par['pr_ost'];
+            foreach ($id_val as $val) {
+              $ar_val = explode('###', $val);
+              $id_prod = $ar_val[0];
+              $id_party = $ar_val[1];
+              $stock = $ar_val[2];
+              $arr = StockParty::where(['product_id1s' => $id_prod, 'party_id1s' => $id_party])->first();
+              if ($arr) {
                 StockParty::where(['product_id1s' => $id_prod, 'party_id1s' => $id_party])
                     ->update(['stock' => $stock]);
-            } else {
-                $pp = new StockParty;
-                $pp->product_id1s = $id_prod;
-                $pp->party_id1s = $id_party;
-                $pp->stock = $stock;
-                $pp->save();
+              } else {
+                  $pp = new StockParty;
+                  $pp->product_id1s = $id_prod;
+                  $pp->party_id1s = $id_party;
+                  $pp->stock = $stock;
+                  $pp->save();
+              }
             }
-            return 'OK';
+          }
+            
+          return 'OK';
         }
 
-		if ($pr == 'price_party') {
-			$id_prod = $par['pp_id'];
-			$id_party = $par['pp_party'];
-			$p_type = $par['pp_type'];
-			$p_act = $par['pp_act'];
-			$p_minqty = $par['pp_minqty'];
-			$p_price = $par['pp_price'];
-			if ($p_act == 'ПрайсУдалить') {
-				PriceParty::where(['product_id1s' => $id_prod, 'party_id1s' => $id_party, 'min_qty' => $p_minqty])->delete();
-			} else {
-				$arr = PriceParty::where(['product_id1s' => $id_prod, 'party_id1s' => $id_party, 'min_qty' => $p_minqty])->first();
-				if ($arr) {
-					PriceParty::where(['product_id1s' => $id_prod, 'party_id1s' => $id_party, 'min_qty' => $p_minqty])
-					->update(['price' => $p_price]);
-				} else {
-					$pp = new PriceParty;
-					$pp->product_id1s = $id_prod;
-					$pp->party_id1s = $id_party;
-					$pp->min_qty = $p_minqty;
-					$pp->party_type = $p_type;
-					$pp->price = $p_price;
-					$pp->save();
-				}
-			}
+		if ($pr == 'cena') {
+      if (isset($par['pr_cena'])) {
+        $id_val = $par['pr_cena'];
+        foreach ($id_val as $val) {
+          $ar_val = explode('###', $val);
+          $id_prod = $ar_val[0];
+          $id_party = $ar_val[1];
+          $p_minqty = $ar_val[2];
+          $p_price = $ar_val[3];
+          $p_act = $ar_val[4];
+
+          if ($p_act == 'ПрайсУдалить') {
+            PriceParty::where(['product_id1s' => $id_prod, 'party_id1s' => $id_party, 'min_qty' => $p_minqty])->delete();
+          } else {
+            $arr = PriceParty::where(['product_id1s' => $id_prod, 'party_id1s' => $id_party, 'min_qty' => $p_minqty])->first();
+            if ($arr) {
+              PriceParty::where(['product_id1s' => $id_prod, 'party_id1s' => $id_party, 'min_qty' => $p_minqty])
+              ->update(['price' => $p_price]);
+            } else {
+              $pp = new PriceParty;
+              $pp->product_id1s = $id_prod;
+              $pp->party_id1s = $id_party;
+              $pp->min_qty = $p_minqty;
+              $pp->price = $p_price;
+              $pp->save();
+            }
+          }
+        }
+      }
+
+	
+			
 			return 'OK';
 		}
 
@@ -446,7 +496,36 @@ class Obmen extends Controller
             if (isset($par['pr_params'])) {
                 $params = $par['pr_params'];
             }
+            $have_char = $par['pr_have_charact'];
+            if (!$have_char) {
+              $have_char = 0;
+            } else {
+              $have_char = 1;
+            }
+            
+            $compar_id = '';
+            $compar_name = '';
+            if (isset($par['pr_compare_id'])) {
+                $compar_id = $par['pr_compare_id'];
+                $compar_name = $par['pr_compare_name'];
 
+                $cg = CompareGroups::firstOrNew(['id_1s' => $compar_id]);
+                $cg->id_1s = $compar_id;
+                $cg->name = $compar_name;
+                $cg->save();
+            }
+
+            $price_id = '';
+            $price_name = '';
+            if (isset($par['pr_pricegroup_id'])) {
+                $price_id = $par['pr_pricegroup_id'];
+                $price_name = $par['pr_pricegroup_name'];
+
+                $cg = PriceGroup::firstOrNew(['id_1s' => $price_id]);
+                $cg->id_1s = $price_id;
+                $cg->name = $price_name;
+                $cg->save();
+            }
 
 
             $grp = Products::firstOrNew(['id_1s' => $id_1s]);
@@ -457,6 +536,9 @@ class Obmen extends Controller
             $grp->sort_order = $kod_sort;
             $grp->parent_id = $rodit;
             $grp->sku = $sku;
+            $grp->have_charact = $have_char;
+            $grp->compare_group = $compar_id;
+            $grp->price_group = $price_id;
             $grp->save();
 
             $grp_desc = ProductsDescriptions::firstOrNew(['products_id' => $grp->id]);
@@ -472,19 +554,32 @@ class Obmen extends Controller
             
             $grp_desc->save();
 
-            PartyParams::where(['product_id1s' => $id_1s, 'party_id1s' => ''])->delete();
+            PartyParams::where(['product_id1s' => $id_1s])->delete();
             if ($params) {
              foreach ($params as $val) {
                $ar_val = explode('###', $val); 
                $pp = new PartyParams;
                $pp->product_id1s = $id_1s;
-               $pp->party_id1s = '';
+               $pp->party_id1s = $ar_val[3];
                $pp->param_type_id = $ar_val[0];
                $pp->value = $ar_val[1];
                $pp->value_id = $ar_val[2];
                $pp->save();
              }
             }
+            Characteristics::where(['product_id1s' => $id_1s])->delete();
+            if (isset($par['pr_charact'])) {
+              foreach ($par['pr_charact'] as $val) {
+                $ar_val = explode('###', $val);
+                $pp = new Characteristics;
+                $pp->product_id1s = $id_1s;
+                $pp->id = $ar_val[0];
+                $pp->name = $ar_val[1];
+                $pp->image = $ar_val[2];
+                $pp->save();
+              }
+            }
+
             ProductPictures::where(['product_id1s' => $id_1s])->delete();
             if (isset($par['pr_pict'])) {
                 foreach ($par['pr_pict'] as $val) {
@@ -539,17 +634,7 @@ class Obmen extends Controller
     			$chpu = $this->translit($name);
             }
             
-            $compar_id = '';
-            $compar_name = '';
-            if (isset($par['gr_compare_id'])) {
-                $compar_id = $par['gr_compare_id'];
-                $compar_name = $par['gr_compare_name'];
-
-                $cg = CompareGroups::firstOrNew(['id_1s' => $compar_id]);
-                $cg->id_1s = $compar_id;
-                $cg->name = $compar_name;
-                $cg->save();
-            }
+            
 
 
     		$grp = Category::firstOrNew(['id_1s' => $id_1s]);
@@ -558,7 +643,7 @@ class Obmen extends Controller
     		$grp->image = 'catalog/' . $pict;
     		$grp->status = $active;
             $grp->sort_order = $kodsort;
-            $grp->compare_group = $compar_id;
+            //$grp->compare_group = $compar_id;
     		$grp->save();
 
     		$grp_desc = Category_description::firstOrNew(['category_id' => $grp->id]);

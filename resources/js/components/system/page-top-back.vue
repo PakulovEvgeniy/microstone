@@ -1,5 +1,5 @@
 <template>
-    <div class="page__mobile-back" v-show="getScreenState<2">
+    <div class="page__mobile-back">
       <i class="fa fa-chevron-left"></i>&nbsp;
       <router-link class="page__mobile-back-link" :to="link">{{name}}</router-link>
     </div>
@@ -15,45 +15,34 @@
         props: [
           'link',
           'name'
-        ], 
-        computed: {
-          ...mapGetters([
-            'getScreenState'
-          ])
-        },
-        methods: {
-        	
-        }
+        ]
     }
 </script>
 
-<style>
+<style lang="less">
+@import '../../../less/smart-grid.less';
   .page__mobile-back {
     display: none;
-    padding: 20px 15px;
-  }
-  .page__mobile-back i {
-    font-size: 13px;
-  }
-  .page__mobile-back-link {
-    text-decoration: none;
-    color: #333;
-    padding-left: 5px;
-    margin-right: 5px;
-  }
-  .page__mobile-back-link:hover {
-    color: #00608d;
-    text-decoration: underline;
-  }
-  @media (max-width: 991px) {
-    .page__mobile-back {
+    padding: 20px 15px 5px 15px;
+    i {
+      font-size: 13px;
+    }
+    &-link {
+      text-decoration: none;
+      color: #333;
+      padding-left: 5px;
+      margin-right: 5px;
+      &:hover {
+        color: #00608d;
+        text-decoration: underline;
+      }
+    }
+    .md-block({
       display: flex;
       align-items: center;
-    }
+    });
+    .from-to(@break_sm + 1px, @break_md, {
+      padding: 20px 0 5px 0;
+    });
   }
-  @media (max-width: 991px) and (min-width: 768px) {
-    .page__mobile-back {
-      padding: 20px 0;
-    }
-  } 
 </style>

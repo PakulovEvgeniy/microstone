@@ -17,7 +17,7 @@
     </div>
     <div class="compare__product-controls">
       <buy-button
-        v-tooltip.bottom="cart.items.indexOf(product.id) != -1 ? 'Перейти в корзину'  : 'Добавить в корзину'"
+        v-tooltip.bottom="isInCartAll(product) ? 'Перейти в корзину'  : 'Добавить в корзину'"
         :item="product"
         :list="cart.items"
         :small="true"
@@ -58,7 +58,8 @@
       ...mapGetters([
         'auth',
         'wishlist',
-        'cart'
+        'cart',
+        'isInCartAll'
       ]),
       isInList() {
         return this.wishlist.items.indexOf(this.product.id) != -1;

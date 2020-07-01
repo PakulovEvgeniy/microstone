@@ -1,32 +1,39 @@
 <template>
-  <button
+<div class="buy-button">
+  <button 
     :disabled="disable"
     @click="addToCart(item.id)"
     class="buy button-ui button-ui_brand"
-    :class="{'active': isInList, 'button-ui_passive': passive, small: small, big: big}"
+    :class="{'active': isInCartAll(item), 'button-ui_passive': passive, small: small, big: big}"
   >
   <span>{{btnText}}</span>
-  <i class="fa" :class="{'fa-shopping-cart': !isInList, 'fa-check': isInList}"></i>
+  <i class="fa" :class="{'fa-shopping-cart': !isInCartAll(item), 'fa-check': isInCartAll(item)}"></i>
+  
   </button>
+  <prodcart-popover @close="onClose" v-if="pcPopVis"  :list="item.characts" :elem="$el" :product="item"></prodcart-popover>
+</div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import prodcartPopover from '../pages/product/productcart-popover.vue';
 export default {
   data() {
     return {
-      disable: false
+      disable: false,
+      pcPopVis: false
     };
+  },
+  components: {
+    prodcartPopover
   },
   computed: {
     ...mapGetters([
-      'auth'
+      'auth',
+      'isInCartAll'
     ]),
-    isInList() {
-      return this.list.indexOf(this.item.id) != -1;
-    },
     btnText() {
-      return this.isInList ? 'В корзине'  : 'Купить';
+      return this.isInCartAll(this.item) ? 'В корзине'  : 'Купить';
     }
   },
   props: [
@@ -37,18 +44,21 @@ export default {
     'big'
   ],
   methods: {
+    onClose() {
+      this.pcPopVis = false;
+    },
     addToCart(id) {
-      if (!this.auth) {
-        if (this.isInList) {
-            this.$router.push('/account/cart');
-        } else {
-          this.$store.dispatch('addToLocalCart', id);
-        }
+      if (this.pcPopVis) {
+        this.pcPopVis = false;
+        return;
+      }
+      if (this.isInCartAll(this.item)) {
+        this.$router.push('/account/cart');
       } else {
-        if (this.isInList) {
-            this.$router.push('/account/cart');
+        if (this.item.have_charact) {
+          this.pcPopVis = true;
         } else {
-          this.$store.dispatch('addToCart', [id]);
+          this.$store.dispatch('addToCart', [{id: id, characteristic: '', qty: 1}]);
         }
       }
     }
@@ -58,6 +68,9 @@ export default {
 
 <style lang="less">
 @import '../../../less/vars.less';
+  .buy-button {
+    display: inline-block;
+  }
   button.buy {
     width: 90px;
     &.active {
@@ -76,14 +89,18 @@ export default {
     }
   }
 
-  @media (max-width: 991px) {
+  @media (max-width: 992px) {
     button.buy.small {
       width: 40px;
       i {
         display: inline-block;
       }
-      span {
+      > span {
         display: none;
+      }
+      ~ .prodcart-popover .prodcart-popover__cont {
+        right: -40px;
+        left: auto;
       }
     }
   }

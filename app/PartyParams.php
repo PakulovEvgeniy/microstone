@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Filters;
 use DB;
+use JSRender;
 
 class PartyParams extends Model
 {
@@ -38,9 +39,9 @@ class PartyParams extends Model
         $type_pr = $type_pr->id;
 
     	$prd = PartyParams::where(['product_id1s' => $id_1s, 'param_type_id' => $type_pr])
-            ->select('value', 'value_id', 'full_name', 'logo')
+            ->select('value', 'value_id', 'full_name', 'logo', 'chpu')
             ->leftJoin('brands','party_params.value_id','=','brands.id')
-    		->groupBy('value', 'value_id', 'full_name', 'logo')
+    		->groupBy('value', 'value_id', 'full_name', 'logo', 'chpu')
             ->get();
         $res = [];
         foreach ($prd as $val) {
@@ -48,7 +49,9 @@ class PartyParams extends Model
               'id' => $val->value_id,
               'name' => $val->value,
               'full_name' => $val->full_name,
-              'logo' => $val->logo
+              'logo' => JSRender::resizeImage($val->logo,100,40),
+              'chpu' => $val->chpu,
+              'have_logo' => $val->logo == 'catalog/no_image.png' ? false : true
             ];
         }
     	return $res;
