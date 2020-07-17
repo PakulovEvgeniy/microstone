@@ -48,10 +48,11 @@
           </div>
           <div class="n-catalog-product__buttons">
             <add-in-list-button
-              v-tooltip.top="wishlist.items.indexOf(item.id) != -1 ? 'Удалить из избранного' : 'Добавить в избранное'"
+              v-tooltip.top="isInWishAll(item) ? 'Удалить из избранного' : 'Добавить в избранное'"
               :item="item"
               :list="wishlist.items"
               :authOnly="true"
+              :isWish="true"
               delLocalAction="delFromLocalWishlist"
               addLocalAction="addToLocalWishlist"
               addAuthAction="addToServerWishlist"
@@ -114,7 +115,8 @@
            'compare',
            'cart',
            'getScreenState',
-           'isInCartAll'
+           'isInCartAll',
+           'isInWishAll'
           ]),
           price() {
             if (this.item.min_price && this.item.max_price) {
@@ -168,6 +170,7 @@
 </script>
 <style lang="less">
 @import '../../../../less/vars.less';
+@import '../../../../less/smart-grid.less';
   .product-price__current {
     font-size: 20px;
     font-weight: bold;
@@ -202,11 +205,13 @@
     }
   }
 
+
+
   .n-catalog-product__buttons button{
     margin-right: 12px;
   }
-  .n-catalog-product__buttons button:first-child {
-   margin: 0 12px 0 auto;
+  .n-catalog-product__buttons > .list-button {
+   margin: 0 0 0 auto;
   }
 
   .vs-notify.compare .ntf {
@@ -233,5 +238,11 @@
         }
       }
     }
-  }  
+  } 
+
+  .md-block({
+    .n-catalog-product__buttons .prodwish-popover .prodwish-popover__cont {
+      right: auto !important;
+    }
+  }); 
 </style>

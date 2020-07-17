@@ -45,10 +45,11 @@
                         icon="fa-bar-chart"
                       ></add-in-list-button>
                       <add-in-list-button
-                        v-tooltip.bottom="wishlist.items.indexOf(it.id) != -1 ? 'Удалить из избранного' : 'Добавить в избранное'"
+                        v-tooltip.bottom="isInWishAll(it) ? 'Удалить из избранного' : 'Добавить в избранное'"
                         :item="it"
                         :list="wishlist.items"
                         :authOnly="true"
+                        :isWish="true"
                         delLocalAction="delFromLocalWishlist"
                         addLocalAction="addToLocalWishlist"
                         addAuthAction="addToServerWishlist"
@@ -109,7 +110,8 @@
             'wishlist',
             'compare',
             'cart',
-            'isInCartAll'
+            'isInCartAll',
+            'isInWishAll'
           ]),
           valLength() {
             return this.searchValue.length;

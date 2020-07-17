@@ -112,6 +112,7 @@ export function createStore () {
       wishlist: {
         items: [
         ],
+        curItems: [],
         products:[
         ],
         curGroup: null,

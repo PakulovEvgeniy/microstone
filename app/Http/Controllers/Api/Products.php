@@ -121,7 +121,7 @@ class Products extends Controller
 			if (isset($qu['pr']) && is_array($qu['pr'])) {
 				$stat = 'OK';
 				$data = [
-					'setWishlistProducts' => mod_Products::getProductsList($qu['pr']),
+					'setWishlistProducts' => mod_Products::getProductsList(array_column($qu['pr'], 'id')),
 					'setWishGroup' => null
 				];
 			}

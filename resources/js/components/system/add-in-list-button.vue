@@ -1,40 +1,54 @@
 <template>
-  <button
-    :disabled="disable"
-    @click="addToList(item.id)"
-    class="button-ui button-ui_white button-ui_icon"
-    :class="{
-      'button-ui_done': isInList, 
-      'button-ui_action-icon-on': disable && !isInList, 
-      'button-ui_action-icon-off': disable && isInList
-    }"
-  >
-    <i
-      class="fa"
+  <div class="list-button">
+    <button
+      :disabled="disable"
+      @click="addToList(item.id)"
+      class="button-ui button-ui_white button-ui_icon"
       :class="{
-        [this.icon]: !disable,
-        'fa-check': disable && !isInList,
-        'slideDown': disable,
-        'fa-trash-o': disable && isInList
+        'button-ui_done': isInList, 
+        'button-ui_action-icon-on': disable && !isInList, 
+        'button-ui_action-icon-off': disable && isInList
       }"
-    ></i>
-  </button>
+    >
+      <i
+        class="fa"
+        :class="{
+          [this.icon]: !disable,
+          'fa-check': disable && !isInList,
+          'slideDown': disable,
+          'fa-trash-o': disable && isInList
+        }"
+      ></i>
+    </button>
+    <prodwish-popover @close="onClose" v-if="isWish && pcPopVis"  :list="item.characts" :elem="$el" :product="item"></prodwish-popover>
+  </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import prodwishPopover from '../pages/product/prodwish-popover.vue';
 export default {
   data() {
     return {
-      disable: false
+      disable: false,
+      pcPopVis: false
     };
+  },
+  components: {
+    prodwishPopover
   },
   computed: {
     ...mapGetters([
-      'auth'
+      'auth',
+      'isInWishAll',
+      'isInWish'
     ]),
     isInList() {
-      return this.list.indexOf(this.item.id) != -1;
+      if (this.isWish) {
+        return this.isInWishAll(this.item);
+      } else {
+        return this.list.indexOf(this.item.id) != -1;
+      }
     }
   },
   props: [
@@ -45,10 +59,34 @@ export default {
     'addLocalAction',
     'delAuthAction',
     'addAuthAction',
-    'icon'
+    'icon',
+    'isWish'
   ],
   methods: {
+    onClose() {
+      this.pcPopVis = false;
+    },
     addToList(id) {
+      if (this.isWish) {
+        if (this.pcPopVis) {
+          this.pcPopVis = false;
+          return;
+        }
+        if (this.item.have_charact) {
+          this.pcPopVis = true;
+        } else {
+          this.disable = true;
+          setTimeout(() => {
+            if (this.isInList) {
+              this.$store.dispatch('delFromWishList', {id: id, characteristic: '', group_id: 0});
+            } else {
+              this.$store.dispatch('addToWishList', {id: id, characteristic: ''});
+            }
+            this.disable = false;
+          } , 1000);
+        }
+        return;
+      }
       if ((this.authOnly && !this.auth) || !this.authOnly) {
         this.disable = true;
         setTimeout(() => {
@@ -78,6 +116,19 @@ export default {
 
 <style lang="less">
 @import '../../../less/vars.less';
+@import '../../../less/smart-grid.less';
+
+.md-block({
+  .list-button > .prodwish-popover .prodwish-popover__cont {
+    right: -40px;
+    left: auto;
+  }
+});
+
+
+.list-button {
+    display: inline-block;
+}
 .button-ui.button-ui_action-icon-on {
     border: 1px solid @main-color;
     color: @main-color;

@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\Wishlist;
 use App\Products;
+use App\PriceParty;
 
 class Wishlist_groups extends Model
 {
@@ -19,10 +20,23 @@ class Wishlist_groups extends Model
 		$res = [];
 		foreach ($row as $val) {
 			$arr_wish = Wishlist::getWishlistAll($user_id, $val->id);
-			$prod = Products::getProductsList($arr_wish);
+			
 			$total_price = 0;
-			foreach ($prod as $v) {
-				$total_price+=$v['price_with_discount'];
+			foreach ($arr_wish as $v) {
+				$prd = Products::find($v['id']);
+				if (!$prd) {
+					continue;
+				}
+				if ($prd->have_charact) {
+					$p = PriceParty::getPriceForProductCharact($prd->id_1s);
+					$k = array_search($v['characteristic'], array_column($p, 'id'));
+					if ($k) {
+						$total_price+=$p[$k]['price'];
+					}
+				} else {
+					$p = PriceParty::getMinMaxPriceForProduct($prd->id_1s);
+					$total_price+=$p['min'];
+				}
 			}
 			$res[] = [
 			  'id' => $val->id,

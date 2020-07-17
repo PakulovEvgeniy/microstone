@@ -12,6 +12,7 @@
                 </div>
                 <span class="prodcart-popover__product-title">{{el.name}}</span>
               </a>
+              <div v-if="isInCart({id: product.id, characteristic: el.id})" class="prodcart-popover__incart">В корзине:<router-link to="/account/cart"> перейти</router-link></div>
             </div>
           </div>
         </div>
@@ -79,6 +80,17 @@
       z-index: 1;
       text-align: right;
       font-weight: normal;
+    }
+    &__incart {
+      text-align: right;
+      padding: 0 20px;
+      color: #999;
+      font-size: 13px;
+      a {
+        margin-left: 10px;
+        color: #409FCB;
+        border-bottom: 1px dotted #409FCB; 
+      }
     }
     &__scroll {
       overflow-x: auto;

@@ -14,13 +14,13 @@ class Cart extends Controller
 	        'id_list' => 'required|array',
 	      ]);
         $param = $request->all();
-        CartModel::AddToCartFromLocal($request->user()->id, $param['id_list']);
+        $new_cart = CartModel::AddToCartFromLocal($request->user()->id, $param['id_list'], true);
 	    	
 	    	return [
           'status' => 'OK',
           'message' => 'Товар(ы) успешно добавлены в корзину', 
          	'data' => [
-        		'addToItemCart' => $param['id_list']
+        		'setCart' => $new_cart
          	]
         ];
     	}

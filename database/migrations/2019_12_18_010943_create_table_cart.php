@@ -17,7 +17,7 @@ class CreateTableCart extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('user_id');
             $table->bigInteger('product_id');
-            $table->string('characteristic_id', 100);
+            $table->string('characteristic_id', 100)->nullable();
             $table->index(['user_id']);
             $table->integer('product_id')->default(0);
         });

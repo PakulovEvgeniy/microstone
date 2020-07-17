@@ -142,7 +142,6 @@ export default {
         if(!data.notwait) {
           dispatch('showWait');
         }
-
         let gt = axios.get(data.url, {params: data.params})
           .then(response => {
             if(!data.notwait) {

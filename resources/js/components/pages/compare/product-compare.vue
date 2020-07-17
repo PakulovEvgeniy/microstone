@@ -11,6 +11,7 @@
       v-tooltip.bottom="isInList ? 'Убрать из избранного' : 'Добавить в избранное'"
       @click="clickFavorite"
     ><i class="fa fa-heart-o"></i></button>
+    <prodwish-popover @close="onClose" v-if="pcPopVis"  :list="product.characts" :elem="$el" :product="product"></prodwish-popover>
     <i 
       @click="$emit('clickTrash')" 
       class="fa fa-trash icon icon-trash"
@@ -51,11 +52,13 @@
   import { mapGetters, mapActions } from 'vuex';
   import productRating from '../product/product-rating.vue';
   import buyButton from '../../system/buy-button.vue';
+  import prodwishPopover from '../product/prodwish-popover.vue';
   export default {
     data() {
         return {
           clientX: 0,
-          clientY: 0
+          clientY: 0,
+          pcPopVis: false
         }
     },
     props: [
@@ -70,19 +73,18 @@
         'auth',
         'wishlist',
         'cart',
-        'isInCartAll'
+        'isInCartAll',
+        'isInWishAll'
       ]),
       isInList() {
-        return this.wishlist.items.indexOf(this.product.id) != -1;
+        return this.isInWishAll(this.product);
       }
     },
     methods: {
-      ...mapActions([
-        'addToLocalWishlist',
-        'delFromLocalWishlist',
-        'addToServerWishlist',
-        'delFromServerWishlist'
-      ]),
+      
+      onClose() {
+        this.pcPopVis = false;
+      },
       mouseDownGal(e) {
         this.clientX = e.clientX;
         this.clientY = e.clientY;
@@ -97,18 +99,17 @@
         }
       },
       clickFavorite() {
-        let id = this.product.id;
-        if (this.auth) {
-          if (this.isInList) {
-            this.delFromServerWishlist(id);
-          } else {
-            this.addToServerWishlist(id);
-          }
+        if (this.pcPopVis) {
+          this.pcPopVis = false;
+          return;
+        }
+        if (this.product.have_charact) {
+          this.pcPopVis = true;
         } else {
           if (this.isInList) {
-            this.delFromLocalWishlist(id);
+            this.$store.dispatch('delFromWishList', {id: this.product.id, characteristic: '', group_id: 0});
           } else {
-            this.addToLocalWishlist(id);
+            this.$store.dispatch('addToWishList', {id: this.product.id, characteristic: ''});
           }
         }
       },
@@ -120,7 +121,8 @@
     },
     components: {
       productRating,
-      buyButton
+      buyButton,
+      prodwishPopover
     }
   }
 </script>
@@ -134,8 +136,9 @@
       bottom: 70px;
       right: -90px;
     }
-    .prodcart-popover__scroll {
+    .prodcart-popover__scroll, .prodwish-popover__scroll {
       max-height: 190px;
+      display: none;
     }
     padding: 10px 5px;
     position: relative;
@@ -217,6 +220,9 @@
         .buttons {
           display: block;
         }
+      }
+      .prodwish-popover__scroll {
+        display: block;
       }
     }
     &-content {

@@ -2,7 +2,7 @@
 <div class="buy-button">
   <button 
     :disabled="disable"
-    @click="addToCart(item.id)"
+    @click="addToCart(item)"
     class="buy button-ui button-ui_brand"
     :class="{'active': isInCartAll(item), 'button-ui_passive': passive, small: small, big: big}"
   >
@@ -47,18 +47,22 @@ export default {
     onClose() {
       this.pcPopVis = false;
     },
-    addToCart(id) {
+    addToCart(it) {
       if (this.pcPopVis) {
         this.pcPopVis = false;
         return;
       }
-      if (this.isInCartAll(this.item)) {
+      if (this.isInCartAll(it)) {
         this.$router.push('/account/cart');
       } else {
-        if (this.item.have_charact) {
-          this.pcPopVis = true;
+        if (it.have_charact) {
+          if (it.characteristic) {
+            this.$store.dispatch('addToCart', [{id: it.id, characteristic: it.characteristic, qty: 1}]);
+          } else {
+            this.pcPopVis = true;
+          }
         } else {
-          this.$store.dispatch('addToCart', [{id: id, characteristic: '', qty: 1}]);
+          this.$store.dispatch('addToCart', [{id: it.id, characteristic: '', qty: 1}]);
         }
       }
     }

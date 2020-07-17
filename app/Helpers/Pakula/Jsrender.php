@@ -220,6 +220,7 @@ class Jsrender {
               $state['wishlist']['products'] = [];
               $state['wishlist']['curGroup'] = null;
               $state['wishlist']['groups'] = [];
+              $state['wishlist']['curItems'] = [];
             }
             if (!isset($state['cart'])) {
               $state['cart']= [];

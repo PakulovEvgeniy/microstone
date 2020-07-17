@@ -29,7 +29,8 @@ class Wishlist extends Controller
         $arr_wish = WishModel::getWishlistAll($request->user()->id);
         $dat['wishlist'] = [
           'items' => $arr_wish,
-          'products' => Products::getProductsList($arr_wish),
+          'curItems' => $arr_wish,
+          'products' => Products::getProductsList(array_column($arr_wish, 'id')),
           'curGroup' => null,
           'groups' => Wishlist_groups::getAllGroups($request->user()->id)
         ];
@@ -39,6 +40,7 @@ class Wishlist extends Controller
             'status' => 'OK',
             'data' => [
               'setWishlist' => $arr_wish,
+              'setCurWishlist' => $arr_wish,
               'setWishlistProducts' => $dat['wishlist']['products'],
               'setWishGroup' => null,
               'setWishGroups' => $dat['wishlist']['groups']
@@ -76,7 +78,8 @@ class Wishlist extends Controller
         $arr_wish_all = WishModel::getWishlistAll($request->user()->id);
         $dat['wishlist'] = [
           'items' => $arr_wish_all,
-          'products' => Products::getProductsList($arr_wish),
+          'curItems' => $arr_wish,
+          'products' => Products::getProductsList(array_column($arr_wish, 'id')),
           'curGroup' => $id,
           'groups' => Wishlist_groups::getAllGroups($request->user()->id) 
         ];
@@ -86,6 +89,7 @@ class Wishlist extends Controller
             'status' => 'OK',
             'data' => [
               'setWishlist' => $arr_wish_all,
+              'setCurWishlist' => $arr_wish,
               'setWishlistProducts' => $dat['wishlist']['products'],
               'setWishGroup' => $id,
               'setWishGroups' => $dat['wishlist']['groups']
@@ -253,10 +257,20 @@ class Wishlist extends Controller
           'id' => 'required|integer',
           'group_id' => 'required|integer'
 	      ]);
-    		$param = $request->all();
+        
+        $param = $request->all();
+        $char = "";
+        if (isset($param['characteristic'])) {
+          $char = $param['characteristic'];
+        }
+        if (!$char) {
+          $char = "";
+        }
+    		
 	    	$row = WishModel::where([
 	    		['user_id', '=', $request->user()->id],
 	    		['product_id', '=', $param['id']],
+          ['characteristic_id', '=', $char],
 	    		['wish_group_id', '=', $param['group_id']]
 	    	])->first();
 	    	if (!$row) {
@@ -264,10 +278,16 @@ class Wishlist extends Controller
 	    	} else {
           $row->delete();
           $data = [];
+          $pr = [
+            'id' => $param['id'],
+            'characteristic' => $char
+          ];
           if ((int)$param['group_id'] == 0) {
-            $data['delFromItemWish'] = $param['id'];
+            $data['delFromItemWish'] = $pr;
+            $data['delFromCurItemWish'] = $pr;
             $data['delFromWishListProducts'] = $param['id'];
           } else {
+            $data['delFromCurItemWish'] = $pr;
             $data['delFromWishListProducts'] = $param['id'];
           }
 	    		return [
@@ -310,7 +330,18 @@ class Wishlist extends Controller
 	        'id' => 'required|integer',
 	      ]);
         $param = $request->all();
-        $res = WishModel::AddToWishList($request->user()->id, $param['id'], 0);
+        $char = "";
+        if (isset($param['characteristic'])) {
+          $char = $param['characteristic'];
+        }
+        if (!$char) {
+          $char = "";
+        }
+        $pr = [
+            'id' => $param['id'],
+            'characteristic' => $char
+        ];
+        $res = WishModel::AddToWishList($request->user()->id, $pr, 0);
 	    	
 	    	if (!$res) {
 	    		return ['status' => 'OK'];
@@ -318,7 +349,7 @@ class Wishlist extends Controller
 	    		return [
           	'status' => 'OK',
           	'data' => [
-          		'addToItemWish' => $param['id']
+          		'addToItemWish' => $pr
           	]
         	];
 	    	}
@@ -336,14 +367,14 @@ class Wishlist extends Controller
         $flAdd = false;
         $user_id = $request->user()->id;
 
-        foreach ($param['product_id'] as $prod_id) {
-          $prd = (int)$prod_id;
-          if (!$prd) {
-            continue;
-          }
+        foreach ($param['product_id'] as $prod) {
+          $pr = [
+            'id' => $prod['id'],
+            'characteristic' => $prod['characteristic'] ? $prod['characteristic'] : ''
+          ];
           foreach ($param['groups'] as $val) {
             $grp_id = (int)$val;
-            $res = WishModel::AddToWishList($user_id, $prd, $grp_id);
+            $res = WishModel::AddToWishList($user_id, $pr, $grp_id);
             if ($res) {
               $flAdd = true;
             }

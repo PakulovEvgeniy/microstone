@@ -9,17 +9,19 @@
         class="wishlist-product" 
         v-for="(el, ind) in wishProducts"
         :class="{'last': ind == wishProducts.length-1}"
-        :key="el.id">
+        :key="el.id+el.characteristic">
         <div class="m-checkbox">
-          <input :id="'wlp-'+el.id" type="checkbox" :value="el.id" v-model="checkProds">
-          <label :for="'wlp-'+el.id"><i class="fa fa-check"></i></label>
+          <input :id="'wlp-'+el.id+el.characteristic" type="checkbox" :value="el.id+'#'+el.characteristic" v-model="checkProds">
+          <label :for="'wlp-'+el.id+el.characteristic"><i class="fa fa-check"></i></label>
         </div>
         <div class="block-1">
           <div class="image">
             <router-link :to="'/product/'+el.chpu"><img :src="el.image"></router-link>
           </div>
           <div class="wishlist-product__caption">
-            <div class="name"><router-link :to="'/product/'+el.chpu">{{el.name}}</router-link></div>
+            <div class="name"><router-link :to="'/product/'+el.chpu">{{el.name}}</router-link>
+              <div v-if="el.characteristic" class="characteristic">{{el.charact_name}}</div>
+            </div>
             <div class="product-info__voblers">
               <voblers></voblers>
             </div>
@@ -44,7 +46,7 @@
           </div>
           <div class="wishlist-product__buttons">
             <buy-button
-              v-tooltip.top="isInCartAll(el) ? 'Перейти в корзину'  : 'Добавить в корзину'"
+              v-tooltip.top="isInCart(el) ? 'Перейти в корзину'  : 'Добавить в корзину'"
               :item="el"
               :list="cart.items"
               :small="true"
@@ -60,14 +62,14 @@
               icon="fa-bar-chart"
             ></add-in-list-button>
             <button v-if="auth"
-              @click="$emit('addToOtherList', [el.id])"
+              @click="$emit('addToOtherList', [{id: el.id, characteristic: el.characteristic}])"
               v-tooltip.top="'Добавить товар в другой список'"
               class="button-ui button-ui_white button-ui_icon"
             ><i class="fa fa-plus"></i></button>
             </span>
           </div>
         </div>
-        <a @click="delFromWish(el.id)" class="wishlist-product__remove"><span>Удалить</span></a>
+        <a @click="delFromWish(el)" class="wishlist-product__remove"><span>Удалить</span></a>
       </div>
     </div>
 </template>
@@ -95,7 +97,7 @@
            'auth',
            'compare',
            'cart',
-           'isInCartAll'
+           'isInCart',
           ]),
           checkProds: {
             get () { return this.prodChecked },
@@ -113,11 +115,11 @@
             'delFromLocalWishlist',
             'delFromServerWishlist'
           ]),
-          delFromWish(id) {
+          delFromWish(el) {
             if (!this.auth) {
-              this.delFromLocalWishlist(id);
+              this.delFromLocalWishlist(el);
             } else {
-              this.delFromServerWishlist({id: id, group_id: this.curGroup});
+              this.delFromServerWishlist({id: el.id, characteristic: el.characteristic, group_id: this.curGroup});
             }
           }
         }
@@ -217,6 +219,10 @@
           padding-bottom: 10px;
           a {
             color: #333;
+          }
+          .characteristic {
+            color: #999;
+            font-size: 14px;
           }
         }
       }

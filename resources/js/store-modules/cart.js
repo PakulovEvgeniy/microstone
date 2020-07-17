@@ -38,11 +38,17 @@ export default {
     isInCartAll(state, getters, rootState) {
       return (it) => {
         if (it.have_charact) {
-          return it.characts.every((cr) => {
+          if (it.characteristic) {
             return !!rootState.cart.items.find((el) => {
-              return (el.id == it.id && el.characteristic==cr.id);
+              return el.id == it.id && el.characteristic == it.characteristic;
             });
-          });
+          } else {
+            return it.characts.every((cr) => {
+              return !!rootState.cart.items.find((el) => {
+                return (el.id == it.id && el.characteristic==cr.id);
+              });
+            });
+          }
         } else {
           return !!rootState.cart.items.find((el) => {
             return el.id == it.id

@@ -27,6 +27,7 @@
         :item="product"
         :list="wishlist.items"
         :authOnly="true"
+        :isWish="true"
         delLocalAction="delFromLocalWishlist"
         addLocalAction="addToLocalWishlist"
         addAuthAction="addToServerWishlist"
@@ -59,10 +60,11 @@
         'auth',
         'wishlist',
         'cart',
-        'isInCartAll'
+        'isInCartAll',
+        'isInWishAll'
       ]),
       isInList() {
-        return this.wishlist.items.indexOf(this.product.id) != -1;
+        return this.isInWishAll(this.product);
       }
     },
     methods: {

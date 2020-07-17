@@ -24,7 +24,7 @@
               <button 
                 @click="addAllToCart" 
                 class="buy button-ui button-ui_brand"
-                :class="{'active': allInCart}"
+                :class="{'active': allListInCart}"
               >
                 {{allBtnText}}
               </button>
@@ -144,7 +144,7 @@
             <a @click.stop="renameCustom(el)" class="rename"><i class="fa fa-pencil-square-o"></i><span>Переименовать</span></a>
             <a @click.stop="archiveCustom(el, 1)" class="archive"><i class="fa fa-file-archive-o"></i><span>Архивировать</span></a>
           </div>
-          <div class="price"><span v-if="el.count">{{'от ' + el.total_price}}<i class="fa fa-rub"></i></span></div>
+          <div class="price"><span v-if="el.count">{{'от ' + (+el.total_price).toFixed(2)}}<i class="fa fa-rub"></i></span></div>
           <i class="fa fa-chevron-right"></i>
         </div>
       </div>
@@ -174,7 +174,7 @@
               <a @click.stop="archiveCustom(el, 0)" class="rename"><i class="fa fa-reply"></i><span>Вернуть</span></a>
               <a @click.stop="delCustom(el)" class="archive"><i class="fa fa-times"></i><span>Удалить</span></a>
             </div>
-            <div class="price"><span v-if="el.count">{{'от ' + el.total_price}}<i class="fa fa-rub"></i></span></div>
+            <div class="price"><span v-if="el.count">{{'от ' + (+el.total_price).toFixed(2)}}<i class="fa fa-rub"></i></span></div>
             <i class="fa fa-chevron-right"></i>
           </div>
         </div>
@@ -222,7 +222,9 @@
            'cart',
            'wishCurGroup',
            'wishCurName',
-           'wishGroups'
+           'wishGroups',
+           'isInCartAll',
+           'isInCart'
           ]),
           curDate() {
             let today = new Date();
@@ -261,22 +263,22 @@
             }, 0);
             return 'от ' + total.toFixed(2);
           }, 
-          allInCart() {
+          allListInCart() {
             //if (this.auth) return false;
             let res = this.wishProductsFiltr.every((el) => {
-              return this.cart.items.indexOf(el.id) != -1;
+              return this.isInCartAll(el);
             });
             return res;
           },
           haveStock() {
             //if (this.auth) return false;
             let res = this.wishProducts.some((el) => {
-              return el.stock;
+              return +el.stock;
             });
             return res;
           },
           allBtnText() {
-            return this.allInCart ? 'Всё в корзине' : 'Купить все';
+            return this.allListInCart ? 'Всё в корзине' : 'Купить все';
           },
           listNotArchived() {
             return this.wishGroups.filter((el) => {
@@ -344,13 +346,13 @@
           },
           allChecked() {
             return this.wishProductsFiltr.every((el) => {
-              return this.prodChecked.indexOf(el.id) != -1
+              return this.prodChecked.indexOf(el.id+'#'+el.characteristic) != -1
             });
           },
           listChecked() {
             return this.wishProductsFiltr.filter((el) => {
-              return this.prodChecked.indexOf(el.id) != -1;
-            }).map(el => el.id);
+              return this.prodChecked.indexOf(el.id+'#'+el.characteristic) != -1;
+            }).map(el => el.id+'#'+el.characteristic);
           },
           qtyChecked() {
             return this.listChecked.length;
@@ -377,9 +379,24 @@
             });
           },
           addToOtherListServer(par, isCart) {
+            
+            let prd = par.product_id.map((el) => {
+              if (typeof el == 'string') {
+                let ar = el.split('#');
+                return {
+                  id: +ar[0],
+                  characteristic: ar[1]
+                }
+              } else {
+                return el;
+              }
+            });
             this.$store.dispatch('queryPostToServer', {
               url: '/account/wishlist/addingrouplist',
-              params: par
+              params: {
+                product_id: prd,
+                groups: par.groups
+              }
             });  
           },
           addToOtherList(e, isCart) {
@@ -399,7 +416,20 @@
                 height: 'auto'
               });
             } else {
-              this.addToCart(e);
+              
+              let goods = e.map((el) => {
+                let ar = el.split('#');
+                return {
+                  id: +ar[0],
+                  characteristic: ar[1],
+                  qty: 1
+                }
+              }).filter((el) => {
+                return !this.isInCart(el);
+              });
+              if (goods.length) {
+                this.addToCart(goods);
+              }
             }
           },
           addList(val, sucFunc) {
@@ -425,18 +455,26 @@
           },
           addAllToCart() {
             if (!this.auth) {
-              if (!this.allInCart) {
-                let arr = this.wishProducts.map((el) => {
-                  return el.id;
+              if (!this.allListInCart) {
+                let arr = this.wishProducts.filter((el => {
+                  return !this.isInCartAll(el);
+                }))
+                .map((el) => {
+                  return {id: el.id, characteristic: el.characteristic, qty: 1};
                 });
                 this.addArrayToLocalCart(arr); 
               } else {
                 this.$router.push('/account/cart');
               }
             } else {
-              if (!this.allInCart) {
+              if (!this.allListInCart) {
                 this.addToCart(
-                  this.wishProductsFiltr.map(el => el.id)
+                  this.wishProductsFiltr.filter((el => {
+                    return !this.isInCartAll(el);
+                  }))
+                  .map((el) => {
+                    return {id: el.id, characteristic: el.characteristic, qty: 1};
+                  })
                 )
               } else {
                 this.$router.push('/account/cart');
@@ -529,14 +567,14 @@
           onAllCheck() {
             let allC = this.allChecked;
             this.wishProductsFiltr.forEach((el) => {
-              let ind = this.prodChecked.indexOf(el.id);
+              let ind = this.prodChecked.indexOf(el.id+'#'+el.characteristic);
               if (allC) {
                 if (ind!=-1) {
                   this.prodChecked.splice(ind, 1);
                 }
               } else {
                 if (ind==-1) {
-                  this.prodChecked.push(el.id);
+                  this.prodChecked.push(el.id+'#'+el.characteristic);
                 }
               }
             });
@@ -546,7 +584,7 @@
           if (!this.auth) {
             this.$store.dispatch('restoreWishList');
             if (this.countWishlist>0) {
-              this.$store.dispatch('queryGetToServer', {
+              this.$store.dispatch('queryPostToServer', {
                 url: '/api/products/wishlist',
                 params: {
                   pr: this.wishlist.items

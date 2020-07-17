@@ -67,11 +67,11 @@ class LoginController extends Controller
             $new_cart = [];
             if (isset($par['wishlist']) && is_array($par['wishlist'])) {
                 $new_list = Wishlist::AddToWishListFromLocal($user->id, $par['wishlist']);
-                $prod = Products::getProductsList($new_list);
+                $prod = Products::getProductsList(array_column($new_list, 'id'));
             }
 
             if (isset($par['cart']) && is_array($par['cart'])) {
-                $new_cart = Cart::AddToCartFromLocal($user->id, $par['cart']);
+                $new_cart = Cart::AddToCartFromLocal($user->id, $par['cart'], false);
                 //$prod = Products::getProductsList($new_list);
             }
 

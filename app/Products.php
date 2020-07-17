@@ -18,7 +18,7 @@ use App\Setting;
 use App\DiscountPriceGroup;
 use App\Characteristics;
 use App\SoldProduct;
-
+use App\Category;
 class Products extends Model
 {
     protected $table = 'products';
@@ -125,7 +125,7 @@ class Products extends Model
                 'stock' => $val->stock,
                 'price' => $min_price,
                 'price_with_discount' => $price_disc,
-                'percent' => 10,
+                'percent' => 0,
                 'image' => JSRender::resizeImage($val->image,68,55),
                 'image_2' => JSRender::resizeImage($val->image,80,80),
                 'cat_id' => $val->cat_id,
@@ -135,7 +135,8 @@ class Products extends Model
                 'product_params' => $prod_params,
                 'images' => $pc2,
                 'have_charact' => $val->have_charact,
-                'characts' => $val->have_charact ? Characteristics::getCharacteristics($val->id_1s) : []
+                'characts' => $val->have_charact ? Characteristics::getCharacteristics($val->id_1s) : [],
+                'characts_price' => $val->have_charact ? PriceParty::getPriceForProductCharact($val->id_1s) : []
             ];
         }
 
@@ -163,10 +164,29 @@ class Products extends Model
                 
     	if ($prod) {
             $arr_manuf = PartyParams::getManufacturesByProduct($id_1s);
-
+            $cat = Category::where('id_1s', $prod->parent_id)->first();
+            $chpu="";
+            if ($cat) {
+                $chpu = '/category/' . $cat->category_description->chpu . '?';
+            }
             
             $disc = DiscountPriceGroup::getDiscounts($prod->price_group);
+            $prod_params = PartyParams::getProductParams($id_1s);
 
+            foreach ($prod_params as $key => $val) {
+                $filt = Filters::where('param_type_id', $val['param_type_id'])->first();
+                if (!$filt) {
+                    continue;
+                }
+                $sh = '';
+                if ($filt->filter_type == 'Число') {
+                    $sh = $val['value'] . '-' . $val['value'];
+                } else {
+                    $list = PartyParams::getListParamsForCategory($prod->parent_id, $val['param_type_id']);
+                    $sh = array_search($val['value'], $list);
+                }
+                $prod_params[$key]['filtr_chpu'] = $chpu . 'f[' . $filt->id . ']=' . $sh;
+            }
             $charact=[];
             if ($prod->have_charact) {
                 $charact = Characteristics::getCharacteristics($prod->id_1s);
@@ -181,6 +201,7 @@ class Products extends Model
                 'name' => $prod->products_descriptions->name,
                 'parent_id' => $prod->parent_id,
                 'chpu' => $prod->products_descriptions->chpu,
+                'description' => $prod->products_descriptions->description,
                 'sku' => $prod->sku,
                 'images' => $pc,
                 'images2' => $pc1,
@@ -188,6 +209,7 @@ class Products extends Model
                 'manuf' => $arr_manuf,
                 'price' => $price,
                 'discount_group' => $disc,
+                'params' => $prod_params,
                 'have_charact' => $prod->have_charact,
                 'characts' => $charact
             ];

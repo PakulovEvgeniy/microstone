@@ -31,6 +31,7 @@ use App\CompareGroups;
 use App\Characteristics;
 use App\DiscountPriceGroup;
 use App\PriceGroup;
+use App\ProductFiles;
 
 class Obmen extends Controller
 {
@@ -554,6 +555,18 @@ class Obmen extends Controller
             
             $grp_desc->save();
 
+            ProductFiles::where(['product_id' => $grp->id])->delete();
+            if (isset($par['pr_file'])) {
+              foreach ($par['pr_file'] as $val) {
+                $ar_f = explode('###', $val);
+                $pf = new ProductFiles;
+                $pf->product_id = $grp->id;
+                $pf->name = $ar_f[1];
+                $pf->filename = $ar_f[0];
+                $pf->save();
+              }
+            }
+
             PartyParams::where(['product_id1s' => $id_1s])->delete();
             if ($params) {
              foreach ($params as $val) {
@@ -663,7 +676,12 @@ class Obmen extends Controller
     	if ($pr == 'picture') {
     		$uploadFile = $_FILES['datafile'];
     		$tmp_name = $uploadFile['tmp_name'];
-    		$data_filename = "image/catalog/" . $uploadFile['name'];
+        $ext = strtoupper(pathinfo( $uploadFile['name'], PATHINFO_EXTENSION ));
+        if ($ext == 'PDF') {
+          $data_filename = "image/files/" . $uploadFile['name'];
+        } else {
+          $data_filename = "image/catalog/" . $uploadFile['name'];
+        }
     		$data = file_get_contents($tmp_name);
     		$data = base64_decode($data);
     		if (!empty($data) && ($fp = fopen($data_filename, 'wb'))) {

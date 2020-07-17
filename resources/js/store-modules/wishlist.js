@@ -5,6 +5,9 @@ export default {
 		setWishlist(state, payload) {
       this.state.wishlist.items = payload;
     },
+    setCurWishlist(state, payload) {
+      this.state.wishlist.curItems = payload;
+    },
     setWishlistProducts(state, payload) {
       this.state.wishlist.products = payload;
     },
@@ -19,7 +22,13 @@ export default {
     },
     delFromWishListProducts(state, payload) {
       let prod = this.state.wishlist.products;
+      let wish = this.state.auth ? this.state.wishlist.curItems : this.state.wishlist.items;
       if (!prod.length) {return;}
+      let inWish = wish.find((el) => {
+        return el.id == payload;
+      });
+      if (inWish) {return;}
+
       let fl = prod.findIndex((el) => {
         return el.id == payload;
       });
@@ -32,11 +41,20 @@ export default {
     },
     delFromItemWish(state, payload) {
       let ind = this.state.wishlist.items.findIndex((el) => {
-        return el == payload;
+        return el.id == payload.id && el.characteristic == payload.characteristic;
       });
       if (ind != -1) {
         //this.commit('delFromWishListProducts', this.state.wishlist.items[ind]);
         this.state.wishlist.items.splice(ind, 1);
+      }
+    },
+    delFromCurItemWish(state, payload) {
+      let ind = this.state.wishlist.curItems.findIndex((el) => {
+        return el.id == payload.id && el.characteristic == payload.characteristic;
+      });
+      if (ind != -1) {
+        //this.commit('delFromWishListProducts', this.state.wishlist.items[ind]);
+        this.state.wishlist.curItems.splice(ind, 1);
       }
     }
 	},
@@ -48,7 +66,35 @@ export default {
       return getters.wishlist.items.length;
     },
     wishProducts(state, getters, rootState) {
-      return getters.wishlist.products;
+      if (!rootState.wishlist.products.length) {
+        return rootState.wishlist.products;
+      }
+      let items = getters.auth ? rootState.wishlist.curItems : rootState.wishlist.items;
+      return items.map((el) => {
+        let prd = rootState.wishlist.products.find((it) => {
+          return it.id == el.id;
+        });
+
+        let price = prd.price;
+        let charact_name  = '';
+        if (prd.have_charact) {
+          let pr = prd.characts_price.find((p) => {
+            return p.id == el.characteristic;
+          });
+          let nc = prd.characts.find((p) => {
+            return p.id == el.characteristic;
+          });
+          charact_name = nc ? nc.name : '';
+          price = pr ? pr.price : 0;
+        }
+        return {
+          id: el.id,
+          characteristic: el.characteristic,
+          charact_name: charact_name,
+          ... prd,
+          price: price
+        }
+      });
     },
     wishCurGroup(state, getters, rootState) {
       return rootState.wishlist.curGroup;
@@ -62,6 +108,30 @@ export default {
       });
       return el ? el.name : '';
     },
+    isInWish(state, getters, rootState) {
+      return (it) => {
+        return !!rootState.wishlist.items.find((el) => {
+          return (el.id == it.id && el.characteristic == it.characteristic);
+        });
+      }
+    },
+    isInWishAll(state, getters, rootState) {
+      return (it) => {
+        if (it.have_charact) {
+          
+          return it.characts.every((cr) => {
+            return !!rootState.wishlist.items.find((el) => {
+              return (el.id == it.id && el.characteristic==cr.id);
+            });
+          });
+        
+        } else {
+          return !!rootState.wishlist.items.find((el) => {
+            return el.id == it.id
+          });
+        }
+      }
+    }
   },
   actions: {
     clearLocalWishlist({commit, dispatch}, data) {
@@ -116,17 +186,9 @@ export default {
       }
     },
     delFromServerWishlist({commit, dispatch}, data) {
-      let param = data;
-      if (typeof data !== 'object') {
-        param = {
-          id: data.id,
-          characteristic: data.characteristic,
-          group_id: 0
-        }
-      }
       return dispatch('queryPostToServer', {
         url: '/account/wishlist/delete',
-        params: param
+        params: data
       })
     },
     delFromLocalWishlist({commit, dispatch}, data) {
@@ -145,12 +207,7 @@ export default {
       wish.splice(ind, 1); 
       localStorage.setItem('wishlist', JSON.stringify(wish));
       commit('setWishlist', wish);
-      let it = wish.find((el) => {
-        return el.id == data.id;
-      });
-      if (!it) {
-        commit('delFromWishListProducts', data.id);
-      } 
+      commit('delFromWishListProducts', data.id);
       
     },
     restoreWishList({commit, dispatch}, data) {

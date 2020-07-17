@@ -19,3 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/obmen', 'Api\Obmen@index');
 Route::post('/obmen', 'Api\Obmen@index');
 Route::get('/products/{id}', 'Api\Products@index');
+Route::post('/products/{id}', 'Api\Products@index');

@@ -69,8 +69,29 @@
 												<router-link :to="'/manufacturer/'+brand.chpu"><img :src="brand.logo"></router-link>
 											</div>
 											<order-block></order-block>
+											<div class="clear"></div>
+											
 									</div>
+
 							</div>
+							<item-tabs :tabs="tabs" :active="activeTab" @changeTab="activeTab=$event">
+								<div v-show="activeTab == 0">
+									<div class="tab-description">
+										<div v-html="product.description"></div>
+									</div>
+								</div>
+								<div v-show="activeTab == 1">
+									<div class="tab-characts">
+										<ul>
+											<li v-for="item in prodParams" :key="item.param_type_id">
+												<span class="ch-name">{{item.name}}</span>
+												<span v-if="item.filtr_chpu" class="ch-value"><router-link :to="item.filtr_chpu">{{item.value}}</router-link></span>
+												<span v-else class="ch-value">{{item.value}}</span>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</item-tabs>
 					</div>
 				</template>
 		</div>
@@ -87,6 +108,7 @@
     import notFoundComp from './general/not-found-comp.vue';
     import VueGallery from '../Gallery/gallery.vue';
     import orderBlock from './product/order-block.vue';
+    import itemTabs from '../system/item-tabs.vue';
     //import NoSSR from 'vue-no-ssr';
 		export default {
 				data() {
@@ -94,7 +116,8 @@
 							 curPicture: 0,
                indexGallery: null,
                clientX: 0,
-               clientY: 0
+               clientY: 0,
+               activeTab: 0
 						}
 				},
 				directives: {
@@ -108,6 +131,26 @@
 						'screenWidth',
 						'screenHeight'
 					]),
+          tabs() {
+            return [
+              {
+                'id': 'opisanie',
+                'name': 'Описание'
+              },
+              {
+                'id': 'characts',
+                'name': 'Характеристики'
+              },
+              {
+                'id': 'documents',
+                'name': 'Документация'
+              },
+              {
+                'id': 'feedback',
+                'name': 'Отзывы'
+              }
+            ]
+          },
 					title() {
 							return this.product.name || 'Страница не найдена';
 					},
@@ -116,6 +159,26 @@
 						if (this.product.manuf && this.product.manuf.length) {
 							return this.product.manuf[0];
 						}
+					},
+					prodParams() {
+						if (!this.product) {return [];}
+						let res = [];
+						this.product.params.sort((el1, el2) => el1.kod_sort - el2.kod_sort).forEach((el) => {
+								let fel = res.find((it) => {
+									return it.param_type_id == el.param_type_id;
+								});
+								if (fel) {
+									fel.value += ', '+el.value;
+								} else {
+									res.push({
+										param_type_id: el.param_type_id,
+										name: el.name,
+										value: el.value,
+										filtr_chpu: el.filtr_chpu
+									})
+								}
+						});
+						return res;
 					},
 					breadItems() {
 						let arr = [];
@@ -182,7 +245,8 @@
             owlCarousel,
             notFoundComp,
             VueGallery,
-            orderBlock
+            orderBlock,
+            itemTabs
 				},
 				beforeRouteEnter (to, from, next) {
 					next(vm => {
@@ -194,6 +258,50 @@
 
 <style lang="less">
 @import '../../../less/smart-grid.less';
+@import '../../../less/vars.less';
+
+	.tab {
+		&-description {
+			padding: 20px;
+			p {
+				margin-bottom: 10px;
+			}
+			ul {
+				padding-left: 20px;
+				li {
+					list-style: square;
+				}
+			}
+		}
+		&-characts {
+			padding: 20px;
+			li {
+				display: flex;
+				flex-wrap: nowrap;
+				border-bottom: 1px solid #DCd2d2;
+				font-size: 14px;
+				&:hover {
+					background-color: #FFF9E9;
+				}
+			}
+			li span{
+				padding: 5px 10px;
+			}
+			li span.ch-name {
+				width: 60%;
+			}
+			li span.ch-value {
+				width: 40%;
+				a {
+					color: @main-color;
+					border-bottom: 1px solid;
+					&:hover {
+						color: tomato;
+					}
+				}
+			}
+		}
+	}
 
 	.brand-logo {
 		background-color: #fff;
