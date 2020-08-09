@@ -14,7 +14,6 @@
         :product="el"
         @onZoom="clickZoom($event)"
       ></product-compare-mobile>
-      <v-dialog/>
       <vue-gallery :images="galImages" 
         :index="indexGallery" 
         id = "blueimp-gallery-edit"

@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\ResetPassword;
 use App\Notifications\VerifyEmail;
 use App\Notifications\VerifyEmailCode;
+use App\Notifications\VerifyEmailOrder;
+use Session;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -66,12 +68,27 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new ResetPassword($token));
+        $value = request('dialog', false);
+        $this->notify(new ResetPassword($token, $value));
     }
 
     public function sendEmailVerificationNotification()
     {
-        $this->notify(new VerifyEmail());
+        $value = request('dialog', false);
+        $pas = request('password', false);
+        if ($value && $pas) {
+            $cod = rand(0,9) . rand(0, 9) . rand(0,9) . rand(0,9) . rand(0, 9) . rand(0,9);
+            Session::put('cod', $cod);
+            $dat = [
+                'cod' => $cod,
+                'password' => $pas
+            ];
+
+            $this->notify(new VerifyEmailOrder($dat));
+        } else {
+           $this->notify(new VerifyEmail());
+        }
+        
     }
 
     public function sendEmailVerificationNotificationCode($cod, $email)
@@ -79,5 +96,10 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->email_ext = $email;
         $this->notify(new VerifyEmailCode($cod));
         $this->email_ext = '';
+    }
+
+    public function sendEmailVerificationNotificationOrder($dat)
+    {
+        $this->notify(new VerifyEmailOrder($dat));
     }
 }

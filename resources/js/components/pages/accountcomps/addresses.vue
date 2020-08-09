@@ -22,7 +22,6 @@
         </client-only>
       </div>
       <router-link to="/account/addresses/add" type="button" class="button-ui button-ui_brand account-contragents__add">Добавить адрес</router-link>
-      <v-dialog/>
     </div>
 </template>
 

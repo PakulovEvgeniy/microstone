@@ -65,29 +65,47 @@ class LoginController extends Controller
             $new_list = [];
             $prod = [];
             $new_cart = [];
+            $red = '';
+
+            $dialog = false;
+            if (isset($par['dialog']) &&  $par['dialog']) {
+                $dialog = true;
+            }
+
             if (isset($par['wishlist']) && is_array($par['wishlist'])) {
                 $new_list = Wishlist::AddToWishListFromLocal($user->id, $par['wishlist']);
                 $prod = Products::getProductsList(array_column($new_list, 'id'));
             }
 
             if (isset($par['cart']) && is_array($par['cart'])) {
-                $new_cart = Cart::AddToCartFromLocal($user->id, $par['cart'], false);
+                $new_cart = Cart::AddToCartFromLocal($user->id, $par['cart'], false, false, $dialog);
                 //$prod = Products::getProductsList($new_list);
             }
+            if (isset($par['redirect']) && $par['redirect']) {
+               $red = $par['redirect'];
+            }
 
-            return [
+            $res = [
                 'status' => 'OK',
                 'email' => $user->email,
                 'isVerify' => $user->hasVerifiedEmail(),
-                'redirectTo' => $this->redirectPath(),
                 'csrf' => csrf_token(),
                 'message' => 'Вы успешно авторизовались',
                 'data' => [
                     'setWishlist' => $new_list,
                     'setWishlistProducts' => $prod,
                     'setCart' => $new_cart
+                ],
+                'succesParams' => [
+                    'isVerify' => $user->hasVerifiedEmail()
                 ]
-            ];   
+            ];
+
+            if (!$dialog) {
+                $res['redirectTo'] = $red ? $red : $this->redirectPath();
+            }
+
+            return $res;   
         }
     }
 

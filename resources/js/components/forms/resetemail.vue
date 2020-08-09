@@ -18,7 +18,7 @@
                     <input type="submit" class="btn medium-btn" :class="{'active-btn': isValid}" :disabled="!isValid" value="Изменить пароль">
                 </div>
             </div>
-            <div class="hr"></div>
+            <div v-if="!dialog" class="hr"></div>
         </div>
 
     </form>
@@ -40,6 +40,9 @@ import { mapGetters, mapActions } from 'vuex';
                 }
             }
         },
+        props: [
+            'dialog'
+        ],
         computed: {
             typePassword() {
                 return this.showPassword ? 'text' : 'password';
@@ -49,7 +52,9 @@ import { mapGetters, mapActions } from 'vuex';
             },
             ...mapGetters([
                 'csrf',
-                'resetEmail'
+                'resetEmail',
+                'wishlist',
+                'cart'
             ])
         },
         methods: {
@@ -83,7 +88,13 @@ import { mapGetters, mapActions } from 'vuex';
                         password: this.password.value,
                         password_confirmation: this.password.value,
                         email: this.resetEmail.email,
-                        token: this.resetEmail.token
+                        token: this.resetEmail.token,
+                        dialog: this.dialog,
+                        wishlist: this.wishlist.items,
+                        cart: this.cart.items
+                    },
+                    successAction: () => {
+                        this.$emit('continue');
                     }
                 });
             }

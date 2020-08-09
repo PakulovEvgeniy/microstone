@@ -58,7 +58,7 @@
             </div>
             <main-seach-form></main-seach-form>
             <div class="mobile-header-btns">
-              <router-link class="btn-cart-link" to="/">
+              <router-link class="btn-cart-link" to="/account/cart">
                 <i class="fa fa-shopping-cart btn-cart-link__cart"></i>
                 <span v-if="cartQty" class="btn-badge">{{cartQty}}</span>
               </router-link>

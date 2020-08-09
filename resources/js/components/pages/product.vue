@@ -91,7 +91,22 @@
 										</ul>
 									</div>
 								</div>
+								<div v-show="activeTab == 2">
+									<div class="tab-docs">
+										<div v-for="fil in product.files" :key="fil.id">
+											<img src="/image/catalog/pdf.png">
+											<span>Документация на: </span>
+											<a :href="fil.file">{{fil.name}}</a>
+										</div>
+										<div class="small-gray">
+											<i>Представленная техническая информация носит справочный характер и не предназначена для использования в конструкторской документации.</i>
+										</div>
+									</div>
+								</div>
 							</item-tabs>
+							<div class="node-block">
+								<look-still :prodParams="prodParams" :product="product"></look-still>
+							</div>
 					</div>
 				</template>
 		</div>
@@ -108,6 +123,7 @@
     import notFoundComp from './general/not-found-comp.vue';
     import VueGallery from '../Gallery/gallery.vue';
     import orderBlock from './product/order-block.vue';
+    import lookStill from './product/look-still.vue';
     import itemTabs from '../system/item-tabs.vue';
     //import NoSSR from 'vue-no-ssr';
 		export default {
@@ -246,7 +262,8 @@
             notFoundComp,
             VueGallery,
             orderBlock,
-            itemTabs
+            itemTabs,
+            lookStill
 				},
 				beforeRouteEnter (to, from, next) {
 					next(vm => {
@@ -270,6 +287,29 @@
 				padding-left: 20px;
 				li {
 					list-style: square;
+				}
+			}
+		}
+		&-docs {
+			padding: 20px;
+			div {
+				padding: 0.5em 0;
+			}
+			.small-gray {
+				font-size: .9em;
+    		color: #ADADAD;
+			}
+			img {
+				width: 18px;
+				height: 18px;
+				vertical-align: middle;
+				margin-right: 10px;
+			}
+			a {
+				color: @main-color;
+				border-bottom: 1px solid;
+				&:hover {
+					color: tomato;
 				}
 			}
 		}
@@ -350,6 +390,10 @@
 				border: 1px solid #ddd;
 				position: relative;
 				background-color: #fff;
+				margin-bottom: 2em;
+				~ .item-tabs {
+					margin-top: 0;
+				}
 		}
 		.item-header {
 				margin-left: 0;

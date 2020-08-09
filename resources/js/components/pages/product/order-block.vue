@@ -26,13 +26,7 @@
       <div class="order-block__controls">
         <div class="order-block__info-str">
           <span>{{infoStr}}<i class="fa fa-rub"></i></span>
-          <div class="special-buttons">
-            <div class="compare">
-              <a v-tooltip.top="toolNameCompare" @click="addToCompare" :class="{inlist: isInListCompare}"><i class="fa fa-bar-chart" aria-hidden="true"></i><span>{{linkNameCompare}}</span></a>
-              <compare-popover v-if="isInListCompare"></compare-popover>
-            </div>
-            <a :class="{inlist: isInListWish}" v-tooltip.top="toolNameWish" @click="addToWishList"><i class="fa fa-heart-o" aria-hidden="true"></i><span>{{linkNameWish}}</span></a>
-          </div>
+          <special-buttons :curCharact="curCharact" :product="product"></special-buttons>
         </div>
         <div class="cart-btn">
           <button @click="addToCart" class="button-ui button-ui_brand">В корзину</button>
@@ -45,8 +39,8 @@
 <script>
   import qtySpinner from './qty-spinner.vue';
   import productRating from './product-rating.vue';
-  import comparePopover from '../compare/compare-popover.vue';
   import dropdown from '../../system/dropdown.vue';
+  import specialButtons from './special-buttons.vue';
   import { mapGetters } from 'vuex';
     export default {
         data() {
@@ -93,12 +87,11 @@
             if (!this.product) return [];
             let dg = this.product.discount_group;
             if (!dg.length) return [];
-            let sortDg = dg.sort((el1, el2) => {
-              return el1.qty - el2.qty;
-            });
-            return sortDg.map((el) => {
+            return dg.map((el) => {
               let pr = (Math.ceil(this.price*(1-el.discount/100)*10)/10).toFixed(2);
               return {text:'от '+el.qty+' шт. - '+pr, price: pr, qty: el.qty};
+            }).sort((el1, el2) => {
+              return el1.qty - el2.qty;
             });
           },
           priceViz() {
@@ -121,31 +114,8 @@
                 return el.id == this.product.id;
               }
             });
-          },
-          isInListWish() {
-            return !!this.wishlist.items.find((el) => {
-              if (this.product.have_charact) {
-                return el.id == this.product.id && el.characteristic == this.curCharact.id;
-              } else {
-                return el.id == this.product.id;
-              }
-            });
-          },
-          isInListCompare() {
-            return this.compare.items.indexOf(this.product.id) != -1;
-          },
-          linkNameWish() {
-            return this.isInListWish ? 'В избранном' : 'Избранное';
-          },
-          toolNameWish() {
-            return this.isInListWish ? 'Удалить из избранного' : 'Добавить в избранное';
-          },
-          linkNameCompare() {
-            return this.isInListCompare ? 'В сравнении' : 'Сравнить';
-          },
-          toolNameCompare() {
-            return this.isInListCompare ? 'Удалить из сравнения' : 'Добавить к сравнению';
           }
+          
         },
         methods: {
           methodToRunOnSelect(payload) {
@@ -159,27 +129,13 @@
           },
           addToCart() {
             this.$store.dispatch('addToCart', [{id: this.product.id, characteristic: this.product.have_charact ? this.curCharact.id : '', qty: this.ordQty}]);
-          },
-          addToWishList() {
-            if (this.isInListWish) {
-              this.$store.dispatch('delFromWishList', {id: this.product.id, characteristic: this.product.have_charact ? this.curCharact.id : ''});
-            } else {
-              this.$store.dispatch('addToWishList', {id: this.product.id, characteristic: this.product.have_charact ? this.curCharact.id : ''});
-            }
-          },
-          addToCompare() {
-            if (this.isInListCompare) {
-              this.$store.dispatch('delFromLocalCompare', this.product.id);
-            } else {
-              this.$store.dispatch('addToLocalCompare', this.product.id);
-            }
           }
         },
         components : {
           qtySpinner,
           productRating,
-          comparePopover,
-          dropdown
+          dropdown,
+          specialButtons
         } 
     }
 </script>
@@ -239,39 +195,6 @@
       > span i {
         margin-left: 3px;
         font-size: 14px;
-      }
-      .special-buttons {
-        margin-top: 10px;
-        text-align: left;
-        .compare-info {
-          display: none;
-        }
-        .compare {
-          display: inline-block;
-        }
-        .compare:hover .compare-info {
-          display: block;
-          z-index: 1000;
-        }
-        > a, .compare > a {
-          color: gray;
-
-          margin-right: 15px;
-          i {
-            margin-right: 5px;
-          }
-          &.inlist i {
-            color: #ff7300;
-          }
-        }
-        > a span, .compare > a span {
-          color: #0094d9;
-          border-bottom: 1px dotted #0094d9;
-        }
-        > a.inlist span, .compare > a.inlist span {
-          color: #ff7300;
-          border-bottom: 1px dotted #ff7300;
-        }
       }
     }
     &__controls {

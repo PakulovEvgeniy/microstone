@@ -92,6 +92,34 @@ class VerificationController extends Controller
               'isVerify' => $us->hasVerifiedEmail(),
               'message' => 'Email успешно подтвержден!'
             ];
+        } elseif ($request->code == 3) {
+          $cod = rand(0,9) . rand(0, 9) . rand(0,9) . rand(0,9) . rand(0, 9) . rand(0,9);
+          $request->session()->put('cod', $cod);
+
+          $dat = [
+            'cod' => $cod,
+            'password' => $request->password ? $request->password : ''
+          ];
+
+          $us->sendEmailVerificationNotificationOrder($dat);
+          return [
+            'status' => 'OK',
+            'message' => 'Письмо успешно отправлено!'
+          ];
+        } elseif ($request->code == 4) {
+            if (!$request->cod || $request->cod != $request->session()->get('cod')) {
+              $error = ValidationException::withMessages([
+                'code' => ['Неверный код подтверждения']
+              ]);
+              throw $error;
+            }
+            
+            $us->markEmailAsVerified();
+            return [
+              'status' => 'OK',
+              'isVerify' => $us->hasVerifiedEmail(),
+              'message' => 'Email успешно подтвержден!'
+            ];
         } else {
             $us->sendEmailVerificationNotification();
             return back()->with('resent', true);

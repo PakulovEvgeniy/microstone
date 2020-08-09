@@ -70,7 +70,6 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => '',
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
@@ -83,21 +82,27 @@ class RegisterController extends Controller
             $new_list = [];
             $prod = [];
             $new_cart = [];
+
+            
+            $dialog = false;
+            if (isset($par['dialog']) &&  $par['dialog']) {
+                $dialog = true;
+            }
+
             if (isset($par['wishlist']) && is_array($par['wishlist'])) {
                 $new_list = Wishlist::AddToWishListFromLocal($user->id, $par['wishlist']);
                 $prod = Products::getProductsList(array_column($new_list, 'id'));
             }
 
             if (isset($par['cart']) && is_array($par['cart'])) {
-                $new_cart = Cart::AddToCartFromLocal($user->id, $par['cart'], false);
+                $new_cart = Cart::AddToCartFromLocal($user->id, $par['cart'], false, false, $dialog);
                 //$prod = Products::getProductsList($new_list);
             }
 
-            return [
+            $res  = [
                 'status' => 'OK',
                 'email' => $user->email,
                 'isVerify' => $user->hasVerifiedEmail(),
-                'redirectTo' => $this->redirectPath(),
                 'csrf' => csrf_token(),
                 'message' => 'Регистрация прошла успешно!',
                 'data' => [
@@ -105,7 +110,14 @@ class RegisterController extends Controller
                     'setWishlistProducts' => $prod,
                     'setCart' => $new_cart
                 ]
-            ];   
+            ];
+
+            if (!$dialog) {
+                $res['redirectTo']  = $this->redirectPath();
+            }
+
+
+            return $res;   
         }
     }
 

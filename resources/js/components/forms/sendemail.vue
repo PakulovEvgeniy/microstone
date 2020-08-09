@@ -18,10 +18,25 @@
                 </div>
             </div>
             <div v-else class="mail-mes">
-                На адрес электронной почты: <b>{{login.value}}</b>
-                отправлено письмо с инструкцией по восстановлению доступа
+                <template v-if="dialog">
+                    <div>На адрес электронной почты: <b>{{login.value}}</b>
+                    отправлено письмо с токеном для восстановления доступа</div>
+                    <div v-if="error" class="error">{{this.error}}</div>
+                    <label for="code">Скопируйте токен из письма</label>
+                    <input @blur="onBlur('code')" :class="{'valid': validClass('code'), 'invalid' : invalidClass('code')}" id="code" name="code" :value="code.value" @input="onInput($event,'code')" type="text">
+        
+                    <div class="controls">
+                        <div class="buttons">
+                            <input @click="onClick" type="button" class="btn medium-btn" :class="{'active-btn': isValid}" :disabled="!isValid" value="Продолжить">
+                        </div>
+                    </div>
+                </template>
+                <template v-else>
+                    На адрес электронной почты: <b>{{login.value}}</b>
+                    отправлено письмо с инструкцией по восстановлению доступа
+                </template>
             </div>
-            <div class="hr"></div>
+            <div v-show="!dialog" class="hr"></div>
         </div>
         
     </form>
@@ -41,12 +56,25 @@ import { mapGetters, mapActions} from 'vuex';
                     edit: false,
                     errTxt: 'Некорректный e-mail'
                 },
+                code: {
+                    value: '',
+                    valid: false,
+                    validate: /^[a-z0-9]+$/,
+                    edit: false,
+                    errTxt: 'Некорректный токен'
+                },
                 captchaToken: '',
                 isSendEmail: false
             }
         },
+        props: [
+            'dialog'
+        ],
         computed: {
             isValid() {
+                if (this.isSendEmail) {
+                    return this.code.valid;
+                }
                 return this.captchaToken && this.login.valid;
             },
             ...mapGetters([
@@ -68,7 +96,7 @@ import { mapGetters, mapActions} from 'vuex';
                 this[param].edit = true;
                 if (!this[param].valid) {
                    this.error = this[param].errTxt;   
-                } else if (this.login.valid){
+                } else if ((!this.isSendEmail && this.login.valid) || (this.isSendEmail && this.code.valid)){
                     this.error = '';
                 }
             },
@@ -79,7 +107,8 @@ import { mapGetters, mapActions} from 'vuex';
                 return this[param].edit && !this[param].valid
             },
             ...mapActions([
-                'queryPostToServer'
+                'queryPostToServer',
+                'queryGetToServer'
             ]),
             onSubmit() {
                 this.error = '';
@@ -88,11 +117,23 @@ import { mapGetters, mapActions} from 'vuex';
                     params: {   
                         _token: this.csrf,
                         email: this.login.value,
-                        captcha: this.captchaToken
+                        captcha: this.captchaToken,
+                        dialog: this.dialog
                     },
                     errorAction: this.resetRecaptcha,
                     successAction: () => {
                        this.isSendEmail = true; 
+                    }
+                });
+            },
+            onClick() {
+                this.error = '';
+                this.queryGetToServer({
+                    url: '/password/reset/'+this.code.value,
+                    params: {   
+                    },
+                    successAction: (par) => {
+                       this.$emit('resetEmail'); 
                     }
                 });
             },

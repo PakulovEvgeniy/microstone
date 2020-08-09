@@ -41,7 +41,8 @@ export default {
     'list',
     'passive',
     'small',
-    'big'
+    'big',
+    'fromCart'
   ],
   methods: {
     onClose() {
@@ -53,7 +54,11 @@ export default {
         return;
       }
       if (this.isInCartAll(it)) {
-        this.$router.push('/account/cart');
+        if (this.fromCart) {
+          this.$emit('close');
+        } else {
+          this.$router.push('/account/cart');
+        }
       } else {
         if (it.have_charact) {
           if (it.characteristic) {

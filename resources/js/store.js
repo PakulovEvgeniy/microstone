@@ -28,6 +28,8 @@ export function createStore () {
     },
     state: {
       auth: false,
+      authFrom: '',
+      tempPassword: '',
       isVerify: false,
       csrf: '',
       mounted: false,

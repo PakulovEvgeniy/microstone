@@ -21,7 +21,6 @@
       </search-module>
     </div>
     <compare-params v-if="mount && countCompare"></compare-params>
-    <v-dialog/>
   </div>
 </template>
 

@@ -13,6 +13,7 @@ import Product from './components/pages/product.vue';
 import Manufacturer from './components/pages/manufacturer.vue';
 import Not_found from './components/pages/not-found.vue';
 import Account from './components/pages/account.vue';
+import Cart from './components/pages/cart.vue';
 import emailVerify from './components/pages/email-verify.vue';
 
 import auth from './middleware/auth.js';
@@ -39,6 +40,7 @@ export default new Router({
     { path: '/manufacturer', component: Manufacturer, name: 'allManufacturer' },
     { path: '/manufacturer/:id', component: Manufacturer, name: 'manufacturer'},
     { path: '/about', component: PageComp, name: 'about' },
+    { path: '/account/cart', component: Cart, name: 'cart' },
     { path: '/contact', component: PageComponent('Contact'), name: 'contact' },
     { path: '/account', component: Account, name: 'account',
       meta: {
@@ -60,7 +62,8 @@ export default new Router({
             auth
           ],
           excludePath: [
-            '/account/wishlist'
+            '/account/wishlist',
+            '/account/cart'
           ]
       }
     },

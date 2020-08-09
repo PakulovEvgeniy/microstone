@@ -2,11 +2,20 @@
     <form novalidate method="post" @submit.prevent="onSubmit">
         <input type="hidden" name="_token" id="csrf-token" :value="this.csrf">
         <div class="registration">
+          <div v-if="dialog" class="policy-area">
+              <div class="policy">
+                  <input type="checkbox" id="cb-policy" name="agreeWithPolicy" v-model="isPolicy">
+                  <label for="cb-policy" class="policy"></label>
+              </div>
+              <div class="policy-text">
+                  Я не являюсь зарегистрированным пользователем
+              </div>
+          </div>
             <div v-if="error" class="error">{{this.error}}</div>
             <label for="email">Адрес электронной почты (e-mail)</label>
             <input onfocus="this.removeAttribute('readonly')" readonly @blur="onBlur('login')" :class="{'valid': validClass('login'), 'invalid' : invalidClass('login')}" id="email" name="email" :value="login.value" @input="onInput($event,'login')" type="email">
-            <label for="password">Пароль</label>
-            <div class="password-area">
+            <label v-show="!dialog" for="password">Пароль</label>
+            <div v-show="!dialog" class="password-area">
                 <input onfocus="this.removeAttribute('readonly')" readonly @blur="onBlur('password')" :type="typePassword" :class="{'valid': validClass('password'), 'invalid' : invalidClass('password')}" id="password" @input="onInput($event, 'password')" :value="password.value" name="password" placeholder="Не менее 8 символов">
                 <div class="show-password" title="Показать пароль">
                     <span @click="showPassword = !showPassword">Показать</span>
@@ -19,7 +28,7 @@
                 <div class="captcha">
                     <vue-recaptcha ref="recaptcha" @verify="onVerify" @expired="onExpired" type="checkbox" sitekey="6LcArp8UAAAAAD1CM3AaGQRCQZyN2gFbm0GGkzKk"></vue-recaptcha>
                 </div>
-                <div class="policy-area">
+                <div v-if="!dialog" class="policy-area">
                     <div class="policy">
                         <input type="checkbox" id="cb-policy" name="agreeWithPolicy" v-model="isPolicy">
                         <label for="cb-policy" class="policy"></label>
@@ -29,11 +38,12 @@
                         <router-link to="/police">условиями политики конфиденциальности</router-link>
                     </div>
                 </div>
+                
                 <div class="buttons">
-                    <input type="submit" class="btn medium-btn" :class="{'active-btn': isValid}" :disabled="!isValid" value="Зарегистрироваться">
+                    <input type="submit" class="btn medium-btn" :class="{'active-btn': isValid}" :disabled="!isValid" :value="!dialog ? 'Зарегистрироваться' : 'Продолжить'">
                 </div>
             </div>
-            <div class="hr"></div>
+            <div v-show="!dialog" class="hr"></div>
         </div>
 
     </form>
@@ -62,21 +72,35 @@ import { mapGetters, mapActions } from 'vuex';
                     errTxt: 'Слишком короткий пароль'
                 },
                 captchaToken: '',
-                isPolicy:true
+                isPolicy: true
             }
         },
+        props: [
+          'dialog'
+        ],
         computed: {
             typePassword() {
                 return this.showPassword ? 'text' : 'password';
             },
             isValid() {
+              if (!this.dialog) {
                 return this.isPolicy && this.captchaToken && this.login.valid && this.password.valid;
+              }
+              return this.captchaToken && this.login.valid;  
             },
             ...mapGetters([
                 'csrf',
                 'wishlist',
                 'cart'
             ])
+        },
+        watch: {
+          isPolicy(val) {
+            if (this.dialog) {
+              this.$emit('changeRegister', val);
+            }
+            
+          }
         },
         methods: {
             onVerify(response) {
@@ -106,24 +130,61 @@ import { mapGetters, mapActions } from 'vuex';
             ...mapActions([
                 'queryPostToServer'
             ]),
+            sucContinue(par) {
+              if (this.dialog) {
+                //this.$emit('continue', par);
+              } else {
+                this.$store.commit('setTempPassword', '');
+              }
+            },
+            errorContinue(par) {
+              if (this.dialog) {
+                this.$emit('error', par);
+              }
+            },
+            getRandomPassword(len) {
+              if(len > 10) len = 10;
+              len = len * (-1);
+              return Math.random().toString(36).slice(len);
+            },
             onSubmit() {
                 this.error = '';
-                this.queryPostToServer({
-                    url: '/register',
-                    params: {   
+                let params;
+                if (this.dialog) {
+                  let psd = this.getRandomPassword(8);
+                  this.$store.commit('setTempPassword', psd);
+                  params = {   
+                        _token: this.csrf,
+                        email: this.login.value,
+                        captcha: this.captchaToken,
+                        wishlist: this.wishlist.items,
+                        cart: this.cart.items,
+                        password: psd,
+                        dialog: true
+                    }
+                } else {
+                  params = {   
                         _token: this.csrf,
                         email: this.login.value,
                         password: this.password.value,
                         captcha: this.captchaToken,
                         wishlist: this.wishlist.items,
-                        cart: this.cart.items
-                    },
-                    errorAction: this.resetRecaptcha
+                        cart: this.cart.items,
+                        dialog: false
+                    }
+                }
+                this.queryPostToServer({
+                    url: '/register',
+                    params,
+                    errorAction: this.resetRecaptcha,
+                    successAction: this.sucContinue
                 });
             },
-            resetRecaptcha () {
+            resetRecaptcha (par) {
                 this.captchaToken = '';
-                this.$refs.recaptcha.reset() // Direct call reset method
+                this.$refs.recaptcha.reset();
+                this.$store.commit('setTempPassword', '');
+                this.errorContinue(par);
             }
         },
         components: 

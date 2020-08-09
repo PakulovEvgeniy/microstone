@@ -302,6 +302,28 @@ router.beforeEach((to, from, next) => {
 						}
 					}
 					break;
+				case 'cart':
+					/*if (store.state.auth) {
+						arrProm.push(store.dispatch('queryPostToServer', {
+							url: '/account/cart'
+						}));
+					}*/
+					
+					break;
+				case 'login':
+				case 'register':
+				case 'passwordLink':
+				case 'emailVerify':
+				case 'passwordReset':
+				  if (from.fullPath && from.name != 'register' 
+				  		&& from.name != 'passwordLink' 
+				  		&& from.name != 'passwordReset'
+				  		&& from.name != 'emailVerify'
+				  		&& from.name != 'not-found'
+				  		&& from.name != 'login') {
+				  	store.commit('setAuthFrom', from.fullPath);
+				  }
+					break;
 				case 'account_id_act':
 				  parId = to.params['id'];
 					let parAct = to.params['act'];

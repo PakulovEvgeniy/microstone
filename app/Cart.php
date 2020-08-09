@@ -26,10 +26,13 @@ class Cart extends Model
       return $prod_arr;
     }
 
-  public static function AddToCartFromLocal($user_id, $arr, $need_add)
+  public static function AddToCartFromLocal($user_id, $arr, $need_add, $updt = false, $need_clear = false)
 	{
 		
 		//$prod_arr = self::getCartListId($user_id);
+		if ($need_clear) {
+			Cart::where(['user_id' => $user_id])->delete();
+		}
 		
 		foreach ($arr as $val) {
 			/*$res = array_filter($prod_arr, function($k) use($val) {
@@ -42,18 +45,25 @@ class Cart extends Model
 			if (!$prd) {
 				continue;
 			}
+			$charact = '';
 			if ($val['characteristic']) {
-				$cr = Characteristics::where(['id' => $val['characteristic'], 'product_id1s' => $prd->id_1s])->first();
+				$charact = $val['characteristic'];
+				$cr = Characteristics::where(['id' => $charact, 'product_id1s' => $prd->id_1s])->first();
 				if (!$cr) {
 					continue;
 				}
 			}
-			$w = Cart::where(['characteristic_id' => $val['characteristic'], 'product_id' => $prd->id])->first();
+			$w = Cart::where(['characteristic_id' => $charact, 'product_id' => $prd->id, 'user_id' => $user_id])->first();
 			if ($w) {
 				if (!$need_add) {
 					continue;
 				}
-				$w->qty += $val['qty'] ? $val['qty'] : 1;
+				if ($updt) {
+					$w->qty = $val['qty'] ? $val['qty'] : 1;
+				} else {
+					$w->qty += $val['qty'] ? $val['qty'] : 1;
+				}
+				
 			} else {
 				$w = new Cart();
 				$w->user_id = $user_id;
@@ -66,5 +76,28 @@ class Cart extends Model
 		}
 
 		return self::getCartListId($user_id);
+	}
+
+	public static function deleteFromCart($user_id, $arr)
+	{
+		
+		foreach ($arr as $val) {
+			
+			$charact = '';
+			if ($val['characteristic']) {
+				$charact = $val['characteristic'];
+			}
+			Cart::where(['characteristic_id' => $charact, 'product_id' => $val['id'], 'user_id' => $user_id])->delete(); 
+		}
+
+		return self::getCartListId($user_id);
+	}
+
+	public static function clearCart($user_id)
+	{
+		
+		Cart::where(['user_id' => $user_id])->delete();
+
+		return true;
 	}
 }

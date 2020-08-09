@@ -45,7 +45,7 @@ class ForgotPasswordController extends Controller
     protected function sendResetLinkResponse(Request $request, $response)
     {
         Session::put('reset_email', $request->email);
-        return back()->with('status', trans($response));
+        return redirect('/password/reset')->with('status', trans($response));
     }
 
     public function showLinkRequestForm(Request $request) {

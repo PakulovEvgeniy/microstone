@@ -39,6 +39,7 @@
       </div>
       <wait-load></wait-load>
       <modals-container/>
+      <v-dialog/>
     </div>
 </template>
 

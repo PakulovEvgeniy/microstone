@@ -21,7 +21,7 @@
                  </div>
                  <div v-show="products.totalQty" class="table-result">
                    <div v-for="it in products.items" class="table-item">
-                     <div class="m-checkbox">
+                     <div v-show="!notBuy" class="m-checkbox">
                         <input v-model="checkList" :id="'sch-'+it.id" :value="it.id" type="checkbox">
                         <label :for="'sch-'+it.id"><i class="fa fa-check"></i></label>
                      </div>
@@ -61,6 +61,8 @@
                         :item="it"
                         :list="cart.items"
                         :small="true"
+                        :fromCart="fromCart"
+                        @close="$emit('close')"
                       ></buy-button>
                     </div>
                    </div>
@@ -118,7 +120,9 @@
           }
         },
         props: [
-          'notCompare'
+          'notCompare',
+          'notBuy',
+          'fromCart'
         ],
         methods: {
           ...mapActions([

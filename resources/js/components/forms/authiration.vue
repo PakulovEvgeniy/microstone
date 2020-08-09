@@ -2,6 +2,15 @@
     <form novalidate method="post" @submit.prevent="onSubmit">
         <input type="hidden" name="_token" id="csrf-token" :value="this.csrf">
         <div class="registration">
+            <div v-if="dialog" class="policy-area">
+                <div class="policy">
+                    <input type="checkbox" id="cb-policy" name="agreeWithPolicy" v-model="isPolicy">
+                    <label for="cb-policy" class="policy"></label>
+                </div>
+                <div class="policy-text">
+                    Я не являюсь зарегистрированным пользователем
+                </div>
+            </div>
             <div v-if="error" class="error">{{this.error}}</div>
             <label for="email">Адрес электронной почты (e-mail)</label>
             <input @blur="onBlur('login')" :class="{'valid': validClass('login'), 'invalid' : invalidClass('login')}" id="email" name="email" :value="login.value" @input="onInput($event,'login')" type="email">
@@ -15,13 +24,14 @@
                     </label>
                 </div>
             </div>
+            
             <div class="controls">
-                <router-link to="/password/reset">Забыли пароль?</router-link>
+                <a @click="onRemPas">Забыли пароль?</a>
                 <div class="buttons">
-                    <input type="submit" class="btn medium-btn" :class="{'active-btn': isValid}" :disabled="!isValid" value="Войти">
+                    <input type="submit" class="btn medium-btn" :class="{'active-btn': isValid}" :disabled="!isValid" :value="dialog ? 'Продолжить' : 'Войти'">
                 </div>
             </div>
-            <div class="hr"></div>
+            <div v-show="!dialog" class="hr"></div>
         </div>
 
     </form>
@@ -48,8 +58,17 @@ import { mapGetters, mapActions } from 'vuex';
                     edit: false,
                     errTxt: 'Слишком короткий пароль'
                 },
-                isQuery: false
+                isQuery: false,
+                isPolicy: false
             }
+        },
+        props: [
+            'dialog'
+        ],
+        watch: {
+          isPolicy(val) {
+            this.$emit('changeRegister', val);
+          }
         },
         computed: {
             typePassword() {
@@ -61,10 +80,18 @@ import { mapGetters, mapActions } from 'vuex';
             ...mapGetters([
                 'csrf',
                 'wishlist',
-                'cart'
+                'cart',
+                'authFrom'
             ])
         },
         methods: {
+            onRemPas() {
+                if (this.dialog) {
+                    this.$emit('forgotPassword');
+                } else {
+                    this.$router.push('/password/reset');
+                }
+            },
             onInput(e, param) {
                 this[param].value = e.target.value;
                 this[param].valid = this[param].validate.test(this[param].value);
@@ -86,6 +113,12 @@ import { mapGetters, mapActions } from 'vuex';
             ...mapActions([
                 'queryPostToServer'
             ]),
+            sucContinue(par) {
+                this.$store.commit('setTempPassword', '');
+                if (par && par.isVerify) {
+                    this.$emit('continue');
+                }
+            },
             onSubmit() {
                 this.error = '';
                 this.queryPostToServer({
@@ -95,8 +128,14 @@ import { mapGetters, mapActions } from 'vuex';
                         email: this.login.value,
                         password: this.password.value,
                         wishlist: this.wishlist.items,
-                        cart: this.cart.items
-                    }
+                        cart: this.cart.items,
+                        redirect: this.authFrom,
+                        dialog: this.dialog
+                    },
+                    errorAction: () => {
+                        this.$store.commit('setTempPassword', '');
+                    },
+                    successAction: this.sucContinue
                 });
             }
         }

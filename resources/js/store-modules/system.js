@@ -113,13 +113,13 @@ export default {
               data.successAction(response.data.succesParams);
             }
             if (response.data.status=='ER' && data.errorAction) {
-              data.errorAction();
+              data.errorAction(response.data);
             }
             dispatch('setParams', response.data);
           })
           .catch(e => {
             if (data.errorAction) {
-              data.errorAction();
+              data.errorAction(e);
             }
             dispatch('showError', e);
           })

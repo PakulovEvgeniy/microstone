@@ -225,6 +225,7 @@ class Jsrender {
             if (!isset($state['cart'])) {
               $state['cart']= [];
               $state['cart']['items'] = Cart::getCartListId(Auth::user()->id);
+              $state['cart']['products'] = [];
             }
         } else {
             $state['userEmail'] = '';

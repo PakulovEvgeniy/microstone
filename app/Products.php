@@ -19,6 +19,8 @@ use App\DiscountPriceGroup;
 use App\Characteristics;
 use App\SoldProduct;
 use App\Category;
+use App\ProductFiles;
+
 class Products extends Model
 {
     protected $table = 'products';
@@ -82,18 +84,18 @@ class Products extends Model
 
 
 
-    public static function getProductsList($list, $with_params=false)
+    public static function getProductsList($list, $with_params=false, $with_manuf=false)
     {
         $res = [];
         $row = Products::whereIn('products.id', $list)
-            ->select('products.id_1s as id_1s', 'products.id as id', 'products_descriptions.chpu as chpu' , 'products_descriptions.name as name', 'sku', 'products.image as image', 'category_description.name as cat_name', 'compare_groups.id as cg_id', 'compare_groups.name as cg_name', 'category.id as cat_id', 'have_charact' , DB::raw('SUM(stock) as stock, MIN(price) as min_price'))
+            ->select('products.id_1s as id_1s', 'products.id as id', 'products_descriptions.chpu as chpu' , 'products_descriptions.name as name', 'sku', 'products.image as image', 'category_description.name as cat_name', 'compare_groups.id as cg_id', 'compare_groups.name as cg_name', 'category.id as cat_id', 'have_charact', 'price_group' , DB::raw('SUM(stock) as stock, MIN(price) as min_price'))
             ->leftJoin('products_descriptions','products.id','=','products_descriptions.products_id')
             ->leftJoin('price_party','products.id_1s','=','price_party.product_id1s')
             ->leftJoin('stock_party', 'products.id_1s','=','stock_party.product_id1s')
             ->leftJoin('category','products.parent_id','=','category.id_1s')
             ->leftJoin('compare_groups','products.compare_group','=','compare_groups.id_1s')
             ->leftJoin('category_description','category.id','=','category_description.category_id')
-            ->groupBy('id_1s', 'id', 'name', 'chpu', 'sku', 'image', 'cat_name', 'cg_id', 'cg_name', 'cat_id', 'have_charact')
+            ->groupBy('id_1s', 'id', 'name', 'chpu', 'sku', 'image', 'cat_name', 'cg_id', 'cg_name', 'cat_id', 'have_charact', 'price_group')
             ->get();
 
         //$price_g = $min_price - (10/100*$min_price);
@@ -102,8 +104,16 @@ class Products extends Model
             $min_price = $val->min_price ? $val->min_price : 0;
             $price_disc = round($min_price,2);//round($min_price*0.9, 2);
             $prod_params=[];
+            $prod_manuf='';
+            $disc = [];
+            $stock = [];
             if ($with_params) {
                $prod_params = PartyParams::getProductParams($val->id_1s); 
+            }
+            if ($with_manuf) {
+               $prod_manuf = PartyParams::getManufacturesByProduct($val->id_1s); 
+               $disc = DiscountPriceGroup::getDiscounts($val->price_group);
+               $stock = StockParty::getStock($val->id_1s, $val->id);
             }
 
             $pict = ProductPictures::getPictures($val->id_1s);
@@ -123,6 +133,7 @@ class Products extends Model
                 'chpu' => $val->chpu,
                 'sku' => $val->sku,
                 'stock' => $val->stock,
+                'stock_charact' => $stock,
                 'price' => $min_price,
                 'price_with_discount' => $price_disc,
                 'percent' => 0,
@@ -133,10 +144,12 @@ class Products extends Model
                 'cg_id' => $val->cg_id,
                 'cg_name' => $val->cg_name,
                 'product_params' => $prod_params,
+                'manuf' => $prod_manuf,
                 'images' => $pc2,
+                'discount_group' => $disc,
                 'have_charact' => $val->have_charact,
                 'characts' => $val->have_charact ? Characteristics::getCharacteristics($val->id_1s) : [],
-                'characts_price' => $val->have_charact ? PriceParty::getPriceForProductCharact($val->id_1s) : []
+                'characts_price' => $val->have_charact ? PriceParty::getPriceForProductCharact($val->id_1s) : PriceParty::getMinMaxPriceForProduct($val->id_1s)
             ];
         }
 
@@ -166,9 +179,16 @@ class Products extends Model
             $arr_manuf = PartyParams::getManufacturesByProduct($id_1s);
             $cat = Category::where('id_1s', $prod->parent_id)->first();
             $chpu="";
+            $cat_name = "";
+            $cat_chpu = "";
             if ($cat) {
-                $chpu = '/category/' . $cat->category_description->chpu . '?';
+                $cat_chpu = $cat->category_description->chpu;
+                $chpu = '/category/' . $cat_chpu . '?';
+                $cat_name = $cat->category_description->name;
+
             }
+
+            $fil = ProductFiles::getFiles($prod->id);
             
             $disc = DiscountPriceGroup::getDiscounts($prod->price_group);
             $prod_params = PartyParams::getProductParams($id_1s);
@@ -199,6 +219,8 @@ class Products extends Model
                 'id' => $prod->id,
                 'id_1s' => $prod->id_1s,
                 'name' => $prod->products_descriptions->name,
+                'cat_name' => $cat_name,
+                'cat_chpu' => $cat_chpu,
                 'parent_id' => $prod->parent_id,
                 'chpu' => $prod->products_descriptions->chpu,
                 'description' => $prod->products_descriptions->description,
@@ -211,7 +233,8 @@ class Products extends Model
                 'discount_group' => $disc,
                 'params' => $prod_params,
                 'have_charact' => $prod->have_charact,
-                'characts' => $charact
+                'characts' => $charact,
+                'files' => $fil
             ];
             $prod->popul = $prod->popul+1;
             $prod->save();
